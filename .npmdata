@@ -1,0 +1,7 @@
+.xdrs/_general/adrs/index.md|xdrs-core|0.2.10-beta.0|0
+.xdrs/_general/adrs/principles/001-xdr-standards.md|xdrs-core|0.2.10-beta.0|0
+.xdrs/_general/adrs/principles/003-skill-standards.md|xdrs-core|0.2.10-beta.0|0
+.xdrs/_general/adrs/principles/skills/001-xdr-lint/SKILL.md|xdrs-core|0.2.10-beta.0|0
+.xdrs/_general/edrs/index.md|xdrs-core|0.2.10-beta.0|0
+.xdrs/_general/edrs/principles/001-coding-agent-behavior.md|xdrs-core|0.2.10-beta.0|0
+AGENTS.md|xdrs-core|0.2.10-beta.0|0
