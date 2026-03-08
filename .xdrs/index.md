@@ -20,6 +20,20 @@ General engineering decisions covering cross-business standards and practices.
 
 ---
 
+### ADRs - agentkit
+
+Architectural decisions for the agentkit project: a curated library of XDRs and skills encoding best practices for AI coding agents.
+
+[View agentkit ADRs Index](agentkit/adrs/index.md)
+
+### EDRs - agentkit
+
+Engineering decisions for the agentkit project: a curated library of XDRs and skills encoding best practices for AI coding agents.
+
+[View agentkit EDRs Index](agentkit/edrs/index.md)
+
+---
+
 ### _local (reserved)
 
 Project-local XDRs that must not be shared with other contexts. Always keep this scope last so its decisions override or extend all scopes listed above. Add specific `_local` ADR/BDR/EDR index links here when present.
