@@ -81,6 +81,8 @@ The root `Makefile` delegates every target to `/lib` then `/examples` in sequenc
 
 Each sub-folder under `examples/` is an independent package. The Makefile installs the locally built `.tgz` pack from `lib/dist/` so examples simulate real external usage.
 
+The examples folder MUST exist for any libraries and utilities that are published or have more than 500 lines of code
+
 ### Related Skills
 
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
