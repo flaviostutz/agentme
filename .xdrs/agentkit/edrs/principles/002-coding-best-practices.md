@@ -16,6 +16,8 @@ What coding practices should be followed across all languages and projects to ke
 
 A file must not exceed **400 lines**. When a file grows beyond this limit, split related functions or types into separate, focused modules.
 
+One exception are test files, which normally are bigger than the tested resources.
+
 *Why:* Large files make navigation slow, increase merge conflicts, and obscure the single-responsibility principle.
 
 **Example (TypeScript):**
