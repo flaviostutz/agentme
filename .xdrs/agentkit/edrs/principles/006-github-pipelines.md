@@ -67,7 +67,7 @@ on:
   workflow_dispatch:
     inputs:
       prerelease:
-        description: 'Create as pre-release'
+        description: 'Pre-release'
         type: boolean
         default: true
 
