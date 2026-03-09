@@ -20,9 +20,9 @@ Separating these concerns eliminates accidental publishes from CI runs, ensures 
 |----------|---------|---------|
 | `ci.yml` | `pull_request` → `main`, `push` → `main` | Build, lint, and test the codebase |
 | `release.yml` | `workflow_dispatch` | Tag the next version using monotag |
-| `publish.yml` | `push` of tags matching `v*.*.*` | Publish artifacts for the tagged version |
+| `publish.yml` | `push` of tags matching `*` | Publish artifacts for the tagged version |
 
-All workflows run on `ubuntu-latest`. Tool versions are managed by Mise via `jdx/mise-action`.
+All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via `jdx/mise-action`. Projects should have a .mise.toml file to configure it
 
 ---
 
