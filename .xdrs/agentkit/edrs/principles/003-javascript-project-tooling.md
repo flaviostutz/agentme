@@ -26,34 +26,9 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 
 All commands are run exclusively through Makefiles, not through `package.json` scripts.
 
-#### ESLint configuration
+#### ESLint
 
-Use `@stutzlab/eslint-config` as the base ESLint config for all projects.
-
-Install it as a dev dependency:
-
-```bash
-pnpm add -D @stutzlab/eslint-config
-```
-
-`lib/eslint.config.js`:
-
-```js
-// ESLint 9 flat config format
-import baseConfig from '@stutzlab/eslint-config';
-
-export default [
-  ...baseConfig,
-  {
-    languageOptions: {
-      parserOptions: {
-        project: [ './tsconfig.json' ],
-        tsconfigRootDir: process.cwd(),
-      },
-    },
-  },
-];
-```
+Use `@stutzlab/eslint-config` as the base ESLint config. Use ESLint 9 flat config format (`lib/eslint.config.js`).
 
 #### Project structure
 
@@ -78,26 +53,7 @@ export default [
         └── package.json
 ```
 
-#### Root Makefile
-
-Delegates every target to `/lib` then `/examples`:
-
-```makefile
-SHELL := /bin/bash
-%:
-	@echo ''
-	@echo '>>> Running /lib:$@...'
-	@cd lib && make $@
-	@echo ''
-	@echo '>>> Running /examples:$@...'
-	@cd examples && STAGE=dev make $@
-
-publish:
-	cd lib && make publish
-
-prepare:
-	@echo "Run 'nvm use; corepack enable'"
-```
+The root `Makefile` delegates every target to `/lib` then `/examples` in sequence.
 
 #### lib/Makefile targets
 
@@ -116,64 +72,14 @@ prepare:
 
 #### lib/package.json key fields
 
-```json
-{
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist/**", "package.json", "README.md"],
-  "packageManager": "pnpm@8.x",
-  "scripts": {}
-}
-```
+- `"main"`: `dist/index.js`
+- `"types"`: `dist/index.d.ts`
+- `"files"`: `["dist/**", "package.json", "README.md"]`
+- `"scripts"`: empty — all commands are driven by the Makefile
 
-`scripts` is intentionally empty — all commands are driven by the Makefile.
+#### examples/
 
-#### examples/Makefile
-
-Each sub-folder under `examples/` is an independent package. The Makefile installs the locally built `.tgz` pack from `lib/dist/` so examples simulate real external usage:
-
-```makefile
-SHELL := /bin/bash
-%:
-	@echo "Unknown target: $@. Ignoring"
-
-build: install
-	@echo "Examples built"
-
-install:
-	pnpm add [package-name]@file:../lib/dist/[package-name]-0.0.1.tgz
-	pnpm install
-
-test:
-	@echo "Running example tests..."
-	cd usage-x && make test
-	cd usage-y && make test
-
-all: build test
-```
-
-#### README.md
-
-Must start with a **Quick Start** section containing a minimal working code example. This is the first content rendered on the npm registry page.
-
-```markdown
-# package-name
-
-Short one-line description.
-
-## Quick Start
-
-\`\`\`bash
-pnpm add package-name
-\`\`\`
-
-\`\`\`typescript
-import { myFunction } from 'package-name';
-const result = myFunction('hello');
-\`\`\`
-
-## More sections...
-```
+Each sub-folder under `examples/` is an independent package. The Makefile installs the locally built `.tgz` pack from `lib/dist/` so examples simulate real external usage.
 
 ### Related Skills
 

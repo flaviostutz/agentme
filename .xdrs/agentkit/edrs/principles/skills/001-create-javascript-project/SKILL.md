@@ -215,12 +215,22 @@ module.exports = {
 };
 ```
 
-**`lib/.eslintrc.js`**:
+**`lib/eslint.config.js`** (ESLint 9 flat config format):
 
-```javascript
-module.exports = {
-  extends: ['@stutzlab/eslint-config'],
-};
+```js
+import baseConfig from '@stutzlab/eslint-config';
+
+export default [
+  ...baseConfig,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: process.cwd(),
+      },
+    },
+  },
+];
 ```
 
 ---
@@ -335,7 +345,7 @@ Review all created files and confirm:
 
 **Agent action:** Gathers: name=`retry-client`, default Node.js 20, then creates:
 - `./Makefile`, `./.nvmrc`, `./.gitignore`
-- `lib/src/index.ts`, `lib/src/index.test.ts`, `lib/Makefile`, `lib/package.json`, `lib/tsconfig.json`, `lib/jest.config.js`, `lib/.eslintrc.js`
+- `lib/src/index.ts`, `lib/src/index.test.ts`, `lib/Makefile`, `lib/package.json`, `lib/tsconfig.json`, `lib/jest.config.js`, `lib/eslint.config.js`
 - `examples/Makefile`, `examples/usage-basic/package.json`, `examples/usage-basic/index.js`
 - `README.md` (Quick Start first)
 
