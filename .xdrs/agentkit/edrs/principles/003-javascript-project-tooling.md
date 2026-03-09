@@ -36,12 +36,23 @@ Install it as a dev dependency:
 pnpm add -D @stutzlab/eslint-config
 ```
 
-`lib/.eslintrc.js`:
+`lib/eslint.config.js`:
 
 ```js
-module.exports = {
-  extends: ['@stutzlab'],
-};
+// ESLint 9 flat config format
+import baseConfig from '@stutzlab/eslint-config';
+
+export default [
+  ...baseConfig,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: [ './tsconfig.json' ],
+        tsconfigRootDir: process.cwd(),
+      },
+    },
+  },
+];
 ```
 
 #### Project structure
@@ -55,7 +66,7 @@ module.exports = {
 │   ├── package.json       # package manifest
 │   ├── tsconfig.json      # TypeScript config
 │   ├── jest.config.js     # Jest config
-│   ├── .eslintrc.js       # ESLint config
+│   ├── eslint.config.js   # ESLint config (ESLint 9 flat config)
 │   └── src/               # all TypeScript source files
 │       ├── index.ts       # public API re-exports
 │       └── *.test.ts      # test files co-located with source
@@ -95,8 +106,8 @@ prepare:
 | `install` | `pnpm install --frozen-lockfile` |
 | `build` | compile with `tsc`, strip test files from `dist/`, then `pnpm pack` for local use by examples |
 | `build-module` | compile with `tsc` only (no pack) |
-| `lint` | `pnpm exec eslint ./src --ext .ts` |
-| `lint-fix` | `pnpm exec eslint . --ext .ts --fix` |
+| `lint` | `pnpm exec eslint ./src` |
+| `lint-fix` | `pnpm exec eslint ./src --fix` |
 | `test` | `pnpm exec jest --verbose` |
 | `test-watch` | `pnpm exec jest --watch` |
 | `clean` | remove `node_modules/` and `dist/` |
