@@ -44,7 +44,7 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 | Script | Purpose |
 |--------|---------|
 | `setup` | Install any tools required on the developer machine (e.g., nvm, brew, python, golang). Typically run once per project checkout. In CI, tooling is usually pre-provisioned via runner images or workflow steps instead. |
-| `all` | Run `build`, `lint`, `test`, and any other checks needed to verify the software meets minimum quality standards. The developer's fast pre-push check. |
+| `all` | Alias that runs `build`, `lint`, and `test` in sequence. Must be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. |
 | `clean` | Remove all temporary or generated files created during build, lint, or test (e.g., `node_modules`, virtual environments, compiled binaries, generated files). Used both locally and in CI for a clean slate. |
 | `start` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). |
 | `update-lockfile` | Update the dependency lockfile to reflect the latest resolved versions of all dependencies. |

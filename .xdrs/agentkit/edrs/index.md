@@ -21,3 +21,4 @@ Foundational standards, principles, and guidelines.
 - [agentkit-edr-006](principles/006-github-pipelines.md) - **GitHub CI/CD pipelines**
 - [agentkit-edr-007](principles/007-project-quality-standards.md) - **Project quality standards**
 - [agentkit-edr-008](principles/008-common-targets.md) - **Common development script names**
+- [agentkit-edr-009](principles/009-error-handling.md) - **Error handling**

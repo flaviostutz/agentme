@@ -26,6 +26,24 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 
 All commands are run exclusively through Makefiles, not through `package.json` scripts.
 
+#### ESLint configuration
+
+Use `@stutzlab/eslint-config` as the base ESLint config for all projects.
+
+Install it as a dev dependency:
+
+```bash
+pnpm add -D @stutzlab/eslint-config
+```
+
+`lib/.eslintrc.js`:
+
+```js
+module.exports = {
+  extends: ['@stutzlab'],
+};
+```
+
 #### Project structure
 
 ```
@@ -150,9 +168,3 @@ const result = myFunction('hello');
 
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 
-## Considered Options
-
-- **(REJECTED) npm/yarn** — pnpm is stricter, faster, and better suited for mono-repo style layouts
-- **(REJECTED) webpack/rollup** — esbuild is significantly faster and simpler to configure for library outputs
-- **(REJECTED) vitest** — jest has broader existing ecosystem support in this stack
-- **(CHOSEN) pnpm + tsc + esbuild + eslint + jest** — proven combination used in the [npmdata](https://github.com/flaviostutz/npmdata) project
