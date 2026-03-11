@@ -42,7 +42,7 @@ Pin all required tool versions. Example for a Go + Node.js monorepo:
 ```toml
 [tools]
 go = "1.22"
-node = "20"
+node = "24"
 golangci-lint = "1.57"
 ```
 

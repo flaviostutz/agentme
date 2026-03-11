@@ -2,7 +2,7 @@
 name: 001-create-javascript-project
 description: >
   Scaffolds the initial boilerplate structure for a JavaScript/TypeScript library project following
-  the standard tooling and layout defined in _general-edr-003. Activate this skill when the user
+  the standard tooling and layout defined in _core-edr-003. Activate this skill when the user
   asks to create, scaffold, or initialize a new JavaScript or TypeScript library project, npm
   package, or similar project structure.
 metadata:
@@ -28,7 +28,7 @@ Related EDR: [agentkit-edr-003](../../003-javascript-project-tooling.md)
    - **Package name** (npm-compatible, e.g. `my-lib`)
    - **Short description** (one sentence)
    - **Author** name or GitHub username
-   - **Node.js version** (default: `20`)
+   - **Node.js version** (default: `24`)
    - **GitHub repo URL** (optional, for `package.json` fields)
 2. Confirm the target directory (default: current workspace root).
 
@@ -60,9 +60,9 @@ prepare:
 **`./.nvmrc`**
 
 ```
-20
+24
 ```
-(Replace `20` with the chosen Node.js version.)
+(Replace `24` with the chosen Node.js version.)
 
 **`./.gitignore`**
 
@@ -176,7 +176,7 @@ publish:
   "devDependencies": {
     "@babel/preset-typescript": "^7.21.0",
     "@stutzlab/eslint-config": "^3.2.1",
-    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/node24": "^24.0.0",
     "@types/jest": "^29.5.0",
     "esbuild": "^0.20.0",
     "eslint": "^8.57.0",
@@ -191,7 +191,7 @@ publish:
 
 ```json
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
@@ -337,13 +337,13 @@ Review all created files and confirm:
 - [ ] `lib/package.json` has `main`, `types`, and `files` set correctly
 - [ ] `README.md` starts with Quick Start containing a code example
 - [ ] All `[package-name]` placeholders are replaced with the actual name
-- [ ] Structure matches the layout in [_general-edr-003](../../003-javascript-project-tooling.md)
+- [ ] Structure matches the layout in [_core-edr-003](../../003-javascript-project-tooling.md)
 
 ## Examples
 
 **User:** "Create a new TypeScript library project called `retry-client`"
 
-**Agent action:** Gathers: name=`retry-client`, default Node.js 20, then creates:
+**Agent action:** Gathers: name=`retry-client`, default Node.js 24, then creates:
 - `./Makefile`, `./.nvmrc`, `./.gitignore`
 - `lib/src/index.ts`, `lib/src/index.test.ts`, `lib/Makefile`, `lib/package.json`, `lib/tsconfig.json`, `lib/jest.config.js`, `lib/eslint.config.js`
 - `examples/Makefile`, `examples/usage-basic/package.json`, `examples/usage-basic/index.js`
@@ -354,7 +354,7 @@ All `[package-name]` replaced with `retry-client`.
 ## Edge Cases
 
 - **Existing files** — skip creation; adapt references to the existing structure
-- **Different Node.js version** — update `.nvmrc` and `tsconfig.json` `extends` (e.g. `@tsconfig/node18`)
+- **Different Node.js version** — update `.nvmrc` and `tsconfig.json` `extends` (e.g. `@tsconfig/node22`)
 - **CLI tool** — add `"bin": "dist/main.js"` to `package.json` and create `lib/src/main.ts` as the CLI entry point; add `esbuild` bundle target in `lib/Makefile`
 - **No examples needed** — omit the `examples/` directory; remove the `examples` delegation from root `Makefile`
 - **Binary bundling (Lambda/browser)** — add an esbuild step to `lib/Makefile`: `pnpm exec esbuild src/main.ts --bundle --platform=node --outfile=dist/bundle.js`

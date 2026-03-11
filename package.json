@@ -1,0 +1,24 @@
+{
+  "name": "agentkit",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "npmdata": "^0.15.0",
+    "xdrs-core": "^0.2.15"
+  },
+  "bin": "bin/npmdata.js",
+  "files": [
+    "package.json",
+    "bin/npmdata.js"
+  ],
+  "npmdata": {
+    "sets": [
+      {
+        "package": "agentkit",
+        "output": {
+          "path": "."
+        }
+      }
+    ]
+  }
+}

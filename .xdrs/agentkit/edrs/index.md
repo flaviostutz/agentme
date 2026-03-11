@@ -6,7 +6,7 @@ Propose changes via pull request. All changes must be verified for clarity and n
 
 ## Related scope indexes
 
-- [_general EDRs Index](../../_general/edrs/index.md) - Cross-business general standards (overridden by this scope where conflicts are documented)
+- [_core EDRs Index](../../_core/edrs/index.md) - Cross-business general standards (overridden by this scope where conflicts are documented)
 
 XDRs in scopes listed last override the ones listed first.
 

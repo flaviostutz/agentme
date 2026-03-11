@@ -6,30 +6,19 @@ This index points to all type- and scope-specific XDR indexes. XDRs (Decision Re
 
 XDRs in scopes listed last override the ones listed first
 
-### ADRs - general
+### _core
 
-General architectural decisions covering cross-business standards and practices.
+Decisions about how XDRs work
+[View general ADRs Index](_core/adrs/index.md)
 
-[View general ADRs Index](_general/adrs/index.md)
-
-### EDRs - general
-
-General engineering decisions covering cross-business standards and practices.
-
-[View general EDRs Index](_general/edrs/index.md)
+Decisions about how XDRs work
+[View general EDRs Index](_core/edrs/index.md)
 
 ---
 
-### ADRs - agentkit
+### agentkit
 
-Architectural decisions for the agentkit project: a curated library of XDRs and skills encoding best practices for AI coding agents.
-
-[View agentkit ADRs Index](agentkit/adrs/index.md)
-
-### EDRs - agentkit
-
-Engineering decisions for the agentkit project: a curated library of XDRs and skills encoding best practices for AI coding agents.
-
+General engineering decisions from agentkit scope
 [View agentkit EDRs Index](agentkit/edrs/index.md)
 
 ---
