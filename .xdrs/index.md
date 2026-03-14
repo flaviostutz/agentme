@@ -11,15 +11,9 @@ XDRs in scopes listed last override the ones listed first
 Decisions about how XDRs work
 [View general ADRs Index](_core/adrs/index.md)
 
-Decisions about how XDRs work
-[View general EDRs Index](_core/edrs/index.md)
-
 ---
 
-### agentkit
-
-General engineering decisions from agentkit scope
-[View agentkit EDRs Index](agentkit/edrs/index.md)
+[OTHER SCOPES HERE]
 
 ---
 

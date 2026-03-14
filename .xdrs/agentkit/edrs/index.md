@@ -22,3 +22,4 @@ Foundational standards, principles, and guidelines.
 - [agentkit-edr-007](principles/007-project-quality-standards.md) - **Project quality standards**
 - [agentkit-edr-008](principles/008-common-targets.md) - **Common development script names**
 - [agentkit-edr-009](principles/009-error-handling.md) - **Error handling**
+- [agentkit-edr-010](principles/010-golang-project-tooling.md) - **Go project tooling and structure** *(includes skill: [003-create-golang-project](principles/skills/003-create-golang-project/SKILL.md))*
