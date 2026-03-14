@@ -13,7 +13,11 @@ Decisions about how XDRs work
 
 ---
 
-[OTHER SCOPES HERE]
+### agentkit
+
+Opiniated set of decisions and skills for common development tasks
+
+[View agentkit EDRs Index](agentkit/edrs/index.md)
 
 ---
 
@@ -24,5 +28,3 @@ Project-local XDRs that must not be shared with other contexts. Always keep this
 [View _local BDRs Index](_local/bdrs/index.md)
 
 [View _local ADRs Index](_local/adrs/index.md)
-
-[View _local EDRs Index](_local/edrs/index.md)

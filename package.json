@@ -1,26 +1,98 @@
 {
   "name": "agentkit",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.15.0"
+    "npmdata": "^0.18.4",
+    "xdrs-core": "^0.3.0"
   },
   "bin": "bin/npmdata.js",
   "files": [
     "package.json",
-    "bin/npmdata.js"
+    "bin/npmdata.js",
+    ".xdrs/agentkit/**",
+    ".xdrs/index.md",
+    ".github/agents/speckit*",
+    ".github/prompts/speckit*",
+    ".specify/**",
+    ".vscode/settings.json"
   ],
   "npmdata": {
     "sets": [
       {
-        "package": "agentkit",
+        "package": "xdrs-core",
+        "selector": {
+          "files": [
+            ".xdrs/_core/**",
+            "AGENTS.md"
+          ]
+        },
         "output": {
-          "path": "."
-        }
+          "path": ".",
+          "gitignore": false
+        },
+        "presets": ["basic"]
+      },
+      {
+        "package": "agentkit",
+        "selector": {
+          "files": [
+            ".xdrs/agentkit/**"
+          ]
+        },
+        "output": {
+          "path": ".",
+          "gitignore": false
+        },
+        "presets": ["basic"]
+      },
+      {
+        "package": "agentkit",
+        "selector": {
+          "files": [
+            ".xdrs/index.md"
+          ]
+        },
+        "output": {
+          "path": ".",
+          "managed": false,
+          "skipIfExists": true,
+          "gitignore": false
+        },
+        "presets": ["basic"]
+      },
+      {
+        "package": "agentkit",
+        "selector": {
+          "files": [
+            ".github/agents/speckit*",
+            ".github/prompts/speckit*",
+            ".specify/**"
+          ],
+          "presets": ["speckit"]
+        },
+        "output": {
+          "path": ".",
+          "gitignore": false
+        },
+        "presets": ["speckit"]
+      },
+      {
+        "package": "agentkit",
+        "selector": {
+          "files": [
+            ".vscode/settings.json"
+          ],
+          "presets": ["speckit"]
+        },
+        "output": {
+          "path": ".",
+          "managed": false,
+          "skipIfExists": true,
+          "gitignore": false
+        },
+        "presets": ["speckit"]
       }
     ]
-  },
-  "devDependencies": {
-    "xdrs-core": "^0.3.0"
   }
 }
