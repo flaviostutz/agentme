@@ -11,9 +11,10 @@ importers:
       npmdata:
         specifier: ^0.15.0
         version: 0.15.0
+    devDependencies:
       xdrs-core:
-        specifier: ^0.2.15
-        version: 0.2.15
+        specifier: ^0.3.0
+        version: 0.3.0
 
 packages:
 
@@ -87,12 +88,12 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.14.2:
-    resolution: {integrity: sha512-m+Dk/H7EIaPIDwFivdHzJmPLu0RQgnk/Yyb5DaX5wyUylJ0JGJgFKI3cETTo6ZO42M+aOzN9imRdh7gKa3kfxA==}
-    hasBin: true
-
   npmdata@0.15.0:
     resolution: {integrity: sha512-v4Eqvo5u45LJot8BFrIgGC5DpEqBUdO2Bucs6UxMxdL4j9ocn7v/jOHCcyDUvlEv10+iBpgpe314xdQDg7pIfw==}
+    hasBin: true
+
+  npmdata@0.18.4:
+    resolution: {integrity: sha512-7cSAVWGGSKmI9jhA70IZ4bdGd4NZY+7EOYnDI7fmdC1hhjpNNhDzkLbDTi4XoiMEpig2MfyvMc+Sxc5ZCu3K6A==}
     hasBin: true
 
   package-manager-detector@1.6.0:
@@ -118,8 +119,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.2.15:
-    resolution: {integrity: sha512-CXXXYLI1oinJFVsXfVjJcUUyeM1EkqIXgN8b+G5ZClltLa7B8EjpY5b1+TUJPK3Qr5caAWm0ZZYRZQz+7WyBXw==}
+  xdrs-core@0.3.0:
+    resolution: {integrity: sha512-FNa+dMoNwN/bIxpOVQdEz3X09OzoLsrSpf3hTqo287zU478lbY7S5qpwO6GXJIilurD4nLiXHVEmJudOwNItlg==}
     hasBin: true
 
 snapshots:
@@ -180,7 +181,7 @@ snapshots:
 
   mypkg@1.0.0: {}
 
-  npmdata@0.14.2:
+  npmdata@0.15.0:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -191,7 +192,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  npmdata@0.15.0:
+  npmdata@0.18.4:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -221,8 +222,8 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.2.15:
+  xdrs-core@0.3.0:
     dependencies:
-      npmdata: 0.14.2
+      npmdata: 0.18.4
     transitivePeerDependencies:
       - typescript

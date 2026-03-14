@@ -1,12 +1,1 @@
 node_modules
-# npmdata:start
-.npmdata
-.xdrs/_core/adrs/index.md
-.xdrs/_core/adrs/principles/001-xdr-standards.md
-.xdrs/_core/adrs/principles/003-skill-standards.md
-.xdrs/_core/adrs/principles/skills/001-xdr-lint/SKILL.md
-.xdrs/_core/edrs/index.md
-.xdrs/_core/edrs/principles/001-coding-agent-behavior.md
-.xdrs/index.md
-AGENTS.md
-# npmdata:end
