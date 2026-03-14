@@ -15,11 +15,27 @@ XDRs in scopes listed last override the ones listed first.
 Foundational standards, principles, and guidelines.
 
 - [agentkit-edr-002](principles/002-coding-best-practices.md) - **Coding best practices**
-- [agentkit-edr-003](principles/003-javascript-project-tooling.md) - **JavaScript project tooling and structure** *(includes skill: [001-create-javascript-project](principles/skills/001-create-javascript-project/SKILL.md))*
 - [agentkit-edr-004](principles/004-unit-test-requirements.md) - **Unit test requirements**
-- [agentkit-edr-005](principles/005-monorepo-structure.md) - **Monorepo structure**
-- [agentkit-edr-006](principles/006-github-pipelines.md) - **GitHub CI/CD pipelines**
 - [agentkit-edr-007](principles/007-project-quality-standards.md) - **Project quality standards**
-- [agentkit-edr-008](principles/008-common-targets.md) - **Common development script names**
 - [agentkit-edr-009](principles/009-error-handling.md) - **Error handling**
-- [agentkit-edr-010](principles/010-golang-project-tooling.md) - **Go project tooling and structure** *(includes skill: [003-create-golang-project](principles/skills/003-create-golang-project/SKILL.md))*
+
+## Application
+
+Language and framework-specific tooling and project structure.
+
+- [agentkit-edr-003](application/003-javascript-project-tooling.md) - **JavaScript project tooling and structure** *(includes skill: [001-create-javascript-project](application/skills/001-create-javascript-project/SKILL.md))*
+- [agentkit-edr-010](application/010-golang-project-tooling.md) - **Go project tooling and structure** *(includes skill: [003-create-golang-project](application/skills/003-create-golang-project/SKILL.md))*
+
+## Devops
+
+Repository structure, build conventions, and CI/CD pipelines.
+
+- [agentkit-edr-005](devops/005-monorepo-structure.md) - **Monorepo structure** *(includes skill: [002-monorepo-setup](devops/skills/002-monorepo-setup/SKILL.md))*
+- [agentkit-edr-006](devops/006-github-pipelines.md) - **GitHub CI/CD pipelines**
+- [agentkit-edr-008](devops/008-common-targets.md) - **Common development script names**
+
+## Observability
+
+Health, metrics, logging, and monitoring standards.
+
+- [agentkit-edr-011](observability/011-service-health-check-endpoint.md) - **Service health check endpoint**

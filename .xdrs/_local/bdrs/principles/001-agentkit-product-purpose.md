@@ -59,4 +59,4 @@ agentkit ships two kinds of artifacts:
 
 - [_local-adr-001 - Project basics](../../adrs/principles/001-project-basics.md)
 - [_local-adr-002 - XDR scope guidelines](../../adrs/principles/002-xdr-scope-guidelines.md)
-- [agentkit-edr-003 - JavaScript project tooling](../../../agentkit/edrs/principles/003-javascript-project-tooling.md)
+- [agentkit-edr-003 - JavaScript project tooling](../../../agentkit/edrs/application/003-javascript-project-tooling.md)
