@@ -9,9 +9,8 @@ importers:
   .:
     dependencies:
       npmdata:
-        specifier: ^0.15.0
-        version: 0.15.0
-    devDependencies:
+        specifier: ^0.18.4
+        version: 0.18.4
       xdrs-core:
         specifier: ^0.3.0
         version: 0.3.0
@@ -87,10 +86,6 @@ packages:
 
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
-
-  npmdata@0.15.0:
-    resolution: {integrity: sha512-v4Eqvo5u45LJot8BFrIgGC5DpEqBUdO2Bucs6UxMxdL4j9ocn7v/jOHCcyDUvlEv10+iBpgpe314xdQDg7pIfw==}
-    hasBin: true
 
   npmdata@0.18.4:
     resolution: {integrity: sha512-7cSAVWGGSKmI9jhA70IZ4bdGd4NZY+7EOYnDI7fmdC1hhjpNNhDzkLbDTi4XoiMEpig2MfyvMc+Sxc5ZCu3K6A==}
@@ -180,17 +175,6 @@ snapshots:
       brace-expansion: 5.0.4
 
   mypkg@1.0.0: {}
-
-  npmdata@0.15.0:
-    dependencies:
-      cosmiconfig: 9.0.1
-      ignore: 7.0.5
-      minimatch: 10.2.4
-      mypkg: 1.0.0
-      package-manager-detector: 1.6.0
-      semver: 7.7.4
-    transitivePeerDependencies:
-      - typescript
 
   npmdata@0.18.4:
     dependencies:

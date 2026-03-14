@@ -1,3 +1,36 @@
-bump-deps:
-	@echo "Bumping XDRs core..."
-	npx -y xdrs-core@latest --upgrade
+all: build test
+
+build: install
+	pnpm pack --pack-destination=./dist
+
+lint:
+	@echo "No linting rules to check"
+
+test: build
+	make -C examples test
+
+clean:
+	rm -rf dist node_modules
+	make -C examples clean
+
+install:
+	pnpm install
+
+publish:
+	npx -y monotag@1.26.0 current --bump-action=latest --prefix=
+	@VERSION=$$(node -p "require('./package.json').version"); \
+	if echo "$$VERSION" | grep -q '-'; then \
+		TAG=$$(echo "$$VERSION" | sed 's/[0-9]*\.[0-9]*\.[0-9]*-\([a-zA-Z][a-zA-Z0-9]*\).*/\1/'); \
+		echo "Prerelease version $$VERSION detected, publishing with --tag $$TAG to avoid it being 'latest'"; \
+		npm publish --no-git-checks --tag "$$TAG"; \
+	else \
+		npm publish --no-git-checks; \
+	fi
+
+bump:
+	@echo "Bumping xdrs core..."
+	pnpm upgrade xdrs-core@latest
+	pnpm upgrade npmdata@latest
+
+	# we don't publish those files, but we use themselves
+	pnpm exec xdrs-core extract
