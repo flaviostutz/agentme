@@ -13,6 +13,9 @@ clean:
 	rm -rf dist node_modules
 	make -C examples clean
 
+setup:
+	mise install
+
 install:
 	pnpm install
 

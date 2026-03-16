@@ -1,0 +1,28 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Pre-release'
+        type: boolean
+        default: true
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          # this is needed if you want the tag push to trigger another workflow
+          # create a personal token and set a secret with name GH_PERSONAL_TOKEN
+          # https://github.com/orgs/community/discussions/27028
+          token: ${{ secrets.GH_PERSONAL_TOKEN }}
+      - name: Create tag and push to repo
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "Github Wokflow"
+          npx -y monotag@latest tag-push ${{ inputs.prerelease == true && '--pre-release' || '' }}

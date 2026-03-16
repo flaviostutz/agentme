@@ -66,7 +66,12 @@ The root `Makefile` **MUST** also define a `setup` target that guides a new cont
 
 - [Mise](https://mise.jdx.dev/) **MUST** be used to pin all tool versions (compilers, runtimes, CLI tools).
 - A `.mise.toml` **MUST** exist at the repository root.
+- Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command **MUST** be pinned in `.mise.toml`.
 - Contributors run `mise install` once after cloning.
+- Agents and contributors **MUST** check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
+- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run inside the Mise-managed environment, preferably via `mise exec -- <command>` or an activated Mise shell.
+- If a required tool is missing, the first remediation step **MUST** be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
+- Root and module `Makefile` targets **SHOULD** work correctly when invoked through `mise exec -- make <target>`.
 
 *Why:* Eliminates "works on my machine" build failures by ensuring identical tool versions across all environments.
 

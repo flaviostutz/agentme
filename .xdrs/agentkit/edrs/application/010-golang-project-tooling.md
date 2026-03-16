@@ -8,7 +8,7 @@ What tooling and project structure should Go projects follow to ensure consisten
 
 ## Decision Outcome
 
-**Use the standard Go toolchain (`go build`, `go test`) with `golangci-lint` for linting, feature packages in subdirectories (no `internal/` by default), a `cli/` package for command wiring, and a Makefile as the single entry point for all development tasks.**
+**Use the standard Go toolchain (`go build`, `go test`) with `golangci-lint` for linting, feature packages in subdirectories (no `internal/` by default), a `cli/` package for command wiring, and a Makefile as the single entry point for all development tasks, with the Go toolchain and related CLIs sourced from the repository's Mise-managed environment when the repository defines `.mise.toml`.**
 
 A predictable layout and minimal external tooling keep Go projects approachable, fast to build, and easy to distribute as cross-platform binaries.
 
@@ -23,6 +23,8 @@ A predictable layout and minimal external tooling keep Go projects approachable,
 | **monotag** | Version tagging from git history for the `publish` target |
 
 All commands are run exclusively through the Makefile, never ad-hoc.
+When the repository has a root `.mise.toml`, `go`, `golangci-lint`, and any other Go-related CLIs used by the project **MUST** be pinned there and resolved from the Mise-managed environment rather than the host machine.
+Direct installation of project-required Go CLIs with `go install ...@latest` as a repair step is **NOT** allowed unless an XDR for that repository explicitly permits it.
 
 #### Project structure
 
@@ -60,6 +62,7 @@ All commands are run exclusively through the Makefile, never ad-hoc.
 - Module path: `github.com/<owner>/<project>` (or the relevant VCS path for the project)
 - Use the latest stable Go version (e.g. `go 1.24`).
 - Separate `require` blocks: direct dependencies first, then `// indirect` dependencies.
+- If the repository uses Mise, the Go version declared in `go.mod` and the Go version pinned in `.mise.toml` **MUST** stay aligned.
 
 #### Makefile targets
 
@@ -78,6 +81,17 @@ All commands are run exclusively through the Makefile, never ad-hoc.
 | `clean` | Remove `dist/` and any coverage files |
 | `start` | `go run ./ <default-args>` — launch the binary locally for dev use |
 | `publish` | Tag with `monotag`, then push tag + binaries to GitHub Releases |
+
+When the repository uses Mise, the intended invocation pattern is:
+
+```sh
+mise install
+mise exec -- make build
+mise exec -- make test
+mise exec -- make lint
+```
+
+Using `make build`, `make test`, or `make lint` from an already activated Mise shell is equivalent.
 
 #### Cross-platform binary distribution
 

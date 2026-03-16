@@ -57,21 +57,22 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 | `install` | Download and install all project dependencies. Assumes the language runtime is already available (installed via `setup`). |
 | `compile` | Compile source files into binaries or transpiled output. Assumes dependencies are already installed. |
 | `package` | Assemble a distributable package from compiled files and other resources. Use the `VERSION` environment variable to set the package version explicitly. |
+| `bump` | Automatically upgrade dependencies to the latest version that satisfies the semver range declared in the dependency manifest (e.g., `package.json`, `go.mod`, `pyproject.toml`). Does not widen or change the declared range — only resolves to the highest compatible version within it. After bumping, updates the lockfile and stages the changes. Useful for routine dependency maintenance without risking breaking semver contracts. |
 
 ##### Lint group
 
 | Script | Purpose |
 |--------|---------|
-| `lint` | Run code style checks, formatting validation, code smell detection, dependency security scans, and project structure checks. |
-| `lint-fix` | Automatically fix linting and formatting issues where possible. |
-
+| `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks must be non-destructive (read-only); fixes are handled by `lint-fix`. |
+| `lint-fix` | Automatically fix linting and formatting issues where possible. || `lint-format` | *(Optional)* Check code formatting only (e.g., Prettier, gofmt, Black). |
 ##### Test group
 
 | Script | Purpose |
 |--------|---------|
-| `test` | Run the full test suite. Normally delegates to `test-unit` and `test-integration`. |
-| `test-unit` | Run unit tests only. |
-| `test-integration` | Run integration and end-to-end tests only. |
+| `test` | Run **all tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and integration/end-to-end tests. Normally delegates to `test-unit` and `test-integration` in sequence. |
+| `test-unit` | Run unit tests only, including coverage report generation and coverage threshold enforcement. |
+| `test-integration` | *(Optional)* Run integration and end-to-end tests only. Projects without integration tests may omit this target. |
+| `test-smoke` | *(Optional)* Run a fast, minimal subset of tests to verify the software is basically functional. Useful as a post-deploy health check. |
 
 ##### Release group
 
@@ -151,7 +152,7 @@ make build
 # run all tests (unit + integration)
 make test
 
-# check code style, formatting, and security findings
+# check code formatting, style, code smells, CVE audits, security scans, and project structure
 make lint
 
 # auto-fix lint/formatting issues
