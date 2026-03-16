@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       npmdata:
-        specifier: ^0.18.8
-        version: 0.18.8
+        specifier: ^0.18.9
+        version: 0.18.9
       xdrs-core:
         specifier: ^0.3.0
         version: 0.3.0
@@ -87,8 +87,8 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.18.8:
-    resolution: {integrity: sha512-TKz9GkeB922IBtsstbhNcubX3iw1iIDkbZf/rN62zCWA5M5Wpuu6plSiF7X49w+nv8/Sj44gUZiqxxzVijWwtg==}
+  npmdata@0.18.9:
+    resolution: {integrity: sha512-hyK8IFUWzPEIn87kabIQg2wOIQJZB5HDxy9X1C9lYCS0Nc1Br8sd4flvIdZITdX60W9z5HfU93tOqsSnlRXwuw==}
     hasBin: true
 
   package-manager-detector@1.6.0:
@@ -176,7 +176,7 @@ snapshots:
 
   mypkg@1.0.0: {}
 
-  npmdata@0.18.8:
+  npmdata@0.18.9:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -208,6 +208,6 @@ snapshots:
 
   xdrs-core@0.3.0:
     dependencies:
-      npmdata: 0.18.8
+      npmdata: 0.18.9
     transitivePeerDependencies:
       - typescript
