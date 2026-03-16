@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.18.4",
+    "npmdata": "^0.18.8",
     "xdrs-core": "^0.3.0"
   },
   "bin": "bin/npmdata.js",
@@ -31,7 +31,9 @@
           "path": ".",
           "gitignore": false
         },
-        "presets": ["basic"]
+        "presets": [
+          "basic"
+        ]
       },
       {
         "package": "agentkit",
@@ -44,7 +46,9 @@
           "path": ".",
           "gitignore": false
         },
-        "presets": ["basic"]
+        "presets": [
+          "basic"
+        ]
       },
       {
         "package": "agentkit",
@@ -59,7 +63,9 @@
           "skipIfExists": true,
           "gitignore": false
         },
-        "presets": ["basic"]
+        "presets": [
+          "basic"
+        ]
       },
       {
         "package": "agentkit",
@@ -69,13 +75,17 @@
             ".github/prompts/speckit*",
             ".specify/**"
           ],
-          "presets": ["speckit"]
+          "presets": [
+            "speckit"
+          ]
         },
         "output": {
           "path": ".",
           "gitignore": false
         },
-        "presets": ["speckit"]
+        "presets": [
+          "speckit"
+        ]
       },
       {
         "package": "agentkit",
@@ -83,7 +93,9 @@
           "files": [
             ".vscode/settings.json"
           ],
-          "presets": ["speckit"]
+          "presets": [
+            "speckit"
+          ]
         },
         "output": {
           "path": ".",
@@ -91,7 +103,9 @@
           "skipIfExists": true,
           "gitignore": false
         },
-        "presets": ["speckit"]
+        "presets": [
+          "speckit"
+        ]
       }
     ]
   }

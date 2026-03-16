@@ -1,0 +1,22 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v3
+      - run: make build
+      - run: make lint
+      - run: make test
+      - run: git reset --hard HEAD
+      - run: make publish
