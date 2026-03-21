@@ -3,4 +3,4 @@
 .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.3.0
 .xdrs/_core/adrs/principles/skills/001-lint/SKILL.md|xdrs-core|0.3.0
 .xdrs/_core/adrs/principles/skills/002-write-xdr/SKILL.md|xdrs-core|0.3.0
-AGENTS.md|xdrs-core|0.3.0
+AGENTS.md|xdrs-core|0.3.2

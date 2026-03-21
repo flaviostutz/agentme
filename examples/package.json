@@ -6,6 +6,6 @@
     "agentkit": "file:../dist/agentkit-0.0.1.tgz"
   },
   "devDependencies": {
-    "xdrs-core": "^0.3.0"
+    "xdrs-core": "^0.3.2"
   }
 }
