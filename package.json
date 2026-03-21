@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.18.13",
-    "xdrs-core": "^0.3.2"
+    "npmdata": "^0.18.14",
+    "xdrs-core": "^0.3.3"
   },
   "bin": "bin/npmdata.js",
   "files": [
@@ -36,7 +36,6 @@
         ]
       },
       {
-        "package": "agentkit",
         "selector": {
           "files": [
             ".xdrs/agentkit/**"
@@ -51,7 +50,6 @@
         ]
       },
       {
-        "package": "agentkit",
         "selector": {
           "files": [
             ".xdrs/index.md"
@@ -68,15 +66,11 @@
         ]
       },
       {
-        "package": "agentkit",
         "selector": {
           "files": [
             ".github/agents/speckit*",
             ".github/prompts/speckit*",
             ".specify/**"
-          ],
-          "presets": [
-            "speckit"
           ]
         },
         "output": {
@@ -88,13 +82,9 @@
         ]
       },
       {
-        "package": "agentkit",
         "selector": {
           "files": [
             ".vscode/settings.json"
-          ],
-          "presets": [
-            "speckit"
           ]
         },
         "output": {

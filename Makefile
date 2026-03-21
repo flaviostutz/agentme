@@ -35,5 +35,5 @@ bump:
 	pnpm upgrade xdrs-core@latest
 	pnpm upgrade npmdata@latest
 
-	# we don't publish those files, but we use themselves
+	# we don't publish those files, but we it use outself
 	pnpm exec xdrs-core extract
