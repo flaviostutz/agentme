@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       npmdata:
-        specifier: ^0.18.14
-        version: 0.18.14
+        specifier: ^0.19.0
+        version: 0.19.0
       xdrs-core:
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: ^0.3.4
+        version: 0.3.4
 
 packages:
 
@@ -87,8 +87,8 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.18.14:
-    resolution: {integrity: sha512-XSTZimWQXFaSIBKPmpua8D5IpDbDsRpy/4ClJlJzoKg6sj0mQ6tA3cC0BWsWJCll2aZOaG+lHXiDnRN0bL4DDA==}
+  npmdata@0.19.0:
+    resolution: {integrity: sha512-z7YvkLpPmuny5Xps/yyZh35yBSC05bIZz+pJdvvsb7xlWHIZvu5+E34y3tGLTnhSmTVpTtUQjHuHmrxOgILCSQ==}
     hasBin: true
 
   package-manager-detector@1.6.0:
@@ -114,8 +114,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.3.3:
-    resolution: {integrity: sha512-cSZ2u9BEVkhBlm4oUJrigabLtCNzc/0RCsLsmUAZZlMKEeQ2Q/IJGyn1NqZHl1qof9ztvt1+xqyVP+l2wYEgjQ==}
+  xdrs-core@0.3.4:
+    resolution: {integrity: sha512-yZZIufixl+NPwfMaj1lgnkeculJvOsTWNNRuGWkUGFpCCyOzYSq02sI5KxdY2Jbyk2homPHEuWSBpCQQyy709g==}
     hasBin: true
 
 snapshots:
@@ -176,7 +176,7 @@ snapshots:
 
   mypkg@1.0.0: {}
 
-  npmdata@0.18.14:
+  npmdata@0.19.0:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -206,8 +206,8 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.3.3:
+  xdrs-core@0.3.4:
     dependencies:
-      npmdata: 0.18.14
+      npmdata: 0.19.0
     transitivePeerDependencies:
       - typescript
