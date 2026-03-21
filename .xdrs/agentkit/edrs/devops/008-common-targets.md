@@ -46,7 +46,8 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 | `setup` | Install any tools required on the developer machine (e.g., nvm, brew, python, golang). Typically run once per project checkout. In CI, tooling is usually pre-provisioned via runner images or workflow steps instead. |
 | `all` | Alias that runs `build`, `lint`, and `test` in sequence. Must be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. |
 | `clean` | Remove all temporary or generated files created during build, lint, or test (e.g., `node_modules`, virtual environments, compiled binaries, generated files). Used both locally and in CI for a clean slate. |
-| `start` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). |
+| `dev` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). May have debugging tools, verbose logging, or hot reloading features enabled. |
+| `run` | Run the software in production mode (e.g., start a compiled binary, launch a production server). No debugging or development-only features should be enabled. |
 | `update-lockfile` | Update the dependency lockfile to reflect the latest resolved versions of all dependencies. |
 
 ##### Build group
@@ -105,10 +106,12 @@ Projects may add custom scripts beyond the standard set. Custom scripts must be 
 
 ```
 build-dev         # prepare a build specifically for STAGE=dev
+build-docker      # build a Docker image with the application
 test-smoke        # run a fast subset of unit tests on critical paths
 test-examples     # run the examples/ folder as integration tests
 publish-npm       # publish to the npm registry specifically
 publish-docker    # publish a Docker image
+run-docker        # run the application inside a Docker container
 start-debugger    # launch the software with a visual debugger attached
 deploy-infra      # deploy only the infrastructure layer
 ```
@@ -158,8 +161,11 @@ make lint
 # auto-fix lint/formatting issues
 make lint-fix
 
-# run the software locally
-make start
+# run the software in dev mode (may have hot reload, debug tools enabled, verbose logging etc)
+make dev
+
+# run the software in production mode
+make run
 
 # generate next version, changelogs, and tag the repo; then package
 make release package

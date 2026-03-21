@@ -13,9 +13,12 @@
    - Analyse your work against the XDRs and ensure implementation decisions follow guidelines and patterns
    - Fix any issues
 
-4. **Do not perform git operations unless explicitelly asked**
+4. **Document decisions as XDRs when appropriate**
+   - Check if what is being performed shouldn't be documented as an XDR in _local scope (because the decision has potential to be reused in the future or the topic is complex and would benefit from a document for clarity). Create or update existing documents accordingly.
+
+5. **Do not perform git operations unless explicitelly asked**
    - The developer should be in control of possible destructive operations on the workspace
 
-Check for additional instructions on [AGENTS-LOCAL.md](AGENTS-LOCAL.md).
+Check for additional instructions on [AGENTS.local.md](AGENTS.local.md).
 
 **This AGENTS.md file was created with xdrs-core and shouldn't be changed**
