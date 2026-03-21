@@ -1,4 +1,4 @@
-# agentkit-edr-002: Coding best practices
+# agentme-edr-002: Coding best practices
 
 ## Context and Problem Statement
 

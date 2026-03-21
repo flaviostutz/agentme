@@ -13,11 +13,11 @@ Decisions about how XDRs work
 
 ---
 
-### agentkit
+### agentme
 
 Opiniated set of decisions and skills for common development tasks
 
-[View agentkit EDRs Index](agentkit/edrs/index.md)
+[View agentme EDRs Index](agentme/edrs/index.md)
 
 ---
 

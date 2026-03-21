@@ -1,4 +1,4 @@
-# agentkit-edr-005: Monorepo structure
+# agentme-edr-005: Monorepo structure
 
 ## Context and Problem Statement
 

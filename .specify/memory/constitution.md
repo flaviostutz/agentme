@@ -19,12 +19,12 @@ Templates checked:
 
 Related XDRs created:
   - .xdrs/_local/bdrs/index.md            ✅ created
-  - .xdrs/_local/bdrs/principles/001-agentkit-product-purpose.md  ✅ created
+  - .xdrs/_local/bdrs/principles/001-agentme-product-purpose.md  ✅ created
 
 Follow-up TODOs: none
 -->
 
-# agentkit Constitution
+# agentme Constitution
 
 ## Core Principles
 
@@ -39,11 +39,11 @@ vibe coding, onboarding, and future feature development.
 - ADRs capture architectural context and cross-cutting patterns.
 - EDRs capture concrete engineering decisions: tooling, structure, practices.
 - Every non-trivial implementation decision MUST have a corresponding XDR entry in `_local` or
-  `agentkit` scope before the implementation task is marked complete.
+  `agentme` scope before the implementation task is marked complete.
 
 ### II. Preset Integrity (NON-NEGOTIABLE)
 
-agentkit distributes files to consumer projects via named presets (`basic`, `speckit`). Each
+agentme distributes files to consumer projects via named presets (`basic`, `speckit`). Each
 preset MUST be independently coherent, non-overlapping, and verified on every build.
 
 - A preset MUST contain all files a consumer needs and nothing more.
@@ -90,7 +90,7 @@ The simplest solution that passes all tests is always preferred. Quality gates a
 
 - `make test` in `examples/` MUST verify all preset extraction scenarios end-to-end.
 - XDRs produced during a feature MUST be reviewed for non-conflict before merging.
-- All XDR indexes (`_local`, `agentkit`, `_core`) MUST be updated before a PR is merged.
+- All XDR indexes (`_local`, `agentme`, `_core`) MUST be updated before a PR is merged.
 - New presets or selector changes MUST include updated test assertions in the examples Makefile.
 
 ## Development Workflow

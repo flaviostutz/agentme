@@ -3,7 +3,7 @@ name: 002-monorepo-setup
 description: >
   Step-by-step instructions for setting up and scaffolding a new monorepo following the standard
   layout, naming conventions, Makefiles, Mise tooling, and README requirements defined in
-  agentkit-edr-005. Activate this skill when the user asks to create, initialize, or set up a
+  agentme-edr-005. Activate this skill when the user asks to create, initialize, or set up a
   monorepo, add a new application or module to an existing monorepo, or verify that a monorepo
   complies with the standard structure.
 metadata:
@@ -13,12 +13,12 @@ metadata:
 
 ## Overview
 
-Creates or extends a monorepo that follows the standard layout from [agentkit-edr-005](../../005-monorepo-structure.md):
+Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../005-monorepo-structure.md):
 top-level application folders, a shared library area, Mise-managed tooling, and Makefiles at every
 level so any contributor can build, lint, and test any part of the monorepo with a single,
 predictable command.
 
-Related EDR: [agentkit-edr-005](../../005-monorepo-structure.md)
+Related EDR: [agentme-edr-005](../../005-monorepo-structure.md)
 
 ## Instructions
 

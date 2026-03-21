@@ -1,4 +1,4 @@
-# agentkit-edr-010: Go project tooling and structure
+# agentme-edr-010: Go project tooling and structure
 
 ## Context and Problem Statement
 

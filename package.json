@@ -1,5 +1,5 @@
 {
-  "name": "agentkit",
+  "name": "agentme",
   "version": "0.0.1",
   "description": "",
   "dependencies": {
@@ -10,7 +10,7 @@
   "files": [
     "package.json",
     "bin/npmdata.js",
-    ".xdrs/agentkit/**",
+    ".xdrs/agentme/**",
     ".xdrs/index.md",
     ".github/agents/speckit*",
     ".github/prompts/speckit*",
@@ -38,7 +38,7 @@
       {
         "selector": {
           "files": [
-            ".xdrs/agentkit/**"
+            ".xdrs/agentme/**"
           ]
         },
         "output": {

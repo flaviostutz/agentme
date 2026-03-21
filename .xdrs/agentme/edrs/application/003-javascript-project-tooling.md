@@ -1,4 +1,4 @@
-# agentkit-edr-003: JavaScript project tooling and structure
+# agentme-edr-003: JavaScript project tooling and structure
 
 ## Context and Problem Statement
 

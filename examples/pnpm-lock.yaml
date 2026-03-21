@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      agentkit:
-        specifier: file:../dist/agentkit-0.0.1.tgz
-        version: file:../dist/agentkit-0.0.1.tgz
+      agentme:
+        specifier: file:../dist/agentme-0.0.1.tgz
+        version: file:../dist/agentme-0.0.1.tgz
     devDependencies:
       xdrs-core:
         specifier: ^0.3.2
@@ -26,8 +26,8 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
-  agentkit@file:../dist/agentkit-0.0.1.tgz:
-    resolution: {integrity: sha512-CH3fLGEPYGqm+EKFqD8gZ59cjF5wLkG/xVDhY1f1aU+sDlC+HmC4FIrPqZ6ZikVYFqcINMKiARIYKVtbJNHF9g==, tarball: file:../dist/agentkit-0.0.1.tgz}
+  agentme@file:../dist/agentme-0.0.1.tgz:
+    resolution: {integrity: sha512-jPOT+NCeJvGeUL4cHwlAJffcqOGc6jDYM1I8mFR1vd7ZD/mCpDIAcDUUnQjCMJzFlwul4KFSUBipfF14MZO9qA==, tarball: file:../dist/agentme-0.0.1.tgz}
     version: 0.0.1
     hasBin: true
 
@@ -142,7 +142,7 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
-  agentkit@file:../dist/agentkit-0.0.1.tgz:
+  agentme@file:../dist/agentme-0.0.1.tgz:
     dependencies:
       npmdata: 0.18.14
       xdrs-core: 0.3.3

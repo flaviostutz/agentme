@@ -2,7 +2,7 @@
 name: 003-create-golang-project
 description: >
   Scaffolds the initial boilerplate structure for a Go (Golang) CLI or library project following
-  the standard tooling and layout defined in agentkit-edr-010. Activate this skill when the user
+  the standard tooling and layout defined in agentme-edr-010. Activate this skill when the user
   asks to create, scaffold, or initialize a new Go project, CLI binary, or Go module.
 metadata:
   author: flaviostutz
@@ -12,9 +12,9 @@ compatibility: Go 1.21+
 
 ## Overview
 
-Creates a complete Go CLI project from scratch, following the layout from [agentkit-edr-010](../../010-golang-project-tooling.md). Business logic lives in named feature packages; CLI wiring lives in `cli/<feature>/`; `main.go` is a thin dispatcher. The project builds cross-platform static binaries via a Makefile.
+Creates a complete Go CLI project from scratch, following the layout from [agentme-edr-010](../../010-golang-project-tooling.md). Business logic lives in named feature packages; CLI wiring lives in `cli/<feature>/`; `main.go` is a thin dispatcher. The project builds cross-platform static binaries via a Makefile.
 
-Related EDR: [agentkit-edr-010](../../010-golang-project-tooling.md)
+Related EDR: [agentme-edr-010](../../010-golang-project-tooling.md)
 
 ## Instructions
 
