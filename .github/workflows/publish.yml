@@ -24,5 +24,3 @@ jobs:
       - run: make test
       - run: git reset --hard HEAD
       - run: make publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
