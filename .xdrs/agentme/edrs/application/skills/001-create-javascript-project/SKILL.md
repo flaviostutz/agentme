@@ -18,7 +18,7 @@ library source (`lib/`) from runnable usage examples (`examples/`), coordinated 
 Makefiles. Boilerplate is derived from the [npmdata](https://github.com/flaviostutz/npmdata)
 project.
 
-Related EDR: [agentkit-edr-003](../../003-javascript-project-tooling.md)
+Related EDR: [agentme-edr-003](../../003-javascript-project-tooling.md)
 
 ## Instructions
 

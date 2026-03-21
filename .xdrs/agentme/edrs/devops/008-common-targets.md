@@ -1,4 +1,4 @@
-# agentkit-edr-008: Common development script names
+# agentme-edr-008: Common development script names
 
 ## Context and Problem Statement
 
@@ -137,7 +137,7 @@ test:
 
 A developer can run `make test` at the repo root to test everything, or `cd module-a && make test` to test a single module. Both must work.
 
-**Reference:** See [agentkit-edr-005](005-monorepo-structure.md) for the full monorepo layout convention.
+**Reference:** See [agentme-edr-005](005-monorepo-structure.md) for the full monorepo layout convention.
 
 ---
 

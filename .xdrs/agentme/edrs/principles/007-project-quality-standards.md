@@ -1,4 +1,4 @@
-# agentkit-edr-007: Project quality standards
+# agentme-edr-007: Project quality standards
 
 ## Context and Problem Statement
 
@@ -54,7 +54,7 @@ A unit test suite must run automatically before every release. Failing tests mus
 
 **Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects must never be deployed to production.
 
-**Reference:** [agentkit-edr-004](004-unit-test-requirements.md) for detailed unit test requirements.
+**Reference:** [agentme-edr-004](004-unit-test-requirements.md) for detailed unit test requirements.
 
 ---
 
@@ -80,7 +80,7 @@ Projects larger than 10 files or 200 lines of code must have a linter configured
 
 **Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects must never be deployed to production.
 
-**Reference:** [agentkit-edr-003](003-javascript-project-tooling.md) for JavaScript-specific tooling.
+**Reference:** [agentme-edr-003](003-javascript-project-tooling.md) for JavaScript-specific tooling.
 
 ---
 

@@ -2,13 +2,13 @@
 
 ## Context and Problem Statement
 
-What is agentkit's purpose and what quality bar must its XDRs and skills meet?
+What is agentme's purpose and what quality bar must its XDRs and skills meet?
 
 ## Decision Outcome
 
-**agentkit is a curated library of XDRs and skills encoding best practices for AI coding agents**
+**agentme is a curated library of XDRs and skills encoding best practices for AI coding agents**
 
-agentkit ships two kinds of artifacts: XDRs (ADR/BDR/EDR) that capture best practices and architectural decisions for coding, and skills that encode reusable procedures for AI coding agents. All artifacts are intended for consumption by external projects, so consistency and clarity are paramount.
+agentme ships two kinds of artifacts: XDRs (ADR/BDR/EDR) that capture best practices and architectural decisions for coding, and skills that encode reusable procedures for AI coding agents. All artifacts are intended for consumption by external projects, so consistency and clarity are paramount.
 
 ### Implementation Details
 
@@ -20,16 +20,16 @@ agentkit ships two kinds of artifacts: XDRs (ADR/BDR/EDR) that capture best prac
 
 **Consistency requirements**
 
-Because agentkit XDRs and skills are used as a source of truth by other projects, consistency is paramount. Before adding or changing any XDR or skill:
+Because agentme XDRs and skills are used as a source of truth by other projects, consistency is paramount. Before adding or changing any XDR or skill:
 
 1. Verify the content is clear and unambiguous on its own.
-2. Verify it does not conflict with existing XDRs in the same or other scopes within agentkit.
+2. Verify it does not conflict with existing XDRs in the same or other scopes within agentme.
 3. Explicitly document any accepted conflict in the XDR "Conflicts" section with justification.
 4. Update all affected indexes.
 
 **Consumer integration**
 
-Projects that import agentkit XDRs must add the `agentkit` scope to their `.xdrs/index.md` above `_local`, so local overrides remain in effect.
+Projects that import agentme XDRs must add the `agentme` scope to their `.xdrs/index.md` above `_local`, so local overrides remain in effect.
 
 ## References
 

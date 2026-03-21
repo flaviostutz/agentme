@@ -1,4 +1,4 @@
-# agentkit
+# agentme
 
 Curated distribution package of XDRs and speckit agent workflow files for AI-assisted software development.
 
@@ -6,25 +6,25 @@ This collection is being updated as we develop applications and feel the need fo
 
 ## Getting Started
 
-This will extract all the features of agentkit (skills, github configurations, speckit, xdrs collection):
+This will extract all the features of agentme (skills, github configurations, speckit, xdrs collection):
 
 ```sh
-npx agentkit
+npx agentme
 ```
 
-If you want the version pinned in a project, add `agentkit` to a repository that already has a `package.json` and run it through the local dependency:
+If you want the version pinned in a project, add `agentme` to a repository that already has a `package.json` and run it through the local dependency:
 
 ```sh
-pnpm add -D agentkit
-pnpm exec agentkit extract --output . --presets basic
-pnpm exec agentkit check --output . --presets basic
+pnpm add -D agentme
+pnpm exec agentme extract --output . --presets basic
+pnpm exec agentme check --output . --presets basic
 ```
 
 ## Overview
 
-agentkit is published as an npm package and consumed through `npmdata`-based extraction. It ships a curated set of reusable artifacts for other repositories:
+agentme is published as an npm package and consumed through `npmdata`-based extraction. It ships a curated set of reusable artifacts for other repositories:
 
-- XDRs in `.xdrs/agentkit/` for engineering, architecture, testing, tooling, and CI/CD standards.
+- XDRs in `.xdrs/agentme/` for engineering, architecture, testing, tooling, and CI/CD standards.
 - speckit agent files in `.github/`, `.specify/`, and `.vscode/` for specification-driven AI development workflows.
 
 The package is intentionally static: consumers install it as a development dependency, extract files into their own repository, and commit the generated output.
@@ -33,14 +33,14 @@ The package is intentionally static: consumers install it as a development depen
 
 | Preset | Contents |
 | --- | --- |
-| `basic` | `xdrs-core` baseline ADRs, `AGENTS.md`, and agentkit XDRs |
+| `basic` | `xdrs-core` baseline ADRs, `AGENTS.md`, and agentme XDRs |
 | `speckit` | speckit agents, prompts, templates, scripts, memory files, and VS Code settings |
 | no preset | all shipped artifacts combined |
 
 Typical consumer workflow:
 
-1. For one-off use or a new empty folder, run `npx agentkit --presets <preset>`.
-2. For a pinned project version, add `agentkit` to `package.json` and use `pnpm exec agentkit ...`.
+1. For one-off use or a new empty folder, run `npx agentme --presets <preset>`.
+2. For a pinned project version, add `agentme` to `package.json` and use `pnpm exec agentme ...`.
 3. Review and commit the extracted files.
 4. Re-run `extract` and `check` when upgrading the package.
 
@@ -48,7 +48,7 @@ Typical consumer workflow:
 
 ### Guide AI coding with maintained ADRs and EDRs
 
-Use agentkit when you want architectural and engineering decisions to actively constrain how coding agents implement features. The extracted ADRs and EDRs give the repository a durable source of truth for architecture, coding practices, testing expectations, tooling, and delivery standards.
+Use agentme when you want architectural and engineering decisions to actively constrain how coding agents implement features. The extracted ADRs and EDRs give the repository a durable source of truth for architecture, coding practices, testing expectations, tooling, and delivery standards.
 
 This is useful when you want agents to:
 
@@ -74,7 +74,7 @@ This is useful when you want to:
 
 - keep the project decision log up to date as new features are specified and implemented;
 - have architecture, engineering, and business documentation generated in a consistent XDR format;
-- reuse the same XDR-based approach across other repositories that consume agentkit.
+- reuse the same XDR-based approach across other repositories that consume agentme.
 
 ## Development
 
@@ -110,10 +110,10 @@ What these targets do:
 Key folders:
 
 - `.xdrs/_core/` contains the baseline XDR framework imported from `xdrs-core`.
-- `.xdrs/agentkit/` contains the reusable XDRs distributed to consumers.
+- `.xdrs/agentme/` contains the reusable XDRs distributed to consumers.
 - `.xdrs/_local/` contains internal decisions for this repository only and is not shipped to consumers.
 - `examples/output/` is generated during tests to validate preset extraction and cleanup behavior.
 
 ## Release Notes
 
-The published package exposes the `agentkit` CLI through `bin/npmdata.js` and is released to npm using the root `publish` target. The examples install the locally packed tarball from `dist/` so they exercise the same package shape an external consumer receives.
+The published package exposes the `agentme` CLI through `bin/npmdata.js` and is released to npm using the root `publish` target. The examples install the locally packed tarball from `dist/` so they exercise the same package shape an external consumer receives.

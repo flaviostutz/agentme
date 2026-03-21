@@ -1,4 +1,4 @@
-# agentkit-edr-011: Service health check endpoint
+# agentme-edr-011: Service health check endpoint
 
 ## Context and Problem Statement
 

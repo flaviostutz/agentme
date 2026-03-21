@@ -1,4 +1,4 @@
-# agentkit-edr-006: GitHub CI/CD pipelines
+# agentme-edr-006: GitHub CI/CD pipelines
 
 ## Context and Problem Statement
 
@@ -129,7 +129,7 @@ jobs:
 
 *Why rebuild on publish:* The checkout is done from the exact tag commit. Rebuilding ensures the published artifact matches exactly what is tagged, rather than relying on a prior CI artifact.
 
-*Why `id-token: write`:* Required for npm provenance attestation via `npm publish --provenance`, as specified in [agentkit-edr-003](003-javascript-project-tooling.md).
+*Why `id-token: write`:* Required for npm provenance attestation via `npm publish --provenance`, as specified in [agentme-edr-003](003-javascript-project-tooling.md).
 
 ---
 

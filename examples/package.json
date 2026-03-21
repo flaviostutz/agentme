@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example",
   "dependencies": {
-    "agentkit": "file:../dist/agentkit-0.0.1.tgz"
+    "agentme": "file:../dist/agentme-0.0.1.tgz"
   },
   "devDependencies": {
     "xdrs-core": "^0.3.2"
