@@ -17,6 +17,10 @@
     ".specify/**",
     ".vscode/settings.json"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flaviostutz/agentme.git"
+  },
   "npmdata": {
     "sets": [
       {
