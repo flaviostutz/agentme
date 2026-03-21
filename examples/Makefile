@@ -46,10 +46,12 @@ test: build
 	pnpm exec agentkit extract --output ./output --presets speckit
 	test -e output/.github/agents/speckit.analyze.agent.md
 	test -e output/.specify/memory/constitution.md
-	test ! -e output/.xdrs/index.md
 	test ! -e output/AGENTS.md
 	test ! -e output/.xdrs/_core/adrs/principles/001-xdr-standards.md
 	pnpm exec agentkit check --output ./output --presets speckit
+
+	# present because of previous extractions (it's not managed)
+	test -e output/.xdrs/index.md
 
 
 build: clean install
