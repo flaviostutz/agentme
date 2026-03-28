@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       npmdata:
-        specifier: ^0.19.0
-        version: 0.19.0
+        specifier: ^0.20.0
+        version: 0.20.0
       xdrs-core:
-        specifier: ^0.3.4
-        version: 0.3.4
+        specifier: ^0.3.6
+        version: 0.3.6
 
 packages:
 
@@ -32,8 +32,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  brace-expansion@5.0.4:
-    resolution: {integrity: sha512-h+DEnpVvxmfVefa4jFbCf5HdH5YMDXRsmKflpf1pILZWRFlTbJpxeU55nJl4Smt5HQaGzg1o6RHFPJaOqnmBDg==}
+  brace-expansion@5.0.5:
+    resolution: {integrity: sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ==}
     engines: {node: 18 || 20 || >=22}
 
   callsites@3.1.0:
@@ -87,8 +87,8 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.19.0:
-    resolution: {integrity: sha512-z7YvkLpPmuny5Xps/yyZh35yBSC05bIZz+pJdvvsb7xlWHIZvu5+E34y3tGLTnhSmTVpTtUQjHuHmrxOgILCSQ==}
+  npmdata@0.20.0:
+    resolution: {integrity: sha512-IK1XnO7D/cYbO/aXCpcyXEiDOdF5FAUdCNpwH+MvbPhF0D7WtcfDx7L/xBfCSyW9r3u/T/zNBNop0ts0hEPOWA==}
     hasBin: true
 
   package-manager-detector@1.6.0:
@@ -114,8 +114,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.3.4:
-    resolution: {integrity: sha512-yZZIufixl+NPwfMaj1lgnkeculJvOsTWNNRuGWkUGFpCCyOzYSq02sI5KxdY2Jbyk2homPHEuWSBpCQQyy709g==}
+  xdrs-core@0.3.6:
+    resolution: {integrity: sha512-rfBGSHbMKO4AIH0us9byBV7IbZetiqujOtjm9oJOoWTWTtqb9Gh2VOhiQf7O3vdFTu3QqEglFk9920iI+ycIXg==}
     hasBin: true
 
 snapshots:
@@ -132,7 +132,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  brace-expansion@5.0.4:
+  brace-expansion@5.0.5:
     dependencies:
       balanced-match: 4.0.4
 
@@ -172,11 +172,11 @@ snapshots:
 
   minimatch@10.2.4:
     dependencies:
-      brace-expansion: 5.0.4
+      brace-expansion: 5.0.5
 
   mypkg@1.0.0: {}
 
-  npmdata@0.19.0:
+  npmdata@0.20.0:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -206,8 +206,8 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.3.4:
+  xdrs-core@0.3.6:
     dependencies:
-      npmdata: 0.19.0
+      npmdata: 0.20.0
     transitivePeerDependencies:
       - typescript

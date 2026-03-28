@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.19.0",
-    "xdrs-core": "^0.3.4"
+    "npmdata": "^0.20.0",
+    "xdrs-core": "^0.3.6"
   },
   "bin": "bin/npmdata.js",
   "files": [

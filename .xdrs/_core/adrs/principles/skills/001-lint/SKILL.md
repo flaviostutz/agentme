@@ -17,7 +17,7 @@ Performs a structured review of code changes or files against the XDRs in the re
 ### Phase 1: Code Gathering
 
 1. Identify changes based on requested scope:
-   - For diffs: run and parse `git diff origin/main`
+   - For diffs: run and parse `git diff refs/remotes/origin/HEAD`
    - For files: analyze file contents directly
 
 ### Phase 2: XDR Compilation
