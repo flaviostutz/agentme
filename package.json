@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.20.0",
+    "npmdata": "^0.20.1",
     "xdrs-core": "^0.3.6"
   },
   "bin": "bin/npmdata.js",
