@@ -38,8 +38,7 @@ vibe coding, onboarding, and future feature development.
 - BDRs capture product purpose, business rules, and consumer workflows.
 - ADRs capture architectural context and cross-cutting patterns.
 - EDRs capture concrete engineering decisions: tooling, structure, practices.
-- Every non-trivial implementation decision MUST have a corresponding XDR entry in `_local` or
-  `agentme` scope before the implementation task is marked complete.
+- Every non-trivial implementation decision MUST have a corresponding XDR entry before the implementation task is marked complete. Create new XDRs if necessary.
 
 ### II. Preset Integrity (NON-NEGOTIABLE)
 
