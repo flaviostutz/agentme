@@ -93,11 +93,11 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.18.13:
+  filedist@0.18.13:
     resolution: {integrity: sha512-q+p0wMov2mjAjYHQd2jJzEvVtQObFWVoIfGZrRKaawEjeNhLHFNI5HAa1XqqgKPz4Td7fx9R+ZcKzyXcb0JfDQ==}
     hasBin: true
 
-  npmdata@0.18.14:
+  filedist@0.18.14:
     resolution: {integrity: sha512-XSTZimWQXFaSIBKPmpua8D5IpDbDsRpy/4ClJlJzoKg6sj0mQ6tA3cC0BWsWJCll2aZOaG+lHXiDnRN0bL4DDA==}
     hasBin: true
 
@@ -144,7 +144,7 @@ snapshots:
 
   agentme@file:../dist/agentme-0.0.1.tgz:
     dependencies:
-      npmdata: 0.18.14
+      filedist: 0.18.14
       xdrs-core: 0.3.3
     transitivePeerDependencies:
       - typescript
@@ -197,7 +197,7 @@ snapshots:
 
   mypkg@1.0.0: {}
 
-  npmdata@0.18.13:
+  filedist@0.18.13:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -208,7 +208,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  npmdata@0.18.14:
+  filedist@0.18.14:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -240,12 +240,12 @@ snapshots:
 
   xdrs-core@0.3.2:
     dependencies:
-      npmdata: 0.18.13
+      filedist: 0.18.13
     transitivePeerDependencies:
       - typescript
 
   xdrs-core@0.3.3:
     dependencies:
-      npmdata: 0.18.14
+      filedist: 0.18.14
     transitivePeerDependencies:
       - typescript

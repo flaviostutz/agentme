@@ -32,8 +32,8 @@ publish:
 
 bump:
 	@echo "Bumping xdrs core..."
-	pnpm upgrade xdrs-core@latest
-	pnpm upgrade npmdata@latest
+	pnpm add xdrs-core@latest
+	pnpm add filedist@latest
 
 	# we don't directly publish those files, but the project uses it itself
 	pnpm exec xdrs-core extract

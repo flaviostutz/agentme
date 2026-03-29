@@ -15,7 +15,7 @@ compatibility: JavaScript/TypeScript, Node.js 18+
 
 Creates a complete JavaScript/TypeScript library project from scratch. The layout separates
 library source (`lib/`) from runnable usage examples (`examples/`), coordinated by root-level
-Makefiles. Boilerplate is derived from the [npmdata](https://github.com/flaviostutz/npmdata)
+Makefiles. Boilerplate is derived from the [filedist](https://github.com/flaviostutz/filedist)
 project.
 
 Related EDR: [agentme-edr-003](../../003-javascript-project-tooling.md)
@@ -70,7 +70,7 @@ prepare:
 node_modules/
 dist/
 *.tgz
-.npmdata
+.filedist
 ```
 
 ---

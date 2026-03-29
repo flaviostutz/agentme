@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "npmdata": "^0.20.1",
-    "xdrs-core": "^0.3.6"
+    "filedist": "^0.21.2",
+    "xdrs-core": "^0.3.8"
   },
-  "bin": "bin/npmdata.js",
+  "bin": "bin/filedist.js",
   "files": [
     "package.json",
-    "bin/npmdata.js",
+    "bin/filedist.js",
     ".xdrs/agentme/**",
     ".xdrs/index.md",
     ".github/agents/speckit*",
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "https://github.com/flaviostutz/agentme.git"
   },
-  "npmdata": {
+  "filedist": {
     "sets": [
       {
         "package": "xdrs-core",
