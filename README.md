@@ -22,7 +22,7 @@ pnpm exec agentme check --output . --presets basic
 
 ## Overview
 
-agentme is published as an npm package and consumed through `npmdata`-based extraction. It ships a curated set of reusable artifacts for other repositories:
+agentme is published as an npm package and consumed through `filedist`-based extraction. It ships a curated set of reusable artifacts for other repositories:
 
 - XDRs in `.xdrs/agentme/` for engineering, architecture, testing, tooling, and CI/CD standards.
 - speckit agent files in `.github/`, `.specify/`, and `.vscode/` for specification-driven AI development workflows.
@@ -99,7 +99,7 @@ What these targets do:
 ├── AGENTS.md           Project instructions for AI coding agents
 ├── Makefile            Root build, lint, test, and publish entry point
 ├── .mise.toml          Pinned tool versions (Node.js, pnpm)
-├── bin/                CLI entrypoint delegated to npmdata
+├── bin/                CLI entrypoint delegated to filedist
 ├── dist/               Generated npm package tarballs
 ├── examples/           Runnable verification of consumer extraction behavior
 ├── .github/            Shipped speckit agent and prompt files
@@ -116,4 +116,4 @@ Key folders:
 
 ## Release Notes
 
-The published package exposes the `agentme` CLI through `bin/npmdata.js` and is released to npm using the root `publish` target. The examples install the locally packed tarball from `dist/` so they exercise the same package shape an external consumer receives.
+The published package exposes the `agentme` CLI through `bin/filedist.js` and is released to npm using the root `publish` target. The examples install the locally packed tarball from `dist/` so they exercise the same package shape an external consumer receives.

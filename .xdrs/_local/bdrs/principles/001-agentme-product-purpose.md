@@ -11,7 +11,7 @@ What is agentme's product purpose, who are its consumers, and how do they integr
 ## Decision Outcome
 
 **agentme is a curated distribution package of XDRs and AI agent skills, consumed by other
-projects via npmdata preset extraction.**
+projects via filedist preset extraction.**
 
 Consumers install agentme as an npm dependency and run preset extraction to populate their own
 repository with a curated set of XDRs and speckit agent files. The product value is the curation:
@@ -36,7 +36,7 @@ agentme ships two kinds of artifacts:
 1. Consumer adds `agentme` as an npm devDependency.
 2. Consumer runs `pnpm exec agentme extract --output . --presets <preset>` to populate their
    repository.
-3. Consumer commits the extracted files; agentme manages updates via the `.npmdata` marker.
+3. Consumer commits the extracted files; agentme manages updates via the `.filedist` marker.
 
 **Preset model**
 

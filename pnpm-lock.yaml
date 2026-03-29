@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
-      npmdata:
-        specifier: ^0.20.1
-        version: 0.20.1
+      filedist:
+        specifier: ^0.21.2
+        version: 0.21.2
       xdrs-core:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
 
 packages:
 
@@ -56,6 +56,10 @@ packages:
   error-ex@1.3.4:
     resolution: {integrity: sha512-sqQamAnR14VgCr1A618A3sGrygcpK+HEbenA/HiEAkkUwcZIIB/tgWqHFxWgOyDh4nB4JCRimh79dR5Ywc9MDQ==}
 
+  filedist@0.21.2:
+    resolution: {integrity: sha512-kJbHBqywCj3mBYzYtzUZSs/DcvbF1cHeyh3lW9KNtbypzi0DPWsjbPAzpkYNli9MfIxK1t8wS54y52Z/ktYS/g==}
+    hasBin: true
+
   ignore@7.0.5:
     resolution: {integrity: sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==}
     engines: {node: '>= 4'}
@@ -87,10 +91,6 @@ packages:
   mypkg@1.0.0:
     resolution: {integrity: sha512-bUYxZK4prscFYS4f1NYXcZ+TJBjsx+BSdMA+7F3gXGdBRHCDBdVZS5vIlnEWzYuL2jeVNyJZWlFfTmLZMEOh8g==}
 
-  npmdata@0.20.1:
-    resolution: {integrity: sha512-tNi/IYPc4Q+8ClCNvfHhhM/2Km1hBFtwAF1e7DJkeL5KGdYmSOvxSpPS/6/wkf/JeEkipMsZBqd6oXIp0xhjtg==}
-    hasBin: true
-
   package-manager-detector@1.6.0:
     resolution: {integrity: sha512-61A5ThoTiDG/C8s8UMZwSorAGwMJ0ERVGj2OjoW5pAalsNOg15+iQiPzrLJ4jhZ1HJzmC2PIHT2oEiH3R5fzNA==}
 
@@ -114,8 +114,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.3.6:
-    resolution: {integrity: sha512-rfBGSHbMKO4AIH0us9byBV7IbZetiqujOtjm9oJOoWTWTtqb9Gh2VOhiQf7O3vdFTu3QqEglFk9920iI+ycIXg==}
+  xdrs-core@0.3.8:
+    resolution: {integrity: sha512-94IiGe2o6Ia/4oPJvsyJS0DsjTKWwhDxMqf3MmdDJkbD3yUplPPeie3UdXe9/pe10OyuCEu0/n8ZruNSJrVxpw==}
     hasBin: true
 
 snapshots:
@@ -151,6 +151,17 @@ snapshots:
     dependencies:
       is-arrayish: 0.2.1
 
+  filedist@0.21.2:
+    dependencies:
+      cosmiconfig: 9.0.1
+      ignore: 7.0.5
+      minimatch: 10.2.4
+      mypkg: 1.0.0
+      package-manager-detector: 1.6.0
+      semver: 7.7.4
+    transitivePeerDependencies:
+      - typescript
+
   ignore@7.0.5: {}
 
   import-fresh@3.3.1:
@@ -176,17 +187,6 @@ snapshots:
 
   mypkg@1.0.0: {}
 
-  npmdata@0.20.1:
-    dependencies:
-      cosmiconfig: 9.0.1
-      ignore: 7.0.5
-      minimatch: 10.2.4
-      mypkg: 1.0.0
-      package-manager-detector: 1.6.0
-      semver: 7.7.4
-    transitivePeerDependencies:
-      - typescript
-
   package-manager-detector@1.6.0: {}
 
   parent-module@1.0.1:
@@ -206,8 +206,8 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.3.6:
+  xdrs-core@0.3.8:
     dependencies:
-      npmdata: 0.20.1
+      filedist: 0.21.2
     transitivePeerDependencies:
       - typescript
