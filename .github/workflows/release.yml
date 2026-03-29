@@ -6,7 +6,7 @@ on:
       prerelease:
         description: 'Pre-release'
         type: boolean
-        default: true
+        default: false
 
 jobs:
   create-tag:
