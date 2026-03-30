@@ -4,8 +4,11 @@
 .xdrs/_core/adrs/principles/skills/002-write-xdr/SKILL.md|xdrs-core|0.3.0
 AGENTS.md|xdrs-core|0.3.2
 .xdrs/_core/adrs/principles/skills/001-lint/SKILL.md|xdrs-core|0.3.6
-.github/skills/001-lint|xdrs-core|0.3.6|symlink
-.github/skills/002-write-xdr|xdrs-core|0.3.6|symlink
-.github/skills/001-create-javascript-project|xdrs-core|0.3.6|symlink
-.github/skills/003-create-golang-project|xdrs-core|0.3.6|symlink
-.github/skills/002-monorepo-setup|xdrs-core|0.3.6|symlink
+.github/skills/001-lint|xdrs-core|0.4.0|symlink
+.github/skills/002-write-xdr|xdrs-core|0.4.0|symlink
+.github/skills/001-create-javascript-project|xdrs-core|0.4.0|symlink
+.github/skills/003-create-golang-project|xdrs-core|0.4.0|symlink
+.github/skills/002-monorepo-setup|xdrs-core|0.4.0|symlink
+.xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|9d182bdd9f9d9601a27364a38df0e968b49ea384
+.github/skills/003-write-skill|xdrs-core|0.4.2|symlink
+.github/skills/004-select-relevant-xdrs|xdrs-core|0.4.2|symlink

@@ -1,0 +1,147 @@
+---
+name: 003-write-skill
+description: >
+  Creates a new skill package following XDR skill standards: determines type, scope, subject, and number;
+  then writes a focused SKILL.md with correct frontmatter, phased instructions, examples, and edge cases.
+  Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
+metadata:
+  author: flaviostutz
+  version: "1.0"
+---
+
+## Overview
+
+Guides the creation of a well-structured skill package by following `_core-adr-003` skill standards, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
+
+## Instructions
+
+### Phase 1: Understand the Skill Goal
+
+1. Read `.xdrs/_core/adrs/principles/003-skill-standards.md` in full to internalize the SKILL.md format, folder layout, and numbering rules.
+2. Identify what the skill must do and the exact conditions under which an agent should activate it. Do NOT proceed without a clear goal and activation trigger.
+
+### Phase 2: Select Type, Scope, Subject, and Number
+
+**Type** — choose one based on the skill's activity:
+- **EDR skill**: engineering workflows, tool usage, coding procedures, implementation how-tos
+- **ADR skill**: architectural evaluation, pattern compliance, technology selection guidance
+- **BDR skill**: business process execution, operations procedures, policy-driven activities
+
+Quick test:
+- "How to implement or operate something?" → EDR
+- "How to evaluate or decide on architecture?" → ADR
+- "How to execute a business process or policy?" → BDR
+
+**Scope** — use `_local` unless the user explicitly names another scope.
+
+**Subject** — pick the most specific match for the chosen type (see `003-skill-standards`):
+- ADR subjects: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
+- BDR subjects: `principles`, `marketing`, `product`, `controls`, `operations`, `organization`, `finance`, `sustainability`
+- EDR subjects: `principles`, `application`, `infra`, `ai`, `observability`, `devops`, `governance`
+
+**Skill number** — scan `.xdrs/[scope]/[type]/[subject]/skills/` for the highest existing number and increment by 1. Never reuse numbers from deleted skills.
+
+**Skill name** — `[number]-[short-kebab-case-description]`, max 64 characters total.
+
+### Phase 3: Research Existing Skills and Related XDRs
+
+1. List `.xdrs/[scope]/[type]/[subject]/skills/` for existing skills. If one already covers the goal, extend or reference it instead of creating a duplicate.
+2. Read all XDRs relevant to the skill's domain to collect rules and cross-references.
+
+### Phase 4: Write the SKILL.md
+
+Use the mandatory agentskills format:
+
+```
+---
+name: [number]-[skill-name]
+description: >
+  [What the skill does AND exactly when an agent should activate it. Max 1024 chars.]
+metadata:
+  author: [author]
+  version: "1.0"
+---
+
+## Overview
+
+[1–3 sentence goal statement.]
+
+## Instructions
+
+### Phase 1: …
+[Step-by-step agent instructions organized into named phases. Use imperative language.]
+
+## Examples
+
+[At least one concrete input/context → expected agent action pair.]
+
+## Edge Cases
+
+[Situations where the skill must not activate or must behave differently.]
+
+## References
+
+[Links to related XDRs and skills.]
+```
+
+Rules:
+- Use imperative language ("Read …", "Ask …", "Create …").
+- The `description` field must state both *what* the skill does and *when* to activate it.
+- Do not duplicate content from referenced XDRs — link instead.
+- No emojis. Lowercase filenames. Target under 500 lines.
+
+### Phase 5: Review the Draft
+
+Before writing files, verify:
+
+1. **Activation criteria**: Is it unambiguous when this skill loads vs. when it should not?
+2. **Completeness**: Does every phase have actionable steps?
+3. **Length**: Under 500 lines? Trim verbose explanations.
+4. **Duplication**: Does this overlap an existing skill? If yes, revise.
+5. **References**: Are all related XDRs and skills linked?
+
+If any check fails, revise before continuing.
+
+### Phase 6: Write Files
+
+1. Create the skill file at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`.
+2. Create a hardlink at `.github/skills/[number]-[skill-name]/SKILL.md` so VS Code picks it up immediately:
+   ```
+   mkdir -p .github/skills/[number]-[skill-name]
+   ln .xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md .github/skills/[number]-[skill-name]/SKILL.md
+   ```
+
+### Constraints
+
+- MUST follow the agentskills SKILL.md format from `003-skill-standards` exactly.
+- MUST NOT create a skill that duplicates an existing one — extend or reference it instead.
+- MUST keep scope `_local` unless the user explicitly states otherwise.
+- MUST include a References section linking to `003-skill-standards`.
+
+## Examples
+
+**Input**: "Create a skill to help debug CI pipelines"
+- Type: EDR (engineering workflow)
+- Scope: `_local`
+- Subject: `devops`
+- Number: scan `.xdrs/_local/edrs/devops/skills/` → next available
+- Output: `.xdrs/_local/edrs/devops/skills/001-debug-ci-pipeline/SKILL.md`
+
+**Input**: "Create a skill to review API designs"
+- Type: ADR (architectural evaluation)
+- Scope: `_local`
+- Subject: `integration`
+- Number: scan `.xdrs/_local/adrs/integration/skills/` → next available
+- Output: `.xdrs/_local/adrs/integration/skills/001-review-api-design/SKILL.md`
+
+## Edge Cases
+
+- If the user's goal is already covered by an existing skill, inform the user and offer to extend it instead of creating a new one.
+- If scope is ambiguous, default to `_local` and note the assumption.
+- If the goal spans multiple types (e.g., both EDR and ADR), favor the type that best matches the primary activity.
+
+## References
+
+- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-001 - XDR standards](../../001-xdr-standards.md)
+- [002-write-xdr skill](../002-write-xdr/SKILL.md)

@@ -7,7 +7,17 @@ test: build
 
 # Fix for recursive presets issue: add "presets": ["speckit"] to the selector of the speckit entries in package.json. This forwards the preset filter to agentme's nested sets, preventing the xdrs-core basic set from being extracted recursively.
 
-    # basic preset checks
+	# core preset checks
+	pnpm exec agentme extract --output ./output --presets core
+	test -e output/AGENTS.md
+	test -e output/.xdrs/_core/adrs/principles/001-xdr-standards.md
+	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
+	test ! -e output/.xdrs/agentme/edrs/principles/002-coding-best-practices.md
+	test ! -e output/.github/agents/speckit.analyze.agent.md
+	pnpm exec agentme check --output ./output --presets core
+
+	# basic preset checks
+	rm -rf output
 	pnpm exec agentme extract --output ./output --presets basic
 	test -e output/AGENTS.md
 	test -e output/.xdrs/index.md
@@ -34,13 +44,24 @@ test: build
 
 	# AUTOMATIC CLEANUP OF PREVIOUSLY EXTRACTED PRESETS
 	rm -rf output
-    # basic preset checks
+	# basic preset checks
 	pnpm exec agentme extract --output ./output --presets basic
 	test -e output/AGENTS.md
 	test -e output/.xdrs/index.md
 	test -e output/.xdrs/_core/adrs/principles/001-xdr-standards.md
 	test ! -e output/.github/agents/speckit.analyze.agent.md
 	pnpm exec agentme check --output ./output --presets basic
+
+	# core preset checks (should remove the previous managed files from basic preset)
+	pnpm exec agentme extract --output ./output --presets core
+	test -e output/AGENTS.md
+	test -e output/.xdrs/_core/adrs/principles/001-xdr-standards.md
+	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
+	test ! -e output/.xdrs/agentme/edrs/principles/002-coding-best-practices.md
+	pnpm exec agentme check --output ./output --presets core
+
+	# present because of previous extractions (it's not managed)
+	test -e output/.xdrs/index.md
 
 	# speckit preset checks (should remove the previous files from basic preset)
 	pnpm exec agentme extract --output ./output --presets speckit

@@ -32,8 +32,9 @@ publish:
 
 bump:
 	@echo "Bumping xdrs core..."
-	pnpm add xdrs-core@latest
 	pnpm add filedist@latest
 
 	# we don't directly publish those files, but the project uses it itself
+	pnpm add xdrs-core@latest
 	pnpm exec xdrs-core extract
+# 	pnpm exec filedist extract --packages https://github.com/flaviostutz/xdrs-core.git
