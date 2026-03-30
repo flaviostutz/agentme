@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "filedist": "^0.21.2",
-    "xdrs-core": "^0.3.8"
+    "filedist": "^0.24.0",
+    "xdrs-core": "^0.4.2"
   },
   "bin": "bin/filedist.js",
   "files": [
@@ -36,7 +36,22 @@
           "gitignore": false
         },
         "presets": [
+          "core",
           "basic"
+        ]
+      },
+      {
+        "selector": {
+          "files": [
+            ".xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/**"
+          ]
+        },
+        "output": {
+          "path": ".",
+          "gitignore": false
+        },
+        "presets": [
+          "core"
         ]
       },
       {
