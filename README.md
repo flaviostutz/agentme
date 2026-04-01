@@ -4,6 +4,8 @@ Curated distribution package of XDRs and speckit agent workflow files for AI-ass
 
 This collection is being updated as we develop applications and feel the need for new instructions and skills to help with AI agents.
 
+For guidance on turning recurring delivery friction into reusable decision records, see [Continuous XDR improvement](.xdrs/agentme/edrs/principles/articles/001-continuous-xdr-improvement.md).
+
 ## Getting Started
 
 This will extract all the features of agentme (skills, github configurations, speckit, xdrs collection):

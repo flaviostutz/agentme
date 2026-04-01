@@ -37,4 +37,4 @@ bump:
 	# we don't directly publish those files, but the project uses it itself
 	pnpm add xdrs-core@latest
 	pnpm exec xdrs-core extract
-# 	pnpm exec filedist extract --packages https://github.com/flaviostutz/xdrs-core.git
+# 	pnpm exec filedist extract --packages git://github.com/flaviostutz/xdrs-core.git
