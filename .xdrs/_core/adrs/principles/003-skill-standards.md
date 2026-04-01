@@ -2,9 +2,11 @@
 
 ## Context and Problem Statement
 
-AI agents benefit from reusable, discoverable prompt packages that encode specific expertise or behaviors. Without a standard, these "skills" accumulate inconsistently across repositories, making them hard to find, validate, or share.
+Teams and AI agents benefit from reusable, discoverable procedural packages that encode specific expertise or behaviors. Without a standard, these "skills" accumulate inconsistently across repositories, making them hard to find, validate, or share.
 
-How should skills be authored, structured, and organized within a project so that they are consistent, LLM-friendly, and easy to discover?
+A skill may describe a procedure performed exclusively by a human today but that is expected to be partially or fully automated by an AI agent in the future. Defining skills in a single, shared format from the start allows them to evolve along that automation gradient without restructuring.
+
+How should skills be authored, structured, and organized within a project so that they are consistent, readable by humans and LLMs alike, and easy to discover?
 
 ## Decision Outcome
 
@@ -12,10 +14,20 @@ How should skills be authored, structured, and organized within a project so tha
 
 Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDR subject folder under a `skills/` sub-directory. Each skill occupies its own numbered package folder, mirroring the XDR numbering convention.
 
+A skill may target a human operator, an AI agent, or both. Instructions must be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
+
 ### Implementation Details
 
-**Relation with XDRs**
-Skills are procedures, XDRs are guardrails and decisions.
+**Automation gradient**
+Skills exist on a spectrum from fully manual (human-only) to fully automated (agent-only). A skill should be written so it can be executed at any point on that spectrum:
+- Human reads and follows each step manually.
+- Human delegates some steps to an AI assistant.
+- An AI agent executes the skill autonomously.
+
+Write instructions so that each step is unambiguous and self-contained. Avoid implicit knowledge that only a human or only an AI would have.
+
+**Relation with XDRs and Articles**
+Skills are procedures, XDRs are guardrails and decisions, and Articles are synthetic views that combine information from multiple XDRs and Skills.
 Always create links back and forth between skills <-> XDRs as a reference.
 
 Place a skill under the XDR type that matches the nature of the activity the skill performs:
@@ -109,3 +121,4 @@ skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]
 - [agentskills/agentskills repository](https://github.com/agentskills/agentskills)
 - [skills-ref validation library](https://github.com/agentskills/agentskills/tree/main/skills-ref)
 - [_core-adr-001 - XDR standards](001-xdr-standards.md)
+- [_core-adr-004 - Article standards](004-article-standards.md)

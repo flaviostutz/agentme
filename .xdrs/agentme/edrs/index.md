@@ -18,6 +18,13 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-004](principles/004-unit-test-requirements.md) - **Unit test requirements**
 - [agentme-edr-007](principles/007-project-quality-standards.md) - **Project quality standards**
 - [agentme-edr-009](principles/009-error-handling.md) - **Error handling**
+- [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy**
+
+## Articles
+
+Synthetic views combining agentme XDRs and skills around a specific topic.
+
+- [agentme-article-001](principles/articles/001-continuous-xdr-improvement.md) - **Continuous XDR improvement** (what an XDR is, when to write one, how to discuss it, how to organize it, workflow)
 
 ## Application
 

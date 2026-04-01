@@ -138,3 +138,5 @@ Question: In the end, state explicitly the question that needs to be answered. E
 ## References
 
 - [001-lint skill](skills/001-lint/SKILL.md) - Skill for reviewing code changes against XDRs
+- [_core-adr-003 - Skill standards](003-skill-standards.md)
+- [_core-adr-004 - Article standards](004-article-standards.md)
