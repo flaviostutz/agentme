@@ -1,10 +1,10 @@
-all: build test
+all: build lint test
 
 build: install
 	pnpm pack --pack-destination=./dist
 
 lint:
-	@echo "No linting rules to check"
+	pnpm exec xdrs-core lint .
 
 test: build
 	make -C examples test

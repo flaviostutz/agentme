@@ -9,8 +9,11 @@ AGENTS.md|xdrs-core|0.3.2
 .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|9d182bdd9f9d9601a27364a38df0e968b49ea384
 .github/skills/003-write-skill|xdrs-core|0.4.2|symlink
 .github/skills/004-select-relevant-xdrs|xdrs-core|0.4.2|symlink
-.xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.5.0
 .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|xdrs-core|0.5.0
-.xdrs/_core/adrs/index.md|xdrs-core|0.5.0
 .xdrs/_core/adrs/principles/001-xdr-standards.md|xdrs-core|0.5.0
 .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.5.0
+.xdrs/_core/adrs/principles/005-semantic-versioning-for-xdr-packages.md|xdrs-core|0.7.1
+.xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|xdrs-core|0.7.1
+.xdrs/_core/adrs/index.md|xdrs-core|0.7.1
+.xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.7.1
+.github/skills/004-write-article|xdrs-core|0.7.1|symlink
