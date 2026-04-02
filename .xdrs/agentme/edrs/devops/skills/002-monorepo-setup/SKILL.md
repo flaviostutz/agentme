@@ -13,12 +13,12 @@ metadata:
 
 ## Overview
 
-Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../005-monorepo-structure.md):
+Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../../.xdrs/agentme/edrs/devops/005-monorepo-structure.md):
 top-level application folders, a shared library area, Mise-managed tooling, and Makefiles at every
 level so any contributor can build, lint, and test any part of the monorepo with a single,
 predictable command.
 
-Related EDR: [agentme-edr-005](../../005-monorepo-structure.md)
+Related EDRs: [agentme-edr-005](../../../.xdrs/agentme/edrs/devops/005-monorepo-structure.md), [agentme-edr-013](../../../.xdrs/agentme/edrs/governance/013-contributing-guide-requirements.md)
 
 ## Instructions
 
@@ -94,6 +94,29 @@ Must include four sections:
 | `shared/`           | Libraries and scripts shared across all apps |
 | `<app1>/`           | <Short description of app1>        |
 | `<app2>/`           | <Short description of app2>        |
+```
+
+#### Root `CONTRIBUTING.md`
+
+Must explain the contribution workflow in a short, explicit way.
+
+```markdown
+# Contributing
+
+## Bugs
+Report bugs in GitHub issues with steps to reproduce, expected behavior, and actual behavior.
+
+## Features
+Discuss feature ideas in an issue before opening a pull request so scope and approach can be agreed first.
+
+## Pull requests
+Submit fixes and features through pull requests from feature branches targeting `main`.
+
+## Review etiquette
+Use [Conventional Comments](https://conventionalcomments.org/) in review feedback.
+
+## Keep changes focused
+Keep pull requests small and focused enough that review and discussion stay efficient.
 ```
 
 ---
@@ -219,6 +242,7 @@ After scaffolding, run the following checks and fix any issues:
 - `make lint` at the repository root passes.
 - `make test` at the repository root passes.
 - All folder and file names are lowercase and use hyphens.
+- A `CONTRIBUTING.md` exists at the repository root and covers bugs, feature discussions, pull requests, Conventional Comments, and small focused changes.
 - Every application folder has a `README.md` covering all four required sections.
 - A `.mise.toml` exists at the repository root with all required tool versions pinned.
 
@@ -267,4 +291,4 @@ test:
 - **Cross-application dependency requested:** Refuse and suggest publishing the shared code as a library in `shared/libs/` instead.
 - **Module with no compilable output (e.g., pure scripts):** Still create the Makefile; `build` can be a no-op (`@true`) but the target must exist.
 - **Language not listed above:** Mirror the pattern — `build` produces an artifact, `lint` runs static analysis, `test` runs tests. Adapt commands to the actual toolchain.
-- **Existing files:** Never overwrite existing `README.md` or `Makefile` files without user confirmation. Diff and propose additions instead.
+- **Existing files:** Never overwrite existing `README.md`, `CONTRIBUTING.md`, or `Makefile` files without user confirmation. Diff and propose additions instead.

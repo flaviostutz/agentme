@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.24.0
-        version: 0.24.0
+        specifier: ^0.26.0
+        version: 0.26.0
       xdrs-core:
-        specifier: ^0.5.0
-        version: 0.5.0
+        specifier: ^0.7.1
+        version: 0.7.1
 
 packages:
 
@@ -56,8 +56,8 @@ packages:
   error-ex@1.3.4:
     resolution: {integrity: sha512-sqQamAnR14VgCr1A618A3sGrygcpK+HEbenA/HiEAkkUwcZIIB/tgWqHFxWgOyDh4nB4JCRimh79dR5Ywc9MDQ==}
 
-  filedist@0.24.0:
-    resolution: {integrity: sha512-Hm9nqjIa+2lqsAmbfLBaK3CW+dH8fASkDVn1uHvsGkO4EL77NtSSKjpAt2yOGgj4pgQymXMLjhbXabvVaWy1fA==}
+  filedist@0.26.0:
+    resolution: {integrity: sha512-q3y+btb0DJPt0j868UimacKiVX5A0sP+oMg8GZt6pffwChi8cxmM55ABk7iDZqEO677FZcXiOdg5d2mdPypprA==}
     hasBin: true
 
   ignore@7.0.5:
@@ -114,8 +114,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.5.0:
-    resolution: {integrity: sha512-IztkjZoy8EiBcqjXPVrC3Kox9ivP6NHJU1A26BgadApV4OfF2kHPq0CLqR6awImaXJ973oMCCxlr1l2DZhkCbA==}
+  xdrs-core@0.7.1:
+    resolution: {integrity: sha512-7J6Ik5dXUMxTcHC1CML/GhQt9Ldzgv/2kqSl3knjxvRsK0mIbIq1ICER6nnbYKHDNPieOZJyJ7OMxPxV0mVt0A==}
     hasBin: true
 
 snapshots:
@@ -151,7 +151,7 @@ snapshots:
     dependencies:
       is-arrayish: 0.2.1
 
-  filedist@0.24.0:
+  filedist@0.26.0:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
@@ -206,8 +206,8 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.5.0:
+  xdrs-core@0.7.1:
     dependencies:
-      filedist: 0.24.0
+      filedist: 0.26.0
     transitivePeerDependencies:
       - typescript
