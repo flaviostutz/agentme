@@ -9,7 +9,7 @@ XDRs in scopes listed last override the ones listed first
 ### _core
 
 Decisions about how XDRs work
-[View general ADRs Index](_core/adrs/index.md)
+[View _core ADRs Index](_core/adrs/index.md)
 
 ---
 
@@ -23,8 +23,4 @@ Opiniated set of decisions and skills for common development tasks
 
 ### _local (reserved)
 
-Project-local XDRs that must not be shared with other contexts. Always keep this scope last so its decisions override or extend all scopes listed above. Add specific `_local` ADR/BDR/EDR index links here when present.
-
-[View _local BDRs Index](_local/bdrs/index.md)
-
-[View _local ADRs Index](_local/adrs/index.md)
+Project-local XDRs that must not be shared with other contexts. Always keep this scope last so its decisions override or extend all scopes listed above. Keep `_local` canonical indexes in the workspace tree only; do not link them from this shared index. Readers and tools should still try to discover existing `_local` indexes in the current workspace by default.
