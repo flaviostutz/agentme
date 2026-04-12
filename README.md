@@ -17,9 +17,9 @@ npx agentme
 If you want the version pinned in a project, add `agentme` to a repository that already has a `package.json` and run it through the local dependency:
 
 ```sh
-pnpm add -D agentme
-pnpm exec agentme extract --output . --presets basic
-pnpm exec agentme check --output . --presets basic
+mise exec -- pnpm add -D agentme
+mise exec -- pnpm exec agentme extract --output . --presets basic
+mise exec -- pnpm exec agentme check --output . --presets basic
 ```
 
 ## Overview
@@ -80,19 +80,27 @@ This is useful when you want to:
 
 ## Development
 
-Use the root `Makefile` as the entry point for local verification:
+Install [Mise](https://mise.jdx.dev/getting-started.html), then sync the pinned toolchain:
 
 ```sh
-make build
-make lint
-make test
+mise install
 ```
+
+Use the root `Makefile` as the entry point for local verification inside the Mise-managed environment:
+
+```sh
+mise exec -- make build
+mise exec -- make lint
+mise exec -- make test
+```
+
+Running `make build`, `make lint`, or `make test` from an already activated Mise shell is equivalent.
 
 What these targets do:
 
-- `make build` installs dependencies and creates a local npm package in `dist/`.
-- `make lint` runs the repository lint target.
-- `make test` rebuilds the package and validates the consumer extraction flow through the runnable example in `examples/`.
+- `mise exec -- make build` installs dependencies and creates a local npm package in `dist/`.
+- `mise exec -- make lint` runs the repository lint target.
+- `mise exec -- make test` rebuilds the package and validates the consumer extraction flow through the runnable example in `examples/`.
 
 ## Repository Map
 

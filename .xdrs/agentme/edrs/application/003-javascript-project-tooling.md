@@ -8,7 +8,7 @@ What tooling and project structure should JavaScript/TypeScript projects follow 
 
 ## Decision Outcome
 
-**Use pnpm, tsc, esbuild, eslint, and jest with a standard layout separating library code (`lib/`) from runnable usage examples (`examples/`), coordinated by root-level Makefiles.**
+**Use a Mise-managed Node.js and pnpm toolchain together with pnpm, tsc, esbuild, eslint, and jest in a standard layout separating library code (`lib/`) from runnable usage examples (`examples/`), coordinated by root-level Makefiles.**
 
 Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelines, and a predictable developer experience across projects.
 
@@ -18,30 +18,40 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 
 | Tool | Purpose |
 |------|---------|
+| **Mise** | Tool version management for Node.js, pnpm, and project CLIs |
 | **pnpm** | Package manager — strict linking, workspace support, fast installs |
 | **tsc** | TypeScript compilation — type checking, declaration generation |
 | **esbuild** | Bundling — fast bundling for distribution or single-binary outputs |
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root must define a `.mise.toml` that pins at least Node.js and pnpm, and Makefile targets must run through `mise exec --` or an activated Mise shell.
 
 #### ESLint
 
-Use `@stutzlab/eslint-config` as the base ESLint config. Use ESLint 9 flat config format (`lib/eslint.config.js`).
+Use `lib/eslint.config.mjs` as the ESLint entry point and configure it with `@stutzlab/eslint-config` plus `FlatCompat` from `@eslint/eslintrc`. Keep `package.json` in CommonJS mode without adding `"type": "module"`.
+
+In flat-config mode, Makefile lint targets MUST NOT use `--ext`; file matching is defined in `eslint.config.mjs` instead. The flat config MUST declare TypeScript file globs such as `src/**/*.ts` and point `parserOptions.project` to `./tsconfig.json`.
+
+#### TypeScript and Jest
+
+Use a single `lib/tsconfig.json` for both build and type-aware linting. Keep co-located `*.test.ts` files included in that config so ESLint can resolve them through `parserOptions.project`, and rely on the Makefile cleanup step to remove compiled test artifacts from `dist/` after `tsc` runs.
+
+When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `module` is `nodenext`. `ts-jest` still runs in CommonJS mode by default, so `lib/jest.config.js` MUST configure the `ts-jest` transform with an inline `tsconfig` override that sets `module: 'commonjs'`. Do not use the deprecated `globals['ts-jest']` configuration style.
 
 #### Project structure
 
 ```
 /                          # workspace root
+├── .mise.toml             # pinned Node.js and pnpm versions
 ├── Makefile               # delegates build/lint/test to /lib and /examples
 ├── README.md              # Quick Start first; used as npm registry page
 ├── lib/                   # the published npm package
 │   ├── Makefile           # build, lint, test, publish targets
 │   ├── package.json       # package manifest
-│   ├── tsconfig.json      # TypeScript config
+│   ├── tsconfig.json      # TypeScript config for build and linting
 │   ├── jest.config.js     # Jest config
-│   ├── eslint.config.js   # ESLint config (ESLint 9 flat config)
+│   ├── eslint.config.mjs  # ESLint config (ESLint 9 flat config)
 │   └── src/               # all TypeScript source files
 │       ├── index.ts       # public API re-exports
 │       └── *.test.ts      # test files co-located with source
@@ -53,7 +63,9 @@ Use `@stutzlab/eslint-config` as the base ESLint config. Use ESLint 9 flat confi
         └── package.json
 ```
 
-The root `Makefile` delegates every target to `/lib` then `/examples` in sequence.
+The root `Makefile` delegates every target to `/lib` then `/examples` in sequence and is expected to execute module commands inside the repository's Mise-managed environment.
+
+The commands below assume they are invoked through `mise exec -- make <target>` or from an activated Mise shell.
 
 #### lib/Makefile targets
 
