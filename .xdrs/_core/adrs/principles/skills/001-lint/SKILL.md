@@ -24,12 +24,16 @@ Performs a structured review of code changes or files against the XDRs in the re
 
 1. Gather all Decision Records from `.xdrs/index.md` starting from the working directory.
    - XDR scopes are controlled by nested folders; some are broad, others domain-specific.
-   - Extract metadata first (status, impact, scope, applicability) to filter relevant XDRs before deep analysis.
+   - Extract metadata first to decide whether each XDR should be used for the current review context.
+   - All documents present in the collection are considered active.
+   - Check `Valid:` first. If a convergence date is present and has not yet been reached, the decision SHOULD be adopted for new implementations but is not enforced during reviews.
+   - Check `Applied to:` second. Keep only XDRs whose stated scope fits the files, systems, or workflows under review.
+   - Check the decision text itself last for additional boundaries or exceptions that metadata does not encode.
 2. Filter relevance based on file types, domains, and architectural patterns in scope.
 
 ### Phase 3: XDR Review
 
-1. Cross-reference each file in scope against applicable XDRs.
+1. Cross-reference each file in scope against active, applicable XDRs.
    - **Drop any finding that cannot be traced to a specific rule in an Accepted XDR.** General good-practice observations, personal opinions, or inferred issues without an explicit XDR backing must not be reported.
    - Classify as ERROR (mandatory) or WARNING (advisory).
    - Include: location, description, XDR reference (file + line), suggestion.
@@ -50,7 +54,7 @@ Performs a structured review of code changes or files against the XDRs in the re
 ### Phase 5: Reporting
 
 **Report template**
---------
+```text
 ### Code Review Against XDRs
 Scope: [scope identifier]
 
@@ -68,7 +72,7 @@ Scope: [scope identifier]
 - Errors: [count]
 - Warnings: [count]
 - Outcome: [PASS|FAIL]
---------
+```
 
 ### Constraints
 - MUST NOT include any text or explanations outside the required output format.
@@ -84,6 +88,7 @@ Scope: [scope identifier]
 
 ## References
 
-- [_core-adr-001 - XDR standards](../../001-xdr-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-002 - XDR standards](../../002-xdr-standards.md)
 - [_core-adr-003 - Skill standards](../../003-skill-standards.md)
 

@@ -19,6 +19,4 @@
 5. **Do not perform git operations unless explicitelly asked**
    - The developer should be in control of possible destructive operations on the workspace
 
-Check for additional instructions on [AGENTS.local.md](AGENTS.local.md).
-
 **This AGENTS.md file was created with xdrs-core and shouldn't be changed**

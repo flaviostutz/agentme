@@ -12,8 +12,8 @@ importers:
         specifier: ^0.26.0
         version: 0.26.0
       xdrs-core:
-        specifier: ^0.7.1
-        version: 0.7.1
+        specifier: ^0.14.5
+        version: 0.14.5
 
 packages:
 
@@ -84,8 +84,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  minimatch@10.2.4:
-    resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
+  minimatch@10.2.5:
+    resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
     engines: {node: 18 || 20 || >=22}
 
   mypkg@1.0.0:
@@ -114,8 +114,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.7.1:
-    resolution: {integrity: sha512-7J6Ik5dXUMxTcHC1CML/GhQt9Ldzgv/2kqSl3knjxvRsK0mIbIq1ICER6nnbYKHDNPieOZJyJ7OMxPxV0mVt0A==}
+  xdrs-core@0.14.5:
+    resolution: {integrity: sha512-YHeTUdP4ZcutjcWQItQMpL/k6CCY5d2KN6oyZwB3Abqtn/QI0I3mLGupT4l+spYj3TCadvVca3R3ufWitLzROQ==}
     hasBin: true
 
 snapshots:
@@ -155,7 +155,7 @@ snapshots:
     dependencies:
       cosmiconfig: 9.0.1
       ignore: 7.0.5
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       mypkg: 1.0.0
       package-manager-detector: 1.6.0
       semver: 7.7.4
@@ -181,7 +181,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  minimatch@10.2.4:
+  minimatch@10.2.5:
     dependencies:
       brace-expansion: 5.0.5
 
@@ -206,8 +206,10 @@ snapshots:
 
   semver@7.7.4: {}
 
-  xdrs-core@0.7.1:
+  xdrs-core@0.14.5:
     dependencies:
       filedist: 0.26.0
+      ignore: 7.0.5
+      minimatch: 10.2.5
     transitivePeerDependencies:
       - typescript
