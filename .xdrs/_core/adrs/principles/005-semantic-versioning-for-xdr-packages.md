@@ -2,9 +2,9 @@
 
 ## Context and Problem Statement
 
-Teams consume XDR packages as reusable guidance, constraints, skills, and articles. If package versions do not reflect the real impact of a release, upgrades become risky and teams lose trust in reuse.
+Teams consume XDR packages as reusable guidance, constraints, Research documents, skills, and articles. If package versions do not reflect the real impact of a release, upgrades become risky and teams lose trust in reuse.
 
-Question: How should semantic versioning be used when publishing or versioning a package containing XDRs, skills, and articles?
+Question: How should semantic versioning be used when publishing or versioning a package containing XDRs, Research documents, skills, and articles?
 
 ## Decision Outcome
 
@@ -28,8 +28,8 @@ XDR packages must use semantic versioning so the package version communicates th
 **MINOR**
 - Use a minor bump for backward-compatible additions and new capabilities.
 - Use a minor bump for new XDRs that do not break existing guidance.
-- Use a minor bump for new or updated articles and skill changes that extend the package without requiring consumers to undo previous adoption work.
-- Typical cases: new features, new optional guidance, new articles, expanded skills, or additive non-breaking decision coverage.
+- Use a minor bump for new or updated Research documents, articles, and skill changes that extend the package without requiring consumers to undo previous adoption work.
+- Typical cases: new features, new optional guidance, new Research documents, new articles, expanded skills, or additive non-breaking decision coverage.
 
 **PATCH**
 - Use a patch bump for low-risk fixes and simple improvements.
@@ -43,3 +43,4 @@ XDR packages must use semantic versioning so the package version communicates th
 ## References
 
 - https://semver.org/
+- [_core-adr-006 - Research standards](006-research-standards.md)

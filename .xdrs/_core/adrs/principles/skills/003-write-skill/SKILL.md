@@ -11,16 +11,19 @@ metadata:
 
 ## Overview
 
-Guides the creation of a well-structured skill package by following `_core-adr-003` skill standards, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
+Guides the creation of a well-structured skill package by following `_core-adr-003` skill standards, consulting `xdr-standards` for every core element definition, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
 
 ## Instructions
 
 ### Phase 1: Understand the Skill Goal
 
 1. Read `.xdrs/_core/adrs/principles/003-skill-standards.md` in full to internalize the SKILL.md format, folder layout, and numbering rules.
-2. Identify what the skill must do and the exact conditions under which an agent should activate it. Do NOT proceed without a clear goal and activation trigger.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full before defining any core element for the skill package. Treat it as the canonical source for type, scope, subject, numbering expectations, naming constraints, and folder placement rules.
+3. Identify what the skill must do, the concrete outcome it should produce, and the exact conditions under which an agent should activate it. Do NOT proceed without a clear goal, outcome, and activation trigger.
 
 ### Phase 2: Select Type, Scope, Subject, and Number
+
+Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when there is any ambiguity or edge case, the standard decides.
 
 **Type** — choose one based on the skill's activity:
 - **EDR skill**: engineering workflows, tool usage, coding procedures, implementation how-tos
@@ -34,10 +37,10 @@ Quick test:
 
 **Scope** — use `_local` unless the user explicitly names another scope.
 
-**Subject** — pick the most specific match for the chosen type (see `003-skill-standards`):
+**Subject** — pick the most specific match for the chosen type (required list per type is in `_core-adr-001`):
 - ADR subjects: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
 - BDR subjects: `principles`, `marketing`, `product`, `controls`, `operations`, `organization`, `finance`, `sustainability`
-- EDR subjects: `principles`, `application`, `infra`, `ai`, `observability`, `devops`, `governance`
+- EDR subjects: `principles`, `application`, `infra`, `observability`, `devops`, `governance`
 
 **Skill number** — scan `.xdrs/[scope]/[type]/[subject]/skills/` for the highest existing number and increment by 1. Never reuse numbers from deleted skills.
 
@@ -47,6 +50,8 @@ Quick test:
 
 1. List `.xdrs/[scope]/[type]/[subject]/skills/` for existing skills. If one already covers the goal, extend or reference it instead of creating a duplicate.
 2. Read all XDRs relevant to the skill's domain to collect rules and cross-references.
+3. Evaluate XDR metadata before operationalizing those rules. All documents present in the collection are considered active. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
+4. Decide whether the skill is merely guidance or is being referenced by an XDR as a mandatory procedure. Do not encode policy in the skill unless it comes from a referenced XDR.
 
 ### Phase 4: Write the SKILL.md
 
@@ -64,12 +69,12 @@ metadata:
 
 ## Overview
 
-[1–3 sentence goal statement.]
+[1–3 sentence goal statement with the task objective, expected outcome, and relevant prerequisites or tools when they matter.]
 
 ## Instructions
 
 ### Phase 1: …
-[Step-by-step agent instructions organized into named phases. Use imperative language.]
+[Step-by-step agent instructions organized into named phases. Use imperative language and include verification or acceptance criteria at the end of the task or major phases.]
 
 ## Examples
 
@@ -87,8 +92,14 @@ metadata:
 Rules:
 - Use imperative language ("Read …", "Ask …", "Create …").
 - The `description` field must state both *what* the skill does and *when* to activate it.
+- Keep the skill task-oriented. It should have a clear starting trigger and a concrete ending result.
+- Mention tools or prerequisites when they are required to complete the task reliably.
 - Do not duplicate content from referenced XDRs — link instead.
-- No emojis. Lowercase filenames. Target under 500 lines.
+- Do not present the skill itself as policy; mandatory behavior must come from referenced XDRs or other policy artifacts.
+- When the skill depends on XDRs, make the activation logic and instructions consistent with the XDR metadata so the skill does not operationalize inactive or out-of-scope decisions.
+- Prefer plain Markdown, tables, or ASCII art for simple structure, flow, layout, or relationship indications.
+- If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/assets/` and link with a relative path.
+- No emojis. Lowercase filenames. Target under 6500 words.
 
 ### Phase 5: Review the Draft
 
@@ -96,9 +107,9 @@ Before writing files, verify:
 
 1. **Activation criteria**: Is it unambiguous when this skill loads vs. when it should not?
 2. **Completeness**: Does every phase have actionable steps?
-3. **Length**: Under 500 lines? Trim verbose explanations.
+3. **Length**: Under 6500 words? Trim verbose explanations.
 4. **Duplication**: Does this overlap an existing skill? If yes, revise.
-5. **References**: Are all related XDRs and skills linked?
+5. **References**: Are all related XDRs and skills linked, including the cases where the skill operationalizes multiple XDRs?
 
 If any check fails, revise before continuing.
 
@@ -114,6 +125,7 @@ If any check fails, revise before continuing.
 ### Constraints
 
 - MUST follow the agentskills SKILL.md format from `003-skill-standards` exactly.
+- MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST NOT create a skill that duplicates an existing one — extend or reference it instead.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST include a References section linking to `003-skill-standards`.
@@ -143,5 +155,5 @@ If any check fails, revise before continuing.
 ## References
 
 - [_core-adr-003 - Skill standards](../../003-skill-standards.md)
-- [_core-adr-001 - XDR standards](../../001-xdr-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
 - [002-write-xdr skill](../002-write-xdr/SKILL.md)
