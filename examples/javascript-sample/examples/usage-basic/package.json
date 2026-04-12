@@ -1,0 +1,10 @@
+{
+  "name": "usage-basic",
+  "version": "1.0.0",
+  "description": "Basic usage example for javascript-sample",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {
+    "javascript-sample": "file:../../lib/dist/javascript-sample-0.0.1.tgz"
+  }
+}
