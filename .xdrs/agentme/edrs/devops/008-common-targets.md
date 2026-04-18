@@ -1,3 +1,8 @@
+---
+name: agentme-edr-008-common-development-script-names
+description: Defines standard development command names and lifecycle groups across projects, regardless of the underlying runner. Use when designing build, lint, test, and release entry points.
+---
+
 # agentme-edr-008: Common development script names
 
 ## Context and Problem Statement

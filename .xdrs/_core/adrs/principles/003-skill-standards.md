@@ -1,3 +1,8 @@
+---
+name: _core-adr-003-skill-standards
+description: Defines skill package standards including structure, SKILL.md format, and co-location with XDRs. Use when creating or reviewing skills.
+---
+
 # _core-adr-003: Skill standards
 
 ## Context and Problem Statement

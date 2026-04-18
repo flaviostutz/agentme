@@ -1,3 +1,8 @@
+---
+name: _core-adr-005-semantic-versioning-for-xdr-packages
+description: Defines how semantic versioning applies to XDR packages. Use when publishing or versioning a package containing XDRs, research, skills, or articles.
+---
+
 # _core-adr-005: Semantic versioning for XDR packages
 
 ## Context and Problem Statement

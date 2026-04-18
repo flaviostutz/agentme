@@ -1,3 +1,8 @@
+---
+name: _core-adr-006-research-standards
+description: Defines research document standards including IMRAD structure and traceability to XDRs. Use when creating or reviewing research documents.
+---
+
 # _core-adr-006: Research standards
 
 ## Context and Problem Statement

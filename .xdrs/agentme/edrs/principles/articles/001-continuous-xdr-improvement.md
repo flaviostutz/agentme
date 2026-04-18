@@ -51,7 +51,7 @@ Good opening questions:
 
 ### How should you organize the XDR?
 
-Follow the XDR template from [_core-adr-001](../../../_core/adrs/principles/001-xdr-standards.md). Keep the document small, explicit, and decision-focused.
+Follow the XDR template from [_core-adr-001](../../../../_core/adrs/principles/001-xdrs-core.md). Keep the document small, explicit, and decision-focused.
 
 Use this checklist:
 
@@ -87,7 +87,7 @@ If the same clarification would likely be needed in another feature, by another 
 
 ## References
 
-- [_core-adr-001](../../../_core/adrs/principles/001-xdr-standards.md) - XDR structure, numbering, and mandatory template
-- [_core-article-001](../../../_core/adrs/principles/articles/001-xdrs-overview.md) - XDR introduction and general adoption guidance
+- [_core-adr-001](../../../../_core/adrs/principles/001-xdrs-core.md) - XDR structure, numbering, and mandatory template
+- [_core-article-001](../../../../_core/adrs/principles/articles/001-xdrs-overview.md) - XDR introduction and general adoption guidance
 - [agentme-edr-012](../012-continuous-xdr-enrichment.md) - Shared-first XDR enrichment policy and 80% coverage target
 - [002-write-xdr skill](../../../../../.github/skills/002-write-xdr/SKILL.md) - Step-by-step procedure for drafting new XDRs

@@ -1,3 +1,8 @@
+---
+name: _core-adr-007-plan-standards
+description: Defines plan document standards for describing problems, solutions, and activities. Use when creating or reviewing plans.
+---
+
 # _core-adr-007: Plan standards
 
 ## Context and Problem Statement

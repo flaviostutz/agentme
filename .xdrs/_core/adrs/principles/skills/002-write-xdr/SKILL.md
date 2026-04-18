@@ -77,12 +77,14 @@ Choose a title that clearly states the question this XDR answers, not the answer
 Use the mandatory template from `002-xdr-standards`:
 
 ```
-# [scope]-[type]-[number]: [Short Title]
+---
+name: [scope]-[type]-[number]-[short-title]
+description: [What this decision is about and when to use it]
+applied-to: [Optional. Contexts this decision applies to, under 40 words]
+valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
+---
 
-## Metadata
-[Optional. Include only when at least one metadata field is present]
-Valid: [Optional. Use from YYYY-MM-DD to set a convergence date for adoption]
-Applied to: [Optional short applicability scope, under 40 words]
+# [scope]-[type]-[number]: [Short Title]
 
 ## Context and Problem Statement
 [background, who is impacted, and the explicit question being answered - under 40 words]
@@ -103,10 +105,10 @@ Applied to: [Optional short applicability scope, under 40 words]
 ```
 
 Mandatory rules to apply while drafting:
-- Include `## Metadata` only when `Valid:` and/or `Applied to:` adds value; omit the whole section when none of those fields is defined.
-- When present, place `## Metadata` immediately before `## Context and Problem Statement`.
-- Keep `Applied to:` under 40 words and use `Valid:` only with `from YYYY-MM-DD` format.
-- When metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `Valid:` sets a convergence date for adoption, `Applied to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
+- Include frontmatter `applied-to:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
+- Include frontmatter `valid-from:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
+- Keep `applied-to:` under 40 words and use `valid-from:` only with `YYYY-MM-DD` ISO format.
+- When frontmatter metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `valid-from:` sets a convergence date for adoption, `applied-to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
 - Use mandatory language ("must", "always", "never") only for hard requirements; use advisory language ("should", "recommended") for guidance.
 - Do not duplicate content already in referenced XDRs — link instead.
 - Keep the decision itself authoritative in the XDR. Supporting artifacts may elaborate, but they should not restate the full decision when a short reference is enough.
@@ -122,7 +124,7 @@ Mandatory rules to apply while drafting:
 Check every item before finalizing:
 
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
-2. **Metadata**: If metadata exists, is it directly before Context, limited to `Valid:` / `Applied to:`, omitted entirely when both are absent, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
+2. **Frontmatter**: Are `applied-to:` and `valid-from:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
 3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
 4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
 5. **Redundancy**: Is the XDR the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?

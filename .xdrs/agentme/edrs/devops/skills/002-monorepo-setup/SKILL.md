@@ -13,12 +13,12 @@ metadata:
 
 ## Overview
 
-Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../../.xdrs/agentme/edrs/devops/005-monorepo-structure.md):
+Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../005-monorepo-structure.md):
 top-level application folders, a shared library area, Mise-managed tooling, and Makefiles at every
 level so any contributor can build, lint, and test any part of the monorepo with a single,
 predictable command.
 
-Related EDRs: [agentme-edr-005](../../../.xdrs/agentme/edrs/devops/005-monorepo-structure.md), [agentme-edr-013](../../../.xdrs/agentme/edrs/governance/013-contributing-guide-requirements.md)
+Related EDRs: [agentme-edr-005](../../005-monorepo-structure.md), [agentme-edr-013](../../../governance/013-contributing-guide-requirements.md)
 
 ## Instructions
 
