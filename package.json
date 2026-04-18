@@ -4,7 +4,7 @@
   "description": "",
   "dependencies": {
     "filedist": "^0.26.0",
-    "xdrs-core": "^0.15.2"
+    "xdrs-core": "^0.15.3"
   },
   "bin": "bin/filedist.js",
   "files": [
@@ -94,7 +94,8 @@
         },
         "output": {
           "path": ".",
-          "gitignore": false
+          "gitignore": false,
+          "readonly": false
         },
         "presets": [
           "speckit"
@@ -110,6 +111,7 @@
           "path": ".",
           "managed": false,
           "skipIfExists": true,
+          "readonly": false,
           "gitignore": false
         },
         "presets": [
