@@ -13,8 +13,8 @@ compatibility: Python 3.12+
 
 ## Overview
 
-Creates a complete Python project from scratch using `uv`, `pyproject.toml`, `ruff.toml`, Ruff, Pyright,
-Pytest, and Makefiles. The default layout uses `src/<package_name>/`, `tests/`, and `examples/`
+Creates a complete Python project from scratch using `uv`, `pyproject.toml`, `pydantic`, `ruff.toml`, Ruff,
+Pyright, Pytest, and Makefiles. The default layout uses `src/<package_name>/`, `tests/`, and `examples/`
 for libraries and shared utilities.
 
 Related EDR: [agentme-edr-014](../../014-python-project-tooling.md)
@@ -100,7 +100,9 @@ version = "0.0.1"
 description = "[description]"
 readme = "README.md"
 requires-python = ">=[python-version]"
-dependencies = []
+dependencies = [
+	"pydantic>=2.0.0",
+]
 
 [[project.authors]]
 name = "[author]"
@@ -134,6 +136,7 @@ addopts = "-q"
 
 Use `pyproject.toml` for package metadata, Pyright, and Pytest configuration. Do not add
 `requirements.txt`, `setup.py`, `setup.cfg`, or `pyrightconfig.json` by default.
+Include `pydantic` in `[project.dependencies]` unless another applicable XDR explicitly narrows the stack.
 
 **`./ruff.toml`**
 
@@ -303,7 +306,7 @@ After creating the files:
 
 **Input:** "Create a Python library called `event_tools`"
 - Create `pyproject.toml`, `Makefile`, `src/event_tools/`, `tests/`, and `examples/`
-- Configure `uv`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
+- Configure `uv`, `pydantic`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
 - Verify with `make lint-fix`, `make test`, and `make build`
 
 **Input:** "Scaffold a Python CLI package"

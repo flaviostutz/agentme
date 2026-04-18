@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-014-python-project-tooling-and-structure
-description: Defines the standard Python project toolchain, layout, and Makefile workflow using uv, ruff, pyright, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
+description: Defines the standard Python project toolchain, layout, and Makefile workflow using uv, pydantic, ruff, pyright, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
 ---
 
 # agentme-edr-014: Python project tooling and structure
@@ -13,9 +13,9 @@ What tooling and project structure should Python projects follow to ensure consi
 
 ## Decision Outcome
 
-**Use a uv-managed Python project with `pyproject.toml`, `ruff.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a Makefile as the only development entry point.**
+**Use a uv-managed Python project with `pyproject.toml`, `ruff.toml`, `pydantic`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a Makefile as the only development entry point.**
 
-A single dependency manager, a canonical package config, a shared Ruff baseline, and standard targets keep Python projects predictable for contributors and CI.
+A single dependency manager, a canonical package config, a shared runtime validation layer, a shared Ruff baseline, and standard targets keep Python projects predictable for contributors and CI.
 
 ### Implementation Details
 
@@ -25,6 +25,7 @@ A single dependency manager, a canonical package config, a shared Ruff baseline,
 |------|---------|
 | **uv** | Dependency management, lockfile management, virtualenv sync, build, publish |
 | **pyproject.toml** | Single source of truth for package metadata and non-Ruff tool configuration |
+| **pydantic** | Typed data models, validation, and serialization at application boundaries |
 | **ruff.toml** | Canonical Ruff formatting and lint configuration |
 | **ruff** | Formatting, import sorting, linting, and common code-quality checks |
 | **pyright** | Static type checking |
@@ -65,6 +66,8 @@ Libraries and shared utilities must include an `examples/` folder and wire examp
 
 #### `pyproject.toml`
 
+- New Python projects must include `pydantic` in `[project.dependencies]` unless another applicable XDR explicitly narrows the runtime stack for that project.
+- Use Pydantic v2 APIs for request, response, config, and other boundary-facing models.
 - Runtime dependencies belong in `[project.dependencies]`.
 - Development-only tooling belongs in `[dependency-groups].dev`.
 - Configure Pyright and Pytest in `pyproject.toml` under their `tool.*` sections.
@@ -145,8 +148,8 @@ The root `Makefile` must remain the only contract for CI and contributors, in li
 
 * (REJECTED) **Mixed Python tooling** - Separate tools and config files such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, and `mypy`.
   * Reason: Increases cognitive load, duplicates configuration, and weakens the standard command surface across projects.
-* (CHOSEN) **uv + `pyproject.toml` + `ruff.toml` + Ruff/Pyright/Pytest toolchain** - One dependency manager, a canonical package config, a shared Ruff baseline, and one Makefile entry point.
-  * Reason: Keeps packaging, dependency locking, code style, static analysis, security auditing, and test execution consistent.
+* (CHOSEN) **uv + `pyproject.toml` + `pydantic` + `ruff.toml` + Ruff/Pyright/Pytest toolchain** - One dependency manager, a canonical package config, a shared validation layer, a shared Ruff baseline, and one Makefile entry point.
+  * Reason: Keeps packaging, dependency locking, runtime validation, code style, static analysis, security auditing, and test execution consistent.
 
 ## References
 

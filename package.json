@@ -90,6 +90,24 @@
             ".github/agents/speckit*",
             ".github/prompts/speckit*",
             ".specify/**"
+          ],
+          "exclude": [
+            ".specify/templates/**"
+          ]
+        },
+        "output": {
+          "path": ".",
+          "gitignore": false,
+          "readonly": true
+        },
+        "presets": [
+          "speckit"
+        ]
+      },
+      {
+        "selector": {
+          "files": [
+            ".specify/templates/**"
           ]
         },
         "output": {
