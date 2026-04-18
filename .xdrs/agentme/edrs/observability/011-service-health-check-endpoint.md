@@ -1,3 +1,8 @@
+---
+name: agentme-edr-011-service-health-check-endpoint
+description: Defines the required health endpoint contract for service availability and dependency readiness checks. Use when implementing or reviewing service health endpoints.
+---
+
 # agentme-edr-011: Service health check endpoint
 
 ## Context and Problem Statement

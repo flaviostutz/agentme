@@ -1,3 +1,8 @@
+---
+name: _local-adr-001-project-basics
+description: Defines agentme's purpose and the quality bar for its XDRs and skills. Use when creating, updating, or consuming repository artifacts.
+---
+
 # _local-adr-001: Project basics
 
 ## Context and Problem Statement
@@ -33,5 +38,5 @@ Projects that import agentme XDRs must add the `agentme` scope to their `.xdrs/i
 
 ## References
 
-- [_general-adr-001 - XDR standards](../../../_general/adrs/principles/001-xdr-standards.md)
-- [_general-adr-003 - Skill standards](../../../_general/adrs/principles/003-skill-standards.md)
+- [_core-adr-002 - XDR standards](../../../_core/adrs/principles/002-xdr-standards.md)
+- [_core-adr-003 - Skill standards](../../../_core/adrs/principles/003-skill-standards.md)

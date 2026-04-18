@@ -1,3 +1,8 @@
+---
+name: _core-adr-004-article-standards
+description: Defines article document standards for synthesizing and linking XDRs, research, and skills. Use when creating or reviewing articles.
+---
+
 # _core-adr-004: Article standards
 
 ## Context and Problem Statement

@@ -1,3 +1,8 @@
+---
+name: agentme-edr-010-go-project-tooling-and-structure
+description: Defines the standard Go project toolchain, layout, and Makefile workflow for agentme-based projects. Use when scaffolding or reviewing Go projects.
+---
+
 # agentme-edr-010: Go project tooling and structure
 
 ## Context and Problem Statement

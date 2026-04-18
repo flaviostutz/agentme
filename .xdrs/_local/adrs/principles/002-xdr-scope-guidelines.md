@@ -1,3 +1,8 @@
+---
+name: _local-adr-002-xdr-scope-guidelines-for-agentme
+description: Defines which scope should receive new or updated XDR content in agentme. Use when deciding whether guidance belongs in shared or local scope.
+---
+
 # _local-adr-002: XDR scope guidelines for agentme
 
 ## Context and Problem Statement
