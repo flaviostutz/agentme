@@ -1,5 +1,5 @@
 ---
-name: agentme-edr-014-python-project-tooling-and-structure
+name: agentme-edr-014-python-project-tooling
 description: Defines the standard Python project toolchain, layout, and Makefile workflow using uv, ruff, pyright, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
 ---
 
@@ -13,9 +13,9 @@ What tooling and project structure should Python projects follow to ensure consi
 
 ## Decision Outcome
 
-**Use a uv-managed Python project with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a Makefile as the only development entry point.**
+**Use a uv-managed Python project with `pyproject.toml`, `ruff.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a Makefile as the only development entry point.**
 
-A single dependency manager, one canonical config file, and standard targets keep Python projects predictable for contributors and CI.
+A single dependency manager, a canonical package config, a shared Ruff baseline, and standard targets keep Python projects predictable for contributors and CI.
 
 ### Implementation Details
 
@@ -24,7 +24,8 @@ A single dependency manager, one canonical config file, and standard targets kee
 | Tool | Purpose |
 |------|---------|
 | **uv** | Dependency management, lockfile management, virtualenv sync, build, publish |
-| **pyproject.toml** | Single source of truth for package metadata and tool configuration |
+| **pyproject.toml** | Single source of truth for package metadata and non-Ruff tool configuration |
+| **ruff.toml** | Canonical Ruff formatting and lint configuration |
 | **ruff** | Formatting, import sorting, linting, and common code-quality checks |
 | **pyright** | Static type checking |
 | **pytest** | Test runner |
@@ -42,6 +43,7 @@ When the repository defines a root `.mise.toml`, Python and uv must be pinned th
 ├── .mise.toml              # optional but required when the repo uses Mise
 ├── Makefile                # single entry point for build/lint/test/run tasks
 ├── pyproject.toml          # package metadata + tool config
+├── ruff.toml               # Ruff formatting + lint configuration
 ├── uv.lock                 # committed lockfile
 ├── README.md               # Getting Started near the top
 ├── src/
@@ -57,7 +59,7 @@ When the repository defines a root `.mise.toml`, Python and uv must be pinned th
     └── basic-usage/
 ```
 
-Use the `src/` layout for import safety and packaging clarity. Keep tests under `tests/` and shared test setup in `tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `pyrightconfig.json` by default; keep project metadata and tool configuration in `pyproject.toml`.
+Use the `src/` layout for import safety and packaging clarity. Keep tests under `tests/` and shared test setup in `tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, or `pyrightconfig.json` by default. Keep package metadata, Pyright, and Pytest configuration in `pyproject.toml`, and keep Ruff configuration in `ruff.toml`.
 
 Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md).
 
@@ -65,9 +67,51 @@ Libraries and shared utilities must include an `examples/` folder and wire examp
 
 - Runtime dependencies belong in `[project.dependencies]`.
 - Development-only tooling belongs in `[dependency-groups].dev`.
-- Configure Ruff, Pyright, and Pytest in `pyproject.toml` under their `tool.*` sections.
+- Configure Pyright and Pytest in `pyproject.toml` under their `tool.*` sections.
+- Configure Ruff in `ruff.toml` using the shared baseline below.
 - Commit `uv.lock` and keep it in sync with `pyproject.toml`.
 - Expose CLI entry points with `[project.scripts]` when the project provides commands.
+
+#### `ruff.toml`
+
+Use this Ruff baseline unless another applicable XDR overrides it.
+
+```toml
+cache-dir = ".ruff_cache"
+output-format = "grouped"
+
+line-length = 120
+src = [".", "apps/*/services/*/src", "src/"]
+
+[format]
+docstring-code-format = true
+line-ending = "lf"
+
+[lint.pycodestyle]
+ignore-overlong-task-comments = true # To allow longer TODO comments without raising E501
+
+[lint]
+task-tags = ["TODO"] # https://stackoverflow.com/a/79035357
+
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+
+[lint.flake8-tidy-imports]
+# Ban relative imports beyond immediate module
+ban-relative-imports = "parents"
+
+[lint.per-file-ignores]
+"*/test_*.py" = ["S101", "ANN201", "ANN001", "PLR0913"]
+"*/tests/*.py" = ["S101", "ANN201", "ANN001", "PLR0913", "INP001", "B017", "PT011"]
+"scripts/*.py" = ["T20", "BLE001"]  # Allow prints in scripts
+"*/tests/*" = ["INP001", "SLF001", "PLR2004"]
+```
 
 Ruff is the default formatter and linter. Do not add Black, isort, or Flake8 unless another XDR for that repository explicitly requires them.
 
@@ -101,8 +145,8 @@ The root `Makefile` must remain the only contract for CI and contributors, in li
 
 * (REJECTED) **Mixed Python tooling** - Separate tools and config files such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, and `mypy`.
   * Reason: Increases cognitive load, duplicates configuration, and weakens the standard command surface across projects.
-* (CHOSEN) **uv + `pyproject.toml` + Ruff/Pyright/Pytest toolchain** - One dependency manager, one config file, and one Makefile entry point.
-  * Reason: Keeps packaging, dependency locking, static analysis, security auditing, and test execution consistent.
+* (CHOSEN) **uv + `pyproject.toml` + `ruff.toml` + Ruff/Pyright/Pytest toolchain** - One dependency manager, a canonical package config, a shared Ruff baseline, and one Makefile entry point.
+  * Reason: Keeps packaging, dependency locking, code style, static analysis, security auditing, and test execution consistent.
 
 ## References
 

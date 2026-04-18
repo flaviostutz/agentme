@@ -13,7 +13,7 @@ compatibility: Python 3.12+
 
 ## Overview
 
-Creates a complete Python project from scratch using `uv`, `pyproject.toml`, Ruff, Pyright,
+Creates a complete Python project from scratch using `uv`, `pyproject.toml`, `ruff.toml`, Ruff, Pyright,
 Pytest, and Makefiles. The default layout uses `src/<package_name>/`, `tests/`, and `examples/`
 for libraries and shared utilities.
 
@@ -121,13 +121,6 @@ dev = [
 requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
-[tool.ruff]
-line-length = 100
-target-version = "py313"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP"]
-
 [tool.pyright]
 include = ["src", "tests"]
 venvPath = "."
@@ -139,8 +132,49 @@ testpaths = ["tests"]
 addopts = "-q"
 ```
 
-Use `pyproject.toml` as the single configuration file. Do not add `requirements.txt`,
-`setup.py`, `setup.cfg`, `ruff.toml`, or `pyrightconfig.json` by default.
+Use `pyproject.toml` for package metadata, Pyright, and Pytest configuration. Do not add
+`requirements.txt`, `setup.py`, `setup.cfg`, or `pyrightconfig.json` by default.
+
+**`./ruff.toml`**
+
+Use this Ruff baseline unless another applicable XDR overrides it.
+
+```toml
+cache-dir = ".ruff_cache"
+output-format = "grouped"
+
+line-length = 120
+src = [".", "apps/*/services/*/src", "src/"]
+
+[format]
+docstring-code-format = true
+line-ending = "lf"
+
+[lint.pycodestyle]
+ignore-overlong-task-comments = true # To allow longer TODO comments without raising E501
+
+[lint]
+task-tags = ["TODO"] # https://stackoverflow.com/a/79035357
+
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+	"C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+	"INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+	"TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+	"D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+	"D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+
+[lint.flake8-tidy-imports]
+# Ban relative imports beyond immediate module
+ban-relative-imports = "parents"
+
+[lint.per-file-ignores]
+"*/test_*.py" = ["S101", "ANN201", "ANN001", "PLR0913"]
+"*/tests/*.py" = ["S101", "ANN201", "ANN001", "PLR0913", "INP001", "B017", "PT011"]
+"scripts/*.py" = ["T20", "BLE001"]  # Allow prints in scripts
+"*/tests/*" = ["INP001", "SLF001", "PLR2004"]
+```
 
 **`./.gitignore`**
 
