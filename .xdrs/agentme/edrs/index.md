@@ -26,6 +26,7 @@ Language and framework-specific tooling and project structure.
 
 - [agentme-edr-003](application/003-javascript-project-tooling.md) - **JavaScript project tooling and structure** *(includes skill: [001-create-javascript-project](application/skills/001-create-javascript-project/SKILL.md))*
 - [agentme-edr-010](application/010-golang-project-tooling.md) - **Go project tooling and structure** *(includes skill: [003-create-golang-project](application/skills/003-create-golang-project/SKILL.md))*
+- [agentme-edr-014](application/014-python-project-tooling.md) - **Python project tooling and structure** *(includes skill: [005-create-python-project](application/skills/005-create-python-project/SKILL.md))*
 - [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
 
 ## Devops
