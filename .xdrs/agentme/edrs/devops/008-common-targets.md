@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-008-common-development-script-names
-description: Defines standard development command names and lifecycle groups across projects, regardless of the underlying runner. Use when designing build, lint, test, and release entry points.
+description: Defines standard Makefile target names and the mandatory tool-execution flow using Mise. Use when designing build, lint, test, and release entry points.
 ---
 
 # agentme-edr-008: Common development script names
@@ -9,46 +9,67 @@ description: Defines standard development command names and lifecycle groups acr
 
 Software projects use a wide variety of commands and tooling to perform the same fundamental tasks — building, testing, linting, and deploying. This diversity is amplified across language ecosystems, meaning developers must re-learn project-specific conventions every time they switch contexts. CI pipelines suffer from the same fragmentation, each one requiring bespoke scripts.
 
-What standard set of command names and conventions should projects adopt so that any developer or CI pipeline can immediately operate on any project without needing to read documentation first?
+What standard set of Makefile target names and execution rules should projects adopt so that any developer or CI pipeline can immediately operate on any project without needing to read documentation first?
 
 ## Decision Outcome
 
-**Every project must expose its development actions using a defined set of standardized script names, grouped by lifecycle phase. These names apply regardless of the script runner used — Makefile, npm scripts, shell scripts, or any other tool — so that `build`, `test`, `lint`, and related commands work predictably across all projects and languages.**
+**Every project must expose its development actions through a root `Makefile` using a defined set of standardized target names. Makefile recipes must run explicit tool commands through `mise exec --`, so developers and CI use the same entry point and can see the real command path without extra script indirection.**
 
-Standardizing script names removes the cognitive overhead of learning per-project conventions, makes CI pipelines reusable across projects, and gives new developers an immediately operational entry point. The names are the contract; the underlying runner is an implementation detail.
+Standardizing both the target names and the execution chain removes per-project guesswork, makes CI pipelines reusable, and keeps tooling behavior visible in one place.
 
 ### Implementation Details
 
-#### 1. Every project MUST have a root-level entry point exposing the standard script names
+#### 1. Every project MUST have a root `Makefile` exposing the standard target names
 
-The project root must contain a single authoritative entry point — a `Makefile`, `package.json` scripts section, a shell wrapper, or equivalent — that exposes the standard target names defined in rule 2. Developers and CI pipelines must invoke actions through this entry point exclusively, never by calling underlying tools directly.
+The project root must contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines must invoke routine actions through this `Makefile`, never by calling underlying tools directly in documentation, CI, or daily workflow commands.
 
-**Preferred runner: Makefile.** A `Makefile` is the default recommended choice because it is language-agnostic, universally available, and provides a consistent invocation syntax (`make <target>`) across all ecosystems.
+`make <target>` is the shared contract across projects and languages.
 
-**Alternative runners** are acceptable when a Makefile is not practical for the project's ecosystem:
+- The root `Makefile` must be the entry point for both developers and pipelines.
+- The root `Makefile` must expose at minimum the common targets defined in this XDR.
+- Reverse-compatibility wrappers are allowed when an ecosystem expects them, but they must stay trivial.
+	- Allowed: `package.json` script `"test": "make test"`
+	- Not allowed: `make test` -> `npm run test` -> tool command
+- Project logic must not live in npm scripts, Mise tasks, shell wrappers, or other secondary runners when the same logic belongs in the `Makefile`.
 
-| Runner | Invocation example | When appropriate |
-|--------|--------------------|------------------|
-| Makefile | `make build` | Default; recommended for all projects |
-| npm scripts | `npm run build` | Pure Node.js/frontend projects without a Makefile |
-| Shell script | `./dev.sh build` | Projects where `make` is unavailable or impractical |
-| Other (Taskfile, just, etc.) | `task build` | When agreed upon at the project or org level |
+*Why:* The project entry point must stay language-agnostic and obvious. A developer should be able to inspect the `Makefile` and immediately see which real tool commands will run.
 
-Whichever runner is chosen, the **target names** defined in rule 2 must be used unchanged. The runner is an implementation detail; the names are the shared contract.
+#### 2. Makefile recipes MUST use the explicit tool-execution chain
 
-*Why:* A single entry point means developers and CI pipelines use near-identical commands regardless of the underlying language or tooling. Any tooling change is then contained to the entry-point file and does not require updating CI pipelines or developer documentation.
+After a checkout, the only assumed prerequisites are `make` and [Mise](https://mise.jdx.dev/). The standard execution flow is:
+
+```text
+make <target>
+	-> Makefile recipe
+		-> mise exec -- <tool> [tool arguments]
+			-> explicit tool command
+```
+
+- The `setup` target must run `mise install` and any small project-specific bootstrap needed before normal targets work.
+- Routine targets such as `build`, `lint`, `test`, `run`, and `publish` must be invoked as `make <target>` by both contributors and CI.
+- Each Makefile recipe must call the real underlying command directly through `mise exec --`.
+- Makefile recipes must not add extra script layers such as `npm run`, `pnpm run`, `yarn run`, `mise run`, `mise tasks`, or shell aliases when those layers only forward to another command.
+- Calling the actual tool is allowed even when that tool itself launches another program as part of its normal interface.
+	- Allowed: `mise exec -- pnpm exec eslint ./src`
+	- Allowed: `mise exec -- go test -cover ./...`
+	- Allowed: `mise exec -- uv run --project . pytest`
+	- Disallowed: `mise exec -- pnpm run lint`
+	- Disallowed: `mise run lint`
+	- Disallowed: `make lint` implemented as `./scripts/lint.sh` when the shell script only forwards to one visible tool command
+
+*Why:* This keeps the execution path inspectable, avoids hidden logic spread across multiple scripting systems, and makes CI behave the same way as local development.
 
 ---
 
-#### 2. Standard script groups and names
+#### 3. Standard target groups and names
 
-Scripts are organized into five lifecycle groups. Projects must use these names regardless of the script runner in use. Extensions are allowed (see rule 4) but the core names must not be repurposed.
+Targets are organized into five lifecycle groups. Projects must use these names unchanged. Extensions are allowed (see rule 5) but the core names must not be repurposed.
 
 ##### Developer group
 
-| Script | Purpose |
+| Target | Purpose |
 |--------|---------|
-| `setup` | Install any tools required on the developer machine (e.g., nvm, brew, python, golang). Typically run once per project checkout. In CI, tooling is usually pre-provisioned via runner images or workflow steps instead. |
+| `setup` | Run `mise install` and any small project bootstrap needed before normal targets work. This is the first command after checkout. |
 | `all` | Alias that runs `build`, `lint`, and `test` in sequence. Must be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. |
 | `clean` | Remove all temporary or generated files created during build, lint, or test (e.g., `node_modules`, virtual environments, compiled binaries, generated files). Used both locally and in CI for a clean slate. |
 | `dev` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). May have debugging tools, verbose logging, or hot reloading features enabled. |
@@ -57,7 +78,7 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 
 ##### Build group
 
-| Script | Purpose |
+| Target | Purpose |
 |--------|---------|
 | `build` | Install dependencies, compile, and package the software. The full `install → compile → package` workflow. |
 | `install` | Download and install all project dependencies. Assumes the language runtime is already available (installed via `setup`). |
@@ -67,13 +88,13 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 
 ##### Lint group
 
-| Script | Purpose |
+| Target | Purpose |
 |--------|---------|
 | `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks must be non-destructive (read-only); fixes are handled by `lint-fix`. |
 | `lint-fix` | Automatically fix linting and formatting issues where possible. || `lint-format` | *(Optional)* Check code formatting only (e.g., Prettier, gofmt, Black). |
 ##### Test group
 
-| Script | Purpose |
+| Target | Purpose |
 |--------|---------|
 | `test` | Run **all tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and integration/end-to-end tests. Normally delegates to `test-unit` and `test-integration` in sequence. |
 | `test-unit` | Run unit tests only, including coverage report generation and coverage threshold enforcement. |
@@ -82,7 +103,7 @@ Scripts are organized into five lifecycle groups. Projects must use these names 
 
 ##### Release group
 
-| Script | Purpose |
+| Target | Purpose |
 |--------|---------|
 | `release` | Determine the next version (e.g., via semantic versioning and git tags), generate changelogs and release notes, tag the repository, and create a release artifact. Normally invokes `docgen`. |
 | `docgen` | Generate documentation (API docs, static sites, changelogs, example outputs). |
@@ -103,9 +124,9 @@ Two environment variables have defined semantics and must be used consistently.
 
 ---
 
-#### 4. Extending scripts with prefixes
+#### 5. Extending targets with prefixes
 
-Projects may add custom scripts beyond the standard set. Custom scripts must be named by prefixing a standard script name with a descriptive qualifier, keeping the naming intuitive and consistent with the group it belongs to.
+Projects may add custom targets beyond the standard set. Custom targets must be named by prefixing a standard target name with a descriptive qualifier, keeping the naming intuitive and consistent with the group it belongs to.
 
 **Examples:**
 
@@ -121,13 +142,13 @@ start-debugger    # launch the software with a visual debugger attached
 deploy-infra      # deploy only the infrastructure layer
 ```
 
-The prefix convention ensures developers can infer the purpose of any script without documentation.
+The prefix convention ensures developers can infer the purpose of any target without documentation.
 
 ---
 
-#### 5. Monorepo usage
+#### 6. Monorepo usage
 
-In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to module Makefiles in sequence.
+In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to child Makefiles in sequence. The parent Makefile should call `$(MAKE) -C <child> <target>` directly, while each child `Makefile` runs its actual tool commands through `mise exec --`.
 
 ```makefile
 # root Makefile — delegates to all modules
@@ -146,12 +167,12 @@ A developer can run `make test` at the repo root to test everything, or `cd modu
 
 ---
 
-#### 6. Quick-reference — commands a developer can always rely on
+#### 7. Quick-reference — commands a developer can always rely on
 
-Any project following this EDR supports the following actions. Examples show Makefile syntax; substitute your project's runner (e.g., `npm run build`, `./dev.sh build`) if a Makefile is not used.
+Any project following this EDR supports the following actions through the root `Makefile`.
 
 ```sh
-# install required development tools
+# install the pinned toolchain and project bootstrap
 make setup
 
 # build the software (install deps, compile, package)
@@ -188,25 +209,13 @@ make clean
 make all
 ```
 
-**Equivalent examples for npm scripts and shell:**
-
-```sh
-# npm scripts (package.json)
-npm run build
-npm run test
-npm run lint
-STAGE=dev npm run deploy
-
-# shell wrapper
-./dev.sh build
-./dev.sh test
-STAGE=dev ./dev.sh deploy
-```
-
 ## Considered Options
 
-* (REJECTED) **Language-native entry points only** - Use `npm run`, `python -m`, `go run` etc. directly as the standard without a unifying name convention
+* (REJECTED) **Language-native entry points only** - Use `npm run`, `python -m`, `go run`, and similar tool-specific commands directly as the standard surface
   * Reason: Ties CI pipelines and developer muscle memory to language-specific tooling; breaks the abstraction when the underlying tool changes; target names vary per ecosystem
 
-* (CHOSEN) **Standardized script names, runner-agnostic** - A common, language-agnostic command vocabulary that must be used regardless of whether the runner is a Makefile, npm scripts, a shell wrapper, or another tool; with Makefile as the preferred default
-  * Reason: Separating the names (the contract) from the runner (the implementation) gives every developer and CI pipeline a predictable interface while allowing each project to choose the most practical runner for its ecosystem.
+* (REJECTED) **Runner-agnostic targets with multiple primary runners** - Keep the target names standard but allow Makefile, npm scripts, shell wrappers, or other runners as equivalent first-class entry points
+	* Reason: Preserves naming consistency but still spreads behavior across multiple scripting systems, which hides the real command path and weakens CI standardization.
+
+* (CHOSEN) **Standardized Makefile targets with Mise-managed explicit tool execution** - Use `make <target>` as the only routine entry point, keep target names standard, and run the actual underlying tool commands through `mise exec --`
+	* Reason: This keeps names, execution flow, and tool versions equally predictable while avoiding script indirection.

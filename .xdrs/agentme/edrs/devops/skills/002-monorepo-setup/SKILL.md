@@ -220,13 +220,13 @@ For each module inside an application:
    all: build lint test
 
    build:
-   	go build ./...
+   mise exec -- go build ./...
 
    lint:
-   	golangci-lint run ./...
+   mise exec -- golangci-lint run ./...
 
    test:
-   	go test ./... -cover
+   mise exec -- go test ./... -cover
 
    clean:
 	rm -rf dist .cache
@@ -239,13 +239,13 @@ For each module inside an application:
    all: build lint test
 
    build:
-   	npm run build
+   mise exec -- pnpm exec tsc --project tsconfig.json
 
    lint:
-   	npm run lint
+   mise exec -- pnpm exec eslint ./src
 
    test:
-   	npm test
+   mise exec -- pnpm exec jest --verbose
 
    clean:
 	rm -rf dist .cache
@@ -258,13 +258,13 @@ For each module inside an application:
    all: build lint test
 
    build:
-   	pip install -e .
+   mise exec -- uv build --project . --out-dir dist
 
    lint:
-   	ruff check .
+   mise exec -- uv run --project . ruff check .
 
    test:
-   	pytest
+   mise exec -- uv run --project . pytest
 
    clean:
 	rm -rf dist .cache

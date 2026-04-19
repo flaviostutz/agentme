@@ -34,7 +34,7 @@ A single dependency manager, isolated package internals under `lib/`, and a stan
 
 All routine commands must run through the project `Makefile`, never by calling `uv`, `ruff`, `pytest`, or `pyright` directly in docs, CI, or daily development workflows.
 
-The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST install the base toolchain with `mise install` and run routine Makefile targets through `mise exec -- make <target>` or from an activated Mise shell. Using host-installed `python`, `uv`, or other project CLIs directly for routine project work is not allowed.
+The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`. Using host-installed `python`, `uv`, or other project CLIs directly for routine project work is not allowed.
 
 The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands must set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
 
@@ -102,7 +102,7 @@ Pytest coverage must fail below 80% line and branch coverage, following [agentme
 
 #### Makefile targets
 
-The commands below assume invocation through `mise exec -- make <target>` or plain `make <target>` inside an activated Mise shell.
+Contributors and CI MUST invoke the commands below as `make <target>`. The Makefile recipes themselves MUST call the underlying tools through `mise exec -- <tool> ...`.
 
 #### Root `Makefile`
 
@@ -110,6 +110,7 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 
 | Target | Description |
 |--------|-------------|
+| `setup` | Run `mise install`, then `lib/install` to create or update the shared root `.venv/` |
 | `install` | Run `lib/install` to create or update the shared root `.venv/` |
 | `build` | Run `lib/build` |
 | `lint` | Run `lib/lint` |
@@ -124,17 +125,17 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 
 | Target | Description |
 |--------|-------------|
-| `install` | `uv sync --project . --frozen --all-extras --dev` using the shared root `.venv/` |
-| `build` | `uv sync --project . --frozen --all-extras --dev && uv build --project . --out-dir dist` |
-| `lint` | `uv run --project . ruff format --check . && uv run --project . ruff check . && uv run --project . pyright && uv run --project . pip-audit`, with caches redirected into `.cache/` |
-| `lint-fix` | `uv run --project . ruff format . && uv run --project . ruff check . --fix && uv run --project . pyright && uv run --project . pip-audit`, with caches redirected into `.cache/` |
-| `test-unit` | `uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80`, with pytest and coverage outputs stored under `.cache/` |
+| `install` | `mise exec -- uv sync --project . --frozen --all-extras --dev` using the shared root `.venv/` |
+| `build` | `mise exec -- uv sync --project . --frozen --all-extras --dev && mise exec -- uv build --project . --out-dir dist` |
+| `lint` | `mise exec -- uv run --project . ruff format --check . && mise exec -- uv run --project . ruff check . && mise exec -- uv run --project . pyright && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `lint-fix` | `mise exec -- uv run --project . ruff format . && mise exec -- uv run --project . ruff check . --fix && mise exec -- uv run --project . pyright && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `test-unit` | `mise exec -- uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80`, with pytest and coverage outputs stored under `.cache/` |
 | `clean` | Remove `dist/` and `.cache/` inside `lib/` |
 | `all` | `build lint test-unit` |
-| `update-lockfile` | `uv lock --project . --upgrade` |
-| `run` | `uv run --project . python -m <package_name>` or the project CLI entry point |
+| `update-lockfile` | `mise exec -- uv lock --project . --upgrade` |
+| `run` | `mise exec -- uv run --project . python -m <package_name>` or the project CLI entry point |
 | `dev` | Same as `run`, optionally with repository-specific dev defaults |
-| `publish` | `uv publish --project .` after versioning and packaging are complete |
+| `publish` | `mise exec -- uv publish --project .` after versioning and packaging are complete |
 
 The root `Makefile` must remain the only contract for CI and contributors, in line with [agentme-edr-008](../devops/008-common-targets.md).
 

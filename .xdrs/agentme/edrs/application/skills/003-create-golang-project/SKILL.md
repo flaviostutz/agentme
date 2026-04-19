@@ -103,6 +103,7 @@ all: build lint test
 
 setup:
 	mise install
+	$(MAKE) install
 
 build: install
 	@mkdir -p dist
@@ -204,11 +205,11 @@ coverage.out
 
 ## Development
 
-	mise install
-	mise exec -- make build    # compile binary to dist/
-	mise exec -- make lint     # run golangci-lint with cache in .cache/
-	mise exec -- make test     # run tests with coverage artifacts in .cache/
-	mise exec -- make start    # run locally with default args
+	make setup
+	make build    # compile binary to dist/
+	make lint     # run golangci-lint with cache in .cache/
+	make test     # run tests with coverage artifacts in .cache/
+	make start    # run locally with default args
 ```
 
 ---
@@ -315,9 +316,8 @@ func Run(args []string) {
 After creating all files, run the following in the project root:
 
 ```bash
-mise install
-mise exec -- go mod tidy
-mise exec -- make all
+make setup
+make all
 ```
 
 Fix any compile or lint errors before finishing.
@@ -332,6 +332,6 @@ Fix any compile or lint errors before finishing.
 - All tests co-located (`*_test.go` next to the file under test).
 - Use `tests_integration/` for integration flows and `tests_benchmark/` when benchmarks need dedicated harnesses or datasets.
 - Log with `logrus`; never use `fmt.Println` for diagnostic/debug output.
-- All development tasks go through `make` targets inside the Mise-managed environment — never run `go` directly for routine ops.
+- All development tasks go through `make` targets. The Makefile recipes call `mise exec -- go ...` and related tools directly.
 - Do not create an `internal/` package unless explicitly justified (importability is preferred).
 - If the project is a reusable library, place consumer examples in a sibling `examples/` folder outside the module root and keep them on the public module import path.

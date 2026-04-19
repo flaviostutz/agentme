@@ -62,23 +62,24 @@ all: build lint test
 
 setup:
 	mise install
+	$(MAKE) install
 
 install:
-	$(MISE) $(MAKE) -C lib install
+	$(MAKE) -C lib install
 
 build:
-	$(MISE) $(MAKE) -C lib build
+	$(MAKE) -C lib build
 
 lint:
-	$(MISE) $(MAKE) -C lib lint
+	$(MAKE) -C lib lint
 
 lint-fix:
-	$(MISE) $(MAKE) -C lib lint-fix
+	$(MAKE) -C lib lint-fix
 
 test: test-unit test-examples
 
 test-unit:
-	$(MISE) $(MAKE) -C lib test-unit
+	$(MAKE) -C lib test-unit
 
 test-examples: build
 	@for dir in examples/*; do \
@@ -91,12 +92,12 @@ test-examples: build
 	done
 
 clean:
-	$(MISE) $(MAKE) -C lib clean
+	$(MAKE) -C lib clean
 	rm -rf .cache
 	rm -rf .venv
 ```
 
-The root `Makefile` keeps the repository clean by delegating package work to `lib/` and treating each example directory as an independent consumer project.
+The root `Makefile` keeps the repository clean by delegating package work to `lib/` and treating each example directory as an independent consumer project. Child Makefiles own the actual `mise exec -- <tool>` calls.
 
 **`./.gitignore`**
 
@@ -118,8 +119,8 @@ Keep this README focused on the repository or workspace. Put Getting Started nea
 ## Getting Started
 
 ```sh
-mise install
-mise exec -- make test
+make setup
+make test
 ```
 
 The published package lives in `lib/` and runnable consumer examples live in `examples/`.
@@ -245,8 +246,8 @@ This README is the published package README referenced by `lib/pyproject.toml`.
 ## Getting Started
 
 ```sh
-mise install
-mise exec -- make test
+make setup
+make test
 ```
 
 ```python
@@ -258,9 +259,9 @@ print(hello("world"))
 ## Development
 
 ```sh
-mise exec -- make build
-mise exec -- make lint
-mise exec -- make test
+make build
+make lint
+make test
 ```
 ````
 
@@ -345,11 +346,11 @@ Examples must import the package as a consumer would. Avoid relative imports bac
 
 After creating the files:
 
-1. Run `mise install`.
-2. Run `mise exec -- make install`.
-3. Run `mise exec -- make lint-fix`.
-4. Run `mise exec -- make test`.
-5. Run `mise exec -- make build`.
+1. Run `make setup`.
+2. Run `make install`.
+3. Run `make lint-fix`.
+4. Run `make test`.
+5. Run `make build`.
 6. Fix all failures before finishing.
 
 ## Examples
@@ -358,7 +359,7 @@ After creating the files:
 - Create `Makefile`, `README.md`, `lib/pyproject.toml`, `lib/Makefile`, `lib/src/event_tools/`, `lib/tests/`, and `examples/`
 - Add `lib/README.md`, `.cache/` handling, and install examples from the built wheel in `lib/dist/`
 - Configure `uv`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
-- Verify with `mise exec -- make lint-fix`, `mise exec -- make test`, and `mise exec -- make build`
+- Verify with `make lint-fix`, `make test`, and `make build`
 
 **Input:** "Scaffold a Python CLI package"
 - Add `lib/src/<package_name>/__main__.py`
