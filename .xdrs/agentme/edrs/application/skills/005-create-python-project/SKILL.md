@@ -15,9 +15,10 @@ compatibility: Python 3.12+
 
 Creates a complete Python project from scratch using `uv`, `pyproject.toml`, Ruff, Pyright,
 Pytest, and Makefiles. The default layout keeps the library self-contained under `lib/`, uses a
-shared root `.venv/`, and places runnable consumer projects under `examples/`.
+shared root `.venv/`, redirects persistent caches into `.cache/`, and places runnable consumer
+projects under the sibling `examples/` folder.
 
-Related EDR: [agentme-edr-014](../../014-python-project-tooling.md)
+Related EDRs: [agentme-edr-014](../../014-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
 
 ## Instructions
 
@@ -44,6 +45,7 @@ Create these files first.
 SHELL := /bin/bash
 ROOT_DIR := $(abspath .)
 export UV_PROJECT_ENVIRONMENT := $(ROOT_DIR)/.venv
+export UV_CACHE_DIR := $(ROOT_DIR)/.cache/uv
 
 all: build lint test
 
@@ -68,15 +70,16 @@ test-examples: build
 	@for dir in examples/*; do \
 		if [ -f "$$dir/pyproject.toml" ]; then \
 			echo ">>> Running $$dir"; \
-			UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" uv sync --project "$$dir" --frozen || exit 1; \
-			UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" uv run --project "$$dir" python main.py || exit 1; \
+			UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" UV_CACHE_DIR="$(UV_CACHE_DIR)" uv sync --project "$$dir" --frozen || exit 1; \
+			UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" UV_CACHE_DIR="$(UV_CACHE_DIR)" uv pip install --python "$(UV_PROJECT_ENVIRONMENT)/bin/python" lib/dist/*.whl || exit 1; \
+			UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" UV_CACHE_DIR="$(UV_CACHE_DIR)" uv run --project "$$dir" python main.py || exit 1; \
 		fi; \
 	done
 
 clean:
 	$(MAKE) -C lib clean
+	rm -rf .cache
 	rm -rf .venv
-	find . -type d -name __pycache__ -prune -exec rm -rf {} +
 ```
 
 The root `Makefile` keeps the repository clean by delegating package work to `lib/` and treating each example directory as an independent consumer project.
@@ -87,13 +90,8 @@ If the repository already uses Mise, wrap the delegated commands with `mise exec
 
 ```gitignore
 .venv/
-lib/dist/
-lib/.pytest_cache/
-lib/.ruff_cache/
-lib/.coverage
-lib/htmlcov/
-__pycache__/
-*.pyc
+dist/
+.cache/
 ```
 
 **`./README.md`**
@@ -125,6 +123,10 @@ artifacts, and library-specific Makefile targets.
 SHELL := /bin/bash
 ROOT_DIR := $(abspath ..)
 export UV_PROJECT_ENVIRONMENT := $(ROOT_DIR)/.venv
+export UV_CACHE_DIR := $(ROOT_DIR)/.cache/uv
+export RUFF_CACHE_DIR := $(abspath .cache/ruff)
+export PYTHONPYCACHEPREFIX := $(abspath .cache/pycache)
+export COVERAGE_FILE := $(abspath .cache/coverage)
 
 PACKAGE_NAME ?= your_package
 
@@ -150,7 +152,7 @@ lint-fix: install
 	uv run --project . pip-audit
 
 test-unit: install
-	uv run --project . pytest --cov=src/$(PACKAGE_NAME) --cov-branch --cov-report=term-missing --cov-fail-under=80
+	uv run --project . pytest -o cache_dir=.cache/pytest --cov=src/$(PACKAGE_NAME) --cov-branch --cov-report=term-missing --cov-report=html:.cache/htmlcov --cov-fail-under=80
 
 run: install
 	uv run --project . python -m $(PACKAGE_NAME)
@@ -161,8 +163,7 @@ update-lockfile:
 	uv lock --project . --upgrade
 
 clean:
-	rm -rf dist .pytest_cache .ruff_cache .coverage htmlcov
-	find . -type d -name __pycache__ -prune -exec rm -rf {} +
+	rm -rf dist .cache
 ```
 
 **`lib/pyproject.toml`**
@@ -239,6 +240,14 @@ from [package-name] import hello
 
 print(hello("world"))
 ```
+
+## Development
+
+```sh
+make build
+make lint
+make test
+```
 ````
 
 ### Phase 4: Create the package and tests inside `lib/`
@@ -288,6 +297,8 @@ def test_hello() -> None:
 
 If two or more test files need shared fixtures, create `lib/tests/conftest.py` and move shared setup there.
 
+If the module needs slower end-to-end coverage, place those tests in `lib/tests_integration/`. Put dedicated benchmark harnesses in `lib/tests_benchmark/`.
+
 ### Phase 5: Create examples for libraries and utilities
 
 If the project is a library or shared utility, add an `examples/` directory with one subdirectory per runnable consumer example. Each example must be its own Python project.
@@ -299,13 +310,11 @@ If the project is a library or shared utility, add an `examples/` directory with
 name = "basic-usage"
 version = "0.0.0"
 requires-python = ">=[python-version]"
-dependencies = ["[package-name]"]
-
-[tool.uv.sources]
-[package-name] = { path = "../../lib", editable = false }
+dependencies = []
 ```
 
-This keeps each example independent while still consuming the local library package.
+The root `test-examples` target installs the wheel built into `lib/dist/` before running each
+example. Do not point examples back to `../../lib` or `lib/src/`.
 
 **`examples/basic-usage/main.py`**
 
@@ -332,6 +341,7 @@ After creating the files:
 
 **Input:** "Create a Python library called `event_tools`"
 - Create `Makefile`, `README.md`, `lib/pyproject.toml`, `lib/Makefile`, `lib/src/event_tools/`, `lib/tests/`, and `examples/`
+- Add `lib/README.md`, `.cache/` handling, and install examples from the built wheel in `lib/dist/`
 - Configure `uv`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
 - Verify with `make lint-fix`, `make test`, and `make build`
 

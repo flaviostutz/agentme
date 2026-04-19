@@ -13,6 +13,7 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-007](principles/007-project-quality-standards.md) - **Project quality standards**
 - [agentme-edr-009](principles/009-error-handling.md) - **Error handling**
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy**
+- [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure**
 
 ## Articles
 

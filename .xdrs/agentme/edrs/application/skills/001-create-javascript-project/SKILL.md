@@ -13,12 +13,13 @@ compatibility: JavaScript/TypeScript, Node.js 18+
 
 ## Overview
 
-Creates a complete JavaScript/TypeScript library project from scratch. The layout separates
-library source (`lib/`) from runnable usage examples (`examples/`), coordinated by root-level
-Makefiles. Boilerplate is derived from the [filedist](https://github.com/flaviostutz/filedist)
+Creates a complete JavaScript/TypeScript library project from scratch. The layout keeps the
+published package self-contained in its module root (`lib/`), places runnable consumer examples in
+the sibling `examples/` folder, redirects persistent caches into `.cache/`, and uses Makefiles as
+the only entry points. Boilerplate is derived from the [filedist](https://github.com/flaviostutz/filedist)
 project.
 
-Related EDR: [agentme-edr-003](../../003-javascript-project-tooling.md)
+Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
 
 ## Instructions
 
@@ -72,6 +73,7 @@ pnpm = "10.14.0"
 ```
 node_modules/
 dist/
+.cache/
 *.tgz
 .filedist
 ```
@@ -105,24 +107,29 @@ describe('hello', () => {
 ```makefile
 SHELL := /bin/bash
 MISE := mise exec --
+CACHE_DIR := .cache
 
 build: install
 	@rm -rf dist
-  $(MISE) pnpm exec tsc --outDir dist
+  @mkdir -p $(CACHE_DIR)/tsc
+  $(MISE) pnpm exec tsc --incremental --tsBuildInfoFile $(CACHE_DIR)/tsc/tsconfig.tsbuildinfo --outDir dist
 	@-find ./dist \( -regex '.*\.test\..*' -o -regex '.*__tests.*' \) -exec rm -rf {} \; 2> /dev/null
 	@# Create pack for use by examples to simulate real external usage
   $(MISE) pnpm pack --pack-destination dist
 
 build-module: install
 	@rm -rf dist
-  $(MISE) pnpm exec tsc --outDir dist
+  @mkdir -p $(CACHE_DIR)/tsc
+  $(MISE) pnpm exec tsc --incremental --tsBuildInfoFile $(CACHE_DIR)/tsc/tsconfig.tsbuildinfo --outDir dist
 	@-find ./dist \( -regex '.*\.test\..*' -o -regex '.*__tests.*' \) -exec rm -rf {} \; 2> /dev/null
 
 lint:
-  $(MISE) pnpm exec eslint ./src
+  @mkdir -p $(CACHE_DIR)/eslint
+  $(MISE) pnpm exec eslint ./src --cache --cache-location $(CACHE_DIR)/eslint/.eslintcache
 
 lint-fix:
-  $(MISE) pnpm exec eslint ./src --fix
+  @mkdir -p $(CACHE_DIR)/eslint
+  $(MISE) pnpm exec eslint ./src --fix --cache --cache-location $(CACHE_DIR)/eslint/.eslintcache
 
 test-watch:
   $(MISE) pnpm exec jest --watch
@@ -133,6 +140,7 @@ test:
 clean:
 	rm -rf node_modules
 	rm -rf dist
+  rm -rf .cache
 
 all: build lint test
 
@@ -223,6 +231,8 @@ Use this single tsconfig for both build and type-aware linting. Keep `*.test.ts`
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/*.test.ts'],
+  cacheDirectory: '<rootDir>/.cache/jest',
+  coverageDirectory: '<rootDir>/.cache/coverage',
   collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts'],
   transform: {
     '^.+\\.tsx?$': [
@@ -323,7 +333,29 @@ console.log(result);
 
 ---
 
-### Phase 5: Create `README.md`
+### Phase 5: Create `README.md` and `lib/README.md`
+
+Keep the repository README focused on the workspace and the module README focused on consumers of
+the published package.
+
+**`README.md`**
+
+```markdown
+# [package-name]
+
+[description]
+
+## Getting Started
+
+```bash
+mise install
+make test
+```
+
+The published module lives in `lib/` and runnable consumer examples live in `examples/`.
+```
+
+**`lib/README.md`**
 
 Quick Start must appear at the top — it is rendered first on the npm registry page.
 
@@ -334,28 +366,37 @@ Quick Start must appear at the top — it is rendered first on the npm registry 
 
 ## Quick Start
 
-\`\`\`bash
+```bash
 pnpm add [package-name]
-\`\`\`
+```
 
-\`\`\`typescript
+```typescript
 import { hello } from '[package-name]';
 
 const greeting = hello('world');
 console.log(greeting); // Hello, world!
-\`\`\`
+```
 
 ## Installation
 
-\`\`\`bash
+```bash
 npm install [package-name]
 # or
 pnpm add [package-name]
-\`\`\`
+```
 
 ## Examples
 
-See the [examples/](examples/) folder for complete runnable examples.
+See the sibling `examples/` folder for complete runnable examples that consume the packed artifact
+from `lib/dist/`.
+
+## Development
+
+```bash
+make build
+make lint
+make test
+```
 
 ## License
 
@@ -369,12 +410,13 @@ MIT
 Review all created files and confirm:
 
 - [ ] Root `Makefile` delegates to both `lib/` and `examples/`
+- [ ] `.gitignore` ignores `dist/` and `.cache/`
 - [ ] `lib/src/index.ts` exports at least one symbol
 - [ ] `lib/src/index.test.ts` has at least one passing test
 - [ ] `lib/package.json` has `main`, `types`, and `files` set correctly
 - [ ] `lib/tsconfig.json` includes co-located `src/**/*.test.ts` files for ESLint type-aware parsing
 - [ ] `lib/eslint.config.mjs` points `parserOptions.project` to `tsconfig.json`
-- [ ] `README.md` starts with Quick Start containing a code example
+- [ ] `lib/README.md` starts with Quick Start and ends with module development commands
 - [ ] All `[package-name]` placeholders are replaced with the actual name
 - [ ] Structure matches the layout in [agentme-edr-003](../../003-javascript-project-tooling.md)
 
@@ -384,9 +426,9 @@ Review all created files and confirm:
 
 **Agent action:** Gathers: name=`retry-client`, default Node.js 24, then creates:
 - `./Makefile`, `./.mise.toml`, `./.gitignore`
-- `lib/src/index.ts`, `lib/src/index.test.ts`, `lib/Makefile`, `lib/package.json`, `lib/tsconfig.json`, `lib/jest.config.js`, `lib/eslint.config.mjs`
+- `lib/src/index.ts`, `lib/src/index.test.ts`, `lib/Makefile`, `lib/README.md`, `lib/package.json`, `lib/tsconfig.json`, `lib/jest.config.js`, `lib/eslint.config.mjs`
 - `examples/Makefile`, `examples/usage-basic/package.json`, `examples/usage-basic/index.js`
-- `README.md` (Quick Start first)
+- `README.md` (workspace overview)
 
 All `[package-name]` replaced with `retry-client`.
 

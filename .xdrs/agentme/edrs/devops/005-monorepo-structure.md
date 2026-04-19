@@ -13,9 +13,10 @@ What monorepo structure, naming conventions, tooling, and build standards should
 
 ## Decision Outcome
 
-**Adopt a standardized monorepo layout with top-level application folders, a shared library area, Mise-managed tooling, and Makefiles at every level so any contributor can build, lint, and test any part of the monorepo with a single, predictable command.**
+**Adopt a standardized monorepo layout with top-level application folders that aggregate independent module roots, shared parent-level example and test areas, Mise-managed tooling, and Makefiles at every level.**
 
 For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/002-monorepo-setup/SKILL.md).
+Module folder responsibilities, artifact locations, and test-folder conventions follow [agentme-edr-016](../principles/016-cross-language-module-structure.md).
 
 ### Policies
 
@@ -23,16 +24,26 @@ For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/
 
 ```
 /
+├── .cache/               # Optional shared cache for repo-level tooling
 ├── shared/               # Resources shared across ALL applications
 │   ├── libs/             # Reusable libraries consumed by applications
 │   └── scripts/          # Build/CI/dev scripts used across applications
 │
 ├── <application>/        # One folder per application or project
 │   ├── README.md         # REQUIRED
-│   ├── <module>/         # One folder per compilable module
+│   ├── Makefile          # REQUIRED
+│   ├── <module>/         # One folder per buildable/publishable module
+│   │   ├── Makefile      # REQUIRED
+│   │   ├── README.md     # REQUIRED
+│   │   ├── dist/         # REQUIRED when the module publishes/builds artifacts
+│   │   └── .cache/       # REQUIRED when caches are not shared above
+│   ├── examples/         # Optional sibling consumer examples for modules in this app
+│   ├── tests_integration/# Optional cross-module integration tests for this app
+│   ├── tests_benchmark/  # Optional cross-module benchmarks for this app
 │   └── shared/           # Resources shared by modules within THIS application
 │
 ├── Makefile              # Root Makefile coordinating all areas
+├── .gitignore            # MUST ignore dist/ and .cache/
 ├── README.md             # REQUIRED — onboarding and quickstart guide
 └── .mise.toml            # Mise tool version configuration
 ```
@@ -42,6 +53,7 @@ For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/
 - Represent a cohesive unit with its own lifecycle (e.g., `mymobileapp`, `graph-visualizer`).
 - **MUST** depend only on resources in `/shared/`. Direct cross-application dependencies are forbidden; use published artifacts (container images, published libraries) instead.
 - **MUST** contain a `README.md` with: purpose, architecture overview, how to build, and how to run.
+- **MAY** contain `examples/`, `tests_integration/`, and `tests_benchmark/` when those artifacts apply to multiple modules inside the application.
 
 *Why:* Isolating applications prevents implicit coupling and makes the `shared/` boundary explicit and intentional.
 
@@ -50,6 +62,9 @@ For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/
 - A module is a subfolder inside an application that is independently compilable and produces a build artifact.
 - May depend on sibling modules within the same application or on `/shared/` resources.
 - **MUST NOT** depend on modules from other applications.
+- **MUST** contain its own `Makefile`, `README.md`, and language/tooling configuration.
+- **MUST** keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](../principles/016-cross-language-module-structure.md).
+- **MUST NOT** keep consumer examples inside the module folder; those belong in a sibling `examples/` folder at the nearest parent aggregation root.
 
 #### 4. Naming conventions
 
@@ -61,7 +76,11 @@ For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/
 
 A `Makefile` **MUST** be present at the repository root, in every application folder, and in every module folder.
 
-Each Makefile **MUST** define at minimum: `build`, `lint`, and `test` targets.
+All Makefiles **MUST** use the shared target vocabulary from [agentme-edr-008](008-common-targets.md).
+
+Repository, application, and module Makefiles **MUST** define at minimum: `all`, `build`, `lint`, `test`, and `clean`.
+
+Module Makefiles **SHOULD** also provide `lint-fix` and `install` when the underlying tooling supports them.
 
 The root `Makefile` **MUST** also define a `setup` target that guides a new contributor to prepare their machine.
 
@@ -84,7 +103,11 @@ The root `Makefile` **MUST** also define a `setup` target that guides a new cont
 
 The root `README.md` **MUST** include: overview, machine setup, quickstart, and a repository map.
 
-#### 8. Git tagging and artifact versioning
+#### 8. Root `.gitignore`
+
+The repository root **MUST** ignore `dist/` and `.cache/` so module artifacts and tool caches are never committed accidentally.
+
+#### 9. Git tagging and artifact versioning
 
 All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g., `graphvisualizer/renderer/1.0.0`, `shared/libs/mylib/2.1.0`).
 
@@ -100,10 +123,14 @@ All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g.,
 |---|---|---|
 | Lowercase folder/file names | All | Yes |
 | `README.md` per application | Application folders | Yes |
-| `Makefile` with `build`, `lint`, `test` | All modules and applications | Yes |
+| `README.md` per module | Module folders | Yes |
+| `Makefile` with `all`, `build`, `lint`, `test`, `clean` | Root, applications, modules | Yes |
 | Root `Makefile` with `setup` target | Repository root | Yes |
 | Root `README.md` with setup + quickstart | Repository root | Yes |
+| Ignore `dist/` and `.cache/` | Repository root | Yes |
 | Mise `.mise.toml` at root | Repository root | Yes |
 | Applications depend only on `/shared/` | Application folders | Yes |
 | Modules depend only on siblings or `/shared/` | Module folders | Yes |
+| Module outputs live in `dist/` | Module folders | Yes |
+| Persistent caches live in `.cache/` | Repo or module folders | Yes |
 | Git tags follow `<module-name>/<semver>` format | All modules | Yes |

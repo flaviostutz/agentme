@@ -13,7 +13,7 @@ What tooling and project structure should Python projects follow to ensure consi
 
 ## Decision Outcome
 
-**Use a uv-managed Python project with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a standard layout that separates library code under `lib/` from runnable consumer examples under `examples/`, coordinated by root-level Makefiles and a shared root `.venv/`.**
+**Use a uv-managed Python project with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a layout that follows [agentme-edr-016](../principles/016-cross-language-module-structure.md): a module root under `lib/`, runnable consumer examples in sibling `examples/`, and standardized `dist/` and `.cache/` locations.**
 
 A single dependency manager, isolated package internals under `lib/`, and a standard Makefile contract keep Python projects predictable for contributors and CI while keeping the repository root clean.
 
@@ -37,12 +37,15 @@ When the repository defines a root `.mise.toml`, Python and uv must be pinned th
 
 The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands must set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
 
+Persistent caches must live under `.cache/`, preferably the module `lib/.cache/` plus a shared root `.cache/uv/` when uv cache sharing is desired.
+
 #### Project structure
 
 ```text
 /
 ├── .mise.toml              # optional but required when the repo uses Mise
 ├── .gitignore
+├── .cache/                 # optional shared uv cache at repo level
 ├── .venv/                  # shared uv environment for lib/ and examples/
 ├── Makefile                # root entry point; delegates to lib/ and runs examples/
 ├── README.md               # workspace/repository overview
@@ -51,6 +54,7 @@ The root `.venv/` is the canonical environment location for both the library and
 │   ├── pyproject.toml      # package metadata + tool config
 │   ├── uv.lock             # committed lockfile for the library
 │   ├── README.md           # package README used for publishing
+│   ├── .cache/             # pytest, Ruff, coverage, Python bytecode cache
 │   ├── src/
 │   │   └── <package_name>/
 │   │       ├── __init__.py
@@ -59,6 +63,8 @@ The root `.venv/` is the canonical environment location for both the library and
 │   ├── tests/
 │   │   ├── conftest.py     # shared fixtures when needed
 │   │   └── test_*.py
+│   ├── tests_integration/  # optional integration tests for this module
+│   ├── tests_benchmark/    # optional benchmark harnesses and datasets
 │   └── dist/               # wheels / sdists built from lib/
 └── examples/               # independent consumer projects
     ├── example1/
@@ -73,7 +79,9 @@ Keep the repository root clean: source code, tests, distribution artifacts, and 
 
 Use the `lib/src/` layout for import safety and packaging clarity. Keep tests under `lib/tests/` and shared test setup in `lib/tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `pyrightconfig.json` by default; keep project metadata and tool configuration in `lib/pyproject.toml`.
 
-Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples must import the library as a consumer would rather than reaching back into `lib/src/` with relative imports.
+Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples must import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification must install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
+
+Python keeps unit tests under `lib/tests/` by default because that remains the more common and maintainable convention for typed/package-based projects than co-locating tests beside every source file. Integration tests belong in `lib/tests_integration/`, and benchmark harnesses belong in `lib/tests_benchmark/` when they are more than a single micro-benchmark helper.
 
 #### `lib/pyproject.toml`
 
@@ -108,7 +116,7 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 | `test-unit` | Run `lib/test-unit` |
 | `test-examples` | For each `examples/*/pyproject.toml`, sync and run the example serially against the shared root `.venv/` |
 | `test` | Run `test-unit`, then `test-examples` when applicable |
-| `clean` | Remove the shared root `.venv/` and delegate cleanup to `lib/` |
+| `clean` | Remove the shared root `.venv/`, root `.cache/`, and delegate cleanup to `lib/` |
 | `all` | `build lint test` |
 
 #### `lib/Makefile`
@@ -117,10 +125,10 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 |--------|-------------|
 | `install` | `uv sync --project . --frozen --all-extras --dev` using the shared root `.venv/` |
 | `build` | `uv sync --project . --frozen --all-extras --dev && uv build --project . --out-dir dist` |
-| `lint` | `uv run --project . ruff format --check . && uv run --project . ruff check . && uv run --project . pyright && uv run --project . pip-audit` |
-| `lint-fix` | `uv run --project . ruff format . && uv run --project . ruff check . --fix && uv run --project . pyright && uv run --project . pip-audit` |
-| `test-unit` | `uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80` |
-| `clean` | Remove `dist/`, `.pytest_cache/`, `.ruff_cache/`, `.coverage`, `htmlcov/` inside `lib/` |
+| `lint` | `uv run --project . ruff format --check . && uv run --project . ruff check . && uv run --project . pyright && uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `lint-fix` | `uv run --project . ruff format . && uv run --project . ruff check . --fix && uv run --project . pyright && uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `test-unit` | `uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80`, with pytest and coverage outputs stored under `.cache/` |
+| `clean` | Remove `dist/` and `.cache/` inside `lib/` |
 | `all` | `build lint test-unit` |
 | `update-lockfile` | `uv lock --project . --upgrade` |
 | `run` | `uv run --project . python -m <package_name>` or the project CLI entry point |
