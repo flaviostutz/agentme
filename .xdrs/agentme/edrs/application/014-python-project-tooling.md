@@ -13,9 +13,9 @@ What tooling and project structure should Python projects follow to ensure consi
 
 ## Decision Outcome
 
-**Use a uv-managed Python project with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a Makefile as the only development entry point.**
+**Use a uv-managed Python project with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a standard layout that separates library code under `lib/` from runnable consumer examples under `examples/`, coordinated by root-level Makefiles and a shared root `.venv/`.**
 
-A single dependency manager, one canonical config file, and standard targets keep Python projects predictable for contributors and CI.
+A single dependency manager, isolated package internals under `lib/`, and a standard Makefile contract keep Python projects predictable for contributors and CI while keeping the repository root clean.
 
 ### Implementation Details
 
@@ -35,39 +35,55 @@ All routine commands must run through the project `Makefile`, never by calling `
 
 When the repository defines a root `.mise.toml`, Python and uv must be pinned there and commands should run through `mise exec --` or an activated Mise shell.
 
+The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands must set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
+
 #### Project structure
 
 ```text
 /
 ├── .mise.toml              # optional but required when the repo uses Mise
-├── Makefile                # single entry point for build/lint/test/run tasks
-├── pyproject.toml          # package metadata + tool config
-├── uv.lock                 # committed lockfile
-├── README.md               # Getting Started near the top
-├── src/
-│   └── <package_name>/
-│       ├── __init__.py
-│       ├── __main__.py     # when the project exposes a CLI
-│       └── ...
-├── tests/
-│   ├── conftest.py         # shared fixtures when needed
-│   └── test_*.py
-└── examples/               # required for libraries and shared utilities
-    ├── Makefile
-    └── basic-usage/
+├── .gitignore
+├── .venv/                  # shared uv environment for lib/ and examples/
+├── Makefile                # root entry point; delegates to lib/ and runs examples/
+├── README.md               # workspace/repository overview
+├── lib/                    # everything the published library needs
+│   ├── Makefile            # build, lint, test, publish targets for the library
+│   ├── pyproject.toml      # package metadata + tool config
+│   ├── uv.lock             # committed lockfile for the library
+│   ├── README.md           # package README used for publishing
+│   ├── src/
+│   │   └── <package_name>/
+│   │       ├── __init__.py
+│   │       ├── __main__.py # when the project exposes a CLI
+│   │       └── ...
+│   ├── tests/
+│   │   ├── conftest.py     # shared fixtures when needed
+│   │   └── test_*.py
+│   └── dist/               # wheels / sdists built from lib/
+└── examples/               # independent consumer projects
+    ├── example1/
+    │   ├── pyproject.toml
+    │   └── main.py
+    └── example2/
+        ├── pyproject.toml
+        └── main.py
 ```
 
-Use the `src/` layout for import safety and packaging clarity. Keep tests under `tests/` and shared test setup in `tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `pyrightconfig.json` by default; keep project metadata and tool configuration in `pyproject.toml`.
+Keep the repository root clean: source code, tests, distribution artifacts, and package metadata live under `lib/`, while the root contains only orchestration and repository-level files.
 
-Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md).
+Use the `lib/src/` layout for import safety and packaging clarity. Keep tests under `lib/tests/` and shared test setup in `lib/tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `pyrightconfig.json` by default; keep project metadata and tool configuration in `lib/pyproject.toml`.
 
-#### `pyproject.toml`
+Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples must import the library as a consumer would rather than reaching back into `lib/src/` with relative imports.
+
+#### `lib/pyproject.toml`
 
 - Runtime dependencies belong in `[project.dependencies]`.
 - Development-only tooling belongs in `[dependency-groups].dev`.
-- Configure Ruff, Pyright, and Pytest in `pyproject.toml` under their `tool.*` sections.
-- Commit `uv.lock` and keep it in sync with `pyproject.toml`.
+- Configure Ruff, Pyright, and Pytest in `lib/pyproject.toml` under their `tool.*` sections.
+- Commit `lib/uv.lock` and keep it in sync with `lib/pyproject.toml`.
 - Expose CLI entry points with `[project.scripts]` when the project provides commands.
+
+When Pyright runs from `lib/`, configure it to discover the shared root virtual environment, for example with `venvPath = ".."` and `venv = ".venv"`.
 
 Ruff is the default formatter and linter. Do not add Black, isort, or Flake8 unless another XDR for that repository explicitly requires them.
 
@@ -79,21 +95,37 @@ Pytest coverage must fail below 80% line and branch coverage, following [agentme
 
 The commands below assume invocation through `mise exec -- make <target>` when the repository uses Mise, or plain `make <target>` inside an activated project environment.
 
+#### Root `Makefile`
+
+The root `Makefile` is the only contract for CI and contributors. It delegates library work to `lib/` and runs each example project in `examples/` against the shared root `.venv/`.
+
 | Target | Description |
 |--------|-------------|
-| `install` | `uv sync --frozen --all-extras --dev` |
-| `build` | `uv sync --frozen --all-extras --dev && uv build` |
-| `lint` | `uv run ruff format --check . && uv run ruff check . && uv run pyright && uv run pip-audit` |
-| `lint-fix` | `uv run ruff format . && uv run ruff check . --fix && uv run pyright && uv run pip-audit` |
-| `test-unit` | `uv run pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80` |
-| `test-examples` | Run `examples/` through its own `Makefile` when the project is a library/utility |
+| `install` | Run `lib/install` to create or update the shared root `.venv/` |
+| `build` | Run `lib/build` |
+| `lint` | Run `lib/lint` |
+| `lint-fix` | Run `lib/lint-fix` |
+| `test-unit` | Run `lib/test-unit` |
+| `test-examples` | For each `examples/*/pyproject.toml`, sync and run the example serially against the shared root `.venv/` |
 | `test` | Run `test-unit`, then `test-examples` when applicable |
-| `clean` | Remove `.venv/`, `dist/`, `.pytest_cache/`, `.ruff_cache/`, `.coverage`, `htmlcov/` |
+| `clean` | Remove the shared root `.venv/` and delegate cleanup to `lib/` |
 | `all` | `build lint test` |
-| `update-lockfile` | `uv lock --upgrade` |
-| `run` | `uv run python -m <package_name>` or the project CLI entry point |
+
+#### `lib/Makefile`
+
+| Target | Description |
+|--------|-------------|
+| `install` | `uv sync --project . --frozen --all-extras --dev` using the shared root `.venv/` |
+| `build` | `uv sync --project . --frozen --all-extras --dev && uv build --project . --out-dir dist` |
+| `lint` | `uv run --project . ruff format --check . && uv run --project . ruff check . && uv run --project . pyright && uv run --project . pip-audit` |
+| `lint-fix` | `uv run --project . ruff format . && uv run --project . ruff check . --fix && uv run --project . pyright && uv run --project . pip-audit` |
+| `test-unit` | `uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80` |
+| `clean` | Remove `dist/`, `.pytest_cache/`, `.ruff_cache/`, `.coverage`, `htmlcov/` inside `lib/` |
+| `all` | `build lint test-unit` |
+| `update-lockfile` | `uv lock --project . --upgrade` |
+| `run` | `uv run --project . python -m <package_name>` or the project CLI entry point |
 | `dev` | Same as `run`, optionally with repository-specific dev defaults |
-| `publish` | `uv publish` after versioning and packaging are complete |
+| `publish` | `uv publish --project .` after versioning and packaging are complete |
 
 The root `Makefile` must remain the only contract for CI and contributors, in line with [agentme-edr-008](../devops/008-common-targets.md).
 
@@ -101,8 +133,8 @@ The root `Makefile` must remain the only contract for CI and contributors, in li
 
 * (REJECTED) **Mixed Python tooling** - Separate tools and config files such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, and `mypy`.
   * Reason: Increases cognitive load, duplicates configuration, and weakens the standard command surface across projects.
-* (CHOSEN) **uv + `pyproject.toml` + Ruff/Pyright/Pytest toolchain** - One dependency manager, one config file, and one Makefile entry point.
-  * Reason: Keeps packaging, dependency locking, static analysis, security auditing, and test execution consistent.
+* (CHOSEN) **uv + `lib/` package layout + Ruff/Pyright/Pytest toolchain** - One dependency manager, package internals isolated under `lib/`, consumer examples under `examples/`, and one root Makefile contract.
+  * Reason: Keeps packaging, dependency locking, static analysis, security auditing, and test execution consistent while aligning Python repositories with the established JavaScript layout.
 
 ## References
 
