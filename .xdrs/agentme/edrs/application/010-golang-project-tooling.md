@@ -28,7 +28,7 @@ A predictable layout and minimal external tooling keep Go projects approachable,
 | **golangci-lint** | Linting — aggregates many linters in one fast run; configured via `.golangci.yml` |
 | **monotag** | Version tagging from git history for the `publish` target |
 
-All commands are run exclusively through the Makefile, never ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** install the base toolchain with `mise install` and run routine Makefile targets through `mise exec -- make <target>` or from an activated Mise shell.
+All commands are run exclusively through the Makefile, never ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`.
 Direct installation of project-required Go CLIs with `go install ...@latest` as a repair step is **NOT** allowed unless an XDR for that repository explicitly permits it.
 
 #### Project structure
@@ -82,29 +82,29 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 | Target | Description |
 |--------|-------------|
 | `all` | Default; runs `build lint test` in sequence |
-| `build` | `go mod download && go build -o dist/<binary>` with Go caches redirected into `.cache/` |
+| `build` | `mise exec -- go mod download && mise exec -- go build -o dist/<binary>` with Go caches redirected into `.cache/` |
 | `build-all` | Cross-compile for all target platforms (darwin/linux/windows × amd64/arm64) |
 | `build-arch-os` | Compile for a specific `OS` and `ARCH` environment variable pair; output to `dist/${OS}-${ARCH}/<binary>` |
-| `install` | `go mod download` |
-| `lint` | `golangci-lint run ./...` with its cache redirected into `.cache/` |
-| `lint-fix` | `golangci-lint run --fix ./...` with its cache redirected into `.cache/` |
-| `test` | `go test -cover ./...` — runs all tests with coverage and stores disposable outputs under `.cache/` |
-| `test-unit` | `go test -cover ./...` — alias for unit tests only (same here; integration tests get a separate tag) |
-| `coverage` | `go tool cover -func .cache/coverage.out` — displays coverage summary |
+| `install` | `mise exec -- go mod download` |
+| `lint` | `mise exec -- golangci-lint run ./...` with its cache redirected into `.cache/` |
+| `lint-fix` | `mise exec -- golangci-lint run --fix ./...` with its cache redirected into `.cache/` |
+| `test` | `mise exec -- go test -cover ./...` — runs all tests with coverage and stores disposable outputs under `.cache/` |
+| `test-unit` | `mise exec -- go test -cover ./...` — alias for unit tests only (same here; integration tests get a separate tag) |
+| `coverage` | `mise exec -- go tool cover -func .cache/coverage.out` — displays coverage summary |
 | `clean` | Remove `dist/` and `.cache/` |
-| `start` | `go run ./ <default-args>` — launch the binary locally for dev use |
-| `publish` | Tag with `monotag`, then push tag + binaries to GitHub Releases |
+| `start` | `mise exec -- go run ./ <default-args>` — launch the binary locally for dev use |
+| `publish` | Tag with `mise exec -- npx -y monotag ...`, then push tag + binaries to GitHub Releases |
 
 The required invocation pattern is:
 
 ```sh
-mise install
-mise exec -- make build
-mise exec -- make test
-mise exec -- make lint
+make setup
+make build
+make test
+make lint
 ```
 
-Using `make build`, `make test`, or `make lint` from an already activated Mise shell is equivalent.
+The Makefile recipes themselves must use `mise exec --` for the underlying tool commands.
 
 #### Cross-platform binary distribution
 

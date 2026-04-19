@@ -30,7 +30,7 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST install the base toolchain with `mise install` and run routine Makefile targets through `mise exec -- make <target>` or from an activated Mise shell. Using host-installed `node`, `pnpm`, or other project CLIs directly for routine project work is not allowed.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...` so command behavior does not depend on an activated shell. Using host-installed `node`, `pnpm`, or other project CLIs directly for routine project work is not allowed.
 
 #### ESLint
 
@@ -74,35 +74,35 @@ When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `modu
 └── tests_benchmark/       # optional benchmark harnesses
 ```
 
-The root `Makefile` delegates every target to `/lib` then `/examples` in sequence and is expected to execute module commands inside the repository's Mise-managed environment.
+The root `Makefile` delegates every target to `/lib` then `/examples` in sequence. Parent Makefiles should call child Makefiles directly, and each module Makefile is responsible for running its actual tool commands through `mise exec --`.
 
 When a repository contains multiple JavaScript/TypeScript packages, each package MUST live in its own module folder such as `lib/my-package/` or `services/my-service/`, each with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
 
 Persistent caches MUST live under `.cache/`. Recommended locations are Jest `cacheDirectory`, ESLint `--cache-location`, TypeScript `tsBuildInfoFile`, and coverage outputs.
 
-The commands below MUST be invoked through `mise exec -- make <target>` or from an activated Mise shell.
+Contributors and CI MUST invoke the commands below as `make <target>`. The Makefile recipes themselves MUST call the underlying tools through `mise exec -- <tool> ...`.
 
 #### lib/Makefile targets
 
 | Target | Description |
 |--------|-------------|
-| `install` | `pnpm install --frozen-lockfile` |
-| `build` | compile with `tsc`, strip test files from `dist/`, then `pnpm pack` for local use by examples |
-| `build-module` | compile with `tsc` only (no pack) |
-| `lint` | `pnpm exec eslint ./src` |
-| `lint-fix` | `pnpm exec eslint ./src --fix` |
-| `test` | `pnpm exec jest --verbose` |
-| `test-watch` | `pnpm exec jest --watch` |
+| `install` | `mise exec -- pnpm install --frozen-lockfile` |
+| `build` | `mise exec -- pnpm exec tsc ...`, strip test files from `dist/`, then `mise exec -- pnpm pack` for local use by examples |
+| `build-module` | `mise exec -- pnpm exec tsc ...` only (no pack) |
+| `lint` | `mise exec -- pnpm exec eslint ./src` |
+| `lint-fix` | `mise exec -- pnpm exec eslint ./src --fix` |
+| `test` | `mise exec -- pnpm exec jest --verbose` |
+| `test-watch` | `mise exec -- pnpm exec jest --watch` |
 | `clean` | remove `node_modules/`, `dist/`, and `.cache/` |
 | `all` | `build lint test` |
-| `publish` | version-bump with `monotag`, then `npm publish --provenance` |
+| `publish` | `mise exec -- npx -y monotag ...`, then `mise exec -- npm publish --provenance` |
 
 #### lib/package.json key fields
 
 - `"main"`: `dist/index.js`
 - `"types"`: `dist/index.d.ts`
 - `"files"`: `["dist/**", "package.json", "README.md"]`
-- `"scripts"`: empty — all commands are driven by the Makefile
+- `"scripts"`: empty by default. If reverse compatibility requires scripts, each script must be a direct one-line delegation to one Makefile target.
 
 #### examples/
 

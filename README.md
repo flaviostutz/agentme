@@ -80,27 +80,25 @@ This is useful when you want to:
 
 ## Development
 
-Install [Mise](https://mise.jdx.dev/getting-started.html), then sync the pinned toolchain:
+Install [Mise](https://mise.jdx.dev/getting-started.html), then bootstrap the repository through the root `Makefile`:
 
 ```sh
-mise install
+make setup
 ```
 
-Use the root `Makefile` as the entry point for local verification inside the Mise-managed environment:
+Use the root `Makefile` as the entry point for local verification:
 
 ```sh
-mise exec -- make build
-mise exec -- make lint
-mise exec -- make test
+make build
+make lint
+make test
 ```
-
-Running `make build`, `make lint`, or `make test` from an already activated Mise shell is equivalent.
 
 What these targets do:
 
-- `mise exec -- make build` installs dependencies and creates a local npm package in `dist/`.
-- `mise exec -- make lint` runs the repository lint target.
-- `mise exec -- make test` rebuilds the package and validates the consumer extraction flow through the runnable example in `examples/`.
+- `make build` installs dependencies and creates a local npm package in `dist/`.
+- `make lint` runs the repository lint target.
+- `make test` rebuilds the package and validates the consumer extraction flow through the runnable example in `examples/`.
 
 ## Repository Map
 

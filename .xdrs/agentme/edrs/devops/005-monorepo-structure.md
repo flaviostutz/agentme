@@ -83,6 +83,7 @@ Repository, application, and module Makefiles **MUST** define at minimum: `all`,
 Module Makefiles **SHOULD** also provide `lint-fix` and `install` when the underlying tooling supports them.
 
 The root `Makefile` **MUST** also define a `setup` target that guides a new contributor to prepare their machine.
+The root `setup` target **MUST** run `mise install` and any small repository bootstrap required before routine targets work.
 
 *Why:* Makefiles provide a universal, stack-agnostic entry point regardless of programming language.
 
@@ -91,11 +92,11 @@ The root `Makefile` **MUST** also define a `setup` target that guides a new cont
 - [Mise](https://mise.jdx.dev/) **MUST** be used to pin all tool versions (compilers, runtimes, CLI tools).
 - A `.mise.toml` **MUST** exist at the repository root.
 - Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command **MUST** be pinned in `.mise.toml`.
-- Contributors run `mise install` once after cloning.
+- Contributors and CI run `make setup` after cloning or checkout; this target must call `mise install`.
 - Agents and contributors **MUST** check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
-- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run inside the Mise-managed environment, preferably via `mise exec -- <command>` or an activated Mise shell.
+- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run through `make <target>`, and the Makefile recipes **MUST** execute the underlying tools via `mise exec -- <command>`.
 - If a required tool is missing, the first remediation step **MUST** be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
-- Root and module `Makefile` targets **SHOULD** work correctly when invoked through `mise exec -- make <target>`.
+- Root and module `Makefile` targets **MUST** work when invoked as plain `make <target>` after `make setup`.
 
 *Why:* Eliminates "works on my machine" build failures by ensuring identical tool versions across all environments.
 

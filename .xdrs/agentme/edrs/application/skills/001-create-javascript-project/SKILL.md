@@ -39,7 +39,7 @@ Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agent
 
 **`./Makefile`**
 
-Delegates every make target to `/lib` then `/examples` in sequence:
+Delegates every make target to `/lib` then `/examples` in sequence. Child Makefiles own the actual `mise exec -- <tool>` calls:
 
 ```makefile
 SHELL := /bin/bash
@@ -47,13 +47,13 @@ MISE := mise exec --
 %:
 	@echo ''
 	@echo '>>> Running /lib:$@...'
-  @$(MISE) $(MAKE) -C lib $@
+  @$(MAKE) -C lib $@
 	@echo ''
 	@echo '>>> Running /examples:$@...'
-  @STAGE=dev $(MISE) $(MAKE) -C examples $@
+  @STAGE=dev $(MAKE) -C examples $@
 
 publish:
-  @$(MISE) $(MAKE) -C lib publish
+  @$(MAKE) -C lib publish
 
 setup:
   mise install

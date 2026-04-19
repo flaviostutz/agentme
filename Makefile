@@ -12,7 +12,7 @@ lint-fix:
 	$(MISE) pnpm exec xdrs-core lint .
 
 test: build
-	$(MISE) $(MAKE) -C examples test
+	$(MAKE) -C examples test
 
 clean:
 	rm -rf dist node_modules
