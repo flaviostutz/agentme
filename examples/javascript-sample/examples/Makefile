@@ -1,17 +1,22 @@
 SHELL := /bin/bash
-%:
-	@echo "Unknown target: $@. Ignoring"
+
+.PHONY: all build install test clean
+
+all: build test
 
 build: install
 	@echo "Examples built"
 
 install:
-	# Replace the lib dependency with the locally built pack
-	pnpm add javascript-sample@file:../lib/dist/javascript-sample-0.0.1.tgz
-	pnpm install
+	@if [ ! -f ../lib/dist/javascript-sample-0.0.1.tgz ]; then \
+		echo "Missing packaged artifact. Building lib first..."; \
+		$(MAKE) -C ../lib build; \
+	fi
+	@$(MAKE) -C usage-basic install
 
-test:
+test: install
 	@echo "Running example tests..."
-	cd usage-basic && node index.js
+	@$(MAKE) -C usage-basic run
 
-all: build test
+clean:
+	@$(MAKE) -C usage-basic clean

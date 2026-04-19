@@ -1,23 +1,30 @@
 SHELL := /bin/bash
 MISE := mise exec --
+CACHE_DIR := .cache
+
+.PHONY: all build build-module lint lint-fix test test-watch clean install publish
 
 build: install
 	@rm -rf dist
-	$(MISE) pnpm exec tsc --outDir dist
+	@mkdir -p $(CACHE_DIR)/tsc
+	$(MISE) pnpm exec tsc --incremental --tsBuildInfoFile $(CACHE_DIR)/tsc/tsconfig.tsbuildinfo --outDir dist
 	@-find ./dist \( -regex '.*\.test\..*' -o -regex '.*__tests.*' \) -exec rm -rf {} \; 2> /dev/null
 	@# Create pack for use by examples to simulate real external usage
 	$(MISE) pnpm pack --pack-destination dist
 
 build-module: install
 	@rm -rf dist
-	$(MISE) pnpm exec tsc --outDir dist
+	@mkdir -p $(CACHE_DIR)/tsc
+	$(MISE) pnpm exec tsc --incremental --tsBuildInfoFile $(CACHE_DIR)/tsc/tsconfig.tsbuildinfo --outDir dist
 	@-find ./dist \( -regex '.*\.test\..*' -o -regex '.*__tests.*' \) -exec rm -rf {} \; 2> /dev/null
 
 lint:
-	$(MISE) pnpm exec eslint ./src
+	@mkdir -p $(CACHE_DIR)/eslint
+	$(MISE) pnpm exec eslint ./src --cache --cache-location $(CACHE_DIR)/eslint/.eslintcache
 
 lint-fix:
-	$(MISE) pnpm exec eslint ./src --fix
+	@mkdir -p $(CACHE_DIR)/eslint
+	$(MISE) pnpm exec eslint ./src --fix --cache --cache-location $(CACHE_DIR)/eslint/.eslintcache
 
 test-watch:
 	$(MISE) pnpm exec jest --watch
@@ -28,6 +35,7 @@ test:
 clean:
 	rm -rf node_modules
 	rm -rf dist
+	rm -rf .cache
 
 all: build lint test
 
