@@ -3,29 +3,38 @@ MISE := mise exec --
 all: build lint test
 
 build: install
+	@echo ">>> .: $@"
 	$(MISE) pnpm pack --pack-destination=./dist
 
 lint:
+	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
 
 lint-fix:
+	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
 
 test: build
+	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples test
 
 clean:
+	@echo ">>> .: $@"
 	rm -rf dist node_modules
+	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples clean
 
 setup:
+	@echo ">>> .: $@"
 	mise install
 
 install:
+	@echo ">>> .: $@"
 	mise install
 	$(MISE) pnpm install
 
 publish:
+	@echo ">>> .: $@"
 	$(MISE) npx -y monotag@1.26.0 current --bump-action=latest --prefix=
 	@VERSION=$$($(MISE) node -p "require('./package.json').version"); \
 	if echo "$$VERSION" | grep -q '-'; then \
@@ -37,7 +46,7 @@ publish:
 	fi
 
 bump:
-	@echo "Bumping xdrs core..."
+	@echo ">>> .: $@"
 	mise install
 	$(MISE) pnpm add filedist@latest
 

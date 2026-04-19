@@ -30,7 +30,7 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...` so command behavior does not depend on an activated shell. Using host-installed `node`, `pnpm`, or other project CLIs directly for routine project work is not allowed.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
 
 #### ESLint
 
