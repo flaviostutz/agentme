@@ -2,9 +2,11 @@ SHELL := /bin/bash
 MISE := mise exec --
 
 clean:
+	@echo ">>> ./examples: $@"
 	@rm -rf output node_modules
 
 test: build
+	@echo ">>> ./examples: $@"
 
 # Fix for recursive presets issue: add "presets": ["speckit"] to the selector of the speckit entries in package.json. This forwards the preset filter to agentme's nested sets, preventing the xdrs-core basic set from being extracted recursively.
 
@@ -77,10 +79,13 @@ test: build
 
 
 build: clean install
+	@echo ">>> ./examples: $@"
 
 install:
+	@echo ">>> ..: build"
 	$(MAKE) -C .. build
 	# replace the dependency with the local package
+	@echo ">>> ./examples: $@"
 	$(MISE) pnpm add agentme@file:../dist/agentme-0.0.1.tgz
 	$(MISE) pnpm install
 

@@ -94,7 +94,7 @@ The root `setup` target **MUST** run `mise install` and any small repository boo
 - Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command **MUST** be pinned in `.mise.toml`.
 - Contributors and CI run `make setup` after cloning or checkout; this target must call `mise install`.
 - Agents and contributors **MUST** check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
-- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run through `make <target>`, and the Makefile recipes **MUST** execute the underlying tools via `mise exec -- <command>`.
+- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run through `make <target>`, and the Makefile recipes **MUST** execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
 - If a required tool is missing, the first remediation step **MUST** be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
 - Root and module `Makefile` targets **MUST** work when invoked as plain `make <target>` after `make setup`.
 

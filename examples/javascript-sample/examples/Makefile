@@ -5,18 +5,21 @@ SHELL := /bin/bash
 all: build test
 
 build: install
-	@echo "Examples built"
+	@echo ">>> ./examples/javascript-sample/examples: $@"
 
 install:
+	@echo ">>> ./examples/javascript-sample/examples: $@"
 	@if [ ! -f ../lib/dist/javascript-sample-0.0.1.tgz ]; then \
-		echo "Missing packaged artifact. Building lib first..."; \
+		echo ">>> ../lib: build"; \
 		$(MAKE) -C ../lib build; \
 	fi
+	@echo ">>> ./examples/javascript-sample/examples/usage-basic: install"
 	@$(MAKE) -C usage-basic install
 
 test: install
-	@echo "Running example tests..."
+	@echo ">>> ./examples/javascript-sample/examples/usage-basic: run"
 	@$(MAKE) -C usage-basic run
 
 clean:
+	@echo ">>> ./examples/javascript-sample/examples/usage-basic: clean"
 	@$(MAKE) -C usage-basic clean

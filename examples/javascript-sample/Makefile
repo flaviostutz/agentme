@@ -1,42 +1,36 @@
 SHELL := /bin/bash
-MISE := mise exec --
 
 .PHONY: all build lint test clean publish setup
 
 all: build lint test
 
 build:
-	@echo ''
-	@echo '>>> Running /lib:build...'
+	@echo '>>> ./examples/javascript-sample/lib: $@'
 	@$(MAKE) -C lib build
-	@echo ''
-	@echo '>>> Running /examples:build...'
+	@echo '>>> ./examples/javascript-sample/examples: $@'
 	@STAGE=dev $(MAKE) -C examples build
 
 lint:
-	@echo ''
-	@echo '>>> Running /lib:lint...'
+	@echo '>>> ./examples/javascript-sample/lib: $@'
 	@$(MAKE) -C lib lint
 
 test:
-	@echo ''
-	@echo '>>> Running /lib:test...'
+	@echo '>>> ./examples/javascript-sample/lib: $@'
 	@$(MAKE) -C lib test
-	@echo ''
-	@echo '>>> Running /examples:test...'
+	@echo '>>> ./examples/javascript-sample/examples: $@'
 	@STAGE=dev $(MAKE) -C examples test
 
 clean:
-	@echo ''
-	@echo '>>> Running /lib:clean...'
+	@echo '>>> ./examples/javascript-sample/lib: $@'
 	@$(MAKE) -C lib clean
-	@echo ''
-	@echo '>>> Running /examples:clean...'
+	@echo '>>> ./examples/javascript-sample/examples: $@'
 	@STAGE=dev $(MAKE) -C examples clean
 	@rm -rf .cache
 
 publish:
+	@echo '>>> ./examples/javascript-sample/lib: $@'
 	@$(MAKE) -C lib publish
 
 setup:
+	@echo '>>> ./examples/javascript-sample: $@'
 	mise install

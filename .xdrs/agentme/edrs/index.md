@@ -38,6 +38,7 @@ Repository structure, build conventions, and CI/CD pipelines.
 - [agentme-edr-005](devops/005-monorepo-structure.md) - **Monorepo structure** *(includes skill: [002-monorepo-setup](devops/skills/002-monorepo-setup/SKILL.md))*
 - [agentme-edr-006](devops/006-github-pipelines.md) - **GitHub CI/CD pipelines**
 - [agentme-edr-008](devops/008-common-targets.md) - **Common development script names**
+- [agentme-edr-017](devops/017-tool-execution-and-scripting.md) - **Tool execution and scripting**
 
 ## Governance
 

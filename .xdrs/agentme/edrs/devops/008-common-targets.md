@@ -13,7 +13,7 @@ What standard set of Makefile target names and execution rules should projects a
 
 ## Decision Outcome
 
-**Every project must expose its development actions through a root `Makefile` using a defined set of standardized target names. Makefile recipes must run explicit tool commands through `mise exec --`, so developers and CI use the same entry point and can see the real command path without extra script indirection.**
+**Every project must expose its development actions through a root `Makefile` using a defined set of standardized target names. Target implementation and tool-execution rules follow [agentme-edr-017](017-tool-execution-and-scripting.md), which requires `mise exec --` before routine tool commands.**
 
 Standardizing both the target names and the execution chain removes per-project guesswork, makes CI pipelines reusable, and keeps tooling behavior visible in one place.
 
@@ -34,9 +34,9 @@ The project root must contain a single authoritative `Makefile` that exposes the
 
 *Why:* The project entry point must stay language-agnostic and obvious. A developer should be able to inspect the `Makefile` and immediately see which real tool commands will run.
 
-#### 2. Makefile recipes MUST use the explicit tool-execution chain
+#### 2. Makefile recipes MUST use the shared Mise execution rules
 
-After a checkout, the only assumed prerequisites are `make` and [Mise](https://mise.jdx.dev/). The standard execution flow is:
+After a checkout, the shared execution flow is:
 
 ```text
 make <target>
@@ -47,13 +47,14 @@ make <target>
 
 - The `setup` target must run `mise install` and any small project-specific bootstrap needed before normal targets work.
 - Routine targets such as `build`, `lint`, `test`, `run`, and `publish` must be invoked as `make <target>` by both contributors and CI.
-- Each Makefile recipe must call the real underlying command directly through `mise exec --`.
+- Each Makefile recipe must call the real underlying command through `mise exec --`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
 - Makefile recipes must not add extra script layers such as `npm run`, `pnpm run`, `yarn run`, `mise run`, `mise tasks`, or shell aliases when those layers only forward to another command.
 - Calling the actual tool is allowed even when that tool itself launches another program as part of its normal interface.
 	- Allowed: `mise exec -- pnpm exec eslint ./src`
 	- Allowed: `mise exec -- go test -cover ./...`
 	- Allowed: `mise exec -- uv run --project . pytest`
-	- Disallowed: `mise exec -- pnpm run lint`
+	- Disallowed: `pnpm run lint`
+	- Disallowed: `pnpm exec eslint ./src`
 	- Disallowed: `mise run lint`
 	- Disallowed: `make lint` implemented as `./scripts/lint.sh` when the shell script only forwards to one visible tool command
 
@@ -219,3 +220,8 @@ make all
 
 * (CHOSEN) **Standardized Makefile targets with Mise-managed explicit tool execution** - Use `make <target>` as the only routine entry point, keep target names standard, and run the actual underlying tool commands through `mise exec --`
 	* Reason: This keeps names, execution flow, and tool versions equally predictable while avoiding script indirection.
+
+## References
+
+- [agentme-edr-005](005-monorepo-structure.md) - Monorepo layout and delegation structure
+- [agentme-edr-017](017-tool-execution-and-scripting.md) - Tool-execution rules for Makefile targets and CI
