@@ -23,14 +23,14 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 
 | Tool | Purpose |
 |------|---------|
-| **Mise** | Tool version management for Node.js, pnpm, and project CLIs |
+| **Mise** | Mandatory tool version management and command runner for Node.js, pnpm, and project CLIs |
 | **pnpm** | Package manager — strict linking, workspace support, fast installs |
 | **tsc** | TypeScript compilation — type checking, declaration generation |
 | **esbuild** | Bundling — fast bundling for distribution or single-binary outputs |
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root must define a `.mise.toml` that pins at least Node.js and pnpm, and Makefile targets must run through `mise exec --` or an activated Mise shell.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST install the base toolchain with `mise install` and run routine Makefile targets through `mise exec -- make <target>` or from an activated Mise shell. Using host-installed `node`, `pnpm`, or other project CLIs directly for routine project work is not allowed.
 
 #### ESLint
 
@@ -80,7 +80,7 @@ When a repository contains multiple JavaScript/TypeScript packages, each package
 
 Persistent caches MUST live under `.cache/`. Recommended locations are Jest `cacheDirectory`, ESLint `--cache-location`, TypeScript `tsBuildInfoFile`, and coverage outputs.
 
-The commands below assume they are invoked through `mise exec -- make <target>` or from an activated Mise shell.
+The commands below MUST be invoked through `mise exec -- make <target>` or from an activated Mise shell.
 
 #### lib/Makefile targets
 
