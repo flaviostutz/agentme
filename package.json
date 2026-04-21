@@ -4,7 +4,7 @@
   "description": "",
   "dependencies": {
     "filedist": "^0.26.0",
-    "xdrs-core": "^0.16.0"
+    "xdrs-core": "^0.17.0"
   },
   "bin": "bin/filedist.js",
   "files": [
