@@ -25,7 +25,7 @@ XDR documents are the authoritative policy for their scope, type, and subject. T
 |---|---|---|
 | `name` | Yes | 1-64 characters. Lowercase letters, numbers, hyphens, and leading underscores only. Must not end with a hyphen. Must not contain consecutive hyphens. Must match the document identifier from the heading: `[scope]-[type]-[number]-[short-title]`. |
 | `description` | Yes | 1-1024 characters. Describes what this decision is about and when to use it. Should include keywords that help agents identify when to apply it. |
-| `applied-to` | No | Short description of contexts this decision is applicable to. Keep it under 40 words. If omitted, the decision applies to all logically applicable elements. Examples: `Only frontend code`, `JavaScript projects`. |
+| `applied-to` | No | Short description of contexts this decision is applicable to. Keep it under 40 words. If omitted, the decision applies to all logically applicable elements. ONLY use this section if the usage is very specific to a specific case. Examples: `Only frontend code`, `JavaScript projects`. |
 | `valid-from` | No | ISO date (`YYYY-MM-DD`) indicating from when this decision must be enforced. Before this date it should be used everywhere possible, but compliance is not enforced during reviews until after this date. |
 | `license` | No | SPDX license expression (e.g. `MIT`, `Apache-2.0`, `CC-BY-4.0`). Indicates the license under which the document content is shared. If omitted, the license is governed by the repository or package defaults. |
 | `metadata` | No | Arbitrary key-value map for additional properties not defined by this spec. |
@@ -60,6 +60,7 @@ XDR documents are the authoritative policy for their scope, type, and subject. T
 - Decisions MUST be concise and reference other XDRs to avoid duplication.
 - The `### Implementation Details` section SHOULD state relevant boundaries or exceptions and what a reader should do or avoid in common cases. Use the frontmatter fields `applied-to` and `valid-from` as the first-pass filter for applicability, then keep nuanced boundaries in the decision text.
 - Use concise rules, examples, `Allowed` / `Disallowed` lists or checklists with required items to help the reader apply the decision correctly. Keep them short and decision-specific.
+- When the decision defines strong policies or rules that should be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the XDR MUST follow the extension [_core-adr-008 - XDR standards - structured](008-xdr-standards-structured.md) instead of using plain bullet lists for those rules.
 - Conflict handling applies to XDR documents:
   - For cross-scope overrides, document the decision conflict in the XDR `## Conflicts` section of the XDR that overrides another scope.
   - **Within-scope conflicts:** XDRs within the same type+scope must not conflict. If two XDRs appear to conflict, one should be updated, removed, or the conflict resolved through a new XDR.
@@ -107,6 +108,14 @@ Question: In the end, state explicitly the question that needs to be answered. E
 
 [Optional section with implementation specifics, applicability boundaries, rules, concise examples, or do/don't guidance. This is the answer to the question in the "Context and Problem Statement". (<1300 words)]
 
+## Considered Options 
+[this section is present ONLY if there was more than one option to choose from]
+
+* (CHOSEN) **Option 2** - Brief description of option 2
+  * Reason: Brief description of why this option was accepted, containing the strengths, strategical motivations and it's differential over the other options.
+* (REJECTED) **Option 1** - Brief description of option 1
+  * Reason: Brief description why this was rejected with important aspects to be re-checked in the case we want to change this decision
+
 [Related research, if any]
 - [Research document title](researches/001-example.md) - Brief description of what it informed
 
@@ -144,3 +153,4 @@ Question: In the end, state explicitly the question that needs to be answered. E
 - [_core-adr-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-004 - Article standards](004-article-standards.md)
 - [_core-adr-006 - Research standards](006-research-standards.md)
+- [_core-adr-008 - XDR standards - structured](008-xdr-standards-structured.md) - Extension for XDRs that expose individually referenceable rules

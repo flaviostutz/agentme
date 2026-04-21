@@ -13,6 +13,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-005](principles/005-semantic-versioning-for-xdr-packages.md) - **Semantic versioning for XDR packages** — How to version XDR packages to communicate upgrade impact
 - [_core-adr-006](principles/006-research-standards.md) - **Research standards** — How to structure research documents backing XDR decisions
 - [_core-adr-007](principles/007-plan-standards.md) - **Plan standards** — How to structure ephemeral execution plans that implement decisions
+- [_core-adr-008](principles/008-xdr-standards-structured.md) - **XDR standards - structured** — How to expose individually referenceable numbered rules inside an XDR when external citation by identifier is required
 
 ## Skills
 

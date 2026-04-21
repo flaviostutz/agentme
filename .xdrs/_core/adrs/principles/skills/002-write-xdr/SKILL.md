@@ -76,6 +76,32 @@ Choose a title that clearly states the question this XDR answers, not the answer
 
 Use the mandatory template from `002-xdr-standards`:
 
+**Check if the decision requires a structured set of rules:**
+If the decision defines strong rules or policies that must be stated explicitly, or if other documents, skills, or agents have a clear need to reference individual rules, you MUST apply the structured rule format from `_core-adr-008-xdr-standards-structured`. This means:
+  - Place each rule as a numbered heading block inside `### Implementation Details`.
+  - Use the format:
+    #### [NN]-[short-descriptive-title-in-kebab-case]
+    [Rule body with mandatory/advisory language.]
+  - Ensure each rule is uniquely numbered (two digits, zero-padded) and never reuse numbers if a rule is removed.
+  - Other documents must cite rules using the canonical dot-notation: `[xdr-name].[NN-short-descriptive-title-in-kebab-case]`.
+
+**Example of a structured set of rules:**
+
+```markdown
+### Implementation Details
+
+#### 01-data-must-be-encrypted-at-rest
+All user data must be encrypted at rest using AES-256 or stronger algorithms.
+
+#### 02-access-logs-must-be-retained
+Access logs must be retained for at least 90 days and reviewed monthly for suspicious activity.
+
+#### 03-external-integrations-should-be-reviewed
+All external integrations should be reviewed annually for compliance with current security standards.
+```
+
+Refer to `_core-adr-008-xdr-standards-structured` for full requirements and citation syntax.
+
 ```
 ---
 name: [scope]-[type]-[number]-[short-title]
