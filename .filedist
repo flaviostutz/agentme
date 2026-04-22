@@ -15,7 +15,6 @@ AGENTS.md|xdrs-core|0.14.3
 .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.14.5
 .xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.14.5
 .xdrs/_core/adrs/principles/007-plan-standards.md|xdrs-core|0.14.5
-.xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|xdrs-core|0.14.5
 .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|xdrs-core|0.14.5
 .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|xdrs-core|0.14.5
 .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|xdrs-core|0.14.5
@@ -28,3 +27,4 @@ AGENTS.md|xdrs-core|0.14.3
 .xdrs/_core/adrs/principles/002-xdr-standards.md|xdrs-core|0.17.0
 .xdrs/_core/adrs/principles/skills/002-write-xdr/SKILL.md|xdrs-core|0.17.0
 .xdrs/_core/adrs/index.md|xdrs-core|0.17.0
+.xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|xdrs-core|0.17.1

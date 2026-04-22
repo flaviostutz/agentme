@@ -116,10 +116,10 @@ If any check fails, revise before continuing.
 ### Phase 6: Write Files
 
 1. Create the skill file at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`.
-2. Create a hardlink at `.github/skills/[number]-[skill-name]/SKILL.md` so VS Code picks it up immediately:
+2. Create a symlink at `.github/skills/[number]-[skill-name]` so VS Code picks it up immediately:
    ```
    mkdir -p .github/skills/[number]-[skill-name]
-   ln .xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md .github/skills/[number]-[skill-name]/SKILL.md
+   ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .github/skills/[number]-[skill-name]
    ```
 
 ### Constraints
