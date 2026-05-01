@@ -13,7 +13,7 @@ What tooling and project structure should Go projects follow to ensure consisten
 
 ## Decision Outcome
 
-**Use a Mise-managed Go toolchain with `go build`, `go test`, and `golangci-lint`, module-root folder responsibilities from [agentme-edr-016](../principles/016-cross-language-module-structure.md), feature packages in subdirectories, a `cli/` package for command wiring, and a Makefile as the single entry point for all development tasks.**
+**Use a Mise-managed Go toolchain with `go build`, `go test`, and `golangci-lint`, module-root folder responsibilities from [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md), feature packages in subdirectories, a `cli/` package for command wiring, and a Makefile as the single entry point for all development tasks.**
 
 A predictable layout and minimal external tooling keep Go projects approachable, fast to build, and easy to distribute as cross-platform binaries.
 
@@ -28,7 +28,7 @@ A predictable layout and minimal external tooling keep Go projects approachable,
 | **golangci-lint** | Linting — aggregates many linters in one fast run; configured via `.golangci.yml` |
 | **monotag** | Version tagging from git history for the `publish` target |
 
-All commands are run exclusively through the Makefile, never ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md).
+All commands are run exclusively through the Makefile, never ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](/.xdrs/agentme/edrs/devops/017-tool-execution-and-scripting.md).
 Direct installation of project-required Go CLIs with `go install ...@latest` as a repair step is **NOT** allowed unless an XDR for that repository explicitly permits it.
 
 #### Project structure

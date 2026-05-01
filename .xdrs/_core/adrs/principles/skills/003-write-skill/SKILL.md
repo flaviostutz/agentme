@@ -97,8 +97,9 @@ Rules:
 - Do not duplicate content from referenced XDRs — link instead.
 - Do not present the skill itself as policy; mandatory behavior must come from referenced XDRs or other policy artifacts.
 - When the skill depends on XDRs, make the activation logic and instructions consistent with the XDR metadata so the skill does not operationalize inactive or out-of-scope decisions.
-- Prefer plain Markdown, tables, or ASCII art for simple structure, flow, layout, or relationship indications.
-- If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/assets/` and link with a relative path.
+- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
+- If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
+- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
 - No emojis. Lowercase filenames. Target under 6500 words.
 
 ### Phase 5: Review the Draft
@@ -154,6 +155,6 @@ If any check fails, revise before continuing.
 
 ## References
 
-- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
-- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
-- [002-write-xdr skill](../002-write-xdr/SKILL.md)
+- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
+- [002-write-xdr skill](/.github/skills/002-write-xdr/SKILL.md)

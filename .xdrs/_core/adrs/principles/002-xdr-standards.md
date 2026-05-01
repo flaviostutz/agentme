@@ -109,7 +109,7 @@ Question: In the end, state explicitly the question that needs to be answered. E
 [Optional section with implementation specifics, applicability boundaries, rules, concise examples, or do/don't guidance. This is the answer to the question in the "Context and Problem Statement". (<1300 words)]
 
 ## Considered Options 
-[this section is present ONLY if there was more than one option to choose from]
+[this section is present ONLY if the user explicitely indicated that there were multiple options to choose from while making this decision.]
 
 * (CHOSEN) **Option 2** - Brief description of option 2
   * Reason: Brief description of why this option was accepted, containing the strengths, strategical motivations and it's differential over the other options.
@@ -148,8 +148,8 @@ Question: In the end, state explicitly the question that needs to be answered. E
 ## References
 
 - [_core-adr-001 - XDRs core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
-- [001-lint skill](skills/001-lint/SKILL.md) - Skill for reviewing code changes against XDRs
-- [002-write-xdr skill](skills/002-write-xdr/SKILL.md) - Skill for creating a new XDR following this standard
+- [001-lint skill](/.xdrs/_core/adrs/principles/skills/001-lint/SKILL.md) - Skill for reviewing code changes against XDRs
+- [002-write-xdr skill](/.xdrs/_core/adrs/principles/skills/002-write-xdr/SKILL.md) - Skill for creating a new XDR following this standard
 - [_core-adr-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-004 - Article standards](004-article-standards.md)
 - [_core-adr-006 - Research standards](006-research-standards.md)

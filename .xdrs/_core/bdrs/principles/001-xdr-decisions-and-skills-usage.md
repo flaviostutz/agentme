@@ -47,6 +47,6 @@ Disallowed:
 
 ## References
 
-- [_core-adr-001](../../adrs/principles/001-xdrs-core.md)
-- [_core-adr-002](../../adrs/principles/002-xdr-standards.md)
-- [_core-adr-003](../../adrs/principles/003-skill-standards.md)
+- [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
+- [_core-adr-002](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
+- [_core-adr-003](/.xdrs/_core/adrs/principles/003-skill-standards.md)

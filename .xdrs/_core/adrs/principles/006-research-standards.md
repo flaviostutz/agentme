@@ -48,7 +48,7 @@ Research documents are Markdown files placed inside a subject folder alongside d
 - Research documents SHOULD link in `## References` to the XDRs, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
 - A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not required.
 - One research document MAY also be referenced by multiple XDRs, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
-- Images and other local resource files referenced by a research document SHOULD be used only when they are materially necessary and SHOULD live in `researches/assets/` next to the research files.
+- Images and other local resource files referenced by a research document SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files.
 - Research file names MUST be lowercase. Never use emojis.
 - A research document MAY exist before the related XDR is written, or remain after the XDR changes, as long as its status and references stay clear.
 
@@ -61,7 +61,7 @@ Research documents are Markdown files placed inside a subject folder alongside d
       [subject]/
         researches/
           [number]-[short-title].md
-          assets/
+          .assets/
 ```
 
 Examples:
@@ -133,4 +133,4 @@ Prefer tables, bullets, or ASCII art for simple comparisons. Use external figure
 - [_core-adr-001 - XDRs core](001-xdrs-core.md)
 - [_core-adr-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-004 - Article standards](004-article-standards.md)
-- [005-write-research skill](skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document
+- [005-write-research skill](/.xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document

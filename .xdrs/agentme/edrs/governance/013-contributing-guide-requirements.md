@@ -38,5 +38,5 @@ Projects must keep a `CONTRIBUTING.md` file at the repository root. The file mus
 
 ## References
 
-- [agentme-edr-005 - Monorepo structure](../devops/005-monorepo-structure.md)
-- [002-monorepo-setup skill](../devops/skills/002-monorepo-setup/SKILL.md)
+- [agentme-edr-005 - Monorepo structure](/.xdrs/agentme/edrs/devops/005-monorepo-structure.md)
+- [002-monorepo-setup skill](/.xdrs/agentme/edrs/devops/skills/002-monorepo-setup/SKILL.md)

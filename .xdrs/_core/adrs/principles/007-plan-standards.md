@@ -31,7 +31,7 @@ Plans are Markdown documents placed inside a subject folder alongside decision r
 - Plans MUST include an `Expected end date:` field in ISO format (YYYY-MM-DD) inside the `## Proposed Solution` section.
 - Always use lowercase file names.
 - Never use emojis in plan content.
-- Images and other local resource files referenced by a plan SHOULD live in `plans/assets/` next to the plan files.
+- Images and other local resource files referenced by a plan MUST live in `plans/.assets/` next to the plan files.
 
 **Folder layout**
 
@@ -42,7 +42,7 @@ Plans are Markdown documents placed inside a subject folder alongside decision r
       [subject]/
         plans/
           [number]-[short-title].md
-          assets/
+          .assets/
 ```
 
 Examples:
@@ -135,4 +135,4 @@ Due date: YYYY-MM-DD
 - [_core-adr-001 - XDRs core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
 - [_core-adr-004 - Article standards](004-article-standards.md) - Companion artifact type for synthetic views
 - [_core-adr-006 - Research standards](006-research-standards.md) - Companion artifact type for exploratory evidence
-- [006-write-plan skill](skills/006-write-plan/SKILL.md) - Step-by-step instructions for creating a new plan
+- [006-write-plan skill](/.xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md) - Step-by-step instructions for creating a new plan

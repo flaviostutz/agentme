@@ -19,7 +19,7 @@ the sibling `examples/` folder, redirects persistent caches into `.cache/`, and 
 the only entry points. Boilerplate is derived from the [filedist](https://github.com/flaviostutz/filedist)
 project.
 
-Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-003](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md), [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md)
 
 ## Instructions
 
@@ -418,7 +418,7 @@ Review all created files and confirm:
 - [ ] `lib/eslint.config.mjs` points `parserOptions.project` to `tsconfig.json`
 - [ ] `lib/README.md` starts with Quick Start and ends with module development commands
 - [ ] All `[package-name]` placeholders are replaced with the actual name
-- [ ] Structure matches the layout in [agentme-edr-003](../../003-javascript-project-tooling.md)
+- [ ] Structure matches the layout in [agentme-edr-003](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md)
 
 ## Examples
 

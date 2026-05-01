@@ -114,7 +114,8 @@ Rules to apply while drafting:
 - If the plan scope is too large for 2 years, break it into multiple plans.
 - Remember that this plan must be deleted after full implementation. Write it with that ephemeral nature in mind.
 - Prefer plain Markdown, tables, or ASCII art for structure and flow.
-- If the plan genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/plans/assets/` and link with a relative path.
+- If the plan genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/plans/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
+- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
 - Use lowercase file names. Never use emojis.
 
 ### Phase 6: Place and Register
@@ -152,6 +153,6 @@ Rules to apply while drafting:
 
 ## References
 
-- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
-- [_core-adr-007 - Plan standards](../../007-plan-standards.md)
-- [_core-adr-002 - XDR standards](../../002-xdr-standards.md)
+- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
+- [_core-adr-007 - Plan standards](/.xdrs/_core/adrs/principles/007-plan-standards.md)
+- [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
