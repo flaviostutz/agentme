@@ -99,9 +99,9 @@ This keeps the user-facing command predictable while preserving a clean library 
 ## References
 
 - [agentme-edr-003](003-javascript-project-tooling.md) - JavaScript project packaging and structure
-- [agentme-edr-007](../principles/007-project-quality-standards.md) - README and examples baseline
-- [agentme-edr-008](../devops/008-common-targets.md) - Standard command names for project entry points
-- [agentme-edr-009](../principles/009-error-handling.md) - Process error signaling and error handling expectations
+- [agentme-edr-007](/.xdrs/agentme/edrs/principles/007-project-quality-standards.md) - README and examples baseline
+- [agentme-edr-008](/.xdrs/agentme/edrs/devops/008-common-targets.md) - Standard command names for project entry points
+- [agentme-edr-009](/.xdrs/agentme/edrs/principles/009-error-handling.md) - Process error signaling and error handling expectations
 - [agentme-edr-010](010-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
 - [agentme-edr-014](014-python-project-tooling.md) - Python packaging and CLI entry-point guidance
 - [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig) - Example JSON configuration discovery library for JavaScript CLIs

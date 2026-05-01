@@ -17,23 +17,23 @@ same decision system.
   record the adopted direction. They are the central policy artifact of the framework for the
   scope and topic they cover. Three decision record types exist: **ADR** for architectural and
   technical decisions, **BDR** for business and operational decisions, and **EDR** for engineering
-  implementation decisions. See [_core-adr-001](../001-xdrs-core.md).
+  implementation decisions. See [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md).
 - **Research** captures exploration before or around a decision: constraints, findings, options,
   pros, and cons. Research supports elaboration, discussion, and updates,
   but it is not the final rule. A single Research document may inform multiple downstream ADRs,
   BDRs, or EDRs. If Research and an XDR disagree, the XDR wins. See
-  [_core-adr-006](../006-research-standards.md).
+  [_core-adr-006](/.xdrs/_core/adrs/principles/006-research-standards.md).
 - **Skills** describe how to execute work under the constraints of the decisions. They add the
   procedural detail that XDRs intentionally avoid. A Skill may be used by a human, an AI agent, or
   both. Skills are task-based, should end in a verifiable outcome, and are only mandatory when a
-  policy such as an XDR makes them mandatory. See [_core-adr-003](../003-skill-standards.md).
+  policy such as an XDR makes them mandatory. See [_core-adr-003](/.xdrs/_core/adrs/principles/003-skill-standards.md).
 - **Articles** are synthetic views, like this one. They explain a topic across multiple XDRs,
   Research documents, and Skills, helping readers understand the system without making new
-  decisions. See [_core-adr-004](../004-article-standards.md).
+  decisions. See [_core-adr-004](/.xdrs/_core/adrs/principles/004-article-standards.md).
 - **Plans** describe a problem, a proposed solution, and the approach and activities needed to
   solve it. They have a clear start and end and a well-defined scope. Plans are ephemeral: they
   must be deleted after full implementation, with lasting outputs captured as Decisions, Skills,
-  Articles, or other artifacts. See [_core-adr-007](../007-plan-standards.md).
+  Articles, or other artifacts. See [_core-adr-007](/.xdrs/_core/adrs/principles/007-plan-standards.md).
 - **Indexes and folder structure** are the discovery layer. They do not make decisions by
   themselves, but they determine how people and agents find the right artifacts, how scopes
   override one another, and how a large set of decisions remains navigable.
@@ -139,7 +139,7 @@ guidance, and the explanatory overview close together without collapsing them in
 
 ### Guidelines
 
-Follow [_core-adr-001](../001-xdrs-core.md) and [_core-adr-002](../002-xdr-standards.md) strictly. Key rules:
+Follow [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md) and [_core-adr-002](/.xdrs/_core/adrs/principles/002-xdr-standards.md) strictly. Key rules:
 
 - Use **mandatory language** (`must`, `never`, `required`) for non-negotiable rules and
   **advisory language** (`should`, `recommended`) for guidance.
@@ -157,13 +157,13 @@ Follow [_core-adr-001](../001-xdrs-core.md) and [_core-adr-002](../002-xdr-stand
 - **New subject** — create the subject folder under the existing scope+type path. Add an
   allowed subject or use `principles` if none fits (propose a new subject via a `_core` ADR).
 - **New research** — add a `researches/[number]-[short-title].md` inside the relevant subject
-  folder, following [_core-adr-006](../006-research-standards.md).
+  folder, following [_core-adr-006](/.xdrs/_core/adrs/principles/006-research-standards.md).
 - **New skill** — add a `skills/[number]-[skill-name]/SKILL.md` inside the relevant subject
-  folder, following [_core-adr-003](../003-skill-standards.md).
+  folder, following [_core-adr-003](/.xdrs/_core/adrs/principles/003-skill-standards.md).
 - **New article** — add an `articles/[number]-[short-title].md` inside the relevant subject
-  folder, following [_core-adr-004](../004-article-standards.md).
+  folder, following [_core-adr-004](/.xdrs/_core/adrs/principles/004-article-standards.md).
 - **New plan** — add a `plans/[number]-[short-title].md` inside the relevant subject
-  folder, following [_core-adr-007](../007-plan-standards.md).
+  folder, following [_core-adr-007](/.xdrs/_core/adrs/principles/007-plan-standards.md).
 
 ### Using XDRs in your own project
 
@@ -181,15 +181,15 @@ Follow [_core-adr-001](../001-xdrs-core.md) and [_core-adr-002](../002-xdr-stand
 
 ## References
 
-- [_core-adr-001](../001-xdrs-core.md) - XDR elements: types, scopes, subjects, folder structure
-- [_core-adr-002](../002-xdr-standards.md) - XDR document standards and mandatory template
-- [_core-adr-003](../003-skill-standards.md) - Skill standards and co-location rules
-- [_core-adr-004](../004-article-standards.md) - Article standards
-- [_core-adr-006](../006-research-standards.md) - Research standards
-- [_core-adr-007](../007-plan-standards.md) - Plan standards
-- [001-lint skill](../skills/001-lint/SKILL.md) - Linting code against XDRs
-- [002-write-xdr skill](../skills/002-write-xdr/SKILL.md) - Writing a new XDR
-- [003-write-skill skill](../skills/003-write-skill/SKILL.md) - Writing a new skill
-- [004-write-article skill](../skills/004-write-article/SKILL.md) - Writing a new article
-- [005-write-research skill](../skills/005-write-research/SKILL.md) - Writing a new research document
-- [_core-adr-005](../005-semantic-versioning-for-xdr-packages.md) - Semantic versioning rules for XDR packages
+- [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md) - XDR elements: types, scopes, subjects, folder structure
+- [_core-adr-002](/.xdrs/_core/adrs/principles/002-xdr-standards.md) - XDR document standards and mandatory template
+- [_core-adr-003](/.xdrs/_core/adrs/principles/003-skill-standards.md) - Skill standards and co-location rules
+- [_core-adr-004](/.xdrs/_core/adrs/principles/004-article-standards.md) - Article standards
+- [_core-adr-006](/.xdrs/_core/adrs/principles/006-research-standards.md) - Research standards
+- [_core-adr-007](/.xdrs/_core/adrs/principles/007-plan-standards.md) - Plan standards
+- [001-lint skill](/.xdrs/_core/adrs/principles/skills/001-lint/SKILL.md) - Linting code against XDRs
+- [002-write-xdr skill](/.xdrs/_core/adrs/principles/skills/002-write-xdr/SKILL.md) - Writing a new XDR
+- [003-write-skill skill](/.xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md) - Writing a new skill
+- [004-write-article skill](/.xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md) - Writing a new article
+- [005-write-research skill](/.xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md) - Writing a new research document
+- [_core-adr-005](/.xdrs/_core/adrs/principles/005-semantic-versioning-for-xdr-packages.md) - Semantic versioning rules for XDR packages

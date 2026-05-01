@@ -12,9 +12,9 @@ compatibility: Go 1.21+
 
 ## Overview
 
-Creates a complete Go CLI project from scratch, following the layout from [agentme-edr-010](../../010-golang-project-tooling.md). Business logic lives in named feature packages; CLI wiring lives in `cli/<feature>/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
+Creates a complete Go CLI project from scratch, following the layout from [agentme-edr-010](/.xdrs/agentme/edrs/application/010-golang-project-tooling.md). Business logic lives in named feature packages; CLI wiring lives in `cli/<feature>/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
 
-Related EDRs: [agentme-edr-010](../../010-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-010](/.xdrs/agentme/edrs/application/010-golang-project-tooling.md), [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md)
 
 ## Instructions
 

@@ -28,7 +28,7 @@ Articles are Markdown documents placed inside a subject folder alongside decisio
 - Articles must remain consistent with the XDRs, Research documents, and Skills they reference. When a referenced artifact changes, the article must be reviewed and updated.
 - Place an article in the subject folder that best matches its topic using the required list of subjects per type defined in `_core-adr-001`. If an article spans more than one subject, place it in `principles`.
 - For simple structure, flow, layout, or relationship indications, articles SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
-- Images and other local resource files referenced by an article SHOULD be used only when they are materially necessary and SHOULD live in `articles/assets/` next to the article files.
+- Images and other local resource files referenced by an article SHOULD be used only when they are materially necessary and MUST live in `articles/.assets/` next to the article files.
 - Always use lowercase file names.
 - Never use emojis in article content.
 - Articles should be kept under 1950 words. Move detailed content to referenced XDRs or Skills.
@@ -42,7 +42,7 @@ Articles are Markdown documents placed inside a subject folder alongside decisio
       [subject]/
         articles/
           [number]-[short-title].md
-          assets/
+          .assets/
 ```
 
 Examples:
@@ -89,4 +89,4 @@ when referencing an information from those documents.]
 - [_core-adr-001 - XDRs core](001-xdrs-core.md)
 - [_core-adr-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-006 - Research standards](006-research-standards.md)
-- [004-write-article skill](skills/004-write-article/SKILL.md) - Step-by-step instructions for creating a new article
+- [004-write-article skill](/.xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md) - Step-by-step instructions for creating a new article

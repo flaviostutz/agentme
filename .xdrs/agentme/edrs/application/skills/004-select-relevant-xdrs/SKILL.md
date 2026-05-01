@@ -159,9 +159,9 @@ Input: "Set up agentme for this repo and keep the speckit workflow we already us
 
 ## References
 
-- [agentme README](../../../../../../README.md)
-- [agentme-edr-003 - JavaScript project tooling and structure](../../003-javascript-project-tooling.md)
-- [agentme-edr-005 - Monorepo structure](../../../devops/005-monorepo-structure.md)
-- [agentme-edr-007 - Project quality standards](../../../principles/007-project-quality-standards.md)
-- [agentme-edr-008 - Common development script names](../../../devops/008-common-targets.md)
-- [_core-adr-003 - Skill standards](../../../../../_core/adrs/principles/003-skill-standards.md)
+- [agentme README](/README.md)
+- [agentme-edr-003 - JavaScript project tooling and structure](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md)
+- [agentme-edr-005 - Monorepo structure](/.xdrs/agentme/edrs/devops/005-monorepo-structure.md)
+- [agentme-edr-007 - Project quality standards](/.xdrs/agentme/edrs/principles/007-project-quality-standards.md)
+- [agentme-edr-008 - Common development script names](/.xdrs/agentme/edrs/devops/008-common-targets.md)
+- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)

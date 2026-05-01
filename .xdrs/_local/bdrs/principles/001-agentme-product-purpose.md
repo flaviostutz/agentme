@@ -62,6 +62,6 @@ agentme ships two kinds of artifacts:
 
 ## References
 
-- [_local-adr-001 - Project basics](../../adrs/principles/001-project-basics.md)
-- [_local-adr-002 - XDR scope guidelines](../../adrs/principles/002-xdr-scope-guidelines.md)
-- [agentme-edr-003 - JavaScript project tooling](../../../agentme/edrs/application/003-javascript-project-tooling.md)
+- [_local-adr-001 - Project basics](/.xdrs/_local/adrs/principles/001-project-basics.md)
+- [_local-adr-002 - XDR scope guidelines](/.xdrs/_local/adrs/principles/002-xdr-scope-guidelines.md)
+- [agentme-edr-003 - JavaScript project tooling](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md)

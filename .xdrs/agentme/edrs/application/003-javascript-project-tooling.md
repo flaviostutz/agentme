@@ -13,7 +13,7 @@ What tooling and project structure should JavaScript/TypeScript projects follow 
 
 ## Decision Outcome
 
-**Use a Mise-managed Node.js and pnpm toolchain together with pnpm, tsc, esbuild, eslint, and jest in a module-root layout that follows [agentme-edr-016](../principles/016-cross-language-module-structure.md), with runnable usage examples in sibling `examples/` folders and Makefiles as the only entry points.**
+**Use a Mise-managed Node.js and pnpm toolchain together with pnpm, tsc, esbuild, eslint, and jest in a module-root layout that follows [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md), with runnable usage examples in sibling `examples/` folders and Makefiles as the only entry points.**
 
 Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelines, and a predictable developer experience across projects.
 
@@ -30,7 +30,7 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](/.xdrs/agentme/edrs/devops/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
 
 #### ESLint
 

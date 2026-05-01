@@ -63,7 +63,7 @@ Quick test:
             SKILL.md              # required
             scripts/              # optional: executable scripts the agent may run
             references/           # optional: detailed reference material
-            assets/               # optional: images, templates, data files, and other local resources
+            .assets/               # optional: images, templates, data files, and other local resources
 ```
 
 Examples:
@@ -114,9 +114,9 @@ Rules:
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
-- Images and other local resource files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and SHOULD live in `assets/` inside the same skill package.
+- Images and other local resource files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package.
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
-- Reference other files with relative paths from the skill root.
+- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/`. Sibling files and child folder references SHOULD use relative paths (e.g., `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../other.md`).
 - Always use lowercase file names.
 - Never use emojis in skill content.
 

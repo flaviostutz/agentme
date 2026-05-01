@@ -84,7 +84,7 @@ when referencing information from those documents. Keep under 1950 words total.]
 
 ## References
 
-- [XDR id or Skill name](relative/path/to/file.md) - Brief description of relevance
+- [XDR id or Skill name](/.xdrs/[scope]/[type]/[subject]/[number]-[short-title].md) - Brief description of relevance
 ```
 
 Rules to apply while drafting:
@@ -93,8 +93,9 @@ Rules to apply while drafting:
 - Every factual claim must link back to the authoritative XDR or Skill.
 - If the article advises readers what to do, clearly separate active/applicable XDRs from background, historical, or out-of-scope ones.
 - Never reproduce decision text verbatim; summarize and link.
-- Prefer plain Markdown, tables, or ASCII art for simple structure, flow, layout, or relationship indications.
-- If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/assets/` and link with a relative path.
+- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
+- If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
+- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
 - Keep the article under 1950 words; move detailed content to XDRs or Skills.
 - Use lowercase file names. Never use emojis.
 - If a conflict exists between the article and a Decision Record, note it and defer to the XDR.
@@ -139,6 +140,6 @@ Rules to apply while drafting:
 
 ## References
 
-- [_core-adr-004 - Article standards](../../004-article-standards.md)
-- [_core-adr-006 - Research standards](../../006-research-standards.md)
-- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-004 - Article standards](/.xdrs/_core/adrs/principles/004-article-standards.md)
+- [_core-adr-006 - Research standards](/.xdrs/_core/adrs/principles/006-research-standards.md)
+- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
