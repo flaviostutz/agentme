@@ -36,6 +36,7 @@ Quick test:
 - "How to execute a business process or policy?" → BDR
 
 **Scope** — use `_local` unless the user explicitly names another scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Subject** — pick the most specific match for the chosen type (required list per type is in `_core-adr-001`):
 - ADR subjects: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
@@ -122,6 +123,7 @@ If any check fails, revise before continuing.
    mkdir -p .github/skills/[number]-[skill-name]
    ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .github/skills/[number]-[skill-name]
    ```
+3. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new skill. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
 
 ### Constraints
 
@@ -129,6 +131,7 @@ If any check fails, revise before continuing.
 - MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST NOT create a skill that duplicates an existing one — extend or reference it instead.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
 - MUST include a References section linking to `003-skill-standards`.
 
 ## Examples

@@ -35,6 +35,7 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 - **EDR**: specific tool/library, coding practice, testing strategy, project structure
 
 **Scope** — use `_local` unless the user explicitly names another scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Subject** — pick one from the allowed list for the chosen type (from `001-xdrs-core`):
 - ADR: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
@@ -167,6 +168,7 @@ If any check fails, revise and re-run this phase before proceeding.
 3. Add or verify the scope entry in `.xdrs/index.md`.
 4. If significant research was produced or already exists, link it from the XDR `## Considered Options` section.
 5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Implementation Details` without turning the XDR into a long procedure.
+6. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new content. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
 
 ### Phase 9: Verify Package structure with Lint
 
@@ -185,6 +187,7 @@ If any check fails, revise and re-run this phase before proceeding.
 - MUST NOT create an XDR that duplicates a decision already captured in another XDR — extend or reference instead.
 - MUST prefer links and short references over repeating the same decision content across related documents.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
 
 ## References
 
