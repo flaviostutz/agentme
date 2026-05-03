@@ -17,9 +17,9 @@ Every project must meet six minimum quality standards: a Getting Started section
 
 These standards form a non-negotiable baseline. Individual projects may raise the bar but must never fall below it.
 
----
+### Implementation Details
 
-### 1. README MUST have a Getting Started section
+#### 01-readme-must-have-getting-started
 
 `README.md` must include a **Getting Started** section in the first 20 lines with the minimal steps to install and use the project.
 
@@ -48,7 +48,7 @@ myFunction({ input: "value" });
 
 ---
 
-### 2. Unit tests MUST run on every release
+#### 02-unit-tests-must-run-on-every-release
 
 A unit test suite must run automatically before every release. Failing tests must block the release — no silent skips or overrides.
 
@@ -63,7 +63,7 @@ A unit test suite must run automatically before every release. Failing tests mus
 
 ---
 
-### 3. The project MUST comply with all applicable workspace XDRs
+#### 03-project-must-comply-with-xdrs
 
 All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](/.xdrs/index.md)) must be followed. A deviation requires a project-local XDR documenting the override.
 
@@ -73,7 +73,7 @@ All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](/.xdrs
 
 ---
 
-### 4. The project MUST have linting enforcing code style, formatting, and best practices
+#### 04-project-must-have-linting
 
 Projects larger than 10 files or 200 lines of code must have a linter configured and actively enforced. Lint failures block CI builds.
 
@@ -89,7 +89,7 @@ Projects larger than 10 files or 200 lines of code must have a linter configured
 
 ---
 
-### 5. The project structure MUST be easily understood by new developers
+#### 05-project-structure-must-be-clear
 
 Directory and file layout must be self-explanatory: source code, tests, configuration, and examples must be clearly separated and named.
 
@@ -114,7 +114,7 @@ Directory and file layout must be self-explanatory: source code, tests, configur
 
 ---
 
-### 6. Libraries and utilities MUST have a runnable examples folder verified on every test run
+#### 06-libraries-must-have-runnable-examples
 
 Projects that are libraries or shared utilities must include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples are executed as part of `make test`.
 

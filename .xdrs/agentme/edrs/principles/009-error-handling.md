@@ -17,7 +17,7 @@ What error handling practices should be followed across all languages and projec
 
 ### Implementation Details
 
-#### 1. Catch exceptions only where they can be properly handled
+#### 01-catch-only-where-handled
 
 Never catch an exception unless the catching site can genuinely recover from it, translate it into a meaningful domain error, or enrich it with context before re-throwing. Do **not** swallow exceptions silently. When suppressing an exception is intentional, always add a comment explaining exactly why, or log it at an appropriate level.
 
@@ -73,7 +73,7 @@ except CacheError:
 
 ---
 
-#### 2. Avoid exposing exceptions as part of public interfaces — return error values instead
+#### 02-avoid-exceptions-in-public-interfaces
 
 At module and service boundaries, prefer returning a value that signals success or failure (e.g., a result type, a discriminated union, or a `(value, error)` tuple as in Go) over throwing exceptions. This forces callers to explicitly acknowledge and handle the error case before using the result.
 
@@ -157,7 +157,7 @@ def fetch_user(user_id: str) -> Ok[User] | Err:
 
 ---
 
-#### 3. Centralise repetitive catch logic into utility helpers
+#### 03-centralise-repetitive-catch-logic
 
 If the same `try/catch` pattern (e.g., logging, classifying HTTP errors, wrapping exceptions) appears in multiple places, extract it into a shared utility. Do not copy-paste catch blocks across the codebase.
 
@@ -209,7 +209,7 @@ def save_order(order: Order): ...
 
 ---
 
-#### 4. Communicate failure clearly at process and service boundaries
+#### 04-communicate-failure-at-boundaries
 
 Every system boundary must signal failure explicitly:
 
@@ -272,7 +272,7 @@ def create_order_endpoint(payload: OrderRequest):
 
 ---
 
-#### 5. Write test cases for error scenarios
+#### 05-write-test-cases-for-error-scenarios
 
 Every module that handles errors must have dedicated test cases that verify the error paths. Do not only test the happy path.
 

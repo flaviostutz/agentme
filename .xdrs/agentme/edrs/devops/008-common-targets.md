@@ -19,7 +19,7 @@ Standardizing both the target names and the execution chain removes per-project 
 
 ### Implementation Details
 
-#### 1. Every project MUST have a root `Makefile` exposing the standard target names
+#### 01-every-project-must-have-root-makefile
 
 The project root must contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines must invoke routine actions through this `Makefile`, never by calling underlying tools directly in documentation, CI, or daily workflow commands.
 
@@ -34,7 +34,7 @@ The project root must contain a single authoritative `Makefile` that exposes the
 
 *Why:* The project entry point must stay language-agnostic and obvious. A developer should be able to inspect the `Makefile` and immediately see which real tool commands will run.
 
-#### 2. Makefile recipes MUST use the shared Mise execution rules
+#### 02-makefile-recipes-must-use-mise
 
 After a checkout, the shared execution flow is:
 
@@ -62,7 +62,7 @@ make <target>
 
 ---
 
-#### 3. Standard target groups and names
+#### 03-standard-target-groups-and-names
 
 Targets are organized into five lifecycle groups. Projects must use these names unchanged. Extensions are allowed (see rule 5) but the core names must not be repurposed.
 
@@ -114,7 +114,7 @@ Targets are organized into five lifecycle groups. Projects must use these names 
 
 ---
 
-#### 3. Standard environment variables
+#### 04-standard-environment-variables
 
 Two environment variables have defined semantics and must be used consistently.
 
@@ -125,7 +125,7 @@ Two environment variables have defined semantics and must be used consistently.
 
 ---
 
-#### 5. Extending targets with prefixes
+#### 05-extending-targets-with-prefixes
 
 Projects may add custom targets beyond the standard set. Custom targets must be named by prefixing a standard target name with a descriptive qualifier, keeping the naming intuitive and consistent with the group it belongs to.
 
@@ -147,7 +147,7 @@ The prefix convention ensures developers can infer the purpose of any target wit
 
 ---
 
-#### 6. Monorepo usage
+#### 06-monorepo-usage
 
 In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to child Makefiles in sequence. The parent Makefile should call `$(MAKE) -C <child> <target>` directly, while each child `Makefile` runs its actual tool commands through `mise exec --`.
 
@@ -168,7 +168,7 @@ A developer can run `make test` at the repo root to test everything, or `cd modu
 
 ---
 
-#### 7. Quick-reference — commands a developer can always rely on
+#### 07-quick-reference
 
 Any project following this EDR supports the following actions through the root `Makefile`.
 

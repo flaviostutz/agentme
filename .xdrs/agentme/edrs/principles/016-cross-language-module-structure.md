@@ -19,7 +19,7 @@ Language-specific EDRs may add ecosystem details, but they must not redefine the
 
 ### Implementation Details
 
-#### 1. Every buildable or publishable module MUST own its folder root
+#### 01-module-must-own-folder-root
 
 A module is the smallest independently buildable, testable, or publishable unit. It MUST live in its own folder and that folder MUST contain:
 
@@ -40,7 +40,7 @@ Example module root:
 └── ... language-specific sources and config ...
 ```
 
-#### 2. Parent folders are aggregation roots, not hidden implementation buckets
+#### 02-parent-folders-are-aggregation-roots
 
 Parent folders such as a repository root, an application folder, or `lib/` may aggregate multiple modules. They may also hold shared consumer examples or multi-module test harnesses.
 
@@ -57,13 +57,13 @@ Recommended aggregation pattern:
 └── tests_benchmark/
 ```
 
-#### 3. Build and publish outputs MUST go to `dist/`
+#### 03-build-outputs-must-go-to-dist
 
 Distributable outputs such as packages, wheels, archives, generated binaries, or packed example inputs MUST be written under the module's `dist/` folder.
 
 `dist/` MUST be gitignored.
 
-#### 4. Persistent tool caches MUST live under `.cache/`
+#### 04-persistent-caches-must-live-under-cache
 
 Tool-generated caches and disposable machine-local state MUST be redirected into the nearest intended `.cache/` folder, either at monorepo level or module level.
 
@@ -79,7 +79,7 @@ If a tool cannot natively choose its cache path, the module `Makefile` MUST wrap
 
 `.cache/` MUST be gitignored.
 
-#### 5. Consumer examples MUST sit outside the module they exercise
+#### 05-consumer-examples-must-sit-outside-module
 
 Examples that demonstrate how to consume a library or reusable module MUST live in a sibling `examples/` folder under the nearest aggregation root, not inside the module folder itself.
 
@@ -98,7 +98,7 @@ examples/
 └── using-mymodule/
 ```
 
-#### 6. Every module README MUST explain both usage and development
+#### 06-module-readme-must-explain-usage-and-development
 
 Each module MUST contain a `README.md` that shows how to use the module as a consumer.
 
@@ -106,7 +106,7 @@ The end of the README MUST also include short developer instructions for that mo
 
 Repository-level READMEs may describe the workspace, but they do not replace the module README.
 
-#### 7. Unit, integration, and benchmark tests use predictable locations
+#### 07-tests-use-predictable-locations
 
 Unit tests SHOULD be co-located with the file they exercise when that is idiomatic and common for the language.
 
@@ -123,7 +123,7 @@ Benchmark tests MUST live in one of these locations:
 - `<module>/tests_benchmark/` for module-specific harnesses or datasets
 - `<parent>/tests_benchmark/` when they cover multiple sibling modules
 
-#### 8. Module Makefiles MUST expose the shared target vocabulary
+#### 08-module-makefiles-must-expose-shared-targets
 
 Every module `Makefile` MUST expose the common target names from [agentme-edr-008](/.xdrs/agentme/edrs/devops/008-common-targets.md). At minimum, modules MUST provide `build`, `lint`, and `test`, and SHOULD also provide `all`, `clean`, and `lint-fix` when meaningful.
 

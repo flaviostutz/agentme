@@ -17,7 +17,7 @@ What unit testing practices should be followed to ensure tests are meaningful, r
 
 ### Implementation Details
 
-#### 1. MUST have at least one assertion per test
+#### 01-must-have-at-least-one-assertion-per-test
 
 ```typescript
 // bad — no assertion; passes even when code is broken
@@ -32,7 +32,7 @@ it("processes the order and returns a confirmation id", () => {
 
 ---
 
-#### 2. MUST run offline — no external resource dependencies
+#### 02-must-run-offline
 
 Unit tests must not depend on any external resources: no network calls, no running databases, no external APIs, no file system paths outside the repo. Tests must pass with only static code available.
 
@@ -53,7 +53,7 @@ it("fetches user", async () => {
 
 ---
 
-#### 3. MUST maintain at least 80% line/branch coverage, enforced in CI
+#### 03-must-maintain-80-percent-coverage
 
 ```typescript
 // vitest.config.ts
@@ -66,7 +66,7 @@ Builds that miss the threshold must not be merged.
 
 ---
 
-#### 4. SHOULD extract shared setup into a test utility module
+#### 04-should-extract-shared-setup
 
 When setup logic is repeated across two or more test files, centralize it (`src/test-utils/`, `internal/testutil/`, `tests/conftest.py`).
 
@@ -79,7 +79,7 @@ export function makeOrder(overrides: Partial<Order> = {}): Order {
 
 ---
 
-#### 5. SHOULD avoid mocks — prefer real code execution
+#### 05-should-avoid-mocks
 
 Use the lowest-cost alternative that exercises real behavior:
 
