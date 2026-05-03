@@ -116,7 +116,7 @@ Benchmarks belong in `lib/tests_benchmark/` when they require dedicated harnesse
 
 The examples folder MUST exist for any libraries and utilities that are published or have more than 500 lines of code
 
-### Related Skills
+## References
 
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 

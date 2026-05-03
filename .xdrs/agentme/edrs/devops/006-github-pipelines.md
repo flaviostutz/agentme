@@ -31,7 +31,9 @@ All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via 
 
 ---
 
-#### 1. CI workflow — `.github/workflows/ci.yml`
+#### 01-ci-workflow
+
+File: `.github/workflows/ci.yml`
 
 Triggered on every PR targeting `main` and every push to `main`. Runs the standard `build`, `lint`, and `test` targets from the root Makefile and fails the workflow if any step exits non-zero.
 
@@ -59,7 +61,9 @@ jobs:
 
 ---
 
-#### 2. Release workflow — `.github/workflows/release.yml`
+#### 02-release-workflow
+
+File: `.github/workflows/release.yml`
 
 Manually dispatched (`workflow_dispatch`). Calculates the next semantic version tag using **monotag** and pushes that tag to the repository. Pushing the tag then automatically triggers the publish workflow.
 
@@ -102,7 +106,9 @@ jobs:
 
 ---
 
-#### 3. Publish workflow — `.github/workflows/publish.yml`
+#### 03-publish-workflow
+
+File: `.github/workflows/publish.yml`
 
 Triggered exclusively when a tag matching `v*.*.*` is pushed to the repository. This ensures only explicitly tagged commits produce published artifacts. Runs `make publish` against the tagged commit.
 

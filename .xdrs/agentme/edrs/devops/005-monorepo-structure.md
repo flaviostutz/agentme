@@ -18,9 +18,9 @@ What monorepo structure, naming conventions, tooling, and build standards should
 For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/002-monorepo-setup/SKILL.md).
 Module folder responsibilities, artifact locations, and test-folder conventions follow [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md).
 
-### Policies
+### Implementation Details
 
-#### 1. Top-level directory layout
+#### 01-top-level-directory-layout
 
 ```
 /
@@ -48,7 +48,7 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 └── .mise.toml            # Mise tool version configuration
 ```
 
-#### 2. Application folders
+#### 02-application-folders
 
 - Represent a cohesive unit with its own lifecycle (e.g., `mymobileapp`, `graph-visualizer`).
 - **MUST** depend only on resources in `/shared/`. Direct cross-application dependencies are forbidden; use published artifacts (container images, published libraries) instead.
@@ -57,7 +57,7 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 
 *Why:* Isolating applications prevents implicit coupling and makes the `shared/` boundary explicit and intentional.
 
-#### 3. Module folders
+#### 03-module-folders
 
 - A module is a subfolder inside an application that is independently compilable and produces a build artifact.
 - May depend on sibling modules within the same application or on `/shared/` resources.
@@ -66,13 +66,13 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 - **MUST** keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md).
 - **MUST NOT** keep consumer examples inside the module folder; those belong in a sibling `examples/` folder at the nearest parent aggregation root.
 
-#### 4. Naming conventions
+#### 04-naming-conventions
 
 - All folder and file names **MUST** be **lowercase**.
 - Use hyphens (`-`) to separate words (e.g., `data-loader`, `graph-visualizer`).
 - Avoid abbreviations unless universally understood in the domain (e.g., `cli`, `api`).
 
-#### 5. Makefiles at every level
+#### 05-makefiles-at-every-level
 
 A `Makefile` **MUST** be present at the repository root, in every application folder, and in every module folder.
 
@@ -87,7 +87,7 @@ The root `setup` target **MUST** run `mise install` and any small repository boo
 
 *Why:* Makefiles provide a universal, stack-agnostic entry point regardless of programming language.
 
-#### 6. Mise for tooling management
+#### 06-mise-for-tooling-management
 
 - [Mise](https://mise.jdx.dev/) **MUST** be used to pin all tool versions (compilers, runtimes, CLI tools).
 - A `.mise.toml` **MUST** exist at the repository root.
@@ -100,15 +100,15 @@ The root `setup` target **MUST** run `mise install` and any small repository boo
 
 *Why:* Eliminates "works on my machine" build failures by ensuring identical tool versions across all environments.
 
-#### 7. Root README
+#### 07-root-readme
 
 The root `README.md` **MUST** include: overview, machine setup, quickstart, and a repository map.
 
-#### 8. Root `.gitignore`
+#### 08-root-gitignore
 
 The repository root **MUST** ignore `dist/` and `.cache/` so module artifacts and tool caches are never committed accidentally.
 
-#### 9. Git tagging and artifact versioning
+#### 09-git-tagging-and-artifact-versioning
 
 All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g., `graphvisualizer/renderer/1.0.0`, `shared/libs/mylib/2.1.0`).
 
@@ -118,7 +118,7 @@ All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g.,
 
 ---
 
-#### 11. Summary of requirements
+#### 11-summary-of-requirements
 
 | Requirement | Scope | Mandatory |
 |---|---|---|

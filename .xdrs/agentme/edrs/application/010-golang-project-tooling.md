@@ -151,6 +151,6 @@ Use `github.com/sirupsen/logrus` for structured logging. Set the log level from 
 
 Use the standard library `flag` package for CLI flags. Each `cli/<feature>` package defines its own `FlagSet`, parses it from `os.Args[2:]`, and calls the corresponding domain function.
 
-### Related Skills
+## References
 
 - [003-create-golang-project](skills/003-create-golang-project/SKILL.md) — scaffolds a new Go project following this structure
