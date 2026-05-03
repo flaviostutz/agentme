@@ -36,6 +36,7 @@ If the answers from Phase 1 leave scope, type, or subject ambiguous, use `vscode
 Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail matters, the standard decides.
 
 **Scope** — use `_local` unless the user explicitly names another scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Type** — match the type of decision this research supports (`adrs`, `bdrs`, or `edrs`). Use the same rules as `002-write-xdr` Phase 2:
 - **BDR**: business process, product policy, strategic rule, operational procedure
@@ -244,6 +245,7 @@ If any check fails, revise before continuing.
 1. Create the research file at `.xdrs/[scope]/[type]/[subject]/researches/[number]-[short-title].md`.
 2. Add an entry to `.xdrs/[scope]/[type]/index.md`.
 3. Add back-references from the related XDR, article, or skill when the relationship is important for discovery.
+4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new research. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
 
 ## Examples
 
@@ -276,4 +278,5 @@ If any check fails, revise before continuing.
 - MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST follow the research template and section-goal rules from `006-research-standards`.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
 - MUST keep the document as research rather than turning it into a final decision.

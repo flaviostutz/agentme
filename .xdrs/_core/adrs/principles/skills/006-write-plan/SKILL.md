@@ -33,6 +33,7 @@ Guides the creation of a well-structured plan document by following `_core-adr-0
 Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail is unclear, the standard decides.
 
 **Scope** — use `_local` unless the user explicitly names another scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Type** — match the type of the XDRs the plan primarily implements or relates to (`adrs`, `bdrs`, or `edrs`).
 - **BDR**: business process, product policy, strategic rule, operational procedure
@@ -123,6 +124,7 @@ Rules to apply while drafting:
 1. Save the file at `.xdrs/[scope]/[type]/[subject]/plans/[number]-[short-title].md`.
 2. Add a link to the plan in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`).
 3. Add back-references in the XDRs, Research documents, and Skills that the plan relates to, under their `## References` section.
+4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new plan. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
 
 ### Phase 7: Verify with Lint
 
@@ -156,3 +158,10 @@ Rules to apply while drafting:
 - [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
 - [_core-adr-007 - Plan standards](/.xdrs/_core/adrs/principles/007-plan-standards.md)
 - [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
+
+## Constraints
+
+- MUST follow the plan template and section-goal rules from `007-plan-standards`.
+- MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
+- MUST keep scope `_local` unless the user explicitly states otherwise.
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
