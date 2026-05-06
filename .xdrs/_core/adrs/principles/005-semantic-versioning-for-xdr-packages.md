@@ -17,7 +17,7 @@ Question: How should semantic versioning be used when publishing or versioning a
 
 XDR packages must use semantic versioning so the package version communicates the expected upgrade impact on consuming teams and projects.
 
-### Implementation Details
+### Details
 
 - Package versions MUST follow `MAJOR.MINOR.PATCH`.
 - The published package version MUST represent the impact of the package as a whole, not only of a single changed file.

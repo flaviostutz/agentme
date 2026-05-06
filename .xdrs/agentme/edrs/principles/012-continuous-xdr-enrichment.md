@@ -38,7 +38,7 @@ Developers must treat reusable missing guidance discovered during implementation
 
 ## References
 
-- [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [_core-article-001](/.xdrs/_core/adrs/principles/articles/001-xdrs-overview.md)
+- [_core-adr-001](../../../_core/adrs/principles/001-xdrs-core.md)
+- [_core-article-001](../../../_core/adrs/principles/articles/001-xdrs-overview.md)
 - [agentme-article-001](articles/001-continuous-xdr-improvement.md)
-- [002-write-xdr skill](/.github/skills/002-write-xdr/SKILL.md)
+- [002-write-xdr skill](../../../../.github/skills/002-write-xdr/SKILL.md)

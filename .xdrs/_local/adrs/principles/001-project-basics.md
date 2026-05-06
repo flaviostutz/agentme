@@ -38,5 +38,5 @@ Projects that import agentme XDRs must add the `agentme` scope to their `.xdrs/i
 
 ## References
 
-- [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
-- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [_core-adr-002 - XDR standards](../../../_core/adrs/principles/002-xdr-standards.md)
+- [_core-adr-003 - Skill standards](../../../_core/adrs/principles/003-skill-standards.md)

@@ -65,7 +65,7 @@ A unit test suite must run automatically before every release. Failing tests mus
 
 #### 03-project-must-comply-with-xdrs
 
-All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](/.xdrs/index.md)) must be followed. A deviation requires a project-local XDR documenting the override.
+All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](../../../index.md)) must be followed. A deviation requires a project-local XDR documenting the override.
 
 **Requirements:**
 - Review applicable XDRs before any significant implementation
@@ -85,7 +85,7 @@ Projects larger than 10 files or 200 lines of code must have a linter configured
 
 **Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects must never be deployed to production.
 
-**Reference:** [agentme-edr-003](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md) for JavaScript-specific tooling.
+**Reference:** [agentme-edr-003](../application/003-javascript-project-tooling.md) for JavaScript-specific tooling.
 
 ---
 

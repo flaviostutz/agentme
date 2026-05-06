@@ -16,7 +16,7 @@ What monorepo structure, naming conventions, tooling, and build standards should
 **Adopt a standardized monorepo layout with top-level application folders that aggregate independent module roots, shared parent-level example and test areas, Mise-managed tooling, and Makefiles at every level.**
 
 For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/002-monorepo-setup/SKILL.md).
-Module folder responsibilities, artifact locations, and test-folder conventions follow [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md).
+Module folder responsibilities, artifact locations, and test-folder conventions follow [agentme-edr-016](../principles/016-cross-language-module-structure.md).
 
 ### Implementation Details
 
@@ -63,7 +63,7 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 - May depend on sibling modules within the same application or on `/shared/` resources.
 - **MUST NOT** depend on modules from other applications.
 - **MUST** contain its own `Makefile`, `README.md`, and language/tooling configuration.
-- **MUST** keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md).
+- **MUST** keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](../principles/016-cross-language-module-structure.md).
 - **MUST NOT** keep consumer examples inside the module folder; those belong in a sibling `examples/` folder at the nearest parent aggregation root.
 
 #### 04-naming-conventions

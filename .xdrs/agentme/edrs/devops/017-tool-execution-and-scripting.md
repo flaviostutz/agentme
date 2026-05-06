@@ -59,6 +59,6 @@ Disallowed:
 - [agentme-edr-005](005-monorepo-structure.md) - Monorepo layout and Makefile hierarchy
 - [agentme-edr-006](006-github-pipelines.md) - CI/CD workflows should call Make targets
 - [agentme-edr-008](008-common-targets.md) - Standard target names
-- [agentme-edr-003](/.xdrs/agentme/edrs/application/003-javascript-project-tooling.md) - JavaScript tooling commands inside Makefiles
-- [agentme-edr-010](/.xdrs/agentme/edrs/application/010-golang-project-tooling.md) - Go tooling commands inside Makefiles
-- [agentme-edr-014](/.xdrs/agentme/edrs/application/014-python-project-tooling.md) - Python tooling commands inside Makefiles
+- [agentme-edr-003](../application/003-javascript-project-tooling.md) - JavaScript tooling commands inside Makefiles
+- [agentme-edr-010](../application/010-golang-project-tooling.md) - Go tooling commands inside Makefiles
+- [agentme-edr-014](../application/014-python-project-tooling.md) - Python tooling commands inside Makefiles

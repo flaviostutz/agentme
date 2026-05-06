@@ -17,9 +17,9 @@ Question: How must agents and humans use XDR decisions and skills so policy, exe
 
 XDR decisions are the authoritative source of mandatory policy. Skills are execution artifacts that operationalize those decisions and must never substitute them as policy authority.
 
-### Implementation Details
+### Details
 
-- Before treating any XDR as a current requirement, evaluate applicability in order: `valid-from`, `applied-to`, then the decision text.
+- Before treating any XDR as a current requirement, evaluate applicability in order: `validFrom`, `applyTo`, then the decision text.
 - The set of policies that an agent or human must comply with for a given operational context must be declared in BDRs.
 - If a policy set becomes too large or too mixed in purpose to review clearly in one record, it must be split into multiple focused BDRs.
 - Specific work instructions that operationalize BDR policies must be structured as skills when the procedure is detailed enough to benefit from a dedicated operational document.
@@ -47,6 +47,6 @@ Disallowed:
 
 ## References
 
-- [_core-adr-001](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [_core-adr-002](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
-- [_core-adr-003](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [_core-adr-001](../../adrs/principles/001-xdrs-core.md)
+- [_core-adr-002](../../adrs/principles/002-xdr-standards.md)
+- [_core-adr-003](../../adrs/principles/003-skill-standards.md)

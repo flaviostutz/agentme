@@ -22,12 +22,12 @@ Performs a structured review of code changes or files against the XDRs in the re
 
 ### Phase 2: XDR Compilation
 
-1. Gather all Decision Records from `.xdrs/index.md` starting from the working directory.
+1. Gather all Decision Records from the XDR root `index.md` (default: `.xdrs/index.md`) starting from the working directory.
    - XDR scopes are controlled by nested folders; some are broad, others domain-specific.
    - Extract frontmatter first to decide whether each XDR should be used for the current review context.
    - All documents present in the collection are considered active.
-   - Check `valid-from:` first. If a date is present and has not yet been reached, the decision SHOULD be adopted for new implementations but is not enforced during reviews.
-   - Check `applied-to:` second. Keep only XDRs whose stated scope fits the files, systems, or workflows under review.
+   - Check `validFrom:` first. If a date is present and has not yet been reached, the decision SHOULD be adopted for new implementations but is not enforced during reviews.
+   - Check `applyTo:` second. Keep only XDRs whose stated scope fits the files, systems, or workflows under review.
    - Check the decision text itself last for additional boundaries or exceptions that metadata does not encode.
 2. Filter relevance based on file types, domains, and architectural patterns in scope.
 
@@ -88,7 +88,7 @@ Scope: [scope identifier]
 
 ## References
 
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
-- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-002 - XDR standards](../../002-xdr-standards.md)
+- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
 
