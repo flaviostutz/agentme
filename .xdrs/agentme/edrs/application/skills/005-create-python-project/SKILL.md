@@ -18,7 +18,7 @@ Pyright, Pytest, and Makefiles. The default layout keeps the library self-contai
 uses a shared root `.venv/`, redirects persistent caches into `.cache/`, and places runnable
 consumer projects under the sibling `examples/` folder.
 
-Related EDRs: [agentme-edr-014](/.xdrs/agentme/edrs/application/014-python-project-tooling.md), [agentme-edr-016](/.xdrs/agentme/edrs/principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-014](../../014-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
 
 ## Instructions
 
@@ -375,5 +375,5 @@ After creating the files:
 
 ## References
 
-- [agentme-edr-014](/.xdrs/agentme/edrs/application/014-python-project-tooling.md)
-- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [agentme-edr-014](../../014-python-project-tooling.md)
+- [_core-adr-003 - Skill standards](../../../../../_core/adrs/principles/003-skill-standards.md)

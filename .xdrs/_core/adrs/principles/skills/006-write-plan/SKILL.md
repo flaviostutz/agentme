@@ -52,8 +52,8 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 
 ### Phase 4: Research Related Artifacts
 
-1. Read all XDRs, Research documents, Skills, and existing Plans relevant to the plan topic across all scopes listed in `.xdrs/index.md`.
-2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether the decision fits the intended context, and the decision text defines any remaining boundaries.
+1. Read all XDRs, Research documents, Skills, and existing Plans relevant to the plan topic across all scopes listed in the XDR root `index.md`.
+2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether the decision fits the intended context, and the decision text defines any remaining boundaries.
 3. Identify Decisions that this plan implements, Research that informs the planning, and any existing Plans that overlap.
 4. Collect artifact IDs and file paths for cross-references.
 
@@ -116,7 +116,7 @@ Rules to apply while drafting:
 - Remember that this plan must be deleted after full implementation. Write it with that ephemeral nature in mind.
 - Prefer plain Markdown, tables, or ASCII art for structure and flow.
 - If the plan genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/plans/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - Use lowercase file names. Never use emojis.
 
 ### Phase 6: Place and Register
@@ -155,9 +155,9 @@ Rules to apply while drafting:
 
 ## References
 
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [_core-adr-007 - Plan standards](/.xdrs/_core/adrs/principles/007-plan-standards.md)
-- [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-007 - Plan standards](../../007-plan-standards.md)
+- [_core-adr-002 - XDR standards](../../002-xdr-standards.md)
 
 ## Constraints
 

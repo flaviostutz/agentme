@@ -49,8 +49,8 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 
 ### Phase 3: Research Existing Artifacts
 
-1. Read relevant XDRs across all scopes listed in `.xdrs/index.md`.
-2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
+1. Read relevant XDRs across all scopes listed in the XDR root `index.md`.
+2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
 3. Read existing research documents in the same or overlapping subjects to avoid duplicating the same study.
 4. Read related skills or articles if they contain context, implementation limits, or terminology that must be reflected.
 5. Collect links that should appear in the final `## References` section.
@@ -137,7 +137,7 @@ Rules:
 - Ensure the methods and test conditions are reproducible enough for an experienced professional to rerun or evolve the critical parts later.
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), bullet points, or ASCII art for simple explanations and comparisons, especially in the introduction and results.
 - If the research genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/researches/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - Keep section word limits within the standard and keep the document under 5000 words total unless the introduction explicitly states that a very detailed analysis is required.
 
 ### Phase 8: Check Section Goals
@@ -269,9 +269,9 @@ If any check fails, revise before continuing.
 
 ## References
 
-- [_core-adr-006 - Research standards](/.xdrs/_core/adrs/principles/006-research-standards.md)
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [002-write-xdr skill](/.github/skills/002-write-xdr/SKILL.md)
+- [_core-adr-006 - Research standards](../../006-research-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [002-write-xdr skill](../002-write-xdr/SKILL.md)
 
 ## Constraints
 
@@ -280,3 +280,4 @@ If any check fails, revise before continuing.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
 - MUST keep the document as research rather than turning it into a final decision.
+ing it into a final decision.

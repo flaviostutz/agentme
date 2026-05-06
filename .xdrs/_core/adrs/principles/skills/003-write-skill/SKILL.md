@@ -51,7 +51,7 @@ Quick test:
 
 1. List `.xdrs/[scope]/[type]/[subject]/skills/` for existing skills. If one already covers the goal, extend or reference it instead of creating a duplicate.
 2. Read all XDRs relevant to the skill's domain to collect rules and cross-references.
-3. Evaluate XDR metadata before operationalizing those rules. All documents present in the collection are considered active. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
+3. Evaluate XDR metadata before operationalizing those rules. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
 4. Decide whether the skill is merely guidance or is being referenced by an XDR as a mandatory procedure. Do not encode policy in the skill unless it comes from a referenced XDR.
 
 ### Phase 4: Write the SKILL.md
@@ -100,7 +100,7 @@ Rules:
 - When the skill depends on XDRs, make the activation logic and instructions consistent with the XDR metadata so the skill does not operationalize inactive or out-of-scope decisions.
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
 - If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - No emojis. Lowercase filenames. Target under 6500 words.
 
 ### Phase 5: Review the Draft
@@ -158,6 +158,6 @@ If any check fails, revise before continuing.
 
 ## References
 
-- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [002-write-xdr skill](/.github/skills/002-write-xdr/SKILL.md)
+- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [002-write-xdr skill](../002-write-xdr/SKILL.md)

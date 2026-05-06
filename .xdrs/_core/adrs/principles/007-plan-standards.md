@@ -17,7 +17,7 @@ How should plans be structured and organized so they provide clear guidance for 
 
 Plans are Markdown documents placed inside a subject folder alongside decision records. They describe a problem, a proposed solution, and the approach to solve it. Plans have a clear start and end and a well-defined scope.
 
-### Implementation Details
+### Details
 
 - Plans describe a problem (why), what we will do to solve the problem, and the approach and activities needed to solve it (how).
 - Plans are NOT the source of truth. When a plan and an XDR disagree, the XDR takes precedence.
@@ -135,4 +135,4 @@ Due date: YYYY-MM-DD
 - [_core-adr-001 - XDRs core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
 - [_core-adr-004 - Article standards](004-article-standards.md) - Companion artifact type for synthetic views
 - [_core-adr-006 - Research standards](006-research-standards.md) - Companion artifact type for exploratory evidence
-- [006-write-plan skill](/.xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md) - Step-by-step instructions for creating a new plan
+- [006-write-plan skill](skills/006-write-plan/SKILL.md) - Step-by-step instructions for creating a new plan

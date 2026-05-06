@@ -7,17 +7,17 @@ description: Extends xdr-standards with a numbered rule format for XDR documents
 
 ## Context and Problem Statement
 
-Some XDR documents define multiple strong policies or rules that must be stated explicitly so they can be applied consistently. In other cases, documents, skills, or agents need to refer to one specific rule without copying its content. Without a standard format, prose references like "see the third bullet in Implementation Details" are fragile and ambiguous.
+Some XDR documents define multiple strong policies or rules that must be stated explicitly so they can be applied consistently. In other cases, documents, skills, or agents need to refer to one specific rule without copying its content. Without a standard format, prose references like "see the third bullet in Details" are fragile and ambiguous.
 
 Question: How should an XDR document expose strong or individually referenceable rules or policies so they stay explicit, stable, and easy to cite?
 
 ## Decision Outcome
 
-**Numbered rule blocks inside Implementation Details with a canonical citation syntax**
+**Numbered rule blocks inside Details with a canonical citation syntax**
 
-When an XDR document defines strong rules or policies that should be stated explicitly, or when documents and skills need to cite individual rules precisely, each rule must be placed inside `### Implementation Details` as a numbered heading block. Referencing documents and skills must cite rules using the canonical dot-notation identifier.
+When an XDR document defines strong rules or policies that should be stated explicitly, or when documents and skills need to cite individual rules precisely, each rule must be placed inside `### Details` as a numbered heading block. Referencing documents and skills must cite rules using the canonical dot-notation identifier.
 
-### Implementation Details
+### Details
 
 Use this format when the decision defines strong rules or policies that must be stated explicitly as stable rule blocks, or when there is a clear need for external documents, skills, or agents to reference specific items inside an XDR without duplicating the full policy text. Standard XDRs that do not define strong rule sets and do not need item-level citation should follow `_core-adr-002-xdr-standards` without adding numbered rule headings.
 
@@ -72,7 +72,7 @@ Documents and skills that cite a rule must use the exact dot-notation form: `[xd
 
 * (REJECTED) **Free-form prose rules with section anchors** — Use markdown heading anchors as citation targets.
   * Reason: Anchors are fragile across editors, rendering tools, and refactors. They do not enforce a stable numbering contract and break silently when headings are reworded.
-* (CHOSEN) **Numbered rule blocks inside Implementation Details** — Prefix each rule heading with a two-digit sequence number and use dot-notation for citations.
+* (CHOSEN) **Numbered rule blocks inside Details** — Prefix each rule heading with a two-digit sequence number and use dot-notation for citations.
   * Reason: Minimal addition to the existing XDR template, stable identifiers independent of heading text, and fully compatible with `_core-adr-002-xdr-standards`.
 
 ## References

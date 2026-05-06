@@ -62,8 +62,8 @@ If the article spans more than one subject, place it in `principles`.
 
 ### Phase 4: Research XDRs and Skills to Synthesize
 
-1. Read all XDRs, Research documents, and Skills relevant to the article topic across all scopes listed in `.xdrs/index.md`.
-2. Evaluate XDR metadata before synthesizing guidance. All documents present in the collection are considered active. Use `Valid:` to determine the convergence date for adoption, `Applied to:` to determine whether the decision fits the audience or context being discussed, and the decision text itself for any remaining applicability boundaries.
+1. Read all XDRs, Research documents, and Skills relevant to the article topic across all scopes listed in the XDR root `index.md`.
+2. Evaluate XDR metadata before synthesizing guidance. All documents present in the collection are considered active. Use `validFrom:` to determine the convergence date for adoption, `applyTo:` to determine whether the decision fits the audience or context being discussed, and the decision text itself for any remaining applicability boundaries.
 3. Identify the key points a reader needs to understand the topic end-to-end.
 4. Collect XDR IDs and file paths for cross-references. Never copy decision text verbatim; link to it.
 
@@ -85,7 +85,7 @@ when referencing information from those documents. Keep under 1950 words total.]
 
 ## References
 
-- [XDR id or Skill name](/.xdrs/[scope]/[type]/[subject]/[number]-[short-title].md) - Brief description of relevance
+- [XDR id or Skill name](relative/path/to/file.md) - Brief description of relevance
 ```
 
 Rules to apply while drafting:
@@ -96,7 +96,7 @@ Rules to apply while drafting:
 - Never reproduce decision text verbatim; summarize and link.
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
 - If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - Keep the article under 1950 words; move detailed content to XDRs or Skills.
 - Use lowercase file names. Never use emojis.
 - If a conflict exists between the article and a Decision Record, note it and defer to the XDR.
@@ -143,6 +143,6 @@ Rules to apply while drafting:
 
 ## References
 
-- [_core-adr-004 - Article standards](/.xdrs/_core/adrs/principles/004-article-standards.md)
-- [_core-adr-006 - Research standards](/.xdrs/_core/adrs/principles/006-research-standards.md)
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
+- [_core-adr-004 - Article standards](../../004-article-standards.md)
+- [_core-adr-006 - Research standards](../../006-research-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)

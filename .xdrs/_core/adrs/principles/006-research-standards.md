@@ -17,7 +17,7 @@ Question: How should research documents be structured and organized so they comm
 
 Research documents are Markdown files placed inside a subject folder alongside decision records. They use an IMRAD-inspired paper structure adapted to company needs so teams can communicate investigated problems, methods, findings, and conclusions clearly, combine experienced professional judgment with good-enough evidence, preserve reproducibility where it matters, and revisit the work when technology, constraints, or facts change.
 
-### Implementation Details
+### Details
 
 - Research is evidence and exploration, not the adopted decision. When a research document and an XDR disagree, the XDR takes precedence.
 - `Research` is the artifact name. `researches/` is only the folder name used alongside `skills/` and `articles/`.
@@ -133,4 +133,4 @@ Prefer tables, bullets, or ASCII art for simple comparisons. Use external figure
 - [_core-adr-001 - XDRs core](001-xdrs-core.md)
 - [_core-adr-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-004 - Article standards](004-article-standards.md)
-- [005-write-research skill](/.xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document
+- [005-write-research skill](skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document

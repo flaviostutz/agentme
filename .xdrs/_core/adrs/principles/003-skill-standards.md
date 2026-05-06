@@ -21,7 +21,7 @@ Skills follow the [agentskills](https://agentskills.io/specification) open forma
 
 A skill may target a human operator, an AI agent, or both. Instructions must be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
 
-### Implementation Details
+### Details
 
 **Automation gradient**
 Skills exist on a spectrum from fully manual (human-only) to fully automated (agent-only). A skill should be written so it can be executed at any point on that spectrum:
@@ -36,7 +36,7 @@ Skills are procedures, XDRs are guardrails and decisions, Research documents cap
 Always create links back and forth between skills <-> XDRs when the relationship is direct, and link to related Research or Articles when they provide important context.
 - Skills are task-based artifacts. They should have a clear starting trigger, an expected end result, and enough detail for a human or agent to verify that the task finished correctly.
 - A skill is not policy by itself. If following a skill is mandatory, that obligation must come from an XDR or another explicit policy that references the skill.
-- When a skill reads, operationalizes, or enforces XDRs, it MUST evaluate the XDR metadata first. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills must not treat out-of-window or out-of-scope XDRs as current requirements.
+- When a skill reads, operationalizes, or enforces XDRs, it MUST evaluate the XDR metadata first. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills must not treat out-of-window or out-of-scope XDRs as current requirements.
 - Skills and XDRs have a many-to-many relationship: one skill may operationalize multiple XDRs, and one XDR may be executed through multiple skills in different contexts.
 
 Place a skill under the XDR type that matches the nature of the activity the skill performs:
@@ -116,7 +116,7 @@ Rules:
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
 - Images and other local resource files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package.
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/`. Sibling files and child folder references SHOULD use relative paths (e.g., `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - Always use lowercase file names.
 - Never use emojis in skill content.
 

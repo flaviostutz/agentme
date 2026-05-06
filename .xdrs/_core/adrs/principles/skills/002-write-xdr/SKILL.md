@@ -16,7 +16,7 @@ Guides the creation of a well-structured XDR by following the standards in `_cor
 
 ### Phase 1: Understand the Decision
 
-1. Read `.xdrs/index.md` to discover all active scopes and their canonical indexes.
+1. Read the XDR root `index.md` (default: `.xdrs/index.md`) to discover all active scopes and their canonical indexes.
 2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full to internalize structure rules, mandatory language, and the XDR framework elements.
 3. Read `.xdrs/_core/adrs/principles/002-xdr-standards.md` in full to internalize the XDR template and document writing rules.
 4. Treat `001-xdrs-core` as the canonical source for all core XDR element definitions (type, scope, subject, numbering, placement). Treat `002-xdr-standards` as the canonical source for how to write and structure the document itself.
@@ -57,8 +57,8 @@ Choose a title that clearly states the question this XDR answers, not the answer
 
 ### Phase 4: Research Related XDRs
 
-1. Read all existing XDRs relevant to the topic across all scopes listed in `.xdrs/index.md`.
-2. Evaluate XDR metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `Valid:` determines the convergence date for adoption, `Applied to:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope XDRs as background only when assessing overlaps and conflicts.
+1. Read all existing XDRs relevant to the topic across all scopes listed in the XDR root `index.md`.
+2. Evaluate XDR metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope XDRs as background only when assessing overlaps and conflicts.
 3. Identify decisions that already address the topic (full or partial overlap).
 4. Note decisions that might conflict with the intended outcome.
 5. Read related `researches/` documents when they exist, especially if they contain constraints, findings, or option tradeoffs that should influence the decision.
@@ -79,7 +79,7 @@ Use the mandatory template from `002-xdr-standards`:
 
 **Check if the decision requires a structured set of rules:**
 If the decision defines strong rules or policies that must be stated explicitly, or if other documents, skills, or agents have a clear need to reference individual rules, you MUST apply the structured rule format from `_core-adr-008-xdr-standards-structured`. This means:
-  - Place each rule as a numbered heading block inside `### Implementation Details`.
+  - Place each rule as a numbered heading block inside `### Details`.
   - Use the format:
     #### [NN]-[short-descriptive-title-in-kebab-case]
     [Rule body with mandatory/advisory language.]
@@ -89,7 +89,7 @@ If the decision defines strong rules or policies that must be stated explicitly,
 **Example of a structured set of rules:**
 
 ```markdown
-### Implementation Details
+### Details
 
 #### 01-data-must-be-encrypted-at-rest
 All user data must be encrypted at rest using AES-256 or stronger algorithms.
@@ -107,8 +107,8 @@ Refer to `_core-adr-008-xdr-standards-structured` for full requirements and cita
 ---
 name: [scope]-[type]-[number]-[short-title]
 description: [What this decision is about and when to use it]
-applied-to: [Optional. Contexts this decision applies to, under 40 words]
-valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
+applyTo: [Optional. Contexts this decision applies to, under 40 words]
+validFrom: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 ---
 
 # [scope]-[type]-[number]: [Short Title]
@@ -121,7 +121,7 @@ valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 **[Chosen Option Title]**
 [One sentence: what is the decision - under 30 words]
 
-### Implementation Details
+### Details
 [Rules, applicability boundaries, concise examples, and optional do/don't guidance — under 1300 words]
 
 ## Considered Options (only if the user explicitly indicated multiple options)
@@ -132,10 +132,10 @@ valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 ```
 
 Mandatory rules to apply while drafting:
-- Include frontmatter `applied-to:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
-- Include frontmatter `valid-from:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
-- Keep `applied-to:` under 40 words and use `valid-from:` only with `YYYY-MM-DD` ISO format.
-- When frontmatter metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `valid-from:` sets a convergence date for adoption, `applied-to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
+- Include frontmatter `applyTo:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
+- Include frontmatter `validFrom:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
+- Keep `applyTo:` under 40 words and use `validFrom:` only with `YYYY-MM-DD` ISO format.
+- When frontmatter metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `validFrom:` sets a convergence date for adoption, `applyTo:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
 - Use mandatory language ("must", "always", "never") only for hard requirements; use advisory language ("should", "recommended") for guidance.
 - Do not duplicate content already in referenced XDRs — link instead.
 - Keep the decision itself authoritative in the XDR. Supporting artifacts may elaborate, but they should not restate the full decision when a short reference is enough.
@@ -143,7 +143,7 @@ Mandatory rules to apply while drafting:
 - Keep exploratory option analysis in a related Research document when it would distract from the final decision text.
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
 - If the XDR genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
-- Links that reference a parent folder MUST use absolute paths from the repository root with a leading `/` (e.g., `/.xdrs/_core/adrs/principles/001-xdrs-core.md`). Sibling files and child folder references SHOULD use relative paths (e.g., `002-other-doc.md`, `.assets/image.png`, `subdir/file.md`). Never use relative paths that traverse up the directory tree (e.g., `../../.assets/test.png`, `../other.md`).
+- Use relative paths for all links; never use absolute paths starting with `/`.
 - No emojis. Lowercase filenames.
 - Target under 1300 words total; under 2600 words for complex decisions.
 
@@ -152,23 +152,23 @@ Mandatory rules to apply while drafting:
 Check every item before finalizing:
 
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
-2. **Frontmatter**: Are `applied-to:` and `valid-from:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
+2. **Frontmatter**: Are `applyTo:` and `validFrom:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
 3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
 4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
 5. **Redundancy**: Is the XDR the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?
 6. **Conflicts section**: Is it present and filled if Phase 3 found any conflicts?
-7. **Index entries**: Will the new XDR be added to `[scope]/[type]/index.md` and `.xdrs/index.md`?
+7. **Index entries**: Will the new XDR be added to `[scope]/[type]/index.md` and the XDR root `index.md`?
 
 If any check fails, revise and re-run this phase before proceeding.
 
 ### Phase 8: Write Files
 
-1. Create the XDR file at `.xdrs/[scope]/[type]/[subject]/[number]-[short-title].md`.
-2. Add an entry to `.xdrs/[scope]/[type]/index.md` (create the file if it does not exist).
-3. Add or verify the scope entry in `.xdrs/index.md`.
+1. Create the XDR file at `[xdrs-root]/[scope]/[type]/[subject]/[number]-[short-title].md` (default root: `.xdrs/`).
+2. Add an entry to `[xdrs-root]/[scope]/[type]/index.md` (create the file if it does not exist).
+3. Add or verify the scope entry in the XDR root `index.md`.
 4. If significant research was produced or already exists, link it from the XDR `## Considered Options` section.
-5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Implementation Details` without turning the XDR into a long procedure.
-6. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new content. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
+5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Details` without turning the XDR into a long procedure.
+6. Evaluate whether the scope index at `[xdrs-root]/[scope]/index.md` should be updated to reflect the new content. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
 
 ### Phase 9: Verify Package structure with Lint
 
@@ -191,6 +191,6 @@ If any check fails, revise and re-run this phase before proceeding.
 
 ## References
 
-- [_core-adr-001 - XDRs core](/.xdrs/_core/adrs/principles/001-xdrs-core.md)
-- [_core-adr-002 - XDR standards](/.xdrs/_core/adrs/principles/002-xdr-standards.md)
-- [_core-adr-003 - Skill standards](/.xdrs/_core/adrs/principles/003-skill-standards.md)
+- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-002 - XDR standards](../../002-xdr-standards.md)
+- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
