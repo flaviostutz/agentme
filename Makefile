@@ -51,6 +51,4 @@ bump:
 	$(MISE) pnpm add filedist@latest
 
 	# we don't directly publish those files, but the project uses it itself
-	$(MISE) pnpm add xdrs-core@latest
-	$(MISE) pnpm exec xdrs-core extract
-# 	pnpm exec filedist extract --packages git:github.com/flaviostutz/xdrs-core.git
+	pnpm exec filedist extract --packages git:github.com/flaviostutz/xdrs-core.git
