@@ -13,7 +13,6 @@ lint:
 lint-fix:
 	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
-
 test: build
 	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples test
@@ -50,7 +49,9 @@ bump:
 	mise install
 	$(MISE) pnpm add filedist@latest
 
+	$(MISE) pnpm add xdrs-core@latest
+
 	# we don't directly publish those files, but the project uses it itself
-	$(MISE) pnpm dlx filedist --config .filedistrc.local.yml
+	$(MISE) pnpm exec filedist --config .filedistrc.local.yml
 
 # 	copilot -p "check and fix agentme xdrs after xdrs-core bump"
