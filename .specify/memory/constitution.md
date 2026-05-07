@@ -40,78 +40,59 @@ vibe coding, onboarding, and future feature development.
 - EDRs capture concrete engineering decisions: tooling, structure, practices.
 - Every non-trivial implementation decision MUST have a corresponding XDR entry before the implementation task is marked complete. Create new XDRs if necessary.
 
-### II. Preset Integrity (NON-NEGOTIABLE)
+### II. XDR as the Single Source of Truth for All Policies
 
-agentme distributes files to consumer projects via named presets (`basic`, `speckit`). Each
-preset MUST be independently coherent, non-overlapping, and verified on every build.
+All quality standards, business policies, architectural policies, and engineering policies that
+specs, plans, and implementations must follow MUST be captured exclusively in XDRs. The
+constitution does not restate those rules; it defers to them.
 
-- A preset MUST contain all files a consumer needs and nothing more.
-- Presets MUST NOT share extraction sets unless the consumer explicitly requests multiple presets.
-- The `examples/` folder MUST assert the exact file presence/absence for each preset combination
-  after every `make build`.
-- Adding a file to a preset or changing selector patterns is a public API change and requires a
-  version bump (MINOR or MAJOR depending on impact).
-
-### III. Consumer-First API Discipline
-
-XDRs, skills, and preset file sets are a public API consumed by external projects. Changes MUST
-respect semantic versioning.
-
-- MAJOR: removing or renaming a preset, removing or restructuring an XDR that external consumers
-  reference, or any change that requires consumer-side migration.
-- MINOR: adding a new preset, adding XDRs or skills, adding files to an existing preset.
-- PATCH: wording, clarifications, typo fixes inside XDRs or skills that carry no structural change.
-- Breaking changes MUST be documented in the release notes and in the relevant XDR's `Conflicts`
-  or `Implementation Details` section before merging.
-
-### IV. Self-Contained Artifacts
-
-Every XDR and skill MUST work without any implicit context outside itself.
-
-- XDRs MUST be under 100 lines (hard limit 200 for templates and elaborate decisions).
-- Skills MUST be under 500 lines; lengthy reference material goes in `references/`.
-- Internal cross-references MUST use relative file paths; no absolute or external URLs without
-  explanation.
-- A consumer reading an XDR or skill for the first time MUST be able to follow it without
-  accessing other systems.
-
-### V. Simplicity and Verified Quality
-
-The simplest solution that passes all tests is always preferred. Quality gates are non-negotiable.
-
-- `make test` MUST pass before any release; failures block publish.
-- Linting MUST be clean (`make lint-fix`) before merging.
-- Files MUST NOT exceed 400 lines (test files excepted).
-- No feature scope creep: implement only what the current spec requires.
-- Avoid adding error handling, fallbacks, or abstractions for hypothetical future scenarios.
-
-## Quality Requirements
-
-- `make test` in `examples/` MUST verify all preset extraction scenarios end-to-end.
-- XDRs produced during a feature MUST be reviewed for non-conflict before merging.
-- All XDR indexes (`_local`, `agentme`, `_core`) MUST be updated before a PR is merged.
-- New presets or selector changes MUST include updated test assertions in the examples Makefile.
+- Quality gates (testing, linting, coverage thresholds, file-size limits) → EDRs.
+- Business rules, consumer workflows, versioning contracts → BDRs.
+- Architectural patterns, cross-cutting concerns, dependency strategies → ADRs.
+- If a policy is not in an XDR, it is not an enforceable policy. Write the XDR first.
+- Agents and humans MUST consult the XDR index before starting any work and MUST follow every
+  relevant XDR found there without exception.
 
 ## Development Workflow
 
 1. Before starting a feature: check existing XDRs for applicable decisions.
 2. During specifying (`speckit.specify`): capture business requirements as BDRs in `_local`.
+   **After every `speckit.specify` run the agent MUST offer to run `speckit.clarify` (refine)
+   before proceeding to planning. This is non-negotiable.**
 3. During planning (`speckit.plan`): update or create ADRs and EDRs in `_local` that reflect
    architectural and engineering decisions made during the planning phase.
+   **After every `speckit.plan` run the agent MUST propose running `speckit.checklist` to enrich
+   the plan with domain-specific quality checks before generating tasks.**
 4. During implementation: follow XDRs; create new `_local` XDRs for decisions not yet captured.
 5. After implementation: delete feature specs and plans; XDRs remain permanently.
 6. Runtime guidance: see `.xdrs/index.md` and all linked scope indexes.
+
+## XDR Compliance Check (Mandatory at Every Stage)
+
+Every Spec, Refinement (clarify), Plan, Checklist, and Implementation task MUST include an
+explicit step that verifies compliance with the XDRs present in the repository:
+
+1. Read `.xdrs/index.md` and all linked scope indexes (`_local`, `agentme`, `_core`).
+2. Identify every XDR relevant to the work being performed.
+3. Confirm that the artifact (spec, plan, task list, or code change) does not contradict any
+   relevant XDR.
+4. If a contradiction or gap is found: either update the artifact to comply, or create/update the
+   relevant XDR to reflect the new decision before continuing.
+5. Document the compliance check result in the artifact (e.g., a "XDR Compliance" section or
+   comment) so reviewers can audit it.
+
+No artifact may be considered complete without a passed XDR compliance check.
 
 ## Governance
 
 This constitution supersedes all other development practices within this repository. Amendments
 require:
-1. A version bump following semantic versioning rules stated in Principle III.
+1. A version bump following semantic versioning rules stated in the relevant BDR/ADR/EDR.
 2. An updated `LAST_AMENDED_DATE` in this file.
-3. A review of all five principles for continued non-conflict.
+3. A review of all principles for continued non-conflict.
 4. An updated Sync Impact Report (HTML comment at the top of this file).
 
-All PRs MUST include a "Constitution Check" section confirming compliance with all five principles.
+All PRs MUST include a "Constitution Check" section confirming compliance with all principles.
 Complexity MUST be justified; if a solution requires deviation from a principle, that deviation
 MUST be documented in a new or updated XDR in `_local`.
 

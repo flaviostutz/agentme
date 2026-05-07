@@ -51,11 +51,12 @@ Collectively, these are referred to as XDRs.
   - `_core-adr-006` defines research standards
   - `_core-adr-007` defines plan standards
 - For simple structures, flows, layout, or relationship indications, documents SHOULD prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams) or ASCII art instead of external assets.
-- Images and other supporting files SHOULD be used only when they are materially necessary to preserve clarity, fidelity, or evidence. When used, they MUST live in a sibling `.assets/` folder next to the document.
+- Any non-Markdown supporting files referenced by a document (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary to preserve clarity, fidelity, or evidence. When used, they MUST live in a sibling `.assets/` folder next to the document.
   - XDRs in the subject root use `[xdrs-root]/[scope]/[type]/[subject]/.assets/`
   - Articles use `[xdrs-root]/[scope]/[type]/[subject]/articles/.assets/`
   - Research uses `[xdrs-root]/[scope]/[type]/[subject]/researches/.assets/`
   - Skills use `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/`
+- Sub-directories inside `.assets/` are allowed to keep related files organized only when that `.assets/` folder already has more than 10 files. Otherwise, keep files flat in `.assets/`.
 - **Scopes:** 
   - Short name that defines a group or a package of xdrs
   - examples: `business-x`, `business-y`, `team-43`, `_core`

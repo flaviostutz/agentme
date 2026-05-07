@@ -53,7 +53,7 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 ### Phase 4: Research Related Artifacts
 
 1. Read all XDRs, Research documents, Skills, and existing Plans relevant to the plan topic across all scopes listed in the XDR root `index.md`.
-2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether the decision fits the intended context, and the decision text defines any remaining boundaries.
+2. Evaluate XDR metadata before treating any decision as current context. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the intended context, and the decision text defines any remaining boundaries.
 3. Identify Decisions that this plan implements, Research that informs the planning, and any existing Plans that overlap.
 4. Collect artifact IDs and file paths for cross-references.
 

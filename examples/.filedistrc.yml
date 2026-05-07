@@ -1,0 +1,7 @@
+sets:
+  - package: agentme
+    selector:
+      presets:
+        - core
+    output:
+      path: ./output

@@ -51,4 +51,6 @@ bump:
 	$(MISE) pnpm add filedist@latest
 
 	# we don't directly publish those files, but the project uses it itself
-	pnpm exec filedist extract --packages git:github.com/flaviostutz/xdrs-core.git
+	$(MISE) pnpm dlx filedist --config .filedistrc.local.yml
+
+# 	copilot -p "check and fix agentme xdrs after xdrs-core bump"
