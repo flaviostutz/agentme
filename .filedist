@@ -19,7 +19,6 @@ AGENTS.md|xdrs-core|0.21.0
 .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/002-xdr-standards.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
-.xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/007-plan-standards.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/skills/001-lint/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
@@ -29,3 +28,4 @@ AGENTS.md|xdrs-core|0.21.0
 .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
 .xdrs/_core/bdrs/principles/001-xdr-decisions-and-skills-usage.md|https://github.com/flaviostutz/xdrs-core.git|e14afc4827a5a0fc78bb192a4a1a55ee1a6fe7a2
+.xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|4e412c84a78ab3dbebff8f054ab9ed27f9b38735

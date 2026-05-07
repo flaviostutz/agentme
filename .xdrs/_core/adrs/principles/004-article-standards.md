@@ -32,7 +32,7 @@ Articles are Markdown documents placed inside a subject folder alongside decisio
 - Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Always use lowercase file names.
 - Never use emojis in article content.
-- Articles should be kept under 1950 words. Move detailed content to referenced XDRs or Skills.
+- Articles should be kept under 5000 words. Move or point to detailed contents referenced in XDRs decisions, researches, plans or skills.
 
 **Folder layout**
 

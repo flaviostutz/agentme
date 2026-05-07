@@ -49,9 +49,12 @@ bump:
 	mise install
 	$(MISE) pnpm add filedist@latest
 
+	# used for linting xdrs
 	$(MISE) pnpm add xdrs-core@latest
 
 	# we don't directly publish those files, but the project uses it itself
 	$(MISE) pnpm exec filedist --config .filedistrc.local.yml
+
+	make all
 
 # 	copilot -p "check and fix agentme xdrs after xdrs-core bump"
