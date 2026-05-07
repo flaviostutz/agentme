@@ -19,7 +19,7 @@ XDR decisions are the authoritative source of mandatory policy. Skills are execu
 
 ### Details
 
-- Before treating any XDR as a current requirement, evaluate applicability in order: `validFrom`, `applyTo`, then the decision text.
+- Before treating any XDR as a current requirement, evaluate applicability in order: `valid-from`, `apply-to`, then the decision text.
 - The set of policies that an agent or human must comply with for a given operational context must be declared in BDRs.
 - If a policy set becomes too large or too mixed in purpose to review clearly in one record, it must be split into multiple focused BDRs.
 - Specific work instructions that operationalize BDR policies must be structured as skills when the procedure is detailed enough to benefit from a dedicated operational document.

@@ -58,7 +58,7 @@ Choose a title that clearly states the question this XDR answers, not the answer
 ### Phase 4: Research Related XDRs
 
 1. Read all existing XDRs relevant to the topic across all scopes listed in the XDR root `index.md`.
-2. Evaluate XDR metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `validFrom:` determines the convergence date for adoption, `applyTo:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope XDRs as background only when assessing overlaps and conflicts.
+2. Evaluate XDR metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope XDRs as background only when assessing overlaps and conflicts.
 3. Identify decisions that already address the topic (full or partial overlap).
 4. Note decisions that might conflict with the intended outcome.
 5. Read related `researches/` documents when they exist, especially if they contain constraints, findings, or option tradeoffs that should influence the decision.
@@ -107,8 +107,8 @@ Refer to `_core-adr-008-xdr-standards-structured` for full requirements and cita
 ---
 name: [scope]-[type]-[number]-[short-title]
 description: [What this decision is about and when to use it]
-applyTo: [Optional. Contexts this decision applies to, under 40 words]
-validFrom: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
+apply-to: [Optional. Contexts this decision applies to, under 40 words]
+valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 ---
 
 # [scope]-[type]-[number]: [Short Title]
@@ -132,10 +132,10 @@ validFrom: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 ```
 
 Mandatory rules to apply while drafting:
-- Include frontmatter `applyTo:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
-- Include frontmatter `validFrom:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
-- Keep `applyTo:` under 40 words and use `validFrom:` only with `YYYY-MM-DD` ISO format.
-- When frontmatter metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `validFrom:` sets a convergence date for adoption, `applyTo:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
+- Include frontmatter `apply-to:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
+- Include frontmatter `valid-from:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
+- Keep `apply-to:` under 40 words and use `valid-from:` only with `YYYY-MM-DD` ISO format.
+- When frontmatter metadata is present, write it so a reader can decide whether the XDR should be used for the current case without guessing. `valid-from:` sets a convergence date for adoption, `apply-to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
 - Use mandatory language ("must", "always", "never") only for hard requirements; use advisory language ("should", "recommended") for guidance.
 - Do not duplicate content already in referenced XDRs — link instead.
 - Keep the decision itself authoritative in the XDR. Supporting artifacts may elaborate, but they should not restate the full decision when a short reference is enough.
@@ -152,7 +152,7 @@ Mandatory rules to apply while drafting:
 Check every item before finalizing:
 
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
-2. **Frontmatter**: Are `applyTo:` and `validFrom:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
+2. **Frontmatter**: Are `apply-to:` and `valid-from:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the XDR is currently valid and applicable?
 3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
 4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
 5. **Redundancy**: Is the XDR the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?

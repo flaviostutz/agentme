@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "filedist": "^0.26.0"
+    "filedist": "^0.28.1"
   },
   "bin": "bin/filedist.js",
   "files": [
@@ -23,7 +23,7 @@
   "filedist": {
     "sets": [
       {
-        "package": "xdrs-core",
+        "package": "xdrs-core@latest",
         "selector": {
           "files": [
             ".xdrs/_core/**",

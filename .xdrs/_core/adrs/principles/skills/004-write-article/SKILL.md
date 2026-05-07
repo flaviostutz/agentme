@@ -63,7 +63,7 @@ If the article spans more than one subject, place it in `principles`.
 ### Phase 4: Research XDRs and Skills to Synthesize
 
 1. Read all XDRs, Research documents, and Skills relevant to the article topic across all scopes listed in the XDR root `index.md`.
-2. Evaluate XDR metadata before synthesizing guidance. All documents present in the collection are considered active. Use `validFrom:` to determine the convergence date for adoption, `applyTo:` to determine whether the decision fits the audience or context being discussed, and the decision text itself for any remaining applicability boundaries.
+2. Evaluate XDR metadata before synthesizing guidance. All documents present in the collection are considered active. Use `valid-from:` to determine the convergence date for adoption, `apply-to:` to determine whether the decision fits the audience or context being discussed, and the decision text itself for any remaining applicability boundaries.
 3. Identify the key points a reader needs to understand the topic end-to-end.
 4. Collect XDR IDs and file paths for cross-references. Never copy decision text verbatim; link to it.
 
