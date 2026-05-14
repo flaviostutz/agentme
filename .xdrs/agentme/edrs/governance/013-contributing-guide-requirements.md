@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-013-contributing-guide-requirements
+name: agentme-edr-policy-013-contributing-guide-requirements
 description: Defines the minimum contributor workflow guidance required in root CONTRIBUTING.md files. Use when scaffolding or reviewing contribution processes.
 ---
 
-# agentme-edr-013: Contributing guide requirements
+# agentme-edr-policy-013: Contributing guide requirements
 
 ## Context and Problem Statement
 

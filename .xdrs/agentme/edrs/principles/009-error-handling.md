@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-009-error-handling
+name: agentme-edr-policy-009-error-handling
 description: Defines error handling practices for catching, propagating, surfacing, and testing failures consistently across projects. Use when implementing interfaces and failure paths.
 ---
 
-# agentme-edr-009: Error handling
+# agentme-edr-policy-009: Error handling
 
 ## Context and Problem Statement
 

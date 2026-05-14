@@ -1,9 +1,9 @@
 ---
-name: _local-bdr-001-agentme-product-purpose-and-consumer-model
+name: _local-bdr-policy-001-agentme-product-purpose-and-consumer-model
 description: Defines agentme's product purpose, consumers, and integration model. Use when deciding whether new artifacts fit the package distribution goals.
 ---
 
-# _local-bdr-001: agentme product purpose and consumer model
+# _local-bdr-policy-001: agentme product purpose and consumer model
 
 ## Context and Problem Statement
 

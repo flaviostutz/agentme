@@ -1,5 +1,5 @@
 ---
-name: 003-create-golang-project
+name: agentme-edr-skill-003-create-golang-project
 description: >
   Scaffolds the initial boilerplate structure for a Go (Golang) CLI or library project following
   the standard tooling and layout defined in agentme-edr-010. Activate this skill when the user

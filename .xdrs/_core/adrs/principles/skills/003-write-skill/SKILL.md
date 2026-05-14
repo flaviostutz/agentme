@@ -1,7 +1,7 @@
 ---
-name: 003-write-skill
+name: _core-adr-skill-003-write-skill
 description: >
-  Creates a new skill package following XDR skill standards: determines type, scope, subject, and number;
+  Creates a new skill package following XDRS skill standards: determines type, scope, subject, and number;
   then writes a focused SKILL.md with correct frontmatter, phased instructions, examples, and edge cases.
   Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
 metadata:
@@ -11,7 +11,7 @@ metadata:
 
 ## Overview
 
-Guides the creation of a well-structured skill package by following `_core-adr-003` skill standards, consulting `xdr-standards` for every core element definition, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
+Guides the creation of a well-structured skill package by following `_core-adr-policy-003` skill standards, consulting `xdrs-core` for every core element definition, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
 
 ## Instructions
 
@@ -38,21 +38,21 @@ Quick test:
 **Scope** — use `_local` unless the user explicitly names another scope.
 - If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
-**Subject** — pick the most specific match for the chosen type (required list per type is in `_core-adr-001`):
+**Subject** — pick the most specific match for the chosen type (required list per type is in `_core-adr-policy-001`):
 - ADR subjects: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
 - BDR subjects: `principles`, `marketing`, `product`, `controls`, `operations`, `organization`, `finance`, `sustainability`
 - EDR subjects: `principles`, `application`, `infra`, `observability`, `devops`, `governance`
 
 **Skill number** — scan `.xdrs/[scope]/[type]/[subject]/skills/` for the highest existing number and increment by 1. Never reuse numbers from deleted skills.
 
-**Skill name** — `[number]-[short-kebab-case-description]`, max 64 characters total.
+**Skill name** — `[scope]-[type]-skill-[number]-[short-kebab-case-description]`, max 64 characters total. The directory name is `[number]-[short-kebab-case-description]`.
 
-### Phase 3: Research Existing Skills and Related XDRs
+### Phase 3: Research Existing Skills and Related Policies
 
 1. List `.xdrs/[scope]/[type]/[subject]/skills/` for existing skills. If one already covers the goal, extend or reference it instead of creating a duplicate.
-2. Read all XDRs relevant to the skill's domain to collect rules and cross-references.
-3. Evaluate XDR metadata before operationalizing those rules. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope XDRs as background only.
-4. Decide whether the skill is merely guidance or is being referenced by an XDR as a mandatory procedure. Do not encode policy in the skill unless it comes from a referenced XDR.
+2. Read all Policies relevant to the skill's domain to collect rules and cross-references.
+3. Evaluate Policy metadata before operationalizing those rules. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope Policies as background only.
+4. Decide whether the skill is merely guidance or is being referenced by a Policy as a mandatory procedure. Do not encode policy in the skill unless it comes from a referenced Policy.
 
 ### Phase 4: Write the SKILL.md
 
@@ -60,7 +60,7 @@ Use the mandatory agentskills format:
 
 ```
 ---
-name: [number]-[skill-name]
+name: [scope]-[type]-skill-[number]-[skill-name]
 description: >
   [What the skill does AND exactly when an agent should activate it. Max 1024 chars.]
 metadata:
@@ -87,7 +87,7 @@ metadata:
 
 ## References
 
-[Links to related XDRs and skills.]
+[Links to related Policies and skills.]
 ```
 
 Rules:
@@ -95,9 +95,9 @@ Rules:
 - The `description` field must state both *what* the skill does and *when* to activate it.
 - Keep the skill task-oriented. It should have a clear starting trigger and a concrete ending result.
 - Mention tools or prerequisites when they are required to complete the task reliably.
-- Do not duplicate content from referenced XDRs — link instead.
-- Do not present the skill itself as policy; mandatory behavior must come from referenced XDRs or other policy artifacts.
-- When the skill depends on XDRs, make the activation logic and instructions consistent with the XDR metadata so the skill does not operationalize inactive or out-of-scope decisions.
+- Do not duplicate content from referenced Policies — link instead.
+- Do not present the skill itself as policy; mandatory behavior must come from referenced Policies or other policy artifacts.
+- When the skill depends on Policies, make the activation logic and instructions consistent with the Policy metadata so the skill does not operationalize inactive or out-of-scope decisions.
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
 - If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
@@ -123,7 +123,7 @@ If any check fails, revise before continuing.
    mkdir -p .github/skills/[number]-[skill-name]
    ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .github/skills/[number]-[skill-name]
    ```
-3. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new skill. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-001`.
+3. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new skill. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 
 ### Constraints
 
@@ -158,6 +158,6 @@ If any check fails, revise before continuing.
 
 ## References
 
-- [_core-adr-003 - Skill standards](../../003-skill-standards.md)
-- [_core-adr-001 - XDRs core](../../001-xdrs-core.md)
-- [002-write-xdr skill](../002-write-xdr/SKILL.md)
+- [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-policy-001 - XDRs core](../../001-xdrs-core.md)
+- [002-write-policy skill](../002-write-policy/SKILL.md)

@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-005-monorepo-structure
+name: agentme-edr-policy-005-monorepo-structure
 description: Defines the standard monorepo layout, naming, and build conventions using shared areas, Mise, and Makefiles. Use when creating or reviewing monorepos.
 ---
 
-# agentme-edr-005: Monorepo structure
+# agentme-edr-policy-005: Monorepo structure
 
 ## Context and Problem Statement
 

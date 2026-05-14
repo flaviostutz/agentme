@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-017-tool-execution-and-scripting
+name: agentme-edr-policy-017-tool-execution-and-scripting
 description: Defines how Makefiles, CI pipelines, and optional wrapper scripts execute project commands. Use when designing project automation or command entry points.
 ---
 
-# agentme-edr-017: Tool execution and scripting
+# agentme-edr-policy-017: Tool execution and scripting
 
 ## Context and Problem Statement
 

@@ -1,5 +1,5 @@
 ---
-name: 004-select-relevant-xdrs
+name: agentme-edr-skill-004-select-relevant-xdrs
 description: >
    Analyzes a client repository, extracts the full agentme XDR set, and excludes the records that do
    not fit the project's structure and workflow needs. Activate this skill when the user asks to

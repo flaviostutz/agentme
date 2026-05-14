@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-008-common-development-script-names
+name: agentme-edr-policy-008-common-development-script-names
 description: Defines standard Makefile target names and the mandatory tool-execution flow using Mise. Use when designing build, lint, test, and release entry points.
 ---
 
-# agentme-edr-008: Common development script names
+# agentme-edr-policy-008: Common development script names
 
 ## Context and Problem Statement
 

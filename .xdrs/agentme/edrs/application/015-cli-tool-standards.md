@@ -1,10 +1,9 @@
 ---
-name: agentme-edr-015-cli-tool-standards
+name: agentme-edr-policy-015-cli-tool-standards
 description: Defines how distributable CLI tools should separate command handling from library logic and expose consistent command behavior. Use when designing or reviewing CLI interfaces.
-applied-to: Distributable CLI tools and their standalone libraries
 ---
 
-# agentme-edr-015: CLI tool standards
+# agentme-edr-policy-015: CLI tool standards
 
 ## Context and Problem Statement
 
