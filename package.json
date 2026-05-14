@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "filedist": "^0.28.1",
-    "xdrs-core": "^0.21.1"
+    "filedist": "^0.31.0",
+    "xdrs-core": "^0.26.0"
   },
   "bin": "bin/filedist.js",
   "files": [

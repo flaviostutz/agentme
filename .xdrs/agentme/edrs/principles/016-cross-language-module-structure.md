@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-016-cross-language-module-structure
+name: agentme-edr-policy-016-cross-language-module-structure
 description: Defines the baseline module-root structure, artifact locations, cache placement, README expectations, examples layout, and test folder conventions across languages. Use when creating or reviewing buildable modules.
 ---
 
-# agentme-edr-016: Cross-language module structure
+# agentme-edr-policy-016: Cross-language module structure
 
 ## Context and Problem Statement
 

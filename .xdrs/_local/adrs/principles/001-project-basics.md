@@ -1,9 +1,9 @@
 ---
-name: _local-adr-001-project-basics
+name: _local-adr-policy-001-project-basics
 description: Defines agentme's purpose and the quality bar for its XDRs and skills. Use when creating, updating, or consuming repository artifacts.
 ---
 
-# _local-adr-001: Project basics
+# _local-adr-policy-001: Project basics
 
 ## Context and Problem Statement
 

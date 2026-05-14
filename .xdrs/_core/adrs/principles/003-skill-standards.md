@@ -1,9 +1,9 @@
 ---
-name: _core-adr-003-skill-standards
-description: Defines skill package standards including structure, SKILL.md format, and co-location with XDRs. Use when creating or reviewing skills.
+name: _core-adr-policy-003-skill-standards
+description: Defines skill package standards including structure, SKILL.md format, and co-location with XDRS packages. Use when creating or reviewing skills.
 ---
 
-# _core-adr-003: Skill standards
+# _core-adr-policy-003: Skill standards
 
 ## Context and Problem Statement
 
@@ -15,9 +15,9 @@ How should skills be authored, structured, and organized within a project so tha
 
 ## Decision Outcome
 
-**agentskills-compatible skill packages, co-located with XDRs**
+**agentskills-compatible skill packages, co-located with XDRS**
 
-Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDR subject folder under a `skills/` sub-directory. Each skill occupies its own numbered package folder, mirroring the XDR numbering convention.
+Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDRS subject folder under a `skills/` sub-directory. Each skill occupies its own numbered package folder, mirroring the XDRS numbering convention.
 
 A skill may target a human operator, an AI agent, or both. Instructions must be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
 
@@ -31,20 +31,20 @@ Skills exist on a spectrum from fully manual (human-only) to fully automated (ag
 
 Write instructions so that each step is unambiguous and self-contained. Avoid implicit knowledge that only a human or only an AI would have.
 
-**Relation with XDRs, Research, and Articles**
-Skills are procedures, XDRs are guardrails and decisions, Research documents capture the explored option space and findings behind a decision, and Articles are synthetic views that combine information from multiple artifacts.
-Always create links back and forth between skills <-> XDRs when the relationship is direct, and link to related Research or Articles when they provide important context.
+**Relation with Policies, Research, and Articles**
+Skills are procedures, Policies are guardrails and decisions, Research documents capture the explored option space and findings behind a decision, and Articles are synthetic views that combine information from multiple artifacts.
+Always create links back and forth between skills <-> Policies when the relationship is direct, and link to related Research or Articles when they provide important context.
 - Skills are task-based artifacts. They should have a clear starting trigger, an expected end result, and enough detail for a human or agent to verify that the task finished correctly.
-- A skill is not policy by itself. If following a skill is mandatory, that obligation must come from an XDR or another explicit policy that references the skill.
-- When a skill reads, operationalizes, or enforces XDRs, it MUST evaluate the XDR metadata first. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills must not treat out-of-window or out-of-scope XDRs as current requirements.
-- Skills and XDRs have a many-to-many relationship: one skill may operationalize multiple XDRs, and one XDR may be executed through multiple skills in different contexts.
+- A skill is not policy by itself. If following a skill is mandatory, that obligation must come from a Policy or another explicit policy that references the skill.
+- When a skill reads, operationalizes, or enforces Policies, it MUST evaluate the Policy metadata first. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills must not treat out-of-window or out-of-scope Policies as current requirements.
+- Skills and Policies have a many-to-many relationship: one skill may operationalize multiple Policies, and one Policy may be executed through multiple skills in different contexts.
 
-Place a skill under the XDR type that matches the nature of the activity the skill performs:
+Place a skill under the XDRS type that matches the nature of the activity the skill performs:
 - **EDR skills** - engineering workflows, tool usage, coding procedures, implementation how-tos (e.g. how to design a webpage, how to run a CI pipeline, how to debug a service)
 - **ADR skills** - architectural evaluation, pattern compliance checks, technology selection guidance (e.g. how to review an architecture diagram, how to assess API design)
 - **BDR skills** - business process execution, market analysis, operations procedures, business rules
 
-The `[subject]` component in the folder path MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-001`.
+The `[subject]` component in the folder path MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-policy-001`.
 
 Quick test:
 - "Is the skill about *how to implement or operate* something?" → EDR.
@@ -81,7 +81,7 @@ Examples:
 
 ```
 ---
-name: 001-skill-name      # required: must match the parent directory name exactly; max 64 chars
+name: [scope]-[type]-skill-[number]-[skill-name]      # required: full identifier including scope and type; max 64 chars
 description: >            # required: what the skill does AND when to activate it; max 1024 chars
   Concise explanation of the skill and the situations in which an agent should load it.
 license: <license>        # optional
@@ -110,7 +110,8 @@ Known gotchas and how to handle them.
 ```
 
 Rules:
-- The `name` field must match the parent directory name exactly (e.g., directory `001-code-review` uses `name: 001-code-review`). This preserves agentskills spec compliance while encoding the ordering number.
+- The `name` field MUST use the format `[scope]-[type]-skill-[number]-[skill-name]` (e.g., `_core-adr-skill-001-code-review`). This aligns skill identifiers with the Policy document identifier format, making every XDRS element consistently identifiable by scope and type.
+- The directory name MUST follow the format `[number]-[skill-name]` (e.g., `001-code-review`), which keeps the filesystem hierarchy simple while the `name:` field carries the full identifier.
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
@@ -131,16 +132,16 @@ skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]
 
 ## Considered Options
 
-* (REJECTED) **Top-level `skills/` directory separate from XDRs** - Decouples skills from the decisions that govern them.
-  * Reason: Breaks the natural association between a decision (XDR) and the skill that implements it; makes navigation harder.
-* (CHOSEN) **agentskills-compatible packages co-located with XDRs** - Standardized format with scoped discovery and clear ownership.
-  * Reason: Reuses proven agentskills tooling, aligns with the existing XDR scope/subject hierarchy, and keeps skills close to the decisions they implement.
+* (REJECTED) **Top-level `skills/` directory separate from XDRS** - Decouples skills from the decisions that govern them.
+  * Reason: Breaks the natural association between a decision (Policy) and the skill that implements it; makes navigation harder.
+* (CHOSEN) **agentskills-compatible packages co-located with XDRS** - Standardized format with scoped discovery and clear ownership.
+  * Reason: Reuses proven agentskills tooling, aligns with the existing XDRS scope/subject hierarchy, and keeps skills close to the decisions they implement.
 
 ## References
 
 - [agentskills specification](https://agentskills.io/specification)
 - [agentskills/agentskills repository](https://github.com/agentskills/agentskills)
 - [skills-ref validation library](https://github.com/agentskills/agentskills/tree/main/skills-ref)
-- [_core-adr-001 - XDRs core](001-xdrs-core.md)
-- [_core-adr-004 - Article standards](004-article-standards.md)
-- [_core-adr-006 - Research standards](006-research-standards.md)
+- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md)
+- [_core-adr-policy-004 - Article standards](004-article-standards.md)
+- [_core-adr-policy-006 - Research standards](006-research-standards.md)

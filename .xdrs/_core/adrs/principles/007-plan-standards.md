@@ -1,9 +1,9 @@
 ---
-name: _core-adr-007-plan-standards
+name: _core-adr-policy-007-plan-standards
 description: Defines plan document standards for describing problems, solutions, and activities. Use when creating or reviewing plans.
 ---
 
-# _core-adr-007: Plan standards
+# _core-adr-policy-007: Plan standards
 
 ## Context and Problem Statement
 
@@ -13,21 +13,21 @@ How should plans be structured and organized so they provide clear guidance for 
 
 ## Decision Outcome
 
-**Subject-level ephemeral plan documents co-located with XDRs**
+**Subject-level ephemeral plan documents co-located with Policies**
 
-Plans are Markdown documents placed inside a subject folder alongside decision records. They describe a problem, a proposed solution, and the approach to solve it. Plans have a clear start and end and a well-defined scope.
+Plans are Markdown documents placed inside a subject folder alongside policies. They describe a problem, a proposed solution, and the approach to solve it. Plans have a clear start and end and a well-defined scope.
 
 ### Details
 
 - Plans describe a problem (why), what we will do to solve the problem, and the approach and activities needed to solve it (how).
-- Plans are NOT the source of truth. When a plan and an XDR disagree, the XDR takes precedence.
+- Plans are NOT the source of truth. When a plan and a Policy disagree, the Policy takes precedence.
 - Plans are ephemeral. They MUST be deleted after full implementation. The lasting outputs of a plan are actual actions or Decisions, Skills, Articles, Research documents, and other artifacts that result from execution.
 - Plans may be used to implement a certain Decision. They may also use Research documents to help with the planning process. Articles may be written on top of a plan to give more context and connect more details present in other decisions and research to people involved in the plan.
 - During the implementation of a plan, new Decisions, Articles, Skills, Research documents, and even other Plans may be created. Always link all related elements to each other.
 - A plan can be high level, describing only one milestone, or more complex, describing a WBS (work breakdown structure) along with owners, multiple milestones in a tactical sequence, and checklists to verify completeness. Actual tasks performed by actors should normally be tracked in specialized software such as GitHub or Azure DevOps.
 - The total time to deliver a plan should not be more than 2 years. If more time is needed, create a new plan later with what was learned.
 - Plans MUST live under `plans/` inside the relevant subject folder: `.xdrs/[scope]/[type]/[subject]/plans/[number]-[short-title].md`
-- The `[subject]` component MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-001`.
+- The `[subject]` component MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-policy-001`.
 - Plans MUST include an `Expected end date:` field in ISO format (YYYY-MM-DD) inside the `## Proposed Solution` section.
 - Always use lowercase file names.
 - Never use emojis in plan content.
@@ -61,7 +61,7 @@ Examples:
 All plans MUST follow this template:
 
 ```markdown
-# [scope]-plan-[number]: [Short Title]
+# [scope]-[type]-plan-[number]: [Short Title]
 
 ## Executive Summary
 
@@ -121,19 +121,19 @@ Due date: YYYY-MM-DD
 
 ## References
 
-- [Related XDR or artifact](relative/path.md) - Brief description of relevance
+- [Related Policy or artifact](relative/path.md) - Brief description of relevance
 ```
 
 ## Considered Options
 
-* (REJECTED) **Inline planning in XDRs** — Embed planning details inside decision records.
-  * Reason: Plans are ephemeral execution documents while XDRs are lasting decisions. Mixing them bloats XDRs and creates confusion about what to delete after execution.
-* (CHOSEN) **Subject-level plans folder co-located with XDRs** — Keeps plans alongside the decisions they implement, with clear lifecycle expectations.
+* (REJECTED) **Inline planning in Policies** — Embed planning details inside policies.
+  * Reason: Plans are ephemeral execution documents while Policies are lasting decisions. Mixing them bloats Policies and creates confusion about what to delete after execution.
+* (CHOSEN) **Subject-level plans folder co-located with Policies** — Keeps plans alongside the decisions they implement, with clear lifecycle expectations.
   * Reason: Consistent with how skills, articles, and research are organized. The explicit deletion requirement after implementation keeps the document base clean.
 
 ## References
 
-- [_core-adr-001 - XDRs core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
-- [_core-adr-004 - Article standards](004-article-standards.md) - Companion artifact type for synthetic views
-- [_core-adr-006 - Research standards](006-research-standards.md) - Companion artifact type for exploratory evidence
+- [_core-adr-policy-001 - Policies core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
+- [_core-adr-policy-004 - Article standards](004-article-standards.md) - Companion artifact type for synthetic views
+- [_core-adr-policy-006 - Research standards](006-research-standards.md) - Companion artifact type for exploratory evidence
 - [006-write-plan skill](skills/006-write-plan/SKILL.md) - Step-by-step instructions for creating a new plan

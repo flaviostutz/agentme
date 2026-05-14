@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-004-unit-test-requirements
+name: agentme-edr-policy-004-unit-test-requirements
 description: Defines unit test requirements for assertions, offline execution, coverage, shared setup, and real-code preference. Use when writing or reviewing tests.
 ---
 
-# agentme-edr-004: Unit test requirements
+# agentme-edr-policy-004: Unit test requirements
 
 ## Context and Problem Statement
 

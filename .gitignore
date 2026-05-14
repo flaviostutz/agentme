@@ -2,3 +2,4 @@ node_modules
 dist
 
 .filedist-tmp
+.mypy_cache

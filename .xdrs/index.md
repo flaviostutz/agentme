@@ -6,6 +6,8 @@ This index points to all type- and scope-specific XDR indexes. XDRs (Decision Re
 
 XDRs in scopes listed last override the ones listed first
 
+XDRS scopes listed last override the ones listed first
+
 ### _core
 
 Decisions about how XDRs work

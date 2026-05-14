@@ -1,9 +1,9 @@
 ---
-name: agentme-edr-012-continuous-xdr-improvement-policy
+name: agentme-edr-policy-012-continuous-xdr-improvement-policy
 description: Defines how teams should promote reusable implementation guidance into shared XDRs instead of keeping it in prompts or local habits. Use when recurring decisions surface during delivery.
 ---
 
-# agentme-edr-012: Continuous xdr improvement policy
+# agentme-edr-policy-012: Continuous xdr improvement policy
 
 ## Context and Problem Statement
 
@@ -41,4 +41,4 @@ Developers must treat reusable missing guidance discovered during implementation
 - [_core-adr-001](../../../_core/adrs/principles/001-xdrs-core.md)
 - [_core-article-001](../../../_core/adrs/principles/articles/001-xdrs-overview.md)
 - [agentme-article-001](articles/001-continuous-xdr-improvement.md)
-- [002-write-xdr skill](../../../../.github/skills/002-write-xdr/SKILL.md)
+- [002-write-policy skill](../../../../.github/skills/002-write-policy/SKILL.md)

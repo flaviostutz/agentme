@@ -1,37 +1,37 @@
 ---
-name: _core-adr-006-research-standards
-description: Defines research document standards including IMRAD structure and traceability to XDRs. Use when creating or reviewing research documents.
+name: _core-adr-policy-006-research-standards
+description: Defines research document standards including IMRAD structure and traceability to Policies. Use when creating or reviewing research documents.
 ---
 
-# _core-adr-006: Research standards
+# _core-adr-policy-006: Research standards
 
 ## Context and Problem Statement
 
-Teams often need more space than an XDR allows to evaluate constraints, explore options, and record findings before or after a decision changes. When that material is scattered across PR comments, docs, and chat, the reasoning behind a decision becomes hard to recover or update.
+Teams often need more space than a Policy allows to evaluate constraints, explore options, and record findings before or after a decision changes. When that material is scattered across PR comments, docs, and chat, the reasoning behind a decision becomes hard to recover or update.
 
-Question: How should research documents be structured and organized so they communicate an investigated problem, evidence, and conclusions clearly, while remaining traceable from related XDRs?
+Question: How should research documents be structured and organized so they communicate an investigated problem, evidence, and conclusions clearly, while remaining traceable from related Policies?
 
 ## Decision Outcome
 
-**IMRAD-based subject-level research documents co-located with XDRs**
+**IMRAD-based subject-level research documents co-located with XDRS**
 
-Research documents are Markdown files placed inside a subject folder alongside decision records. They use an IMRAD-inspired paper structure adapted to company needs so teams can communicate investigated problems, methods, findings, and conclusions clearly, combine experienced professional judgment with good-enough evidence, preserve reproducibility where it matters, and revisit the work when technology, constraints, or facts change.
+Research documents are Markdown files placed inside a subject folder alongside policies. They use an IMRAD-inspired paper structure adapted to company needs so teams can communicate investigated problems, methods, findings, and conclusions clearly, combine experienced professional judgment with good-enough evidence, preserve reproducibility where it matters, and revisit the work when technology, constraints, or facts change.
 
 ### Details
 
-- Research is evidence and exploration, not the adopted decision. When a research document and an XDR disagree, the XDR takes precedence.
+- Research is evidence and exploration, not the adopted decision. When a research document and a Policy disagree, the Policy takes precedence.
 - `Research` is the artifact name. `researches/` is only the folder name used alongside `skills/` and `articles/`.
 - Research documents MUST live under `researches/` inside the relevant subject folder:
   `.xdrs/[scope]/[type]/[subject]/researches/[number]-[short-title].md`
-- The `[subject]` component MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-001`.
+- The `[subject]` component MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-policy-001`.
 - Research documents SHOULD stay focused on one investigated problem, comparison, or hypothesis.
 - Research documents MUST state clearly what problem or question is being investigated, the relevant system or domain context, and why the subject matters in practice.
 - Research documents MUST follow this section order: `Abstract`, `Introduction`, `Methods`, `Results`, `Discussion`, `Conclusion`, `References`.
 - Research uses a company-adapted IMRAD structure. It MAY include informed professional judgment and experience-based observations, but claims that affect the conclusion MUST have enough evidence to be teachable, reviewable, and useful to other colleagues.
 - Research does not require full academic statistical rigor. Use good-enough evidence that supports the conclusion without demanding exhaustive proof.
-- Research documents MUST read as standalone technical papers for readers who do not know the XDR process.
+- Research documents MUST read as standalone technical papers for readers who do not know the XDRS process.
 - Mentions of future ADRs, decision lifecycle, repository process, or artifact management SHOULD be avoided in the body unless they are materially necessary to understand the research question.
-- Traceability to related XDRs, skills, articles, discussions, and external sources SHOULD live primarily in `## References` and surrounding indexes rather than in the body narrative.
+- Traceability to related Policies, skills, articles, discussions, and external sources SHOULD live primarily in `## References` and surrounding indexes rather than in the body narrative.
 - Research documents MUST describe the methods, tools, sources, and conditions with enough detail that an experienced professional could at least minimally reproduce the important parts of the study, especially the aspects that materially affected the conclusion.
 - The short title portion after the research id MUST stay under 20 words.
 - `## Abstract` MUST be a single paragraph under 200 words summarizing the goal, methods, results, and conclusion. It SHOULD let a quick technical reader understand the question, method, main result, and takeaway.
@@ -45,13 +45,13 @@ Research documents are Markdown files placed inside a subject folder alongside d
 - In general, research SHOULD roughly follow the proportion `Introduction : Methods : Results : Discussion ≈ 3 : 5 : 6 : 4`.
 - Be strict about the goal of each section. Avoid duplicating the same material across sections and prefer clarity over rhetorical flourishes.
 - Research documents SHOULD stay under 5000 words total. They MAY exceed that only when the `## Introduction` explicitly states that the study will be lengthy because a very detailed analysis is required.
-- Research documents SHOULD link in `## References` to the XDRs, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
+- Research documents SHOULD link in `## References` to the Policies, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
 - A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not required.
-- One research document MAY also be referenced by multiple XDRs, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
+- One research document MAY also be referenced by multiple Policies, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
 - Any non-Markdown files referenced by a research document (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files.
 - Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Research file names MUST be lowercase. Never use emojis.
-- A research document MAY exist before the related XDR is written, or remain after the XDR changes, as long as its status and references stay clear.
+- A research document MAY exist before the related Policy is written, or remain after the Policy changes, as long as its status and references stay clear.
 
 **Folder layout**
 
@@ -81,7 +81,7 @@ Examples:
 All research documents MUST follow this template:
 
 ```markdown
-# [scope]-research-[number]: [Short Title]
+# [scope]-[type]-research-[number]: [Short Title]
 
 ## Abstract
 
@@ -116,22 +116,22 @@ Prefer tables, bullets, or ASCII art for simple comparisons. Use external figure
 
 [A list of all cited literature, websites, tutorials, documentation, discussions, and related artifacts. Goal: make all cited sources and supporting artifacts traceable.]
 
-- [Related XDR or artifact](relative/path.md) - Why it matters
-- [Another related XDR if this research informed multiple decisions](relative/path.md) - Why it matters
+- [Related Policy or artifact](relative/path.md) - Why it matters
+- [Another related Policy if this research informed multiple decisions](relative/path.md) - Why it matters
 ```
 
 ## Considered Options
 
 - Related research: `001-research-and-decision-lifecycle` (workspace-local research)
 
-* (REJECTED) **Inline long-form analysis inside the XDR** - Put all research and decision text in one file.
-  * Reason: Makes XDRs too long, mixes evidence with the adopted rule set, and hurts fast retrieval by humans and AI agents.
-* (CHOSEN) **IMRAD-based subject-level research beside XDRs** - Keep exploratory material beside the decisions, skills, and articles it informs, using an IMRAD-inspired structure adapted to company work.
-  * Reason: Preserves lifecycle context, keeps the XDR concise, gives readers a predictable structure, and raises evidence quality without demanding full academic rigor.
+* (REJECTED) **Inline long-form analysis inside the Policy** - Put all research and decision text in one file.
+  * Reason: Makes Policies too long, mixes evidence with the adopted rule set, and hurts fast retrieval by humans and AI agents.
+* (CHOSEN) **IMRAD-based subject-level research beside XDRS** - Keep exploratory material beside the decisions, skills, and articles it informs, using an IMRAD-inspired structure adapted to company work.
+  * Reason: Preserves lifecycle context, keeps the Policy concise, gives readers a predictable structure, and raises evidence quality without demanding full academic rigor.
 
 ## References
 
-- [_core-adr-001 - XDRs core](001-xdrs-core.md)
-- [_core-adr-003 - Skill standards](003-skill-standards.md)
-- [_core-adr-004 - Article standards](004-article-standards.md)
+- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md)
+- [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
+- [_core-adr-policy-004 - Article standards](004-article-standards.md)
 - [005-write-research skill](skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document
