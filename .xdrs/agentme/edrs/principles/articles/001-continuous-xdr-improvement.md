@@ -51,7 +51,7 @@ Good opening questions:
 
 ### How should you organize the XDR?
 
-Follow the XDR template from [_core-adr-002](../../../../_core/adrs/principles/002-xdr-standards.md). Keep the document small, explicit, and decision-focused.
+Follow the XDR template from [_core-adr-002](../../../../_core/adrs/principles/002-policy-standards.md). Keep the document small, explicit, and decision-focused.
 
 Use this checklist:
 
