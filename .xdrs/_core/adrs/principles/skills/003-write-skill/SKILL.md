@@ -120,7 +120,7 @@ If any check fails, revise before continuing.
 1. Create the skill file at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`.
 2. Create a symlink at `.github/skills/[number]-[skill-name]` so VS Code picks it up immediately:
    ```
-   mkdir -p .github/skills/[number]-[skill-name]
+   mkdir -p .github/skills
    ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .github/skills/[number]-[skill-name]
    ```
 3. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new skill. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.

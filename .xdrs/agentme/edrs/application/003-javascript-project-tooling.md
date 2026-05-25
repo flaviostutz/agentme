@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-003-javascript-project-tooling-and-structure
 description: Defines the standard JavaScript and TypeScript project toolchain and layout using Mise, pnpm, TypeScript, ESLint, Jest, and Makefiles. Use when scaffolding or reviewing JavaScript projects.
+apply-to: JavaScript and TypeScript projects
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-003: JavaScript project tooling and structure

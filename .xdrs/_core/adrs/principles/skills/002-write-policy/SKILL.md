@@ -107,8 +107,8 @@ Refer to `_core-adr-policy-008-policy-standards-structured` for full requirement
 ---
 name: [scope]-[type]-[number]-[short-title]
 description: [What this decision is about and when to use it]
-apply-to: [Optional. Contexts this decision applies to, under 40 words]
-valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
+apply-to: [Required. Contexts this decision applies to, under 40 words. Use "All scopes" when broadly applicable.]
+valid-from: [Required. ISO date YYYY-MM-DD. Defaults to today's date when not specified by the user.]
 ---
 
 # [scope]-[type]-[number]: [Short Title]
@@ -132,8 +132,8 @@ valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
 ```
 
 Mandatory rules to apply while drafting:
-- Include frontmatter `apply-to:` only when it adds value by narrowing the decision scope; omit it when the decision applies broadly.
-- Include frontmatter `valid-from:` only when there is a specific future enforcement date; omit it when the decision is immediately effective.
+- Always include frontmatter `apply-to:`. Use `All scopes` when the decision applies broadly, or a more specific description when the decision is narrowly scoped.
+- Always include frontmatter `valid-from:`. Use today's date in `YYYY-MM-DD` format when the user does not specify a date.
 - Keep `apply-to:` under 40 words and use `valid-from:` only with `YYYY-MM-DD` ISO format.
 - When frontmatter metadata is present, write it so a reader can decide whether the Policy should be used for the current case without guessing. `valid-from:` sets a convergence date for adoption, `apply-to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
 - Use mandatory language ("must", "always", "never") only for hard requirements; use advisory language ("should", "recommended") for guidance.
@@ -152,7 +152,7 @@ Mandatory rules to apply while drafting:
 Check every item before finalizing:
 
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
-2. **Frontmatter**: Are `apply-to:` and `valid-from:` present only when they add value, omitted entirely when not needed, and specific enough for a reader to decide whether the Policy is currently valid and applicable?
+2. **Frontmatter**: Are `apply-to:` and `valid-from:` both present? `apply-to:` must describe the applicable context (use `All scopes` when broadly applicable). `valid-from:` must be set (use today's date if the user did not specify one).
 3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
 4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
 5. **Redundancy**: Is the Policy the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?

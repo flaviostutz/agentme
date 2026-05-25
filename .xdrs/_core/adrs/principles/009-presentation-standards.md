@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-009-presentation-standards
 description: Defines how Marp slide presentations are structured, named, placed, and linked within XDRS projects. Use when creating, reviewing, or linting slide decks that support XDRS documents.
+apply-to: Marp slide presentations in XDRS projects
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-009: Presentation standards

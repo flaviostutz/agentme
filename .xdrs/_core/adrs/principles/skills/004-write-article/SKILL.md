@@ -90,6 +90,7 @@ when referencing information from those documents. Keep under 1950 words total.]
 
 Rules to apply while drafting:
 
+- **Write for humans first.** Use clear copywriting style, natural storytelling flow, and logical clustering of related information. Each paragraph should guide the reader forward — avoid repeating information already stated.
 - Write for the stated audience; avoid jargon unexplained elsewhere.
 - Every factual claim must link back to the authoritative Policy or Skill.
 - If the article advises readers what to do, clearly separate active/applicable Policies from background, historical, or out-of-scope ones.
@@ -97,7 +98,7 @@ Rules to apply while drafting:
 - Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
 - If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
-- Keep the article under 1950 words; move detailed content to Policies or Skills.
+- Target under 1950 words for best reader engagement (SHOULD). If content grows beyond that, break it into separate chapter articles rather than expanding a single file. The hard limit is 8000 words.
 - Use lowercase file names. Never use emojis.
 - If a conflict exists between the article and a Policy, note it and defer to the Policy.
 
@@ -131,7 +132,8 @@ Rules to apply while drafting:
 - **Cross-subject topic** — place the article in `principles`, not in any single subject folder.
 - **No existing articles folder** — create it; it is optional in the folder layout.
 - **Conflicting information found** — note the conflict in the article and always defer to the Policy.
-- **Article would exceed 1950 words** — move detailed content to a new Research, Skill, or Policy and link back.
+- **Article approaches 2000 words** — split the content into separate chapter articles (e.g., `001-topic-overview.md`, `002-topic-deep-dive.md`) so each can be read and understood independently. Move detailed content to a Research, Skill, or Policy and link back. The hard ceiling is 8000 words; never exceed it.
+- **Article is part of a series** — add the series position line immediately after the heading (e.g., `_This is article 2/4 of the "Engineering Practices" series. | Previous: ... | Next: ..._`) and link to the adjacent articles. When creating a new article that splits an existing one, update the neighbouring articles to reflect the new total and add or correct their navigation links.
 
 ## Constraints
 

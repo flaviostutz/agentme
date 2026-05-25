@@ -1,6 +1,8 @@
 ---
 name: _local-bdr-policy-002-bank-lead-ai-engineer-role-charter
 description: Defines the Bank Lead AI Engineer role charter, responsibilities, organizational positioning, and required skills at NN Bank. Use when hiring, onboarding, or evaluating the role's scope and authority.
+apply-to: NN Bank AI engineer hiring and onboarding
+valid-from: 2026-05-25
 ---
 
 # _local-bdr-policy-002: Bank Lead AI Engineer Role Charter

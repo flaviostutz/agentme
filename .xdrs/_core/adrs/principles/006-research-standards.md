@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-006-research-standards
 description: Defines research document standards including IMRAD structure and traceability to Policies. Use when creating or reviewing research documents.
+apply-to: All research documents
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-006: Research standards
@@ -49,7 +51,6 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not required.
 - One research document MAY also be referenced by multiple Policies, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
 - Any non-Markdown files referenced by a research document (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files.
-- Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Research file names MUST be lowercase. Never use emojis.
 - A research document MAY exist before the related Policy is written, or remain after the Policy changes, as long as its status and references stay clear.
 

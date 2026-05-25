@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-001-xdrs-core
 description: Defines the core XDRS framework including types (ADR, BDR, EDR), folder structure, scopes, subjects, and index requirements. Use when structuring or navigating policies.
+apply-to: All XDRS scopes and document types
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-001: XDRs core
@@ -56,7 +58,6 @@ Policies can be of different kinds, depending on the nature of the decision:
   - Articles use `[xdrs-root]/[scope]/[type]/[subject]/articles/.assets/`
   - Research uses `[xdrs-root]/[scope]/[type]/[subject]/researches/.assets/`
   - Skills use `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/`
-- Sub-directories inside `.assets/` are allowed to keep related files organized only when that `.assets/` folder already has more than 10 files. Otherwise, keep files flat in `.assets/`.
 - **Scopes:** 
   - Short name that defines a group or a package of XDRS
   - examples: `business-x`, `business-y`, `team-43`, `_core`

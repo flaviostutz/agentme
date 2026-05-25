@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-002-coding-best-practices
 description: Defines cross-language coding practices for keeping code readable, modular, and synchronized with tests and documentation. Apply across projects adopting agentme engineering standards.
+apply-to: All software projects
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-002: Coding best practices

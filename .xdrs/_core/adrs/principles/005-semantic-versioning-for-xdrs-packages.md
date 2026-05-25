@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-005-semantic-versioning-for-xdrs-packages
 description: Defines how semantic versioning applies to XDRS packages. Use when publishing or versioning a package containing Policies, research, skills, or articles.
+apply-to: XDRS packages using semantic versioning
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-005: Semantic versioning for XDRS packages

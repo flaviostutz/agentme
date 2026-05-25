@@ -1,6 +1,8 @@
 ---
 name: _local-adr-policy-002-xdr-scope-guidelines-for-agentme
 description: Defines which scope should receive new or updated XDR content in agentme. Use when deciding whether guidance belongs in shared or local scope.
+apply-to: agentme repository contributors
+valid-from: 2026-05-25
 ---
 
 # _local-adr-policy-002: XDR scope guidelines for agentme

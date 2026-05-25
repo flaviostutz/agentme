@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-003-skill-standards
 description: Defines skill package standards including structure, SKILL.md format, and co-location with XDRS packages. Use when creating or reviewing skills.
+apply-to: All skill packages
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-003: Skill standards
@@ -116,7 +118,6 @@ Rules:
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
 - Any non-Markdown files referenced from `SKILL.md` (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package.
-- Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - Always use lowercase file names.

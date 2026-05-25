@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-007-plan-standards
 description: Defines plan document standards for describing problems, solutions, and activities. Use when creating or reviewing plans.
+apply-to: All plan documents
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-007: Plan standards
@@ -32,7 +34,6 @@ Plans are Markdown documents placed inside a subject folder alongside policies. 
 - Always use lowercase file names.
 - Never use emojis in plan content.
 - Any non-Markdown files referenced by a plan (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `plans/.assets/` next to the plan files.
-- Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 
 **Folder layout**
 

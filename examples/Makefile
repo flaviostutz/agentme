@@ -11,7 +11,7 @@ test: build
 # Fix for recursive presets issue: add "presets": ["speckit"] to the selector of the speckit entries in package.json. This forwards the preset filter to agentme's nested sets, preventing the xdrs-core basic set from being extracted recursively.
 
 	# core preset checks
-	$(MISE) pnpm exec agentme extract --output ./output --presets core
+	$(MISE) pnpm exec agentme install --output ./output --presets core
 	test -e output/AGENTS.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
 	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
@@ -21,7 +21,7 @@ test: build
 
 	# basic preset checks
 	rm -rf output
-	$(MISE) pnpm exec agentme extract --output ./output --presets basic
+	$(MISE) pnpm exec agentme install --output ./output --presets basic
 	test -e output/AGENTS.md
 	test -e output/.xdrs/index.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
@@ -30,7 +30,7 @@ test: build
 
 	# speckit preset checks
 	rm -rf output
-	$(MISE) pnpm exec agentme extract --output ./output --presets speckit
+	$(MISE) pnpm exec agentme install --output ./output --presets speckit
 	test -e output/.github/agents/speckit.analyze.agent.md
 	test -e output/.specify/memory/constitution.md
 	test ! -e output/AGENTS.md
@@ -38,7 +38,7 @@ test: build
 	$(MISE) pnpm exec agentme check --output ./output --presets speckit
 
 	# install all agentme presets
-	$(MISE) pnpm exec agentme extract --output ./output
+	$(MISE) pnpm exec agentme install --output ./output
 	test -e output/.github/agents/speckit.analyze.agent.md
 	test -e output/.specify/memory/constitution.md
 	test -e output/AGENTS.md
@@ -48,7 +48,7 @@ test: build
 	# AUTOMATIC CLEANUP OF PREVIOUSLY EXTRACTED PRESETS
 	rm -rf output
 	# basic preset checks
-	$(MISE) pnpm exec agentme extract --output ./output --presets basic
+	$(MISE) pnpm exec agentme install --output ./output --presets basic
 	test -e output/AGENTS.md
 	test -e output/.xdrs/index.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
@@ -56,7 +56,7 @@ test: build
 	$(MISE) pnpm exec agentme check --output ./output --presets basic
 
 	# core preset checks (should remove the previous managed files from basic preset)
-	$(MISE) pnpm exec agentme extract --output ./output --presets core
+	$(MISE) pnpm exec agentme install --output ./output --presets core
 	test -e output/AGENTS.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
 	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
@@ -67,7 +67,7 @@ test: build
 	test -e output/.xdrs/index.md
 
 	# speckit preset checks (should remove the previous files from basic preset)
-	$(MISE) pnpm exec agentme extract --output ./output --presets speckit
+	$(MISE) pnpm exec agentme install --output ./output --presets speckit
 	test -e output/.github/agents/speckit.analyze.agent.md
 	test -e output/.specify/memory/constitution.md
 	test ! -e output/AGENTS.md
