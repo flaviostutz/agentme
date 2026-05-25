@@ -1,0 +1,44 @@
+version: 1
+packages:
+  agentme: 0.0.1
+sets:
+  - package: agentme
+    selector:
+      presets:
+        - speckit
+    output:
+      path: ./output
+files:
+  output:
+    - .github/agents/speckit.analyze.agent.md|agentme|0.0.1|file|d4736c976438|0
+    - .github/agents/speckit.checklist.agent.md|agentme|0.0.1|file|7f9321e79a3d|0
+    - .github/agents/speckit.clarify.agent.md|agentme|0.0.1|file|fd2239e88634|0
+    - .github/agents/speckit.constitution.agent.md|agentme|0.0.1|file|8802a6e396b6|0
+    - .github/agents/speckit.implement.agent.md|agentme|0.0.1|file|87017d5cab5b|0
+    - .github/agents/speckit.plan.agent.md|agentme|0.0.1|file|8489fdd9656b|0
+    - .github/agents/speckit.specify.agent.md|agentme|0.0.1|file|2889da6ff397|0
+    - .github/agents/speckit.tasks.agent.md|agentme|0.0.1|file|67a69c9c75f2|0
+    - .github/agents/speckit.taskstoissues.agent.md|agentme|0.0.1|file|907276c466a4|0
+    - .github/prompts/speckit.analyze.prompt.md|agentme|0.0.1|file|d07fc7061d8a|0
+    - .github/prompts/speckit.checklist.prompt.md|agentme|0.0.1|file|5acc9508ad5a|0
+    - .github/prompts/speckit.clarify.prompt.md|agentme|0.0.1|file|c858eb4b8b44|0
+    - .github/prompts/speckit.constitution.prompt.md|agentme|0.0.1|file|1422ddfda483|0
+    - .github/prompts/speckit.implement.prompt.md|agentme|0.0.1|file|3b898ee9c80b|0
+    - .github/prompts/speckit.plan.prompt.md|agentme|0.0.1|file|31cb150b78bf|0
+    - .github/prompts/speckit.specify.prompt.md|agentme|0.0.1|file|df46bac4f60e|0
+    - .github/prompts/speckit.tasks.prompt.md|agentme|0.0.1|file|35c255f3e268|0
+    - .github/prompts/speckit.taskstoissues.prompt.md|agentme|0.0.1|file|000747cb6267|0
+    - .specify/memory/constitution.md|agentme|0.0.1|file|796254dc2893|0
+    - .specify/scripts/bash/check-prerequisites.sh|agentme|0.0.1|file|e7640f8e9a6d|0
+    - .specify/scripts/bash/common.sh|agentme|0.0.1|file|af4ab41eb851|0
+    - .specify/scripts/bash/create-new-feature.sh|agentme|0.0.1|file|8b4e6c3e6972|0
+    - .specify/scripts/bash/setup-plan.sh|agentme|0.0.1|file|dd03e9819aee|0
+    - .specify/scripts/bash/update-agent-context.sh|agentme|0.0.1|file|82a1796b848c|0
+    - .specify/templates/agent-file-template.md|agentme|0.0.1|file|22f45fe5238f|0
+    - .specify/templates/checklist-template.md|agentme|0.0.1|file|1f95ddd0ca77|0
+    - .specify/templates/constitution-template.md|agentme|0.0.1|file|a797a150201d|0
+    - .specify/templates/plan-template.md|agentme|0.0.1|file|5cb687798de8|0
+    - .specify/templates/spec-template.md|agentme|0.0.1|file|fce4355100c5|0
+    - .specify/templates/tasks-template.md|agentme|0.0.1|file|18a506449799|0
+checksum: 55d360b40201
+

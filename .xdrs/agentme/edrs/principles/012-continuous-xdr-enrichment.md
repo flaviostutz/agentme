@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-012-continuous-xdr-improvement-policy
 description: Defines how teams should promote reusable implementation guidance into shared XDRs instead of keeping it in prompts or local habits. Use when recurring decisions surface during delivery.
+apply-to: All projects using XDR framework
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-012: Continuous xdr improvement policy

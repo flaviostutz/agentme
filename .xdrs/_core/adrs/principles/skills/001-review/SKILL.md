@@ -22,7 +22,7 @@ Performs a structured review of code changes or files against the Policies in th
 
 ### Phase 2: Policy Compilation
 
-1. Gather all Policies from the Policy root `index.md` (default: `.policies/index.md`) starting from the working directory.
+1. Gather all Policies from the Policy root `index.md` (default: `.xdrs/index.md`) starting from the working directory.
    - Policy scopes are controlled by nested folders; some are broad, others domain-specific.
    - Extract frontmatter first to decide whether each Policy should be used for the current review context.
    - All documents present in the collection are considered active.

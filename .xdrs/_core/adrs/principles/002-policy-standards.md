@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-002-policy-standards
 description: Defines how Policy documents (the core Policy document type) should be written, including template, frontmatter, applicability fields, and conflict handling. Use when writing or reviewing any Policy, rules, contraints or a specific decision document.
+apply-to: All Policy documents
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-002: Policy standards
@@ -25,8 +27,8 @@ Policy documents are the authoritative source of truth for their scope, type, an
 |---|---|---|
 | `name` | Yes | 1-64 characters. Lowercase letters, numbers, hyphens, and leading underscores only. Must not end with a hyphen. Must not contain consecutive hyphens. Must match the document identifier from the heading: `[scope]-[type]-policy-[number]-[short-title]`. |
 | `description` | Yes | 1-1024 characters. Describes what this decision is about and when to use it. Should include keywords that help agents identify when to apply it. |
-| `apply-to` | No | Short description of contexts this decision is applicable to. Keep it under 40 words. If omitted, the decision applies to all logically applicable elements. ONLY use this section if the usage is very specific to a specific case. Examples: `Only frontend code`, `JavaScript projects`. |
-| `valid-from` | No | ISO date (`YYYY-MM-DD`) indicating from when this decision must be enforced. Before this date it should be used everywhere possible, but compliance is not enforced during reviews until after this date. |
+| `apply-to` | Yes | Short description of contexts this decision is applicable to. Keep it under 40 words. Use `All scopes` when the decision applies broadly. Examples: `Only frontend code`, `JavaScript projects`, `All scopes`. |
+| `valid-from` | Yes | ISO date (`YYYY-MM-DD`) indicating from when this decision must be enforced. Before this date it should be used everywhere possible, but compliance is not enforced during reviews until after this date. Defaults to the date the Policy was created. |
 | `license` | No | SPDX license expression (e.g. `MIT`, `Apache-2.0`, `CC-BY-4.0`). Indicates the license under which the document content is shared. If omitted, the license is governed by the repository or package defaults. |
 | `metadata` | No | Arbitrary key-value map for additional properties not defined by this spec. |
 
@@ -35,6 +37,8 @@ Policy documents are the authoritative source of truth for their scope, type, an
     ---
     name: _core-adr-policy-002-policy-standards
     description: Defines how Policy documents should be written. Use when writing or reviewing any Policy.
+    apply-to: All scopes
+    valid-from: 2026-05-21
     ---
     ```
   - Example with optional fields:
@@ -68,7 +72,6 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - Never use emojis in contents.
 - Always use file names with lowercase.
 - Any non-Markdown files referenced by a Policy (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `[xdrs-root]/[scope]/[type]/[subject]/.assets/`.
-- Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Avoid using lengthy instructions on the Policy. If there are long and detailed instructions related to the Policy, or instructions that are outside the decision, create another file with a guide. If the guide is small, keep it in the Policy itself.
 - Policies should be under 1300 words long as a rule of thumb.
   - This is important to make them focused on a clear decision
@@ -83,8 +86,8 @@ All Policies MUST follow this template
 ---
 name: [scope]-[type]-policy-[number]-[short-title]
 description: [What this decision is about and when to use it]
-apply-to: [Optional. Contexts this decision applies to, under 40 words]
-valid-from: [Optional. ISO date YYYY-MM-DD from when enforcement begins]
+apply-to: [Required. Contexts this decision applies to, under 40 words. Use "All scopes" when broadly applicable.]
+valid-from: [Required. ISO date YYYY-MM-DD from when enforcement begins. Defaults to creation date.]
 license: [Optional. SPDX license expression]
 metadata:
   [optional-key]: [optional-value]
@@ -111,7 +114,7 @@ Question: In the end, state explicitly the question that needs to be answered. E
 [Optional section with implementation specifics, applicability boundaries, rules, concise examples, or do/don't guidance. This is the answer to the question in the "Context and Problem Statement". (<1300 words)]
 
 ## Considered Options 
-[this section is present ONLY if the user explicitely indicated that there were multiple options to choose from while making this decision and have a backing research document]
+[this section is present ONLY if the user explicitely indicated that there were multiple options to choose from while making this decision or have a backing research document]
 
 [Related research, if any]
 - [Research document title](researches/001-example.md) - Brief description of what it informed

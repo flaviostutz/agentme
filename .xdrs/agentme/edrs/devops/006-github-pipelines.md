@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-006-github-ci-cd-pipelines
 description: Defines the standard GitHub Actions workflow split for CI, release tagging, and publishing. Use when configuring project automation.
+apply-to: Projects using GitHub Actions
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-006: GitHub CI/CD pipelines

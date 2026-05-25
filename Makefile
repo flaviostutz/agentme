@@ -53,7 +53,7 @@ bump:
 	$(MISE) pnpm add xdrs-core@latest
 
 	# we don't directly publish those files, but the project uses it itself
-	$(MISE) pnpm exec filedist --config .filedistrc.local.yml
+	$(MISE) pnpm exec filedist update
 
 	make all
 

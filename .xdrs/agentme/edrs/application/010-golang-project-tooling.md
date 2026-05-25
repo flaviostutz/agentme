@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-010-go-project-tooling-and-structure
 description: Defines the standard Go project toolchain, layout, and Makefile workflow using Mise for agentme-based projects. Use when scaffolding or reviewing Go projects.
+apply-to: Go projects
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-010: Go project tooling and structure

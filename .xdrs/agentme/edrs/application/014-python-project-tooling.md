@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-014-python-project-tooling-and-structure
 description: Defines the standard Python project toolchain, layout, and Makefile workflow using Mise, uv, ruff, pyright, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
+apply-to: Python projects
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-014: Python project tooling and structure

@@ -1,0 +1,77 @@
+sets:
+  - package: xdrs-core@0.27.0
+    selector:
+      files:
+        - .xdrs/_core/**
+        - AGENTS.md
+    output:
+      path: .
+      gitignore: false
+    presets:
+      - core
+      - basic
+
+  - selector:
+      files:
+        - .xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/**
+    output:
+      path: .
+      gitignore: false
+    presets:
+      - core
+
+  - selector:
+      files:
+        - .xdrs/agentme/**
+    output:
+      path: .
+      gitignore: false
+    presets:
+      - basic
+
+  - selector:
+      files:
+        - .xdrs/index.md
+    output:
+      path: .
+      managed: false
+      skipIfExists: true
+      gitignore: false
+    presets:
+      - basic
+
+  - selector:
+      files:
+        - .github/agents/speckit*
+        - .github/prompts/speckit*
+        - .specify/**
+      exclude:
+        - .specify/templates/**
+    output:
+      path: .
+      gitignore: false
+      readonly: true
+    presets:
+      - speckit
+
+  - selector:
+      files:
+        - .specify/templates/**
+    output:
+      path: .
+      gitignore: false
+      readonly: false
+    presets:
+      - speckit
+
+  - selector:
+      files:
+        - .vscode/settings.json
+    output:
+      path: .
+      managed: false
+      skipIfExists: true
+      readonly: false
+      gitignore: false
+    presets:
+      - speckit

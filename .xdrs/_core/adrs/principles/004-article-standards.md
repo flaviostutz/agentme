@@ -1,6 +1,8 @@
 ---
 name: _core-adr-policy-004-article-standards
 description: Defines article document standards for synthesizing and linking Policies, research, and skills. Use when creating or reviewing articles.
+apply-to: All article documents
+valid-from: 2025-01-01
 ---
 
 # _core-adr-policy-004: Article standards
@@ -19,6 +21,15 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 
 ### Details
 
+**Human-first writing**
+
+- The primary objective of an article is to make information available and accessible to humans. Good copywriting style, storytelling, clear organization, and clustering of related information are essential. Avoid repetitive content; each sentence should add new value.
+- Articles SHOULD stay under 2000 words (approximately a 10-minute read) to maximize reader engagement. When planning an article, keep it as small as possible. Break large subjects into separate chapters, each in its own article, so readers can consume and understand sections independently.
+- When a topic is broken into multiple articles, organize them as a **series**: each article MUST declare its position at the very top (e.g., `_This is article 2/4 of the "Engineering Practices" series._`) and MUST link to the previous and next articles in the series so readers can navigate the sequence without returning to an index.
+- Articles should be kept under 8000 words (hard limit). Move or point to detailed contents referenced in Policy decisions, researches, plans, or skills.
+
+**Content and structure**
+
 - Articles are views, not decisions. They summarize and synthesize content from Policies, Research, and Skills but are NOT the source of truth. When there is a conflict between an article and a Policy, the Policy takes precedence.
 - Articles are not limited to synthesizing Policies. They may also document application features, APIs, general project information, reference tables, diagrams, FAQs and other elements useful to their intended audience.
 - Articles must reference the Policies, Research documents, and Skills they synthesize. Never duplicate decision content; link back to the authoritative sources.
@@ -29,10 +40,8 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 - Place an article in the subject folder that best matches its topic using the required list of subjects per type defined in `_core-adr-policy-001`. If an article spans more than one subject, place it in `principles`.
 - For simple structure, flow, layout, or relationship indications, articles SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
 - Any non-Markdown files referenced by an article (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `articles/.assets/` next to the article files.
-- Sub-directories inside this `.assets/` folder are allowed only when it already has more than 10 files. Otherwise, keep files flat.
 - Always use lowercase file names.
 - Never use emojis in article content.
-- Articles should be kept under 5000 words. Move or point to detailed contents referenced in Policy decisions, researches, plans or skills.
 
 **Folder layout**
 
@@ -63,6 +72,9 @@ All articles MUST follow this template:
 
 ```markdown
 # [scope]-[type]-article-[number]: [Short Title]
+
+<!-- If this article is part of a series, add the line below (omit otherwise): -->
+_This is article [N]/[Total] of the "[Series Name]" series. | Previous: [title](./[prev-file].md) | Next: [title](./[next-file].md)_
 
 ## Overview
 

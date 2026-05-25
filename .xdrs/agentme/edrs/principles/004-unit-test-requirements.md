@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-004-unit-test-requirements
 description: Defines unit test requirements for assertions, offline execution, coverage, shared setup, and real-code preference. Use when writing or reviewing tests.
+apply-to: All projects with unit tests
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-004: Unit test requirements

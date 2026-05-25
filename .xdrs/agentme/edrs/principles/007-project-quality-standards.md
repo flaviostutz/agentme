@@ -1,6 +1,8 @@
 ---
 name: agentme-edr-policy-007-project-quality-standards
 description: Defines minimum project quality standards for README onboarding, testing, linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
+apply-to: All projects
+valid-from: 2026-05-25
 ---
 
 # agentme-edr-policy-007: Project quality standards

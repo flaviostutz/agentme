@@ -1,0 +1,8 @@
+version: 1
+sets:
+  - package: agentme
+    selector:
+      presets:
+        - speckit
+    output:
+      path: ./output
