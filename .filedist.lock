@@ -1,13 +1,13 @@
 version: 1
 packages:
-  xdrs-core@latest: 0.27.0
+  git:https://github.com/flaviostutz/xdrs-core.git@0.27.1: fa9871263fce
 sets:
-  - package: xdrs-core@latest
-    output:
-      force: true
-    selector: {}
+  - package: git:https://github.com/flaviostutz/xdrs-core.git@0.27.1
+    output: {}
+    selector:
+      upgrade: true
 files:
-  '':
+  .:
     - .xdrs/_core/adrs/index.md|xdrs-core|0.27.0|file|f5f69e111072|0
     - .xdrs/_core/adrs/principles/001-xdrs-core.md|xdrs-core|0.27.0|file|e17236b7795f|0
     - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.27.0|file|7167c0fc193b|0
@@ -28,19 +28,17 @@ files:
     - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|xdrs-core|0.27.0|file|20199f8bdd10|0
     - .xdrs/_core/index.md|xdrs-core|0.27.0|file|de2c5180edbe|0
     - AGENTS.md|xdrs-core|0.27.0|file|c258486519ae|0
-    - .github/skills/001-lint|xdrs-core|0.27.0|symlink|2f55eeea6ae7|0
-    - .github/skills/001-review|xdrs-core|0.27.0|symlink|18c5f3a037d4|0
-    - .github/skills/002-write-policy|xdrs-core|0.27.0|symlink|6a529131a7a6|0
-    - .github/skills/002-write-xdr|xdrs-core|0.27.0|symlink|f16553ebcce3|0
-    - .github/skills/003-write-skill|xdrs-core|0.27.0|symlink|688bdafc1e0e|0
-    - .github/skills/004-write-article|xdrs-core|0.27.0|symlink|b039d47d3173|0
-    - .github/skills/005-write-research|xdrs-core|0.27.0|symlink|1c5a5e378515|0
-    - .github/skills/006-write-plan|xdrs-core|0.27.0|symlink|2b94edbd7c9a|0
-    - .github/skills/007-write-presentation|xdrs-core|0.27.0|symlink|50275c9840fb|0
-    - .github/skills/001-create-javascript-project|xdrs-core|0.27.0|symlink|8a0cc510fbce|0
-    - .github/skills/003-create-golang-project|xdrs-core|0.27.0|symlink|84100e64497b|0
-    - .github/skills/004-select-relevant-xdrs|xdrs-core|0.27.0|symlink|3698bb3f3db7|0
-    - .github/skills/005-create-python-project|xdrs-core|0.27.0|symlink|83b11fbd689d|0
-    - .github/skills/002-monorepo-setup|xdrs-core|0.27.0|symlink|35d36a81fd91|0
-checksum: be4d731f8be3
+    - .github/skills/001-review|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|18c5f3a037d4|0
+    - .github/skills/002-write-policy|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|6a529131a7a6|0
+    - .github/skills/003-write-skill|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|688bdafc1e0e|0
+    - .github/skills/004-write-article|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|b039d47d3173|0
+    - .github/skills/005-write-research|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|1c5a5e378515|0
+    - .github/skills/006-write-plan|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|2b94edbd7c9a|0
+    - .github/skills/007-write-presentation|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|50275c9840fb|0
+    - .github/skills/001-create-javascript-project|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|8a0cc510fbce|0
+    - .github/skills/003-create-golang-project|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|84100e64497b|0
+    - .github/skills/004-select-relevant-xdrs|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|3698bb3f3db7|0
+    - .github/skills/005-create-python-project|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|83b11fbd689d|0
+    - .github/skills/002-monorepo-setup|https://github.com/flaviostutz/xdrs-core.git|fa9871263fce|symlink|35d36a81fd91|0
+checksum: ddca86371cb4
 

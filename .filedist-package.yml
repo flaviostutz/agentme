@@ -1,5 +1,5 @@
 sets:
-  - package: xdrs-core@0.27.0
+  - package: xdrs-core@0.27.1
     selector:
       files:
         - .xdrs/_core/**
