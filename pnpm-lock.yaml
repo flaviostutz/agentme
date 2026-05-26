@@ -9,12 +9,12 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.33.0
-        version: 0.33.0
+        specifier: ^0.34.1
+        version: 0.34.1
     devDependencies:
       xdrs-core:
-        specifier: ^0.27.0
-        version: 0.27.0
+        specifier: ^0.27.1
+        version: 0.27.1
 
 packages:
 
@@ -29,8 +29,8 @@ packages:
     resolution: {integrity: sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ==}
     engines: {node: 18 || 20 || >=22}
 
-  filedist@0.33.0:
-    resolution: {integrity: sha512-YHH2bpL1GR+goyUJrkQZkjojFtpHROdmFQraewMRVWUdgo1WlUBP76Wmqz73wfp8WdljUyTIl4yGsnukGCdq2Q==}
+  filedist@0.34.1:
+    resolution: {integrity: sha512-Sw2lTHqUibxHAIxG38Stc6i3lV2EKByhx1iYzgtY+FeMjeQsWm/5MNLAIuu+k5LIIKauEqzKwA+gvcCY1cTBBQ==}
     hasBin: true
 
   ignore@7.0.5:
@@ -51,13 +51,13 @@ packages:
   package-manager-detector@1.6.0:
     resolution: {integrity: sha512-61A5ThoTiDG/C8s8UMZwSorAGwMJ0ERVGj2OjoW5pAalsNOg15+iQiPzrLJ4jhZ1HJzmC2PIHT2oEiH3R5fzNA==}
 
-  semver@7.7.4:
-    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
+  semver@7.8.1:
+    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.27.0:
-    resolution: {integrity: sha512-3uiUCuNBOOrAjFo/aYunJvoRqaiWUBPkKCx+iAO1k5tcdM3q7hcRxFKU39Ll890TpT7UOhdqFpWl1mZUEADevg==}
+  xdrs-core@0.27.1:
+    resolution: {integrity: sha512-LdtMQTKnLrabIl8kjdCmfTF3Psiozu52mHH9WoI9ZmWIRs9/mhv40qZO/J0gUFXnArLcXb5YuvGfVcay7eZAmA==}
     hasBin: true
 
 snapshots:
@@ -70,14 +70,14 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
-  filedist@0.33.0:
+  filedist@0.34.1:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
       minimatch: 10.2.5
       mypkg: 1.0.0
       package-manager-detector: 1.6.0
-      semver: 7.7.4
+      semver: 7.8.1
 
   ignore@7.0.5: {}
 
@@ -93,10 +93,10 @@ snapshots:
 
   package-manager-detector@1.6.0: {}
 
-  semver@7.7.4: {}
+  semver@7.8.1: {}
 
-  xdrs-core@0.27.0:
+  xdrs-core@0.27.1:
     dependencies:
-      filedist: 0.33.0
+      filedist: 0.34.1
       ignore: 7.0.5
       minimatch: 10.2.5

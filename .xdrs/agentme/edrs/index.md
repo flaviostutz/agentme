@@ -29,6 +29,8 @@ Language and framework-specific tooling and project structure.
 - [agentme-edr-010](application/010-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [003-create-golang-project](application/skills/003-create-golang-project/SKILL.md))*
 - [agentme-edr-014](application/014-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [005-create-python-project](application/skills/005-create-python-project/SKILL.md))*
 - [agentme-edr-015](application/015-cli-tool-standards.md) - **CLI tool standards** - Define command UX and behavior for CLI tools
+- [agentme-edr-018](application/018-ai-agent-development-standards.md) - **AI agent development standards** - Standard toolchain, framework, evaluation, and context patterns for AI agent projects
+- [agentme-edr-019](application/019-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
 - [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
 
 ## Devops

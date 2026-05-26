@@ -55,6 +55,4 @@ bump:
 	# we don't directly publish those files, but the project uses it itself
 	$(MISE) pnpm exec filedist update
 
-	make all
-
 # 	copilot -p "check and fix agentme xdrs after xdrs-core bump"
