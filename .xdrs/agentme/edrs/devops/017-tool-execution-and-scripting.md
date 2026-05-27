@@ -19,7 +19,7 @@ How should projects execute development commands so the command surface stays pr
 
 This keeps local development and CI aligned, reduces indirection, and lets contributors understand project behavior by reading one command surface.
 
-### Implementation Details
+### Details
 
 - Every project MUST use a root `Makefile` as the authoritative entry point for developer and pipeline commands.
 - The target names in that `Makefile` MUST follow [agentme-edr-008](008-common-targets.md).

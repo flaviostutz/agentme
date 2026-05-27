@@ -2,13 +2,13 @@
 
 ## Overview
 
-This article explains how architects, engineers and business professionals should recognize, organize, and promote reusable delivery decisions into XDRs as a continuous improvement activity. It is aimed at people working with coding agents, vibe-coding loops, or SDD-oriented delivery who need a practical path from task friction to shared documentation.
-
-Continuous improvement matters because delivery decisions do not stay correct forever. Team structures change, platforms evolve, tools mature, and the trade-offs behind earlier choices shift over time. If XDRs are not revisited and improved continuously, previously useful decisions become stale guidance and eventually turn into a form of legacy documentation that misleads delivery instead of guiding it.
-
-Continuous improvement also keeps the target state explicit. As XDRs evolve across projects and tracks, teams need a clear shared view of where they are trying to converge, what remains intentionally different, and what should be treated as technical debt on the path toward that target. Keeping XDRs current reduces confusion about the desired future state and helps each project evolve toward it deliberately instead of drifting through ad hoc local decisions.
+A practical guide for recognizing recurring delivery decisions and promoting them into shared XDRs. Intended for engineers, architects, and business professionals working with coding agents or SDD-oriented delivery.
 
 ## Content
+
+Delivery decisions do not stay correct forever. Team structures change, platforms evolve, tools mature, and the trade-offs behind earlier choices shift over time. If XDRs are not revisited and improved continuously, previously useful decisions become stale guidance that misleads delivery instead of guiding it.
+
+Keeping XDRs current also makes the target state explicit. Teams need a clear shared view of where they are converging, what remains intentionally different, and what is technical debt on the path to that target.
 
 ### Start from delivery friction
 
@@ -90,4 +90,4 @@ If the same clarification would likely be needed in another feature, by another 
 - [_core-adr-001](../../../../_core/adrs/principles/001-xdrs-core.md) - XDR structure, numbering, and mandatory template
 - [_core-article-001](../../../../_core/adrs/principles/articles/001-xdrs-overview.md) - XDR introduction and general adoption guidance
 - [agentme-edr-012](../012-continuous-xdr-enrichment.md) - Shared-first XDR enrichment policy and 80% coverage target
-- [002-write-policy skill](../../../../../.github/skills/002-write-policy/SKILL.md) - Step-by-step procedure for drafting new XDRs
+- [002-write-policy skill](../../../../_core/adrs/principles/skills/002-write-policy/SKILL.md) - Step-by-step procedure for drafting new XDRs

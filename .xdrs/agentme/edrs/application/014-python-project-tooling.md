@@ -19,7 +19,7 @@ What tooling and project structure should Python projects follow to ensure consi
 
 A single dependency manager, isolated package internals under `lib/`, and a standard Makefile contract keep Python projects predictable for contributors and CI while keeping the repository root clean.
 
-### Implementation Details
+### Details
 
 #### Tooling
 
@@ -97,6 +97,36 @@ Python keeps unit tests under `lib/tests/` by default because that remains the m
 When Pyright runs from `lib/`, configure it to discover the shared root virtual environment, for example with `venvPath = ".."` and `venv = ".venv"`.
 
 Ruff is the default formatter and linter. Do not add Black, isort, or Flake8 unless another XDR for that repository explicitly requires them.
+
+All Python projects must configure the following Ruff sections in `lib/pyproject.toml`:
+
+```toml
+[tool.ruff]
+cache-dir = ".cache/ruff"
+output-format = "grouped"
+line-length = 120
+target-version = "py311"
+src = ["src", "tests", "tests_integration"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+task-tags = ["TODO"]
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
+```
+
+Adjust `target-version` to match the project's minimum supported Python version. The `cache-dir` keeps Ruff's cache under `.cache/ruff` alongside other tool caches. The `src` list must include every directory that contains importable Python code. The `select` list enables a broad set of rules covering style, correctness, performance, security, and documentation. The `ignore` list suppresses rules that are either too noisy or conflict with the chosen docstring style.
 
 Pyright must run on every lint pass. `typeCheckingMode = "standard"` is the minimum baseline; projects may raise this to `strict` when the codebase is ready.
 

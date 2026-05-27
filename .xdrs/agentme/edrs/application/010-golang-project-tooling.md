@@ -19,7 +19,7 @@ What tooling and project structure should Go projects follow to ensure consisten
 
 A predictable layout and minimal external tooling keep Go projects approachable, fast to build, and easy to distribute as cross-platform binaries.
 
-### Implementation Details
+### Details
 
 #### Tooling
 

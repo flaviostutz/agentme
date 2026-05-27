@@ -214,11 +214,28 @@ requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
 [tool.ruff]
-line-length = 100
+cache-dir = ".cache/ruff"
+output-format = "grouped"
+line-length = 120
 target-version = "py313"
+src = ["src", "tests", "tests_integration"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP"]
+task-tags = ["TODO"]
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
 
 [tool.pyright]
 include = ["src", "tests"]

@@ -192,6 +192,7 @@ Follow [_core-adr-policy-001](../001-xdrs-core.md) and [_core-adr-policy-002](..
 
 ## References
 
+- [Presentation slides](.assets/001-xdrs-overview-slides.md) - Marp slide deck overview of this article
 - [_core-adr-policy-001](../001-xdrs-core.md) - XDRS elements: types, scopes, subjects, folder structure
 - [_core-adr-policy-002](../002-policy-standards.md) - Policy document standards and mandatory template
 - [_core-adr-policy-003](../003-skill-standards.md) - Skill standards and co-location rules

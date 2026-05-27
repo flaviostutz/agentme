@@ -19,7 +19,7 @@ What structure and interface rules should distributable CLI tools follow so they
 
 This keeps the user-facing command predictable while preserving a clean library API for embedding, testing, and automation.
 
-### Implementation Details
+### Details
 
 #### CLI command surface
 

@@ -19,7 +19,7 @@ What GitHub Actions workflows should every project follow to ensure a safe, pred
 
 Separating these concerns eliminates accidental publishes from CI runs, ensures monotag has access to the full git history, and makes each workflow independently auditable and re-runnable.
 
-### Implementation Details
+### Details
 
 #### Workflow overview
 

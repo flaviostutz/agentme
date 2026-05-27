@@ -19,7 +19,7 @@ What standard set of Makefile target names and execution rules should projects a
 
 Standardizing both the target names and the execution chain removes per-project guesswork, makes CI pipelines reusable, and keeps tooling behavior visible in one place.
 
-### Implementation Details
+### Details
 
 #### 01-every-project-must-have-root-makefile
 
