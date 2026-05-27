@@ -13,8 +13,8 @@ importers:
         version: 0.34.1
     devDependencies:
       xdrs-core:
-        specifier: ^0.27.1
-        version: 0.27.1
+        specifier: ^0.28.0
+        version: 0.28.0
 
 packages:
 
@@ -56,8 +56,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.27.1:
-    resolution: {integrity: sha512-LdtMQTKnLrabIl8kjdCmfTF3Psiozu52mHH9WoI9ZmWIRs9/mhv40qZO/J0gUFXnArLcXb5YuvGfVcay7eZAmA==}
+  xdrs-core@0.28.0:
+    resolution: {integrity: sha512-qJf84nyU8AK7fWBNk7tJBW04oxSPbTVoTC/1/4C1e3MQ6489oWgDWCeN+hr3NveRjRwG7XsprpfQioADQsq1fQ==}
     hasBin: true
 
 snapshots:
@@ -95,7 +95,7 @@ snapshots:
 
   semver@7.8.1: {}
 
-  xdrs-core@0.27.1:
+  xdrs-core@0.28.0:
     dependencies:
       filedist: 0.34.1
       ignore: 7.0.5
