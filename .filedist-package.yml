@@ -1,5 +1,6 @@
 sets:
-  - package: xdrs-core@0.27.1
+  # - package: xdrs-core@0.27.1
+  - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector:
       files:
         - .xdrs/_core/**

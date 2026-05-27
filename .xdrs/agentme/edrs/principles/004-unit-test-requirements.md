@@ -68,7 +68,27 @@ Builds that miss the threshold must not be merged.
 
 ---
 
-#### 04-should-extract-shared-setup
+#### 04-must-place-test-files-alongside-source
+
+Test files must live next to the source file they test, in the same directory, following the convention of the language/framework (e.g. `file.test.ts`, `file_test.go`, `file.spec.js`).
+
+```
+src/mymodule/group1/file1.ts        ← source
+src/mymodule/group1/file1.test.ts   ← test (same directory)
+```
+
+**Exception — separate test folder:** When the framework makes co-location impractical (e.g. Python's common `tests/` convention), or when the community strongly favors a separate folder, a dedicated test root (e.g. `tests/`) is allowed. In that case the test folder **must mirror** the source folder structure exactly:
+
+```
+src/mymodule/group1/file1.py          ← source
+tests/mymodule/group1/file1_test.py   ← test (mirrored path)
+```
+
+Do not flatten or reorganize paths when using a separate test folder.
+
+---
+
+#### 05-should-extract-shared-setup
 
 When setup logic is repeated across two or more test files, centralize it (`src/test-utils/`, `internal/testutil/`, `tests/conftest.py`).
 
@@ -81,7 +101,7 @@ export function makeOrder(overrides: Partial<Order> = {}): Order {
 
 ---
 
-#### 05-should-avoid-mocks
+#### 06-should-avoid-mocks
 
 Use the lowest-cost alternative that exercises real behavior:
 
