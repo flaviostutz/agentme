@@ -20,7 +20,7 @@ What monorepo structure, naming conventions, tooling, and build standards should
 For step-by-step scaffolding instructions see [skill 002-monorepo-setup](skills/002-monorepo-setup/SKILL.md).
 Module folder responsibilities, artifact locations, and test-folder conventions follow [agentme-edr-016](../principles/016-cross-language-module-structure.md).
 
-### Implementation Details
+### Details
 
 #### 01-top-level-directory-layout
 

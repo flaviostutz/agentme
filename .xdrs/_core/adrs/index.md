@@ -27,6 +27,7 @@ Step-by-step procedural guides for humans and AI agents.
 - [_core-adr-skill-005-write-research](principles/skills/005-write-research/SKILL.md) - **Write Research** — create a new research document
 - [_core-adr-skill-006-write-plan](principles/skills/006-write-plan/SKILL.md) - **Write Plan** — create a new plan document
 - [_core-adr-skill-007-write-presentation](principles/skills/007-write-presentation/SKILL.md) - **Write Presentation** — create Marp slide presentations for XDRS documents
+- [_core-adr-skill-008-write-xdrs-doc](principles/skills/008-write-xdrs-doc/SKILL.md) - **Write XDRS Doc** — router skill; infers document type and delegates to the appropriate authoring skill
 
 ## Articles
 

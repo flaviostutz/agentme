@@ -17,7 +17,7 @@ What coding practices should be followed across all languages and projects to ke
 
 **Apply a set of language-agnostic structural and organizational practices that keep files small, logic decomposed, types co-located, tests co-located, and documentation always in sync.**
 
-### Implementation Details
+### Details
 
 #### 01-keep-files-short
 

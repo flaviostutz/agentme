@@ -19,7 +19,7 @@ How should services expose their health status and validate operational readines
 
 All services must expose a `GET /health` endpoint that validates external dependencies using read-only operations and returns structured status with appropriate HTTP codes.
 
-### Implementation Details
+### Details
 
 **Endpoint contract:**
 

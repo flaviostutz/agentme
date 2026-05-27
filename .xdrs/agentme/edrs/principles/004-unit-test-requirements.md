@@ -17,7 +17,7 @@ What unit testing practices should be followed to ensure tests are meaningful, r
 
 **Every test must assert behavior, run offline without external dependencies, enforce 80% coverage, centralize shared setup, and prefer real code over mocks.**
 
-### Implementation Details
+### Details
 
 #### 01-must-have-at-least-one-assertion-per-test
 

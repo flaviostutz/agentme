@@ -17,7 +17,7 @@ What error handling practices should be followed across all languages and projec
 
 **Follow a set of consistent error handling practices: catch only where you can handle, return errors as values at interfaces, centralize repetitive catch logic, communicate failure clearly at process and service boundaries, and exercise error paths with dedicated tests.**
 
-### Implementation Details
+### Details
 
 #### 01-catch-only-where-handled
 

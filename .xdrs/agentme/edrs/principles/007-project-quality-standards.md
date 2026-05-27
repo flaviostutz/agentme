@@ -19,7 +19,7 @@ Every project must meet six minimum quality standards: a Getting Started section
 
 These standards form a non-negotiable baseline. Individual projects may raise the bar but must never fall below it.
 
-### Implementation Details
+### Details
 
 #### 01-readme-must-have-getting-started
 

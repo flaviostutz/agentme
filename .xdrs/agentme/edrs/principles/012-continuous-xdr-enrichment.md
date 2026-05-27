@@ -19,7 +19,7 @@ Question: What policy should developers follow to continuously enrich XDRs so re
 
 Developers must treat reusable missing guidance discovered during implementation as an XDR gap to be proposed and reviewed, not as permanent prompt-only context or repeated vibe coding.
 
-### Implementation Details
+### Details
 
 - The main objective is sharing, discussing, and converging practices across teams. Controlled divergence during exploration is acceptable, but recurring successful decisions must be converged into shared XDRs.
 - The non _local scope exists to share practices across projects, company areas, and functionally organized teams. Decisions placed in `_local` should be truly specific to the needs of a single application or repository.
@@ -43,4 +43,4 @@ Developers must treat reusable missing guidance discovered during implementation
 - [_core-adr-001](../../../_core/adrs/principles/001-xdrs-core.md)
 - [_core-article-001](../../../_core/adrs/principles/articles/001-xdrs-overview.md)
 - [agentme-article-001](articles/001-continuous-xdr-improvement.md)
-- [002-write-policy skill](../../../../.github/skills/002-write-policy/SKILL.md)
+- [002-write-policy skill](../../../_core/adrs/principles/skills/002-write-policy/SKILL.md)

@@ -19,7 +19,7 @@ What baseline structure rules must every buildable module follow regardless of l
 
 Language-specific EDRs may add ecosystem details, but they must not redefine these baseline folder responsibilities.
 
-### Implementation Details
+### Details
 
 #### 01-module-must-own-folder-root
 

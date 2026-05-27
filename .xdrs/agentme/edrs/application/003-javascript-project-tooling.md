@@ -19,7 +19,7 @@ What tooling and project structure should JavaScript/TypeScript projects follow 
 
 Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelines, and a predictable developer experience across projects.
 
-### Implementation Details
+### Details
 
 #### Tooling
 
