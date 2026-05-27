@@ -103,6 +103,7 @@ Targets are organized into five lifecycle groups. Projects must use these names 
 | `test-unit` | Run unit tests only, including coverage report generation and coverage threshold enforcement. |
 | `test-integration` | *(Optional)* Run integration and end-to-end tests only. Projects without integration tests may omit this target. |
 | `test-smoke` | *(Optional)* Run a fast, minimal subset of tests to verify the software is basically functional. Useful as a post-deploy health check. |
+| `eval` | *(Optional)* Run **all evaluations** for the module. Used alongside `test` to measure the accuracy and performance of statistical systems such as ML models, AI agents, or noisy systems. Typically runs against a live or near-live system (similar to an integration test) and produces a performance analysis report (e.g., F1 score, Accuracy, Precision, Recall). Must not be included in `test` or `all` — evals are opt-in because they require live dependencies and may be slow or costly to run. Individual evaluations must follow the prefix convention: `eval-<qualifier>` (e.g., `eval-simple`, `eval-complex`). |
 
 ##### Release group
 

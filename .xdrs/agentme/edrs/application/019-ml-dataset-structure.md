@@ -17,13 +17,13 @@ How should ML datasets be organized on disk so they are self-describing, easy to
 
 **A standard root layout with mandatory README.md and dataset.schema.json, plus type-specific conventions for data files**
 
-Every dataset must live in its own named folder and include a README and a JSON Schema file. Data files are organized according to three dataset types, each with its own placement rule.
+Every dataset MUST live in its own named folder and include a README and a JSON Schema file. Data files are organized according to three dataset types, each with its own placement rule.
 
 ### Details
 
 #### 01-root-structure-is-mandatory
 
-Every dataset must follow this root layout:
+Every dataset MUST follow this root layout:
 
 ```
 /[name-of-dataset]/
@@ -33,13 +33,13 @@ Every dataset must follow this root layout:
     ...                (additional files depending on dataset type)
 ```
 
-- `README.md` must explain what the dataset is about, the procedures used to create it, remarks on data quality, and instructions on how to consume it with examples.
-- `dataset.schema.json` must be a valid [JSON Schema](https://json-schema.org/) document describing the structure of the dataset's primary data.
-- The dataset folder name must be lowercase, using hyphens as separators.
+- `README.md` MUST explain what the dataset is about, the procedures used to create it, remarks on data quality, and instructions on how to consume it with examples.
+- `dataset.schema.json` MUST be a valid [JSON Schema](https://json-schema.org/) document describing the structure of the dataset's primary data.
+- The dataset folder name MUST be lowercase, using underscores as separators (e.g. `my_dataset`).
 
 #### 02-file-annotation-pairs-must-use-data-folder
 
-Datasets where each item is a file paired with structured JSON output (e.g. image labeling, document data extraction, medical records with known features) must store all files inside the `data/` subfolder. Each data file must have a sibling JSON annotation file named with the same filename suffixed with `.json`.
+Datasets where each item is a file paired with structured JSON output (e.g. image labeling, document data extraction, medical records with known features) MUST store all files inside the `data/` subfolder. Each data file MUST have a sibling JSON annotation file named with the same filename suffixed with `.json`.
 
 ```
 /[name-of-dataset]/
@@ -56,11 +56,11 @@ Datasets where each item is a file paired with structured JSON output (e.g. imag
 
 Placing the annotation file next to its source file (same name + `.json`) keeps them adjacent even in large directories, making it easy to iterate pairs programmatically.
 
-Subdirectories inside `data/` are allowed when the number of files warrants grouping, but the `.json` sibling convention must be preserved at each level.
+Subdirectories inside `data/` are allowed when the number of files warrants grouping, but the `.json` sibling convention MUST be preserved at each level.
 
 #### 03-tabular-datasets-must-use-csv-files-at-root
 
-Datasets composed of column-oriented tabular data must place CSV files at the root of the dataset folder. All tabular files must conform to the schema defined in `dataset.schema.json`, which must describe columns as named attributes with their types.
+Datasets composed of column-oriented tabular data MUST place CSV files at the root of the dataset folder. All tabular files MUST conform to the schema defined in `dataset.schema.json`, which MUST describe columns as named attributes with their types.
 
 ```
 /[name-of-dataset]/
@@ -70,11 +70,11 @@ Datasets composed of column-oriented tabular data must place CSV files at the ro
     README.md
 ```
 
-Multiple CSV files are allowed when they represent different slices or splits of the same schema (e.g. train/test splits, subsets by source). All files in the same dataset must share the same column schema.
+Multiple CSV files are allowed when they represent different slices or splits of the same schema (e.g. train/test splits, subsets by source). All files in the same dataset MUST share the same column schema.
 
 #### 04-complex-structured-datasets-must-use-jsonl
 
-Datasets with complex or heterogeneous per-record structures (e.g. LLM workflow evaluation sets, Q&A pairs, input → expected_output pairs) must use JSONL files (one JSON object per line) placed at the root of the dataset folder. Each line must conform to the schema defined in `dataset.schema.json`.
+Datasets with complex or heterogeneous per-record structures (e.g. LLM workflow evaluation sets, Q&A pairs, input → expected_output pairs) MUST use JSONL files (one JSON object per line) placed at the root of the dataset folder. Each line MUST conform to the schema defined in `dataset.schema.json`.
 
 ```
 /[name-of-dataset]/
@@ -84,11 +84,11 @@ Datasets with complex or heterogeneous per-record structures (e.g. LLM workflow 
     README.md
 ```
 
-Multiple JSONL files are allowed when they represent different splits or categories (e.g. easy vs. edge cases). All files in the same dataset must conform to the same line schema.
+Multiple JSONL files are allowed when they represent different splits or categories (e.g. easy vs. edge cases). All files in the same dataset MUST conform to the same line schema.
 
 #### 05-referenced-files-must-live-in-data-folder
 
-When any dataset type (tabular, JSONL, or annotation-pair) contains references to external files as part of the data (e.g. a JSONL record that includes a file path), those referenced files must be stored inside the `data/` subfolder of the dataset. Paths inside data records must be relative to the dataset root.
+When any dataset type (tabular, JSONL, or annotation-pair) contains references to external files as part of the data (e.g. a JSONL record that includes a file path), those referenced files MUST be stored inside the `data/` subfolder of the dataset. Paths inside data records MUST be relative to the dataset root.
 
 ## References
 

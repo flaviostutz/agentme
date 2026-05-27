@@ -161,3 +161,31 @@ all:
 	$(MAKE) -C basic-usage run
 	$(MAKE) -C advanced-usage run
 ```
+
+---
+
+#### 07-statistical-models-must-have-eval-targets
+
+Projects that contain statistical models (e.g., ML models, LLM-based evaluators, classifiers, ranking systems, or any component whose output quality is measured probabilistically) must define measurable performance thresholds and verify them automatically.
+
+**Requirements:**
+- A `make eval` target must exist and execute all performance evaluations
+- Each evaluation must have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
+- Thresholds must be declared explicitly in the project (e.g., in a config file, `Makefile` variable, or documented in `README.md`)
+- `make eval` must **exit with a non-zero status** (fail) if:
+  - The evaluation cannot be executed (missing data, environment errors, model load failures)
+  - Any metric falls below its defined minimum threshold
+- CI/CD must invoke `make eval` before releasing any version that changes model weights, prompts, or evaluation logic
+
+**Threshold declaration example (Makefile):**
+
+```makefile
+EVAL_MIN_ACCURACY := 0.85
+EVAL_MIN_F1       := 0.80
+
+eval:
+	python eval.py \
+	  --min-accuracy $(EVAL_MIN_ACCURACY) \
+	  --min-f1 $(EVAL_MIN_F1) \
+	  || (echo "Evaluation failed: metrics below threshold"; exit 1)
+```
