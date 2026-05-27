@@ -22,6 +22,6 @@
     "url": "https://github.com/flaviostutz/agentme.git"
   },
   "devDependencies": {
-    "xdrs-core": "^0.27.1"
+    "xdrs-core": "^0.28.0"
   }
 }
