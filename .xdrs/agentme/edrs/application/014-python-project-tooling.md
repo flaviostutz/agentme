@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-014-python-project-tooling-and-structure
-description: Defines the standard Python project toolchain, layout, and Makefile workflow using Mise, uv, ruff, pyright, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
+description: Defines the standard Python project toolchain, layout, and Makefile workflow using Mise, uv, ruff, ty, pytest, and pip-audit. Use when scaffolding or reviewing Python projects.
 apply-to: Python projects
 valid-from: 2026-05-25
 ---
@@ -15,7 +15,7 @@ What tooling and project structure should Python projects follow to ensure consi
 
 ## Decision Outcome
 
-**Use a Mise-managed Python and uv toolchain with `pyproject.toml`, `ruff`, `pyright`, `pytest`, `pytest-cov`, `pip-audit`, and a layout that follows [agentme-edr-016](../principles/016-cross-language-module-structure.md): a module root under `lib/`, runnable consumer examples in sibling `examples/`, and standardized `dist/` and `.cache/` locations.**
+**Use a Mise-managed Python and uv toolchain with `pyproject.toml`, `ruff`, `ty`, `pytest`, `pytest-cov`, `pip-audit`, and a layout that follows [agentme-edr-016](../principles/016-cross-language-module-structure.md): a module root under `lib/`, runnable consumer examples in sibling `examples/`, and standardized `dist/` and `.cache/` locations.**
 
 A single dependency manager, isolated package internals under `lib/`, and a standard Makefile contract keep Python projects predictable for contributors and CI while keeping the repository root clean.
 
@@ -29,12 +29,12 @@ A single dependency manager, isolated package internals under `lib/`, and a stan
 | **uv** | Dependency management, lockfile management, virtualenv sync, build, publish |
 | **pyproject.toml** | Single source of truth for package metadata and tool configuration |
 | **ruff** | Formatting, import sorting, linting, and common code-quality checks |
-| **pyright** | Static type checking |
+| **ty** | Static type checking |
 | **pytest** | Test runner |
 | **pytest-cov** | Coverage reporting and threshold enforcement |
 | **pip-audit** | Dependency CVE audit |
 
-All routine commands must run through the project `Makefile`, never by calling `uv`, `ruff`, `pytest`, or `pyright` directly in docs, CI, or daily development workflows.
+All routine commands must run through the project `Makefile`, never by calling `uv`, `ruff`, `pytest`, or `ty` directly in docs, CI, or daily development workflows.
 
 The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Using routine project CLI commands directly outside the Makefile contract is not allowed.
 
@@ -79,7 +79,7 @@ No tool MUST write cache or state files to the project root, `src/`, `tests/`, o
 │   │       └── shared/         # infrastructure-agnostic utilities
 │   ├── tests/
 │   │   ├── conftest.py     # shared fixtures when needed
-│   │   └── test_*.py
+│   │   └── *_test.py       # e.g. hello_test.py (named after the tested file)
 │   ├── tests_integration/  # optional integration tests for this module
 │   ├── tests_benchmark/    # optional benchmark harnesses and datasets
 │   └── dist/               # wheels / sdists built from lib/
@@ -94,7 +94,7 @@ No tool MUST write cache or state files to the project root, `src/`, `tests/`, o
 
 Keep the repository root clean: source code, tests, distribution artifacts, and package metadata live under `lib/`, while the root contains only orchestration and repository-level files.
 
-Use the `lib/src/` layout for import safety and packaging clarity. Keep tests under `lib/tests/` and shared test setup in `lib/tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `pyrightconfig.json` by default; keep project metadata and tool configuration in `lib/pyproject.toml`.
+Use the `lib/src/` layout for import safety and packaging clarity. Keep tests under `lib/tests/` and shared test setup in `lib/tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `ty.toml` by default; keep project metadata and tool configuration in `lib/pyproject.toml`.
 
 Internal source code MUST be organized following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
 
@@ -106,11 +106,11 @@ Python keeps unit tests under `lib/tests/` by default because that remains the m
 
 - Runtime dependencies belong in `[project.dependencies]`.
 - Development-only tooling belongs in `[dependency-groups].dev`.
-- Configure Ruff, Pyright, and Pytest in `lib/pyproject.toml` under their `tool.*` sections.
+- Configure Ruff, ty, and Pytest in `lib/pyproject.toml` under their `tool.*` sections.
 - Commit `lib/uv.lock` and keep it in sync with `lib/pyproject.toml`.
 - Expose CLI entry points with `[project.scripts]` when the project provides commands.
 
-When Pyright runs from `lib/`, configure it to discover the shared root virtual environment, for example with `venvPath = ".."` and `venv = ".venv"`.
+When ty runs from `lib/`, it auto-discovers the virtual environment via the `VIRTUAL_ENV` environment variable or the `UV_PROJECT_ENVIRONMENT` export set in the Makefile. No additional venv configuration is required in `pyproject.toml`.
 
 Ruff is the default formatter and linter. Do not add Black, isort, or Flake8 unless another XDR for that repository explicitly requires them.
 
@@ -119,6 +119,7 @@ All Python projects must configure the following sections in `lib/pyproject.toml
 ```toml
 [tool.pytest.ini_options]
 cache_dir = ".cache/pytest"
+python_files = "*_test.py"
 
 [tool.coverage.run]
 data_file = ".cache/.coverage"
@@ -156,7 +157,7 @@ ignore-overlong-task-comments = true
 
 Adjust `target-version` to match the project's minimum supported Python version. The `cache-dir` keeps Ruff's cache under `.cache/ruff` alongside other tool caches. The `src` list must include every directory that contains importable Python code. The `select` list enables a broad set of rules covering style, correctness, performance, security, and documentation. The `ignore` list suppresses rules that are either too noisy or conflict with the chosen docstring style.
 
-Pyright must run on every lint pass. `typeCheckingMode = "standard"` is the minimum baseline; projects may raise this to `strict` when the codebase is ready.
+ty must run on every lint pass. The default rule set is the minimum baseline; projects may enable stricter rules as the codebase matures.
 
 Pytest coverage must fail below 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md).
 
@@ -187,8 +188,8 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 |--------|-------------|
 | `install` | `mise exec -- uv sync --project . --frozen --all-extras --dev` using the shared root `.venv/` |
 | `build` | `mise exec -- uv sync --project . --frozen --all-extras --dev && mise exec -- uv build --project . --out-dir dist` |
-| `lint` | `mise exec -- uv run --project . ruff format --check . && mise exec -- uv run --project . ruff check . && mise exec -- uv run --project . pyright && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
-| `lint-fix` | `mise exec -- uv run --project . ruff format . && mise exec -- uv run --project . ruff check . --fix && mise exec -- uv run --project . pyright && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `lint` | `mise exec -- uv run --project . ruff format --check . && mise exec -- uv run --project . ruff check . && mise exec -- uv run --project . ty check && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
+| `lint-fix` | `mise exec -- uv run --project . ruff format . && mise exec -- uv run --project . ruff check . --fix && mise exec -- uv run --project . ty check && mise exec -- uv run --project . pip-audit`, with caches redirected into `.cache/` |
 | `test-unit` | `mise exec -- uv run --project . pytest --cov=src/<package_name> --cov-branch --cov-report=term-missing --cov-fail-under=80`, with pytest and coverage outputs stored under `.cache/` |
 | `clean` | Remove `dist/` and `.cache/` inside `lib/` |
 | `all` | `build lint test-unit` |
@@ -203,7 +204,7 @@ The root `Makefile` must remain the only contract for CI and contributors, in li
 
 * (REJECTED) **Mixed Python tooling** - Separate tools and config files such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, and `mypy`.
   * Reason: Increases cognitive load, duplicates configuration, and weakens the standard command surface across projects.
-* (CHOSEN) **uv + `lib/` package layout + Ruff/Pyright/Pytest toolchain** - One dependency manager, package internals isolated under `lib/`, consumer examples under `examples/`, and one root Makefile contract.
+* (CHOSEN) **uv + `lib/` package layout + Ruff/ty/Pytest toolchain** - One dependency manager, package internals isolated under `lib/`, consumer examples under `examples/`, and one root Makefile contract.
   * Reason: Keeps packaging, dependency locking, static analysis, security auditing, and test execution consistent while aligning Python repositories with the established JavaScript layout.
 
 ## References

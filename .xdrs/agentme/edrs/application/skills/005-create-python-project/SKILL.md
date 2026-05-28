@@ -13,7 +13,7 @@ compatibility: Python 3.12+
 ## Overview
 
 Creates a complete Python project from scratch using Mise, `uv`, `pyproject.toml`, Ruff,
-Pyright, Pytest, and Makefiles. The layout keeps the package self-contained under `lib/`,
+ty, Pytest, and Makefiles. The layout keeps the package self-contained under `lib/`,
 organizes internal code following [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
 (`adapters/`, `app/`, `shared/`), uses a shared root `.venv/`, redirects persistent caches into
 `.cache/`, and places runnable consumer projects under the sibling `examples/` folder.
@@ -157,13 +157,13 @@ build: install
 lint: install
 	$(MISE) uv run --project . ruff format --check .
 	$(MISE) uv run --project . ruff check .
-	$(MISE) uv run --project . pyright
+	$(MISE) uv run --project . ty check
 	$(MISE) uv run --project . pip-audit
 
 lint-fix: install
 	$(MISE) uv run --project . ruff format .
 	$(MISE) uv run --project . ruff check . --fix
-	$(MISE) uv run --project . pyright
+	$(MISE) uv run --project . ty check
 	$(MISE) uv run --project . pip-audit
 
 test-unit: install
@@ -203,7 +203,7 @@ dev = []
 [dependency-groups]
 dev = [
   "pip-audit>=2.9.0",
-  "pyright>=1.1.400",
+  "ty>=0.1.0",
   "pytest>=8.4.0",
   "pytest-cov>=6.1.0",
   "ruff>=0.11.0",
@@ -237,19 +237,17 @@ ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
 [tool.ruff.lint.pycodestyle]
 ignore-overlong-task-comments = true
 
-[tool.pyright]
-include = ["src", "tests"]
-venvPath = ".."
-venv = ".venv"
-typeCheckingMode = "standard"
+[tool.ty]
+src = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+python_files = "*_test.py"
 addopts = "-q"
 ```
 
 Use `lib/pyproject.toml` as the single configuration file for the package. Do not add
-`requirements.txt`, `setup.py`, `setup.cfg`, `ruff.toml`, or `pyrightconfig.json` by default.
+`requirements.txt`, `setup.py`, `setup.cfg`, `ruff.toml`, or `ty.toml` by default.
 
 **`lib/README.md`**
 
@@ -332,7 +330,7 @@ if __name__ == "__main__":
 
 Create empty `adapters/connectors/` directory with a `.gitkeep` for outbound adapters.
 
-**`lib/tests/test_hello.py`**
+**`lib/tests/hello_test.py`**
 
 ```python
 from [package_name].app.hello import hello
@@ -391,7 +389,7 @@ After creating the files:
 - Create `Makefile`, `README.md`, `lib/pyproject.toml`, `lib/Makefile`, `lib/src/event_tools/`, `lib/tests/`, and `examples/`
 - Scaffold `adapters/`, `app/`, `shared/` directories inside `lib/src/event_tools/`
 - Add `lib/README.md`, `.cache/` handling, and install examples from the built wheel in `lib/dist/`
-- Configure `uv`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
+- Configure `uv`, Ruff, ty, Pytest, `pytest-cov`, and `pip-audit`
 - Verify with `make lint-fix`, `make test`, and `make build`
 
 **Input:** "Scaffold a Python CLI package"
