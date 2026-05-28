@@ -1,7 +1,7 @@
 ---
 name: agentme-edr-policy-021-pragmatic-hexagonal-architecture
 description: Defines a pragmatic variant of Hexagonal Architecture for organizing application source code into Adapters (inbound/outbound I/O boundaries) and Application (business logic) layers, with explicit naming conventions and folder structure. Use when designing or reviewing the internal layout of application modules.
-apply-to: All application projects with multiple I/O boundaries or exceeding 300 LOC
+apply-to: All application projects
 valid-from: 2026-05-28
 ---
 
@@ -95,8 +95,8 @@ mysystem/
 
 #### 07-minimum-complexity-threshold
 
-- Apply this structure when a module has multiple I/O boundaries or exceeds 300 lines of code
-- Trivial scripts and single-purpose tools do not need this layering
+- Trivial scripts and single-purpose tools (fewer than ~300 lines with a single I/O boundary) MAY skip this layering
+- All other projects MUST use this structure from the start
 
 #### 08-examples-of-data-flow
 

@@ -12,9 +12,9 @@ compatibility: Go 1.21+
 
 ## Overview
 
-Creates a complete Go CLI project from scratch, following the layout from [agentme-edr-010](../../010-golang-project-tooling.md). Business logic lives in named feature packages; CLI wiring lives in `cli/<feature>/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
+Creates a complete Go project from scratch, following the layout from [agentme-edr-010](../../010-golang-project-tooling.md) and [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md). Business logic lives in `app/<feature>/` packages; CLI wiring lives in `adapters/cli/`; outbound integrations live in `adapters/connectors/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
 
-Related EDRs: [agentme-edr-010](../../010-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-010](../../010-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 
@@ -67,7 +67,7 @@ import (
 	"fmt"
 	"os"
 
-	cli[Feature] "[module]/cli/[feature]"
+	cli "[module]/adapters/cli"
 )
 
 func main() {
@@ -78,7 +78,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "[subcommand]":
-		cli[Feature].Run(os.Args)
+		cli.Run[Feature](os.Args)
 	default:
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 		fmt.Println("Usage: [binary] [[feature]]")
@@ -216,7 +216,7 @@ coverage.out
 
 ### Phase 3: Create the feature package
 
-**`[feature]/[feature].go`** (replace `[feature]`, `[Feature]`):
+**`app/[feature]/[feature].go`** (replace `[feature]`, `[Feature]`):
 
 ```go
 package [feature]
@@ -246,7 +246,7 @@ func Run(opts Options) (Result, error) {
 }
 ```
 
-**`[feature]/[feature]_test.go`** (replace `[feature]`, `[Feature]`):
+**`app/[feature]/[feature]_test.go`** (replace `[feature]`, `[Feature]`):
 
 ```go
 package [feature]
@@ -267,12 +267,12 @@ func Test[Feature]Run(t *testing.T) {
 
 ---
 
-### Phase 4: Create the CLI package
+### Phase 4: Create the CLI adapter
 
-**`cli/[feature]/[feature].go`** (replace `[module]`, `[feature]`, `[Feature]`, `[subcommand]`):
+**`adapters/cli/[feature].go`** (replace `[module]`, `[feature]`, `[Feature]`, `[subcommand]`):
 
 ```go
-package cli[Feature]
+package cli
 
 import (
 	"flag"
@@ -280,11 +280,11 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"[module]/[feature]"
+	"[module]/app/[feature]"
 )
 
-// Run parses CLI flags for the [subcommand] command and calls the domain package.
-func Run(args []string) {
+// Run[Feature] parses CLI flags for the [subcommand] command and calls the domain package.
+func Run[Feature](args []string) {
 	fs := flag.NewFlagSet("[subcommand]", flag.ExitOnError)
 	verbose := fs.Bool("verbose", false, "Show verbose logs during processing")
 
@@ -309,6 +309,21 @@ func Run(args []string) {
 }
 ```
 
+**`shared/logging.go`** (optional, scaffold if needed):
+
+```go
+package shared
+
+import "github.com/sirupsen/logrus"
+
+// SetupLogging configures the global log level.
+func SetupLogging(verbose bool) {
+	if verbose {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
+}
+```
+
 ---
 
 ### Phase 5: Verify and run
@@ -327,8 +342,10 @@ Fix any compile or lint errors before finishing.
 ## Conventions and reminders
 
 - `main.go` dispatches only — no logic.
-- Business logic only in `[feature]/` packages — no flag parsing, no `fmt.Println` for diagnostics.
-- `cli/[feature]/` owns flags, output, and calls domain. No logic here beyond reading flags and printing results.
+- Business logic only in `app/<feature>/` packages — no flag parsing, no `fmt.Println` for diagnostics.
+- `adapters/cli/` owns flag parsing, output formatting, and the wiring between flags and `app/` functions. No business logic lives in adapter packages.
+- Outbound adapters live under `adapters/connectors/` with one subfolder per external resource (e.g., `postgres/`, `stripe-api/`, `redis-cache/`).
+- `shared/` must contain only infrastructure-agnostic utilities — not business rules or domain logic.
 - All tests co-located (`*_test.go` next to the file under test).
 - Use `tests_integration/` for integration flows and `tests_benchmark/` when benchmarks need dedicated harnesses or datasets.
 - Log with `logrus`; never use `fmt.Println` for diagnostic/debug output.
