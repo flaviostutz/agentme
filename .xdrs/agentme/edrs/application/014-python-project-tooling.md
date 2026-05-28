@@ -57,7 +57,7 @@ No tool MUST write cache or state files to the project root, `src/`, `tests/`, o
 ```text
 /
 ├── .mise.toml              # required; pins Python and uv
-├── .gitignore
+├── .gitignore              # MUST ignore .venv/, dist/, .cache/, __pycache__/
 ├── .cache/                 # optional shared uv cache at repo level
 ├── .venv/                  # shared uv environment for lib/ and examples/
 ├── Makefile                # root entry point; delegates to lib/ and runs examples/
