@@ -33,7 +33,7 @@ Guides the creation of a well-structured plan document by following `_core-adr-p
 Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail is unclear, the standard decides.
 
 **Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Type** — match the type of the Policies the plan primarily implements or relates to (`adrs`, `bdrs`, or `edrs`).
 - **BDR**: business process, product policy, strategic rule, operational procedure
@@ -164,4 +164,4 @@ Rules to apply while drafting:
 - MUST follow the plan template and section-goal rules from `007-plan-standards`.
 - MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
-- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).

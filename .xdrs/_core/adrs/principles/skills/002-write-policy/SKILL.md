@@ -35,7 +35,7 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 - **EDR**: specific tool/library, coding practice, testing strategy, project structure
 
 **Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Subject** — pick one from the allowed list for the chosen type (from `001-xdrs-core`):
 - ADR: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
@@ -187,7 +187,7 @@ If any check fails, revise and re-run this phase before proceeding.
 - MUST NOT create a Policy that duplicates a decision already captured in another Policy — extend or reference instead.
 - MUST prefer links and short references over repeating the same decision content across related documents.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
-- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
 
 ## References
 
