@@ -91,22 +91,35 @@ Agent flows MUST include at least one explicit verification node before producin
 
 #### 07-workflow-structure
 
-Agent logic MUST be organized as named workflows. Each workflow is an independent LangGraph `StateGraph` with a defined start node and end node, connecting agents, states, routes, and decision nodes.
+Agent logic MUST be organized as named workflows following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md). Each workflow is an independent LangGraph `StateGraph` with a defined start node and end node, connecting agents, states, routes, and decision nodes.
 
-For each workflow named `<workflow>`, create:
+Workflows live inside `app/workflows/` (the application layer), while external integrations such as LLM providers, vector stores, and third-party APIs live under `adapters/connectors/` (the outbound adapter layer). Inbound interfaces (HTTP API, CLI) live under `adapters/` as inbound adapters.
+
+For each workflow named `<workflow>`, the full project layout is:
 
 ```text
-lib/
-  workflows/
-    <workflow>/
-      graph.py        # StateGraph definition; entry point for the workflow
-      agents.py       # LangChain agent definitions used by this workflow
-      states.py       # Typed state dataclasses / TypedDicts
-      routes.py       # Conditional edge functions
+lib/src/<package_name>/
+  adapters/
+    http/                      # inbound: API server that triggers workflows
+    cli/                       # inbound: CLI entry point (if applicable)
+    connectors/                # outbound: external resource integrations
+      openai/                  # LLM provider connector
+      azure-openai/            # alternative LLM provider connector
+      postgres/                # database connector (if applicable)
+      vector-store/            # vector DB connector (if applicable)
+  app/
+    workflows/
+      <workflow>/
+        graph.py               # StateGraph definition; entry point for the workflow
+        agents.py              # LangChain agent definitions used by this workflow
+        states.py              # Typed state dataclasses / TypedDicts
+        routes.py              # Conditional edge functions
+  shared/                      # infrastructure-agnostic utilities
 ```
 
-- `graph.py` MUST define and compile the `StateGraph` and expose a `graph` object that callers invoke.
-- Additional modules (tools, prompts, schemas) MAY be added inside `lib/workflows/<workflow>/` when they are specific to that workflow. Shared utilities belong in `lib/<module>/`.
+- `app/workflows/<workflow>/graph.py` MUST define and compile the `StateGraph` and expose a `graph` object that callers invoke.
+- Tool calls within workflow nodes that interact with external systems MUST use connectors from `adapters/connectors/`, not inline API calls.
+- Additional modules (prompts, schemas) MAY be added inside `app/workflows/<workflow>/` when they are specific to that workflow. Shared utilities belong in `shared/`.
 - Each workflow MUST be documented with a Mermaid diagram in the project `README.md` following rule `05-flow-documentation`.
 
 #### 08-workflow-evals
@@ -154,3 +167,8 @@ Use deepagents whenever ANY of the following is true for a workflow or tool:
 - If the host-side code needs to pass files into the sandbox (e.g. generated config or input data), create a temporary directory with `tempfile.mkdtemp()`, write the files there, and mount it into the sandbox. Clean it up in the `finally` block.
 - Replace hand-rolled `read_file`, `search_files`, and `grep_file` tool implementations with the equivalent tools provided by deepagents.
 
+## References
+
+- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) — Adapter/application layer separation that defines the project layout
+- [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
+- [agentme-edr-019](019-ml-dataset-structure.md) — ML dataset structure for eval datasets

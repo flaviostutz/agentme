@@ -46,6 +46,23 @@ Use a single `lib/tsconfig.json` for both build and type-aware linting. Keep co-
 
 When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `module` is `nodenext`. `ts-jest` still runs in CommonJS mode by default, so `lib/jest.config.js` MUST configure the `ts-jest` transform with an inline `tsconfig` override that sets `module: 'commonjs'`. Do not use the deprecated `globals['ts-jest']` configuration style.
 
+#### Coverage
+
+Jest must enforce 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md). Configure thresholds in `lib/jest.config.js`:
+
+```js
+coverageThreshold: {
+  global: {
+    lines: 80,
+    branches: 80,
+  },
+},
+coverageProvider: 'v8',
+coverageDirectory: '.cache/coverage',
+```
+
+Builds that miss the threshold must not be merged.
+
 #### Project structure
 
 ```
@@ -78,9 +95,33 @@ When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `modu
 
 The root `Makefile` delegates every target to `/lib` then `/examples` in sequence. Parent Makefiles should call child Makefiles directly, and each module Makefile is responsible for running its actual tool commands through `mise exec --`.
 
+When the project is an application (not a library) with multiple I/O boundaries or exceeding 300 LOC, organize the internal `src/` folder following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md):
+
+```
+lib/
+  └── src/
+      ├── adapters/
+      │   ├── cli/             # CLI bootstrap and entry point
+      │   ├── http/            # HTTP server bootstrap and handlers
+      │   └── connectors/      # outbound adapters (one folder per external resource)
+      │       ├── postgres/
+      │       └── stripe-api/
+      ├── app/                 # core business logic
+      └── shared/              # infrastructure-agnostic utilities
+```
+
 When a repository contains multiple JavaScript/TypeScript packages, each package MUST live in its own module folder such as `lib/my-package/` or `services/my-service/`, each with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
 
-Persistent caches MUST live under `.cache/`. Recommended locations are Jest `cacheDirectory`, ESLint `--cache-location`, TypeScript `tsBuildInfoFile`, and coverage outputs.
+All tool caches, incremental state files, and workspace-local config outputs MUST be written under `.cache/`. This applies to every tool without exception. Cache and state paths MUST be declared in the tool's own configuration file — never on the command line — so that the location is enforced regardless of how the tool is invoked:
+
+| Tool | Config file | Setting | Value |
+|------|------------|---------|-------|
+| **Jest** | `jest.config.js` | `cacheDirectory` | `.cache/jest` |
+| **ESLint** | `eslint.config.mjs` | `cache: true, cacheLocation: '.cache/eslint'` | (set in config object) |
+| **TypeScript** | `tsconfig.json` | `tsBuildInfoFile` | `.cache/tsbuildinfo` |
+| **Jest coverage** | `jest.config.js` | `coverageDirectory` | `.cache/coverage` |
+
+No tool MUST write cache or state files to the project root, `src/`, or any other directory outside `.cache/`. Passing cache paths as Makefile or CLI flags instead of config-file settings is not allowed.
 
 Contributors and CI MUST invoke the commands below as `make <target>`. The Makefile recipes themselves MUST call the underlying tools through `mise exec -- <tool> ...`.
 
@@ -93,7 +134,7 @@ Contributors and CI MUST invoke the commands below as `make <target>`. The Makef
 | `build-module` | `mise exec -- pnpm exec tsc ...` only (no pack) |
 | `lint` | `mise exec -- pnpm exec eslint ./src` |
 | `lint-fix` | `mise exec -- pnpm exec eslint ./src --fix` |
-| `test` | `mise exec -- pnpm exec jest --verbose` |
+| `test` | `mise exec -- pnpm exec jest --verbose --coverage` |
 | `test-watch` | `mise exec -- pnpm exec jest --watch` |
 | `clean` | remove `node_modules/`, `dist/`, and `.cache/` |
 | `all` | `build lint test` |
@@ -120,5 +161,7 @@ The examples folder MUST exist for any libraries and utilities that are publishe
 
 ## References
 
+- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Coverage and unit-test baseline
+- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 
