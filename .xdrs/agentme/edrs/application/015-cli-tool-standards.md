@@ -32,34 +32,34 @@ This keeps the user-facing command predictable while preserving a clean library 
   - `--verbose` on the root command and on subcommands when flags are parsed per command
 - Root `--help` output must list all available commands, key options, and usage examples. Command-specific help must describe that command's arguments and options.
 
-#### CLI to library separation
+#### CLI to application separation
 
-- Structure the software as `cli -> lib`.
-- The CLI layer must only parse arguments, load config, call the library, and format output.
-- Domain logic must live in the library and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
-- Every feature available through the CLI must also be available through the library API.
-- Organize the library by action so the mapping stays direct and obvious.
-  - `extract` command -> `extract(...)`
-  - `validate` command -> `validate(...)`
-- Avoid one generic library `run()` entry point that hides action-specific contracts behind switches or string commands.
+- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md).
+- The CLI layer must only parse arguments, load config, call the application layer, and format output.
+- Domain logic must live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
+- Every feature available through the CLI must also be available through the application API.
+- Organize the application layer by action so the mapping stays direct and obvious.
+  - `extract` command -> `app/extract(...)`
+  - `validate` command -> `app/validate(...)`
+- Avoid one generic `run()` entry point that hides action-specific contracts behind switches or string commands.
 
-#### Library API shape
+#### Application API shape
 
-- Each CLI action should map to a dedicated exported API with typed inputs and outputs appropriate for the language.
-- Library APIs should accept in-memory options objects or typed parameters, not require config files or environment variables unless library-level config-file support is an explicit requirement.
-- The CLI layer is responsible for translating flags, positional arguments, and config-file contents into library inputs.
-- The library should return explicit results and errors so the CLI can decide what to print and which exit code to use.
+- Each CLI action should map to a dedicated exported application function with typed inputs and outputs appropriate for the language.
+- Application APIs should accept in-memory options objects or typed parameters, not require config files or environment variables unless application-level config-file support is an explicit requirement.
+- The CLI layer is responsible for translating flags, positional arguments, and config-file contents into application inputs.
+- The application layer should return explicit results and errors so the CLI can decide what to print and which exit code to use.
 
 #### Configuration
 
 - Prefer flags and positional arguments for simple inputs.
 - When configuration becomes long, nested, or repetitive, support a config file instead of pushing all values into flags.
-- By default, config-file discovery and loading must happen in the CLI layer, not in the library layer.
+- By default, config-file discovery and loading must happen in the CLI layer, not in the application layer.
 - When a config file is supported, the CLI should try to load a JSON config file from `[cwd]/.[cli-name]rc` by default.
 - The CLI should also support an explicit config path flag such as `--config`.
 - For JavaScript tools, `cosmiconfig` is an acceptable implementation. Equivalent discovery libraries are acceptable in other ecosystems.
-- The library must not depend on the presence of the config file; it should receive parsed configuration values from the CLI layer.
-- The library may load or parse config files only when that behavior is an explicit requirement of the library contract for non-CLI consumers as well.
+- The application layer must not depend on the presence of the config file; it should receive parsed configuration values from the CLI layer.
+- The application layer may load or parse config files only when that behavior is an explicit requirement of the application contract for non-CLI consumers as well.
 
 #### Output and progress
 
@@ -73,14 +73,14 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 - Exit with `0` only when the requested action completed successfully.
 - Exit with `1` when the requested action could not be completed.
-- The library should surface failure as return values, result objects, or language-idiomatic errors; the CLI is responsible for converting that outcome into user-facing messages and process exit codes.
+- The application layer should surface failure as return values, result objects, or language-idiomatic errors; the CLI is responsible for converting that outcome into user-facing messages and process exit codes.
 
 #### Documentation
 
 - `README.md` must include at least 4 CLI usage examples.
-- `README.md` must include at least 2 library API examples for the same operation also available through the CLI.
+- `README.md` must include at least 2 application API examples for the same operation also available through the CLI.
 - If the tool supports config files, at least 1 README example should show config-file usage.
-- Examples must use the public command and public library API, not internal modules or private files.
+- Examples must use the public command and public application API, not internal modules or private files.
 
 #### Distribution and versioning
 
@@ -93,12 +93,13 @@ This keeps the user-facing command predictable while preserving a clean library 
 ## Considered Options
 
 * (REJECTED) **Ad hoc CLIs with embedded business logic** - Keep parsing, processing, config loading, and output formatting inside a single entry point.
-  * Reason: Makes the tool hard to test, hard to reuse as a library, and inconsistent across commands.
-* (CHOSEN) **Thin CLI adapter over action-oriented library APIs** - Keep the CLI responsible for user interaction and the library responsible for the actual behavior.
-  * Reason: Preserves a clean programmatic API, keeps command behavior discoverable, and makes the CLI-to-library mapping easy to maintain.
+  * Reason: Makes the tool hard to test, hard to reuse programmatically, and inconsistent across commands.
+* (CHOSEN) **Thin CLI adapter over action-oriented application APIs** - Keep the CLI responsible for user interaction and the application layer responsible for the actual behavior.
+  * Reason: Preserves a clean programmatic API, keeps command behavior discoverable, and makes the CLI-to-application mapping easy to maintain.
 
 ## References
 
+- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
 - [agentme-edr-003](003-javascript-project-tooling.md) - JavaScript project packaging and structure
 - [agentme-edr-007](../principles/007-project-quality-standards.md) - README and examples baseline
 - [agentme-edr-008](../devops/008-common-targets.md) - Standard command names for project entry points

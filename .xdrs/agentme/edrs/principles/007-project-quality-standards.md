@@ -31,7 +31,7 @@ These standards form a non-negotiable baseline. Individual projects may raise th
 
 **Required README structure:**
 
-```markdown
+````markdown
 # Project Name
 
 One-line description.
@@ -46,7 +46,7 @@ npm install my-package
 import { myFunction } from "my-package";
 myFunction({ input: "value" });
 ```
-```
+````
 
 ---
 

@@ -32,6 +32,7 @@ Language and framework-specific tooling and project structure.
 - [agentme-edr-018](application/018-ai-agent-development-standards.md) - **AI agent development standards** - Standard toolchain, framework, evaluation, and workflow patterns for AI agent projects built with Python and LangGraph
 - [agentme-edr-019](application/019-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
 - [agentme-edr-020](application/020-ai-agent-xdrs-knowledge-layer.md) - **AI agent XDRS knowledge layer** - How to integrate XDRS as the runtime source of truth for policies and skills in AI agents (apply only when the project explicitly uses XDRS)
+- [agentme-edr-021](application/021-pragmatic-hexagonal-architecture.md) - **Pragmatic hexagonal architecture** - Organize application layers as External/Adapters/Application with practical coupling rules
 - [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
 
 ## Devops

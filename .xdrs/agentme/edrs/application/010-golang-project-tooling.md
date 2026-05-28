@@ -47,16 +47,25 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 ├── main.go                    # binary entry point — argument dispatch only, no logic
 ├── .cache/                    # GOCACHE, GOMODCACHE, golangci-lint cache, coverage
 ├── dist/                      # built binaries and packaged outputs
-├── <feature-a>/               # domain package (e.g. ownership/, changes/, utils/)
-│   ├── *.go                   # business logic
-│   └── *_test.go              # unit tests co-located with source
-├── <feature-b>/
-│   └── ...
-├── cli/                       # CLI wiring — ties flags to domain packages
-│   ├── <feature-a>/
+├── adapters/                  # I/O boundary layer (following agentme-edr-021)
+│   ├── cli/                   # inbound: CLI wiring — flag parsing, output formatting
+│   │   └── *.go               # subfolders per feature only when complexity warrants it
+│   ├── http/                  # inbound: HTTP server bootstrap and handlers
 │   │   └── *.go
+│   └── connectors/            # outbound: one folder per external resource
+│       ├── postgres/
+│       │   └── *.go
+│       └── stripe-api/
+│           └── *.go
+├── app/                       # core business logic packages
+│   ├── <feature-a>/
+│   │   ├── *.go
+│   │   └── *_test.go
 │   └── <feature-b>/
-│       └── *.go
+│       ├── *.go
+│       └── *_test.go
+├── shared/                    # infrastructure-agnostic utilities shared across adapters and app
+│   └── *.go
 ├── tests_integration/         # optional integration tests for this module
 ├── tests_benchmark/           # optional benchmark harnesses and datasets
 └── examples/                  # optional sibling consumer examples for libraries
@@ -64,12 +73,16 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 
 **Key layout rules:**
 
+- Internal source code is organized following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
 - One Go module per project (`go.mod` at the project root). In a monorepo, each Go project has its own `go.mod` in its subdirectory. No nested modules within a single project unless explicitly justified.
 - In a multi-module repository, each Go module MUST live in its own folder root with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
-- `main.go` is solely an argument dispatcher — it reads `os.Args[1]` and delegates to a `cli/<feature>/Run*()` function. No domain logic lives in `main.go`.
-- Business logic lives in named feature packages at the root (e.g., `ownership/`, `changes/`, `utils/`). These packages are importable and testable without any CLI concerns.
-- `cli/` packages own flag parsing, output formatting, and the wiring between flags and domain functions. No business logic lives in `cli/`.
+- `main.go` is solely an argument dispatcher — it reads `os.Args[1]` and delegates to an `adapters/cli/<feature>/Run*()` function. No domain logic lives in `main.go`.
+- Business logic lives in named feature packages under `app/` (e.g., `app/ownership/`, `app/changes/`). These packages are importable and testable without any CLI or adapter concerns.
+- `adapters/cli/` packages own flag parsing, output formatting, and the wiring between flags and `app/` functions. No business logic lives in adapter packages.
+- Outbound adapters live under `adapters/connectors/` with one subfolder per external resource, named descriptively (e.g., `postgres/`, `stripe-api/`, `redis-cache/`).
+- `shared/` must contain only infrastructure-agnostic utilities — not business rules or domain logic.
 - Packages are flat by default; sub-packages are only introduced when a feature package itself exceeds ~400 lines or has clearly separable sub-concerns.
+- Application MAY import from Adapters when it simplifies the design (pragmatic coupling per edr-021 rule 05).
 - Consumer examples for reusable libraries belong in a sibling `examples/` folder and MUST import the public module path rather than reaching into internal source paths. Because Go libraries are not typically consumed from a local packaged artifact, local example validation may use a temporary module replacement for resolution, but the import path MUST remain the public module path.
 
 #### go.mod
@@ -94,7 +107,8 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 | `test-unit` | `mise exec -- go test -cover ./...` — alias for unit tests only (same here; integration tests get a separate tag) |
 | `coverage` | `mise exec -- go tool cover -func .cache/coverage.out` — displays coverage summary |
 | `clean` | Remove `dist/` and `.cache/` |
-| `start` | `mise exec -- go run ./ <default-args>` — launch the binary locally for dev use |
+| `run` | `mise exec -- go run ./ <default-args>` — launch the binary locally |
+| `run-http` | `mise exec -- go run ./ http` — launch the HTTP inbound adapter |
 | `publish` | Tag with `mise exec -- npx -y monotag ...`, then push tag + binaries to GitHub Releases |
 
 The required invocation pattern is:
@@ -125,7 +139,16 @@ When the project produces a CLI binary for end-users:
 - Benchmarks: keep simple `Benchmark*` functions co-located in `*_test.go`; use `tests_benchmark/` when the benchmark needs dedicated harnesses or datasets.
 - Integration or slow tests: guard with `//go:build integration` and keep them in `tests_integration/` when they are not naturally co-located with one package.
 
-Redirect Go tool caches into `.cache/` using `GOCACHE`, `GOMODCACHE`, and `GOLANGCI_LINT_CACHE` from the module `Makefile` so the repository does not accumulate scattered cache directories.
+All tool caches, incremental state files, and build outputs MUST be written under `.cache/`. Neither `go` nor `golangci-lint` support a project-level config file for cache paths, so environment variables are the only available mechanism. These MUST be declared as top-level exports at the top of the module `Makefile` (not passed as per-recipe CLI flags or inline env overrides) so they apply to every recipe consistently:
+
+| Tool | Mechanism | Makefile export |
+|------|-----------|------------------|
+| **Go build cache** | `GOCACHE` env var | `export GOCACHE := $(CURDIR)/.cache/go-build` |
+| **Go module cache** | `GOMODCACHE` env var | `export GOMODCACHE := $(CURDIR)/.cache/go-mod` |
+| **golangci-lint cache** | `GOLANGCI_LINT_CACHE` env var | `export GOLANGCI_LINT_CACHE := $(CURDIR)/.cache/golangci-lint` |
+| **Test coverage output** | `-coverprofile` flag in `test` target | `.cache/coverage.out` |
+
+No tool MUST write cache or state files to the project root or any directory outside `.cache/`. Passing cache paths as per-recipe environment overrides instead of top-level Makefile exports is not allowed.
 
 #### Linting
 
@@ -151,8 +174,9 @@ Use `github.com/sirupsen/logrus` for structured logging. Set the log level from 
 
 #### CLI flag parsing
 
-Use the standard library `flag` package for CLI flags. Each `cli/<feature>` package defines its own `FlagSet`, parses it from `os.Args[2:]`, and calls the corresponding domain function.
+Use the standard library `flag` package for CLI flags. Each `adapters/cli/<feature>` package defines its own `FlagSet`, parses it from `os.Args[2:]`, and calls the corresponding `app/` function.
 
 ## References
 
+- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) — Defines the adapter/application separation that this layout follows
 - [003-create-golang-project](skills/003-create-golang-project/SKILL.md) — scaffolds a new Go project following this structure
