@@ -41,7 +41,7 @@ Do NOT proceed to Phase 1 until you have at minimum a clear **topic** and **audi
 Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail is unclear, the standard decides.
 
 **Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist` file. If any file under `.xdrs/[scope]/` appears in `.filedist`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
 **Type** — match the type of the XDRS elements the article primarily synthesizes (`adrs`, `bdrs`, or `edrs`).
 If the topic spans multiple types, use `adrs`. Use the same rules as `002-write-policy` Phase 2:
@@ -140,10 +140,8 @@ Rules to apply while drafting:
 - MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST follow the article template and placement rules from `004-article-standards`.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
-- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist`).
+- MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
 - MUST defer to active and applicable Policies when article synthesis conflicts with them.
-
-## References
 
 - [_core-adr-policy-004 - Article standards](../../004-article-standards.md)
 - [_core-adr-policy-006 - Research standards](../../006-research-standards.md)
