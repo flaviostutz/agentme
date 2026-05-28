@@ -104,6 +104,7 @@ The root `Makefile` keeps the repository clean by delegating package work to `li
 .venv/
 dist/
 .cache/
+__pycache__/
 ```
 
 **`./README.md`**
