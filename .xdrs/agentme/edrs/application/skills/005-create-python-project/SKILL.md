@@ -1,10 +1,9 @@
 ---
 name: agentme-edr-skill-005-create-python-project
 description: >
-  Scaffolds the initial boilerplate structure for a Python library or CLI project following the
-  standard tooling and layout defined in agentme-edr-014. Activate this skill when the user asks
-  to create, scaffold, or initialize a new Python package, CLI, library, or similar project
-  structure.
+  Scaffolds the initial boilerplate structure for a Python project following the standard tooling
+  and layout defined in agentme-edr-014. Activate this skill when the user asks to create,
+  scaffold, or initialize a new Python package, CLI, or similar project structure.
 metadata:
   author: flaviostutz
   version: "1.0"
@@ -14,11 +13,12 @@ compatibility: Python 3.12+
 ## Overview
 
 Creates a complete Python project from scratch using Mise, `uv`, `pyproject.toml`, Ruff,
-Pyright, Pytest, and Makefiles. The default layout keeps the library self-contained under `lib/`,
-uses a shared root `.venv/`, redirects persistent caches into `.cache/`, and places runnable
-consumer projects under the sibling `examples/` folder.
+Pyright, Pytest, and Makefiles. The layout keeps the package self-contained under `lib/`,
+organizes internal code following [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
+(`adapters/`, `app/`, `shared/`), uses a shared root `.venv/`, redirects persistent caches into
+`.cache/`, and places runnable consumer projects under the sibling `examples/` folder.
 
-Related EDRs: [agentme-edr-014](../../014-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-014](../../014-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 
@@ -30,7 +30,6 @@ Ask for or infer from context:
 - **Short description** - one sentence
 - **Author** name or GitHub username
 - **Python version** - default `3.13`
-- **Project kind** - `library` or `cli`
 - **Primary entry point** - first module or command name to scaffold
 - **GitHub repo URL** - optional, for project metadata
 - **Confirm target directory** - default: current workspace root
@@ -284,29 +283,37 @@ make test
 
 ### Phase 4: Create the package and tests inside `lib/`
 
-Create this baseline structure.
+Create this baseline structure following [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md).
 
 **`lib/src/[package_name]/__init__.py`**
 
 ```python
-from .core import hello
+from .app.hello import hello
 
 __all__ = ["hello"]
 ```
 
-**`lib/src/[package_name]/core.py`**
+**`lib/src/[package_name]/app/__init__.py`**
+
+```python
+```
+
+**`lib/src/[package_name]/app/hello.py`**
 
 ```python
 def hello(name: str) -> str:
     return f"Hello, {name}!"
 ```
 
-**`lib/src/[package_name]/__main__.py`**
-
-Use this only for CLI-oriented projects.
+**`lib/src/[package_name]/adapters/__init__.py`**
 
 ```python
-from .core import hello
+```
+
+**`lib/src/[package_name]/adapters/cli/__init__.py`**
+
+```python
+from [package_name].app.hello import hello
 
 
 def main() -> None:
@@ -317,10 +324,17 @@ if __name__ == "__main__":
     main()
 ```
 
-**`lib/tests/test_core.py`**
+**`lib/src/[package_name]/shared/__init__.py`**
 
 ```python
-from [package_name].core import hello
+```
+
+Create empty `adapters/connectors/` directory with a `.gitkeep` for outbound adapters.
+
+**`lib/tests/test_hello.py`**
+
+```python
+from [package_name].app.hello import hello
 
 
 def test_hello() -> None:
@@ -331,9 +345,9 @@ If two or more test files need shared fixtures, create `lib/tests/conftest.py` a
 
 If the module needs slower end-to-end coverage, place those tests in `lib/tests_integration/`. Put dedicated benchmark harnesses in `lib/tests_benchmark/`.
 
-### Phase 5: Create examples for libraries and utilities
+### Phase 5: Create examples
 
-If the project is a library or shared utility, add an `examples/` directory with one subdirectory per runnable consumer example. Each example must be its own Python project.
+Add an `examples/` directory with one subdirectory per runnable consumer example. Each example must be its own Python project.
 
 **`examples/basic-usage/pyproject.toml`**
 
@@ -372,14 +386,15 @@ After creating the files:
 
 ## Examples
 
-**Input:** "Create a Python library called `event_tools`"
+**Input:** "Create a Python project called `event_tools`"
 - Create `Makefile`, `README.md`, `lib/pyproject.toml`, `lib/Makefile`, `lib/src/event_tools/`, `lib/tests/`, and `examples/`
+- Scaffold `adapters/`, `app/`, `shared/` directories inside `lib/src/event_tools/`
 - Add `lib/README.md`, `.cache/` handling, and install examples from the built wheel in `lib/dist/`
 - Configure `uv`, Ruff, Pyright, Pytest, `pytest-cov`, and `pip-audit`
 - Verify with `make lint-fix`, `make test`, and `make build`
 
 **Input:** "Scaffold a Python CLI package"
-- Add `lib/src/<package_name>/__main__.py`
+- Add CLI entry point in `lib/src/<package_name>/adapters/cli/__init__.py`
 - Add `[project.scripts]` in `lib/pyproject.toml` when the command name must differ from the module name
 - Keep the same Makefile and quality checks
 

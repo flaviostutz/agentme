@@ -1,9 +1,9 @@
 ---
 name: agentme-edr-skill-001-create-javascript-project
 description: >
-  Scaffolds the initial boilerplate structure for a JavaScript/TypeScript library project following
+  Scaffolds the initial boilerplate structure for a JavaScript/TypeScript project following
   the standard tooling and layout defined in agentme-edr-003. Activate this skill when the user
-  asks to create, scaffold, or initialize a new JavaScript or TypeScript library project, npm
+  asks to create, scaffold, or initialize a new JavaScript or TypeScript project, npm
   package, or similar project structure.
 metadata:
   author: flaviostutz
@@ -13,13 +13,14 @@ compatibility: JavaScript/TypeScript, Node.js 18+
 
 ## Overview
 
-Creates a complete JavaScript/TypeScript library project from scratch. The layout keeps the
-published package self-contained in its module root (`lib/`), places runnable consumer examples in
-the sibling `examples/` folder, redirects persistent caches into `.cache/`, and uses Makefiles as
-the only entry points. Boilerplate is derived from the [filedist](https://github.com/flaviostutz/filedist)
-project.
+Creates a complete JavaScript/TypeScript project from scratch. The layout keeps the
+package self-contained in its module root (`lib/`), organizes internal code following
+[agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md) (`adapters/`, `app/`, `shared/`),
+places runnable consumer examples in the sibling `examples/` folder, redirects persistent caches
+into `.cache/`, and uses Makefiles as the only entry points. Boilerplate is derived from the
+[filedist](https://github.com/flaviostutz/filedist) project.
 
-Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 
@@ -82,7 +83,7 @@ dist/
 
 ### Phase 3: Create `lib/`
 
-**`lib/src/index.ts`** — public API entry point:
+**`lib/src/app/hello.ts`** — business logic:
 
 ```typescript
 export const hello = (name: string): string => {
@@ -90,10 +91,10 @@ export const hello = (name: string): string => {
 };
 ```
 
-**`lib/src/index.test.ts`** — co-located unit test:
+**`lib/src/app/hello.test.ts`** — co-located unit test:
 
 ```typescript
-import { hello } from './index';
+import { hello } from './hello';
 
 describe('hello', () => {
   it('should return a greeting', () => {
@@ -101,6 +102,20 @@ describe('hello', () => {
   });
 });
 ```
+
+**`lib/src/index.ts`** — public API re-export from `app/`:
+
+```typescript
+export { hello } from './app/hello';
+```
+
+**`lib/src/adapters/`** — create empty directories for the hexagonal structure:
+
+- `lib/src/adapters/` — inbound adapters (add `cli/`, `http/`, etc. as needed)
+- `lib/src/adapters/connectors/` — outbound adapters (one folder per external resource)
+- `lib/src/shared/` — infrastructure-agnostic utilities
+
+Create a placeholder `.gitkeep` in `lib/src/adapters/` and `lib/src/shared/` so the directories are tracked.
 
 **`lib/Makefile`**:
 
