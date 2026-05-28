@@ -70,7 +70,13 @@ Builds that miss the threshold must not be merged.
 
 #### 04-must-place-test-files-alongside-source
 
-Test files must live next to the source file they test, in the same directory, following the convention of the language/framework (e.g. `file.test.ts`, `file_test.go`, `file.spec.js`).
+Test files must live next to the source file they test, in the same directory, following the convention of the language/framework:
+
+| Language | Pattern | Example |
+|----------|---------|-------|
+| TypeScript/JavaScript | `[name].test.ts` or `[name].spec.js` | `file1.test.ts` |
+| Go | `[name]_test.go` | `file1_test.go` |
+| Python | `[name]_test.py` | `myfunc_test.py` |
 
 ```
 src/mymodule/group1/file1.ts        ← source

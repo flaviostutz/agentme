@@ -4,7 +4,8 @@ packages:
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     output: {}
-    selector: {}
+    selector:
+      upgrade: true
 files:
   .:
     - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.27.0|file|7167c0fc193b|0
@@ -31,5 +32,5 @@ files:
     - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|9c6b36c4fff5|0
     - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|814c1f81d84f|0
     - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|825f01441d40|0
-checksum: 22738b94daee
+checksum: d3794df57a56
 

@@ -14,6 +14,7 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-009](principles/009-error-handling.md) - **Error handling** - Standardize explicit errors, logging, and propagation rules
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
+- [agentme-edr-022](principles/022-secrets-management.md) - **Secrets management** - Handle secrets securely using native keychains and cloud secret managers
 
 ## Articles
 
