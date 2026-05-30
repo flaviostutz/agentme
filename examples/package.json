@@ -6,6 +6,6 @@
     "agentme": "file:../dist/agentme-0.0.1.tgz"
   },
   "devDependencies": {
-    "xdrs-core": "^0.28.0"
+    "xdrs-core": "^0.28.1"
   }
 }
