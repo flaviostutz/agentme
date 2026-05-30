@@ -9,6 +9,7 @@ Propose changes via pull request. All changes must be verified for clarity and n
 Foundational standards, principles, and guidelines.
 
 - [agentme-edr-002](principles/002-coding-best-practices.md) - **Coding best practices** - Keep files small, tests nearby, and docs synchronized
+- [agentme-edr-023](principles/023-coding-abstraction-practices.md) - **Coding abstraction practices** - Define when abstractions are justified and when they must be inlined
 - [agentme-edr-004](principles/004-unit-test-requirements.md) - **Unit test requirements** - Define minimum unit-test coverage and naming expectations
 - [agentme-edr-007](principles/007-project-quality-standards.md) - **Project quality standards** - Require build, lint, and test verification before completion
 - [agentme-edr-009](principles/009-error-handling.md) - **Error handling** - Standardize explicit errors, logging, and propagation rules
