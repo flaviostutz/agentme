@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-024-llm-development-standards
-description: Defines the standard framework, provider compatibility, and observability approach for LLM-based applications in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls, manages prompt context, or handles conversation history.
+description: Defines the standard framework, provider compatibility, observability approach, and unit testing patterns for LLM-based applications in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls, manages prompt context, or handles conversation history.
 apply-to: Python projects that make LLM calls, manage prompt context, or handle conversation threads
 valid-from: 2026-06-03
 ---
@@ -69,7 +69,48 @@ Enable LangChain auto-tracing at every application entry point by calling `mlflo
 - Pair with `mlflow.start_run()` at the workflow or agent level to group LLM traces under a named experiment run (see [agentme-edr-018](018-ai-agent-development-standards.md) for run-level MLflow instrumentation).
 - Do not disable autolog in production unless there is an explicit performance justification documented in the codebase.
 
+#### 04-unit-test-mocking
+
+LLM provider calls are external API calls and MUST be mocked in unit tests per [agentme-edr-004](../principles/004-unit-test-requirements.md) rule `06-should-avoid-mocks`. Mocking LLM providers enables offline test execution while testing workflow logic, routing, and state management.
+
+Use **LangChain's `FakeListChatModel`** or a custom `GenericFakeChatModel` wrapper for unit testing LLM calls:
+
+```python
+from langchain_core.language_models.fake_chat_models import FakeListChatModel
+
+# Unit test with mocked LLM responses
+def test_document_workflow_routing():
+    fake_llm = FakeListChatModel(responses=[
+        "APPROVE",
+        "The document meets all quality criteria."
+    ])
+    
+    workflow = DocumentWorkflow(llm=fake_llm)
+    result = workflow.run(input_doc)
+    
+    assert result.status == "approved"
+    assert "quality criteria" in result.reasoning
+```
+
+**Mocking boundaries:**
+
+- Mocks are ONLY for unit tests (required). Integration tests SHOULD use real LLM providers when implemented (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `13-three-tier-testing-strategy`).
+- Evals MUST use real LLM providers to capture model drift and are REQUIRED before every release (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `04-dataset-driven-accuracy-measurement`).
+- Mock the LLM provider at the construction boundary (dependency injection), not by patching internal LangChain methods.
+- Test files MUST follow the naming convention `<name>_test.py` for unit tests (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `13-three-tier-testing-strategy` for integration test naming).
+
+When workflows or agents require injectable LLM instances, accept the LLM as a constructor parameter or configuration field:
+
+```python
+class DocumentWorkflow:
+    def __init__(self, llm: Optional[BaseChatModel] = None):
+        self.llm = llm or ChatOpenAI(model="gpt-4")
+```
+
+This allows unit tests to inject `FakeListChatModel` while production code uses the real provider.
+
 ## References
 
 - [agentme-edr-018](018-ai-agent-development-standards.md) — Agent and Workflow implementation standards (LangGraph, deepagents, MLflow run-level tracking)
+- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements including external API mocking guidance
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure

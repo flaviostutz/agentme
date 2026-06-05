@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-007-project-quality-standards
-description: Defines minimum project quality standards for README onboarding, testing, linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
+description: Defines minimum project quality standards for README onboarding, testing (unit and integration), linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
 apply-to: All projects
 valid-from: 2026-05-25
 ---
@@ -15,7 +15,7 @@ What minimum quality standards must every project in the organization meet to en
 
 ## Decision Outcome
 
-Every project must meet six minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run.
+Every project must meet the minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run. Integration tests are advised but not required. Projects with statistical models must have evaluation targets with performance thresholds.
 
 These standards form a non-negotiable baseline. Individual projects may raise the bar but must never fall below it.
 
@@ -189,3 +189,44 @@ eval:
 	  --min-f1 $(EVAL_MIN_F1) \
 	  || (echo "Evaluation failed: metrics below threshold"; exit 1)
 ```
+
+---
+
+#### 08-integration-tests-are-advised
+
+Integration tests verify end-to-end system behavior with real external dependencies (databases, APIs, message queues, file systems, cloud services). While not required, integration tests are strongly advised for projects that interact with external systems.
+
+**When to implement integration tests:**
+
+- The project makes calls to external APIs or services
+- The project reads from or writes to databases
+- The project integrates with third-party systems (payment processors, authentication providers, etc.)
+- The project's behavior depends on the interaction between multiple components or services
+- Unit tests alone cannot adequately verify system integration points
+
+**Integration test guidelines (when implemented):**
+
+- SHOULD verify end-to-end execution with real external dependencies or containerized equivalents (e.g., postgres in Docker, localstack for AWS services)
+- SHOULD use pass/fail assertions to validate expected behavior and error handling
+- SHOULD be isolated from unit tests to allow independent execution
+- Files SHOULD be named with a clear integration test suffix (e.g., `<name>_integration_test.py`, `<name>.integration.test.ts`)
+- MAY be run less frequently than unit tests (e.g., nightly, before releases) to manage execution time and external dependency costs
+- MAY use smaller or cheaper configurations of external services when available (e.g., smaller database instances, development-tier API keys)
+
+**Makefile target:**
+
+When integration tests exist, provide a dedicated `make test-integration` target:
+
+```makefile
+test: test-unit
+
+test-unit:
+	# Run fast offline unit tests
+	pytest lib/src/
+
+test-integration:
+	# Run integration tests with real dependencies
+	pytest lib/src/ -m integration
+```
+
+Projects are not required to implement integration tests, but when present, they SHOULD follow these conventions for consistency across the codebase.
