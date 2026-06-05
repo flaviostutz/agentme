@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-018-ai-agent-development-standards
-description: Defines the standard toolchain, framework, evaluation approach, and workflow patterns for building AI agents (tool-invocation loops) and LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI agent or workflow projects. For raw LLM calls and provider configuration, see agentme-edr-024.
+description: Defines the standard toolchain, framework, evaluation approach, testing strategy, and workflow patterns for building AI agents (tool-invocation loops) and LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI agent or workflow projects. For raw LLM calls and provider configuration, see agentme-edr-024.
 apply-to: AI agent and LangGraph workflow projects built with Python
 valid-from: 2026-05-26
 ---
@@ -42,10 +42,16 @@ Use **MLflow** for all agent and workflow observability and evaluation:
 
 Every agent pipeline MUST have a companion evaluation dataset and an MLflow experiment that measures accuracy against it. Datasets and evals are organized per-workflow following rule `07-workflow-structure` and rule `08-workflow-evals`.
 
+- **Evals** measure model accuracy and performance against expected outputs. They are REQUIRED before every release to verify the workflow meets specified accuracy thresholds. They run against real LLM providers to capture model drift. They log metrics to MLflow and MUST have project-defined quality thresholds that block releases when not met.
+- **Integration tests** verify that workflows execute end-to-end with real connectors and real models, using pass/fail assertions. They are ADVISED but not required. They validate wiring, error handling, and system integration, not model accuracy. See rule `13-three-tier-testing-strategy` for integration test guidelines.
+
+**Eval requirements:**
+
 - Store evaluation datasets under `evals/<workflow>/` (sibling of `lib/` and `examples/`), following [agentme-edr-019](019-ml-dataset-structure.md) for structure and format. For MLflow input/output pairs, use the JSONL format described in `agentme-edr-019.04-complex-structured-datasets-must-use-jsonl`.
 - Write evaluation scripts under `evals/<workflow>/` that load the dataset, run each input through the live agent (against real LLMs, not mocks), compare outputs to expected values, and log per-sample and aggregate metrics to an MLflow experiment.
 - Add a `make eval` Makefile target in the module root Makefile (the same Makefile that sits alongside `lib/` and `examples/`) that delegates to all per-workflow eval targets.
 - Evaluation MUST run against real LLM providers, not recorded responses, to capture model drift. MLflow tracking MUST work locally without a remote server.
+- Evals MUST be executed before every release. Failed eval runs with accuracy below project-defined thresholds MUST block the release.
 
 #### 05-flow-documentation
 
@@ -218,9 +224,86 @@ Choose a name that summarises what the workflow consumes, processes, and produce
 
 **Bad names** (FORBIDDEN): `MainWorkflow`, `AgentGraph`, `ProcessFlow`, `Workflow1`, `RunGraph`.
 
+#### 13-three-tier-testing-strategy
+
+AI agent and workflow projects recognize three distinct testing tiers, each with its own purpose, tooling, and execution model:
+
+| Tier | Purpose | Model source | External APIs | File naming | When to run | Required |
+|---|---|---|---|---|---|---|
+| **Unit tests** | Test workflow logic, routing, and state management in isolation | Mocked (FakeListChatModel) | Mocked or faked | `<name>_test.py` | On every commit | **Required** |
+| **Integration tests** | Verify end-to-end wiring with real models and real external connectors | Real LLM providers | Real connectors | `<name>_integration_test.py` | Before releases or on a schedule | Advised |
+| **Evals** | Measure model accuracy and performance against expected outputs | Real LLM providers | Real connectors | `eval_<slice>.py` (see rule 08) | Before every release | **Required** |
+
+**Unit test requirements (REQUIRED):**
+
+- MUST use mocked LLM providers (see [agentme-edr-024](024-llm-development-standards.md) rule `04-unit-test-mocking`).
+- MUST run offline with no external dependencies per [agentme-edr-004](../principles/004-unit-test-requirements.md) rule `02-must-run-offline`.
+- MUST achieve 80% code coverage per [agentme-edr-004](../principles/004-unit-test-requirements.md) rule `03-must-maintain-80-percent-coverage`.
+- MUST test workflow routing logic, conditional edges, state transformations, and error handling.
+- Files MUST be named `<name>_test.py` and placed alongside the source file per [agentme-edr-004](../principles/004-unit-test-requirements.md) rule `04-must-place-test-files-alongside-source`.
+- MUST achieve 80% coverage of workflow graph edges and branches per rule `14-workflow-graph-coverage`.
+
+**Integration test guidelines (ADVISED):**
+
+Integration tests are advised but not required. See [agentme-edr-007](../principles/007-project-quality-standards.md) rule `08-integration-tests-are-advised` for general integration testing guidelines.
+
+For AI agent and workflow projects specifically, when integration tests are implemented:
+
+- SHOULD use real LLM providers configured via environment variables
+- MAY use smaller, faster models (e.g., `gpt-3.5-turbo`) instead of production models to reduce cost and latency
+- SHOULD verify workflow execution with pass/fail assertions, not accuracy metrics (accuracy is measured by evals)
+
+**Eval requirements (REQUIRED):**
+
+Evals are REQUIRED for all agent and workflow projects. See rule `04-dataset-driven-accuracy-measurement` and rule `08-workflow-evals` for full requirements.
+
+- Evals MUST run against real LLM providers to capture model drift and log metrics to MLflow for tracking model performance over time.
+- Evals MUST be executed before every release to verify the workflow meets specified accuracy thresholds.
+- Failed eval runs with accuracy below project-defined thresholds MUST block the release.
+
+#### 13-workflow-graph-coverage
+
+LangGraph Workflows MUST achieve **80% coverage of workflow graph edges and branches** during unit-tests.
+
+**Graph edge coverage** measures whether each transition (edge) in the `StateGraph` is exercised by at least one test. This ensures that routing logic, conditional edges, and error paths are tested.
+
+**Requirements:**
+
+- Every conditional edge (e.g., `add_conditional_edges`) MUST have test cases covering each possible branch.
+- Every node→node transition MUST be exercised by at least one test.
+- Error handling paths (e.g., nodes that route to error states or retry nodes) MUST be tested with inputs that trigger those paths.
+- Use mocked LLM responses in unit tests to control which branches are taken (see [agentme-edr-024](024-llm-development-standards.md) rule `04-unit-test-mocking`).
+
+**Example:**
+
+```python
+def test_workflow_approval_path():
+    """Test the workflow takes the approval path when LLM returns APPROVE."""
+    fake_llm = FakeListChatModel(responses=["APPROVE"])
+    workflow = DocumentWorkflow(llm=fake_llm)
+    
+    result = workflow.invoke({"document": sample_doc})
+    
+    assert result["status"] == "approved"
+    assert "verify_approved" in result["_visited_nodes"]
+
+def test_workflow_rejection_path():
+    """Test the workflow takes the rejection path when LLM returns REJECT."""
+    fake_llm = FakeListChatModel(responses=["REJECT"])
+    workflow = DocumentWorkflow(llm=fake_llm)
+    
+    result = workflow.invoke({"document": sample_doc})
+    
+    assert result["status"] == "rejected"
+    assert "handle_rejection" in result["_visited_nodes"]
+```
+
+When measuring coverage, use the same 80% threshold: at least 80% of graph edges must be covered by unit tests.
+
 ## References
 
-- [agentme-edr-024](024-llm-development-standards.md) — LLM development standards: LangChain framework, provider compatibility, LLM observability, and the LLM / Agent / Workflow conceptual model
+- [agentme-edr-024](024-llm-development-standards.md) — LLM development standards: LangChain framework, provider compatibility, LLM observability, unit test mocking, and the LLM / Agent / Workflow conceptual model
+- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements including coverage, offline execution, and test file placement
 - [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) — Adapter/application layer separation that defines the project layout
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
 - [agentme-edr-019](019-ml-dataset-structure.md) — ML dataset structure for eval datasets
