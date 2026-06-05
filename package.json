@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "filedist": "^0.34.1"
+    "filedist": "^0.34.2"
   },
   "bin": "bin/filedist.js",
   "files": [
@@ -22,6 +22,6 @@
     "url": "https://github.com/flaviostutz/agentme.git"
   },
   "devDependencies": {
-    "xdrs-core": "^0.28.1"
+    "xdrs-core": "^0.28.2"
   }
 }

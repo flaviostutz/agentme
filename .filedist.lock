@@ -1,14 +1,12 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: dd0aac6e9ae7
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 6102e7231e52
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     output: {}
-    selector:
-      upgrade: true
+    selector: {}
 files:
   .:
-    - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.27.0|file|7167c0fc193b|0
     - .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.27.0|file|92faf9ffa638|0
     - .xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.27.0|file|1bba5558d7fa|0
     - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|xdrs-core|0.27.0|file|3060fcc77aa7|0
@@ -16,7 +14,6 @@ files:
     - .xdrs/_core/adrs/principles/007-plan-standards.md|xdrs-core|0.27.0|file|ed6f135f86a4|0
     - .xdrs/_core/adrs/principles/009-presentation-standards.md|xdrs-core|0.27.0|file|d454789bedd2|0
     - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|xdrs-core|0.27.0|file|04262f4e9ea2|0
-    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|xdrs-core|0.27.0|file|20199f8bdd10|0
     - .xdrs/_core/index.md|xdrs-core|0.27.0|file|de2c5180edbe|0
     - AGENTS.md|xdrs-core|0.27.0|file|c258486519ae|0
     - .github/skills/001-review|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|symlink|18c5f3a037d4|0
@@ -27,10 +24,12 @@ files:
     - .github/skills/008-write-xdrs-doc|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|symlink|c3a23ff52f24|0
     - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|0f2c3f610ddb|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|76e6ae9392a1|0
-    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|eeaad998756b|0
-    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|3095b12625cc|0
-    - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|9c6b36c4fff5|0
-    - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|814c1f81d84f|0
-    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dd0aac6e9ae7|file|825f01441d40|0
-checksum: d3794df57a56
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|ddf9b37f8830|0
+    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|904800bb5336|0
+    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|9d38bf64a0aa|0
+    - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|8a9c392061d2|0
+    - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|69e9d4d8fe21|0
+    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|d31cdc8956b9|0
+    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|6102e7231e52|file|eaae488e6198|0
+checksum: ace5ba61b115
 

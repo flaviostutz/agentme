@@ -174,7 +174,7 @@ If any check fails, revise and re-run this phase before proceeding.
 
 1. Run the CLI lint utility from the repository root:
    ```
-   npx -y xdrs-core lint .
+   npx -y xdrs-core@latest lint
    ```
 2. Fix all reported errors before considering the task complete.
 3. Review warnings; fix straightforward ones and note intentional deviations explicitly.
