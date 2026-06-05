@@ -110,6 +110,14 @@ Rules to apply while drafting:
    section.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new article. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 
+### Phase 7: Verify with Lint
+
+1. Run the CLI lint utility from the repository root:
+   ```
+   npx -y xdrs-core@latest lint
+   ```
+2. Fix all reported errors before considering the task complete.
+
 ## Examples
 
 **Input:** "Write an article about how skills work in this project."

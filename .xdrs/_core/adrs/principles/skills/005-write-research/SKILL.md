@@ -247,6 +247,14 @@ If any check fails, revise before continuing.
 3. Add back-references from the related Policy, article, or skill when the relationship is important for discovery.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new research. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 
+### Phase 12: Verify with Lint
+
+1. Run the CLI lint utility from the repository root:
+   ```
+   npx -y xdrs-core@latest lint
+   ```
+2. Fix all reported errors before considering the task complete.
+
 ## Examples
 
 **Input**: "Create research comparing package distribution options for our Policy scopes"

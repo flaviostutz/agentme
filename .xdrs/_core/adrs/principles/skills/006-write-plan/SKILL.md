@@ -130,7 +130,7 @@ Rules to apply while drafting:
 
 1. Run the CLI lint utility from the repository root:
    ```
-   npx -y xdrs-core lint .
+   npx -y xdrs-core@latest lint
    ```
 2. Fix all reported errors before considering the task complete.
 
