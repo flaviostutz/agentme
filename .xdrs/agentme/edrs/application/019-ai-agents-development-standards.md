@@ -188,6 +188,7 @@ Agent execution MUST be observable through logging and tracing:
 - Use structured logging (JSON) with fields: `iteration`, `tool_selected`, `tool_result_status`, `decision`.
 - For LLM calls within agents, follow [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability`.
 - When agents run as workflow nodes, MLflow tracking from the parent workflow automatically captures agent-level traces.
+- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 **Example structured log entry:**
 
