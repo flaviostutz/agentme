@@ -15,12 +15,12 @@ compatibility: JavaScript/TypeScript, Node.js 18+
 
 Creates a complete JavaScript/TypeScript project from scratch. The layout keeps the
 package self-contained in its module root (`lib/`), organizes internal code following
-[agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md) (`adapters/`, `app/`, `shared/`),
+[agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md) (`adapters/`, `app/`, `shared/`),
 places runnable consumer examples in the sibling `examples/` folder, redirects persistent caches
 into `.cache/`, and uses Makefiles as the only entry points. Boilerplate is derived from the
 [filedist](https://github.com/flaviostutz/filedist) project.
 
-Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-021](../../021-pragmatic-hexagonal-architecture.md)
+Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 

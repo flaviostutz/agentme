@@ -82,7 +82,7 @@ Builds that miss the threshold must not be merged.
 │   ├── dist/              # compiled files and packed .tgz artifacts
 │   └── src/               # all TypeScript source files
 │       ├── index.ts       # public API re-exports from app/
-│       ├── adapters/      # I/O boundary layer (following agentme-edr-021)
+│       ├── adapters/      # I/O boundary layer (following agentme-edr-026)
 │       │   ├── cli/       # inbound: CLI bootstrap and entry point
 │       │   ├── http/      # inbound: HTTP server bootstrap and handlers
 │       │   └── connectors/ # outbound: one folder per external resource
@@ -101,7 +101,7 @@ Builds that miss the threshold must not be merged.
 
 The root `Makefile` delegates every target to `/lib` then `/examples` in sequence. Parent Makefiles should call child Makefiles directly, and each module Makefile is responsible for running its actual tool commands through `mise exec --`.
 
-Internal source code MUST be organized following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities). The public API entry point (`index.ts`) re-exports from `app/`.
+Internal source code MUST be organized following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities). The public API entry point (`index.ts`) re-exports from `app/`.
 
 When a repository contains multiple JavaScript/TypeScript packages, each package MUST live in its own module folder such as `lib/my-package/` or `services/my-service/`, each with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
 
@@ -155,6 +155,6 @@ The examples folder MUST exist for any libraries and utilities that are publishe
 ## References
 
 - [agentme-edr-004](../principles/004-unit-test-requirements.md) — Coverage and unit-test baseline
-- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
+- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 

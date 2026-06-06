@@ -71,7 +71,7 @@ No tool MUST write cache or state files to the project root, `src/`, `tests/`, o
 │   ├── src/
 │   │   └── <package_name>/
 │   │       ├── __init__.py
-│   │       ├── adapters/       # I/O boundary layer (following agentme-edr-021)
+│   │       ├── adapters/       # I/O boundary layer (following agentme-edr-026)
 │   │       │   ├── cli/        # inbound: CLI bootstrap and entry point
 │   │       │   ├── http/       # inbound: HTTP server bootstrap
 │   │       │   └── connectors/ # outbound: one folder per external resource
@@ -96,7 +96,7 @@ Keep the repository root clean: source code, tests, distribution artifacts, and 
 
 Use the `lib/src/` layout for import safety and packaging clarity. Keep tests under `lib/tests/` and shared test setup in `lib/tests/conftest.py`. Do not introduce `requirements.txt`, `setup.py`, `setup.cfg`, `tox.ini`, `ruff.toml`, or `ty.toml` by default; keep project metadata and tool configuration in `lib/pyproject.toml`.
 
-Internal source code MUST be organized following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
+Internal source code MUST be organized following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
 
 Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples must import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification must install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
 

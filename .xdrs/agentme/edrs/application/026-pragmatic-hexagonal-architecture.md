@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-021-pragmatic-hexagonal-architecture
+name: agentme-edr-policy-026-pragmatic-hexagonal-architecture
 description: Defines a pragmatic variant of Hexagonal Architecture for organizing application source code into Adapters (inbound/outbound I/O boundaries) and Application (business logic) layers, with explicit naming conventions and folder structure. Use when designing or reviewing the internal layout of application modules.
 apply-to: All application projects
 valid-from: 2026-05-28
 ---
 
-# agentme-edr-policy-021: Pragmatic hexagonal architecture
+# agentme-edr-policy-026: Pragmatic hexagonal architecture
 
 ## Context and Problem Statement
 
