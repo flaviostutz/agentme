@@ -73,7 +73,7 @@ Targets are organized into five lifecycle groups. Projects must use these names 
 | Target | Purpose |
 |--------|---------|
 | `setup` | Run `mise install` and any small project bootstrap needed before normal targets work. This is the first command after checkout. |
-| `all` | Alias that runs `build`, `lint`, and `test` in sequence. Must be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. |
+| `all` | Alias that runs `build`, `lint`, and `test` in sequence. Must be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. Must only invoke targets that run **offline** — no external credentials, running servers, paid APIs, or environment-specific configuration outside the repository. |
 | `clean` | Remove all temporary or generated files created during build, lint, or test (e.g., `node_modules`, virtual environments, compiled binaries, generated files). Used both locally and in CI for a clean slate. |
 | `dev` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). May have debugging tools, verbose logging, or hot reloading features enabled. |
 | `run` | Run the software in production mode (e.g., start a compiled binary, launch a production server). No debugging or development-only features should be enabled. |
@@ -93,13 +93,13 @@ Targets are organized into five lifecycle groups. Projects must use these names 
 
 | Target | Purpose |
 |--------|---------|
-| `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks must be non-destructive (read-only); fixes are handled by `lint-fix`. |
+| `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks must be non-destructive (read-only); fixes are handled by `lint-fix`. Must only invoke subtargets that run **offline** (no external credentials or services). |
 | `lint-fix` | Automatically fix linting and formatting issues where possible. || `lint-format` | *(Optional)* Check code formatting only (e.g., Prettier, gofmt, Black). |
 ##### Test group
 
 | Target | Purpose |
 |--------|---------|
-| `test` | Run **all tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and integration/end-to-end tests. Normally delegates to `test-unit` and `test-integration` in sequence. |
+| `test` | Run **all offline tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and any integration or end-to-end tests that run **offline** (no external servers, credentials, or paid APIs). Normally delegates to `test-unit` and, when offline, `test-integration` in sequence. Suffixed targets that require external dependencies must not be invoked automatically — see rule 08. |
 | `test-unit` | Run unit tests only, including coverage report generation and coverage threshold enforcement. |
 | `test-integration` | *(Optional)* Run integration and end-to-end tests only. Projects without integration tests may omit this target. |
 | `test-smoke` | *(Optional)* Run a fast, minimal subset of tests to verify the software is basically functional. Useful as a post-deploy health check. |
@@ -147,6 +147,14 @@ deploy-infra      # deploy only the infrastructure layer
 ```
 
 The prefix convention ensures developers can infer the purpose of any target without documentation.
+
+---
+
+#### 08-default-targets-must-only-include-offline-subtargets
+
+`make all`, `make test`, and `make lint` must include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
+
+Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) **must** exist as named targets so developers can invoke them explicitly, but **must not** be invoked from `all`, `test`, or `lint`.
 
 ---
 
