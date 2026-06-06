@@ -150,6 +150,20 @@ The prefix convention ensures developers can infer the purpose of any target wit
 
 ---
 
+#### 09-ai-project-dev-targets
+
+AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
+
+**Example implementation:**
+
+```makefile
+dev-mlflow:
+	mise exec -- mlflow ui --host 0.0.0.0 --port 5000
+	open http://localhost:5000/
+```
+
+---
+
 #### 08-default-targets-must-only-include-offline-subtargets
 
 `make all`, `make test`, and `make lint` must include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
@@ -201,6 +215,9 @@ make lint-fix
 
 # run the software in dev mode (may have hot reload, debug tools enabled, verbose logging etc)
 make dev
+
+# [AI projects only] start a local MLflow tracking server for development inspection
+make dev-mlflow
 
 # run the software in production mode
 make run
