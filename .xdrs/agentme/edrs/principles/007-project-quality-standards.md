@@ -145,6 +145,7 @@ Projects that are libraries or shared utilities must include an `examples/` dire
 **Root Makefile:**
 
 ```makefile
+# test-examples runs the examples offline (no external services) → include in test
 test: test-unit test-examples
 
 test-unit:
@@ -153,6 +154,8 @@ test-unit:
 test-examples:
 	$(MAKE) -C examples
 ```
+
+If examples require live services or credentials, remove `test-examples` from the `test` dependency list and keep it as a standalone named target only. See [agentme-edr-008](../devops/008-common-targets.md) rule 08 for the full offline/online decision table.
 
 **Examples Makefile:**
 
