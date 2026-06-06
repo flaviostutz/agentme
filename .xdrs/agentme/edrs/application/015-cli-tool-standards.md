@@ -34,7 +34,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 #### CLI to application separation
 
-- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-021](021-pragmatic-hexagonal-architecture.md).
+- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md).
 - The CLI layer must only parse arguments, load config, call the application layer, and format output.
 - Domain logic must live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
 - Every feature available through the CLI must also be available through the application API.
@@ -99,7 +99,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 ## References
 
-- [agentme-edr-021](021-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
+- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
 - [agentme-edr-003](003-javascript-project-tooling.md) - JavaScript project packaging and structure
 - [agentme-edr-007](../principles/007-project-quality-standards.md) - README and examples baseline
 - [agentme-edr-008](../devops/008-common-targets.md) - Standard command names for project entry points

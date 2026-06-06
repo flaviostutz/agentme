@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-019-ml-dataset-structure
+name: agentme-edr-policy-024-ml-dataset-structure
 description: Defines the standard folder layout and file conventions for ML datasets used in AI/ML projects. Use when creating, organizing, or consuming datasets for machine learning tasks such as image labeling, document extraction, tabular data, LLM evaluation, and Q&A sets.
 apply-to: ML and AI projects that produce or consume datasets
 valid-from: 2026-05-27
 ---
 
-# agentme-edr-policy-019: ML dataset structure
+# agentme-edr-policy-024: ML dataset structure
 
 ## Context and Problem Statement
 

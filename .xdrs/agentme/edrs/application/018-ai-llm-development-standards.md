@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-024-llm-development-standards
-description: Defines the standard framework, provider compatibility, observability approach, and unit testing patterns for LLM-based applications in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls, manages prompt context, or handles conversation history.
-apply-to: Python projects that make LLM calls, manage prompt context, or handle conversation threads
-valid-from: 2026-06-03
+name: agentme-edr-policy-018-ai-llm-development-standards
+description: Defines the standard framework, provider configuration, observability approach, and unit testing patterns for simple LLM calls in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls using LangChain, manages prompt context, or handles conversation history. For agentic patterns see agentme-edr-019, for workflow patterns see agentme-edr-020.
+apply-to: Python projects that make direct LLM calls, manage prompt context, or handle conversation threads
+valid-from: 2026-06-05
 ---
 
-# agentme-edr-policy-024: LLM development standards
+# agentme-edr-policy-018: AI LLM development standards
 
 ## Context and Problem Statement
 
@@ -16,6 +16,8 @@ Which framework should be used for LLM calls, how should providers be configured
 ## Decision Outcome
 
 **Use LangChain as the standard framework for all direct LLM interactions. Adopt a strict three-tier conceptual model — LLM / Agent / Workflow — that maps each tier to a specific library.**
+
+This policy covers the **LLM** tier only. For the **Agent** tier, see [agentme-edr-019](019-ai-agents-development-standards.md). For the **Workflow** tier, see [agentme-edr-020](020-ai-workflow-development-standards.md).
 
 ### Conceptual model
 
@@ -29,7 +31,7 @@ Three distinct tiers of LLM-based computation are recognized in this project. Ev
 
 These tiers nest: a Workflow may contain Agent nodes; an Agent uses LLM calls internally. The tier of a component is determined by its outermost controlling structure.
 
-See [agentme-edr-018](018-ai-agent-development-standards.md) for Agent and Workflow implementation standards.
+See [agentme-edr-019](019-ai-agents-development-standards.md) for Agent implementation standards and [agentme-edr-020](020-ai-workflow-development-standards.md) for Workflow implementation standards.
 
 ### Details
 
@@ -45,19 +47,30 @@ Every component that interacts with an LLM MUST be classified as exactly one of 
 
 All direct LLM calls MUST use **LangChain** via the `langchain` and `langchain-openai` packages.
 
-- Use `langchain-openai` as the provider integration layer. It supports both OpenAI and Azure OpenAI through environment variables, with no code changes required to switch.
-- Select the provider by setting `OPENAI_API_TYPE=azure` for Azure OpenAI or omitting it for OpenAI.
-- Never hardcode provider-specific URLs, deployment names, or API versions in code; inject them through environment variables or a configuration object.
+- Use `langchain-openai` as the provider integration layer. It supports both OpenAI and Azure OpenAI.
+- **Always configure LLM providers using explicit library attributes** such as `api_key`, `base_url`, `model`, `api_version`, etc. Never rely on environment variables for LLM configuration.
+- Configuration MUST be passed via constructor parameters or configuration objects, making dependencies explicit and testable.
 
-Minimum required environment variable surface:
+**Example of explicit configuration:**
 
-| Variable | Purpose |
-|---|---|
-| `OPENAI_API_KEY` | API key (both providers) |
-| `OPENAI_API_BASE` / `AZURE_OPENAI_ENDPOINT` | Endpoint (Azure only) |
-| `OPENAI_API_VERSION` | API version (Azure only) |
-| `AZURE_OPENAI_DEPLOYMENT` | Deployment/model name (Azure only) |
-| `OPENAI_MODEL` | Model name (OpenAI only) |
+```python
+from langchain_openai import ChatOpenAI
+
+# OpenAI configuration (explicit)
+llm = ChatOpenAI(
+    api_key=config.openai_api_key,
+    model="gpt-4",
+    temperature=0.7
+)
+
+# Azure OpenAI configuration (explicit)
+llm = ChatOpenAI(
+    api_key=config.azure_api_key,
+    azure_endpoint=config.azure_endpoint,
+    api_version="2024-02-15-preview",
+    azure_deployment=config.azure_deployment
+)
+```
 
 LangChain chain or runnable definitions MUST be placed in `app/workflows/<workflow>/agents.py` (for workflow-scoped LLM calls) or in the appropriate application layer module. Do not inline LLM construction in adapter or CLI code.
 
@@ -66,7 +79,7 @@ LangChain chain or runnable definitions MUST be placed in `app/workflows/<workfl
 Enable LangChain auto-tracing at every application entry point by calling `mlflow.langchain.autolog()` during startup, before any LLM call is made.
 
 - This captures inputs, outputs, token counts, and latency for every LangChain chain or runnable automatically.
-- Pair with `mlflow.start_run()` at the workflow or agent level to group LLM traces under a named experiment run (see [agentme-edr-018](018-ai-agent-development-standards.md) for run-level MLflow instrumentation).
+- Pair with `mlflow.start_run()` at the workflow or agent level to group LLM traces under a named experiment run (see [agentme-edr-020](020-ai-workflow-development-standards.md) for run-level MLflow instrumentation).
 - Do not disable autolog in production unless there is an explicit performance justification documented in the codebase.
 
 #### 04-unit-test-mocking
@@ -94,23 +107,34 @@ def test_document_workflow_routing():
 
 **Mocking boundaries:**
 
-- Mocks are ONLY for unit tests (required). Integration tests SHOULD use real LLM providers when implemented (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `13-three-tier-testing-strategy`).
-- Evals MUST use real LLM providers to capture model drift and are REQUIRED before every release (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `04-dataset-driven-accuracy-measurement`).
+- Mocks are ONLY for unit tests (optional for LLM-tier projects). Integration tests SHOULD use real LLM providers when implemented (see [agentme-edr-020](020-ai-workflow-development-standards.md) rule `13-three-tier-testing-strategy`).
+- Evals MAY be used for critical prompts to capture model drift (see [agentme-edr-020](020-ai-workflow-development-standards.md) rule `04-dataset-driven-accuracy-measurement`).
 - Mock the LLM provider at the construction boundary (dependency injection), not by patching internal LangChain methods.
-- Test files MUST follow the naming convention `<name>_test.py` for unit tests (see [agentme-edr-018](018-ai-agent-development-standards.md) rule `13-three-tier-testing-strategy` for integration test naming).
+- Test files MUST follow the naming convention `<name>_test.py` for unit tests (see [agentme-edr-020](020-ai-workflow-development-standards.md) rule `13-three-tier-testing-strategy` for integration test naming).
 
 When workflows or agents require injectable LLM instances, accept the LLM as a constructor parameter or configuration field:
 
 ```python
 class DocumentWorkflow:
     def __init__(self, llm: Optional[BaseChatModel] = None):
-        self.llm = llm or ChatOpenAI(model="gpt-4")
+        self.llm = llm or ChatOpenAI(
+            api_key=config.openai_api_key,
+            model="gpt-4"
+        )
 ```
 
 This allows unit tests to inject `FakeListChatModel` while production code uses the real provider.
 
+### Testing Requirements
+
+For LLM-tier projects (simple LangChain calls without agents or workflows):
+
+- **Unit tests**: NOT required
+- **Evaluation tests**: NOT required but SHOULD be used when critical prompts are being used to measure accuracy and detect model drift
+
 ## References
 
-- [agentme-edr-018](018-ai-agent-development-standards.md) — Agent and Workflow implementation standards (LangGraph, deepagents, MLflow run-level tracking)
+- [agentme-edr-019](019-ai-agents-development-standards.md) — Agent implementation standards (deepagents, tool-invocation loops)
+- [agentme-edr-020](020-ai-workflow-development-standards.md) — Workflow implementation standards (LangGraph, MLflow run-level tracking)
 - [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements including external API mocking guidance
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
