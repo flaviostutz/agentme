@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-007-project-quality-standards
-description: Defines minimum project quality standards for README onboarding, testing (unit and integration), linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
+description: Defines minimum project quality standards for README onboarding, testing (unit, integration, and AI-tier evals), linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
 apply-to: All projects
 valid-from: 2026-05-25
 ---
@@ -230,3 +230,31 @@ test-integration:
 ```
 
 Projects are not required to implement integration tests, but when present, they SHOULD follow these conventions for consistency across the codebase.
+
+---
+
+#### 09-ai-project-testing-requirements
+
+AI projects are classified into three tiers — LLM, Agent, and Workflow — defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md). Testing requirements differ per tier:
+
+| Tier | Unit tests | Evals | Integration tests |
+|---|---|---|---|
+| **LLM** ([agentme-edr-018](../application/018-ai-llm-development-standards.md)) | Not required | Not required; SHOULD be used when critical prompts are in use to measure accuracy and detect model drift | Not required |
+| **Agent** ([agentme-edr-019](../application/019-ai-agents-development-standards.md)) | Not required | Not required; MAY be used | Not required |
+| **Workflow** ([agentme-edr-020](../application/020-ai-workflow-development-standards.md)) | **Required** — see below | **Required** before every release; failed evals block release | Advised |
+
+**Workflow unit test requirements:**
+
+- MUST use mocked LLM providers. See [agentme-edr-018](../application/018-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the mocking pattern.
+- MUST run offline with no external dependencies per [agentme-edr-004](004-unit-test-requirements.md) rule `02-must-run-offline`.
+- MUST achieve 80% code coverage per [agentme-edr-004](004-unit-test-requirements.md) rule `03-must-maintain-80-percent-coverage`.
+- MUST test workflow routing logic, conditional edges, state transformations, and error handling.
+- MUST achieve **80% coverage of LangGraph graph edges and branches**: every conditional edge MUST have test cases covering each possible branch, and every node→node transition MUST be exercised by at least one test.
+- Files MUST be named `<name>_test.py` and placed alongside the source file per [agentme-edr-004](004-unit-test-requirements.md) rule `04-must-place-test-files-alongside-source`.
+
+**Workflow eval requirements:**
+
+- Evals MUST be executed before every release.
+- Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
+- Evals MUST run against real LLM providers (not mocks) to capture model drift.
+- For eval folder structure and script requirements, see [agentme-edr-021](../application/021-ai-eval-standards.md).

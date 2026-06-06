@@ -17,19 +17,9 @@ Which framework should be used for building agents with tool-invocation loops, a
 
 **Use the deepagents framework for all agent implementations where an LLM autonomously decides which tools to call and when to stop.**
 
-This policy covers the **Agent** tier only. For simple LLM calls, see [agentme-edr-018](018-ai-llm-development-standards.md). For workflow orchestration that contains agents as nodes, see [agentme-edr-020](020-ai-workflow-development-standards.md).
-
 ### Conceptual model
 
 An **Agent** is an LLM-based flow driven by a tool-invocation loop that the LLM itself plans and executes. The LLM decides which tools to call and when to stop. The agent follows a perceive → plan → act → observe cycle autonomously until it reaches a terminal state.
-
-Agents differ from simple LLM calls (no tools) and workflows (predefined graph topology):
-
-| Tier | What it is | Library |
-|---|---|---|
-| **LLM** | A request → response prompt exchange. No autonomous decision-making. | `langchain` / `langchain-openai` |
-| **Agent** | An LLM-based flow with a tool-invocation loop. The LLM decides which tools to call. | `deepagents` |
-| **Workflow** | A directed graph of nodes. The graph topology is defined in code, not chosen by the LLM. | `langgraph` |
 
 ### Details
 
@@ -93,21 +83,10 @@ def run_file_analysis_agent(input_files: List[Path]) -> AnalysisResult:
 
 #### 03-agent-state-management
 
-Agents MUST maintain explicit state that tracks:
-- The current task or goal
-- Tool invocation history (what tools were called, with what arguments, and what they returned)
-- Agent reasoning or plan (if applicable)
-- Terminal conditions (success, failure, or maximum iterations reached)
-
 **State type naming:**
 
 - Agent state types MUST end with `_agent_state` suffix (e.g., `file_analyzer_agent_state`)
 - Follow [agentme-edr-020](020-ai-workflow-development-standards.md) rule `11-state-type-conventions` when agents are used as workflow nodes
-
-**State persistence:**
-
-- Agents SHOULD expose methods to serialize and restore state for debugging and checkpointing
-- Long-running agents MUST implement state checkpointing to enable recovery from failures
 
 #### 04-tool-definition-patterns
 
@@ -201,15 +180,99 @@ Agent class names MUST follow the pattern `<Purpose>Agent` where `<Purpose>` des
 
 When agents are used as nodes in workflows, the node name MUST use the `_agent` suffix per [agentme-edr-020](020-ai-workflow-development-standards.md) rule `09-node-naming-conventions`.
 
-### Testing Requirements
+#### 07-agent-observability
 
-For agent-tier projects:
+Agent execution MUST be observable through logging and tracing:
 
-- **Unit tests**: MAY be used but are NOT required
-- **Evaluation tests**: MAY be used but are NOT required
-- **Integration tests**: MAY be used but are NOT required
+- Log each iteration of the perceive → plan → act → observe cycle with iteration number and tool selection.
+- Use structured logging (JSON) with fields: `iteration`, `tool_selected`, `tool_result_status`, `decision`.
+- For LLM calls within agents, follow [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability`.
+- When agents run as workflow nodes, MLflow tracking from the parent workflow automatically captures agent-level traces.
 
-When tests are implemented, follow [agentme-edr-018](018-ai-llm-development-standards.md) for LLM mocking patterns and [agentme-edr-020](020-ai-workflow-development-standards.md) for testing strategy.
+**Example structured log entry:**
+
+```json
+{
+  "timestamp": "2026-06-05T10:30:45Z",
+  "agent": "FileAnalyzerAgent",
+  "iteration": 3,
+  "tool_selected": "search_files",
+  "tool_args": {"pattern": "*.py"},
+  "tool_result_status": "success",
+  "decision": "continue"
+}
+```
+
+#### 08-agent-unit-testing
+
+Agent LLM calls are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`.
+
+Because agents drive a tool-invocation loop — where the LLM decides which tools to call — the fake model must return **tool-call messages** followed by a final answer. Use **`GenericFakeChatModel`** for this:
+
+```python
+from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
+from langchain_core.messages import AIMessage
+
+def test_file_analyzer_agent_calls_search_then_stops():
+    # Iteration 1: LLM requests a tool call
+    tool_call_msg = AIMessage(
+        content="",
+        tool_calls=[{
+            "name": "search_files",
+            "args": {"pattern": "*.py", "directory": "/workspace"},
+            "id": "call_1"
+        }]
+    )
+    # Iteration 2: LLM produces a final answer after observing the tool result
+    final_msg = AIMessage(content="Found 3 Python files matching the pattern.")
+
+    fake_model = GenericFakeChatModel(messages=iter([tool_call_msg, final_msg]))
+
+    agent = FileAnalyzerAgent(model=fake_model)
+    result = agent.run(directory="/workspace")
+
+    assert result.status == "success"
+    assert "3 Python files" in result.summary
+```
+
+Agents MUST be designed so that the LLM instance is injectable (constructor parameter) to allow test doubles. See [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the injectable LLM pattern.
+
+**`mock_deep_agent`**
+
+Place `mock_deep_agent` in a shared test utilities module (e.g., `tests/helpers.py`) so all test files that need it can import it from one location and mock deep_agent instances when needed.
+
+**Example usage:**
+
+```python
+from tests.helpers import mock_deep_agent
+
+def test_workflow_calls_subagent(mocker):
+    mock_deep_agent(
+        mocker,
+        "mypackage.nodes.analysis_node.create_workflow_agent",
+        output={"status": "success", "findings": ["issue A"]}
+    )
+
+    result = run_analysis_workflow(input_data)
+
+    assert result.findings == ["issue A"]
+```
+
+#### 09-agent-composition
+
+When multiple agents are needed:
+
+- **Single agent with multiple tools:** Use when tools share a common goal and context (e.g., a code analysis agent with `read_file`, `search_code`, and `analyze_pattern` tools).
+- **Multiple agents as workflow nodes:** Use when agents have distinct responsibilities and outputs that feed into each other. Orchestrate them using LangGraph per [agentme-edr-020](020-ai-workflow-development-standards.md).
+- Do NOT create nested agent loops (agent calling agent autonomously). Use workflows for multi-agent orchestration.
+
+**Decision criteria:**
+
+| Pattern | When to use |
+|---|---|
+| Single agent + tools | All tools serve the same goal; agent completes in one session |
+| Multiple workflow-orchestrated agents | Each agent has a distinct goal; outputs flow between agents; deterministic sequencing needed |
+| Nested agents (FORBIDDEN) | Never — always use workflow orchestration instead |
 
 ## References
 
@@ -217,3 +280,5 @@ When tests are implemented, follow [agentme-edr-018](018-ai-llm-development-stan
 - [agentme-edr-020](020-ai-workflow-development-standards.md) — Workflow development standards (using agents as workflow nodes)
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Hexagonal architecture (tool placement in adapters/connectors)
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
+- [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
+- [agentme-edr-021](021-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking
