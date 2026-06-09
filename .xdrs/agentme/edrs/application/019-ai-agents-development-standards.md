@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-019-ai-agents-development-standards
-description: Defines the structural patterns and design decisions for building AI agents with tool-invocation loops using the deepagents framework: framework selection, sandbox setup, state naming, agent naming, composition patterns, and system prompt structure. Use when designing or scaffolding a new agent. For tool definitions, error handling, observability, and testing see agentme-edr-028. For simple LLM calls see agentme-edr-018, for workflow orchestration see agentme-edr-020.
+description: Defines the structural patterns and design decisions for building AI agents with tool-invocation loops using the deepagents framework: framework selection, sandbox setup, state naming, agent naming, composition patterns, and system prompt structure. Use when designing or scaffolding a new agent. For tool definitions, error handling, observability, and testing see agentme-edr-020. For simple LLM calls see agentme-edr-018, for workflow orchestration see agentme-edr-021.
 apply-to: AI agent projects — consult when designing agent structure, choosing sandbox approach, defining naming conventions, and composing multi-agent systems
 valid-from: 2026-06-05
 ---
@@ -87,7 +87,7 @@ def run_file_analysis_agent(input_files: List[Path]) -> AnalysisResult:
 **State type naming:**
 
 - Agent state types MUST end with `_agent_state` suffix (e.g., `file_analyzer_agent_state`)
-- Follow [agentme-edr-020](020-ai-workflow-development-standards.md) rule `11-state-type-conventions` when agents are used as workflow nodes
+- Follow [agentme-edr-021](021-ai-workflow-development-standards.md) rule `11-state-type-conventions` when agents are used as workflow nodes
 
 #### 04-agent-naming-conventions
 
@@ -104,14 +104,14 @@ Agent class names MUST follow the pattern `<Purpose>Agent` where `<Purpose>` des
 - `MyAgent` (not descriptive)
 - `Agent1` (numbered, not semantic)
 
-When agents are used as nodes in workflows, the node name MUST use the `_agent` suffix per [agentme-edr-020](020-ai-workflow-development-standards.md) rule `09-node-naming-conventions`.
+When agents are used as nodes in workflows, the node name MUST use the `_agent` suffix per [agentme-edr-021](021-ai-workflow-development-standards.md) rule `09-node-naming-conventions`.
 
 #### 05-agent-composition
 
 When multiple agents are needed:
 
 - **Single agent with multiple tools:** Use when tools share a common goal and context (e.g., a code analysis agent with `read_file`, `search_code`, and `analyze_pattern` tools).
-- **Multiple agents as workflow nodes:** Use when agents have distinct responsibilities and outputs that feed into each other. Orchestrate them using LangGraph per [agentme-edr-020](020-ai-workflow-development-standards.md).
+- **Multiple agents as workflow nodes:** Use when agents have distinct responsibilities and outputs that feed into each other. Orchestrate them using LangGraph per [agentme-edr-021](021-ai-workflow-development-standards.md).
 - Do NOT create nested agent loops (agent calling agent autonomously). Use workflows for multi-agent orchestration.
 
 **Decision criteria:**
@@ -190,6 +190,6 @@ e.g.: Respond with a JSON object matching this schema: ...]
 ## References
 
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards (LangChain configuration, mocking patterns)
-- [agentme-edr-020](020-ai-workflow-development-standards.md) — Workflow development standards (using agents as workflow nodes)
-- [agentme-edr-028](028-ai-agents-implementation-quality-standards.md) — Agent implementation quality standards (tool definitions, error handling, observability, unit testing)
+- [agentme-edr-021](021-ai-workflow-development-standards.md) — Workflow development standards (using agents as workflow nodes)
+- [agentme-edr-020](020-ai-agents-quality-standards.md) — Agent implementation quality standards (tool definitions, error handling, observability, unit testing)
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure

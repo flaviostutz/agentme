@@ -82,7 +82,7 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 - Outbound adapters live under `adapters/connectors/` with one subfolder per external resource, named descriptively (e.g., `postgres/`, `stripe-api/`, `redis-cache/`).
 - `shared/` must contain only infrastructure-agnostic utilities — not business rules or domain logic.
 - Packages are flat by default; sub-packages are only introduced when a feature package itself exceeds ~400 lines or has clearly separable sub-concerns.
-- Application MAY import from Adapters when it simplifies the design (pragmatic coupling per edr-021 rule 05).
+- Application MAY import from Adapters when it simplifies the design (pragmatic coupling per edr-022 rule 05).
 - Consumer examples for reusable libraries belong in a sibling `examples/` folder and MUST import the public module path rather than reaching into internal source paths. Because Go libraries are not typically consumed from a local packaged artifact, local example validation may use a temporary module replacement for resolution, but the import path MUST remain the public module path.
 
 #### go.mod

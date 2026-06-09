@@ -244,7 +244,7 @@ AI projects are classified into three tiers — LLM, Agent, and Workflow — def
 |---|---|---|---|
 | **LLM** ([agentme-edr-018](../application/018-ai-llm-development-standards.md)) | Not required | Not required; SHOULD be used when critical prompts are in use to measure accuracy and detect model drift | Not required |
 | **Agent** ([agentme-edr-019](../application/019-ai-agents-development-standards.md)) | Not required | Not required; MAY be used | Not required |
-| **Workflow** ([agentme-edr-020](../application/020-ai-workflow-development-standards.md)) | **Required** — see below | **Required** before every release; failed evals block release | Advised |
+| **Workflow** ([agentme-edr-021](../application/021-ai-workflow-development-standards.md)) | **Required** — see below | **Required** before every release; failed evals block release | Advised |
 
 **Workflow unit test requirements:**
 
@@ -260,4 +260,4 @@ AI projects are classified into three tiers — LLM, Agent, and Workflow — def
 - Evals MUST be executed before every release.
 - Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
 - Evals MUST run against real LLM providers (not mocks) to capture model drift.
-- For eval folder structure and script requirements, see [agentme-edr-021](../application/021-ai-eval-standards.md).
+- For eval folder structure and script requirements, see [agentme-edr-028](../application/028-ai-eval-standards.md).
