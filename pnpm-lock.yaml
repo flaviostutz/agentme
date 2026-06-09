@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.34.2
-        version: 0.34.2
+        specifier: ^0.35.0
+        version: 0.35.0
     devDependencies:
       xdrs-core:
         specifier: ^0.28.3
@@ -31,6 +31,10 @@ packages:
 
   filedist@0.34.2:
     resolution: {integrity: sha512-xh1XvVOpGOi06dVGFG3qLrTSwGXguCMeShPyHV2eoNxiM1TH3z3VmjI9zqj9p0WqOy4RXX7duV2zByRjgzWKQg==}
+    hasBin: true
+
+  filedist@0.35.0:
+    resolution: {integrity: sha512-EEHJSRu6mCPPOM42npvQ33roOSUdORT5y2q30XWeBOssvpy5nGCN/r/O0+Lz/Dj+Dk7zFlD1kWHx0o+jv2hhmA==}
     hasBin: true
 
   ignore@7.0.5:
@@ -71,6 +75,15 @@ snapshots:
       balanced-match: 4.0.4
 
   filedist@0.34.2:
+    dependencies:
+      ignore: 7.0.5
+      js-yaml: 4.1.1
+      minimatch: 10.2.5
+      mypkg: 1.0.0
+      package-manager-detector: 1.6.0
+      semver: 7.8.1
+
+  filedist@0.35.0:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
