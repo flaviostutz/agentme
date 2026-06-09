@@ -53,11 +53,10 @@ This keeps the user-facing command predictable while preserving a clean library 
 #### Configuration
 
 - Prefer flags and positional arguments for simple inputs.
-- When configuration becomes long, nested, or repetitive, support a config file instead of pushing all values into flags.
+- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-027](../devops/027-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
 - By default, config-file discovery and loading must happen in the CLI layer, not in the application layer.
-- When a config file is supported, the CLI should try to load a JSON config file from `[cwd]/.[cli-name]rc` by default.
-- The CLI should also support an explicit config path flag such as `--config`.
-- For JavaScript tools, `cosmiconfig` is an acceptable implementation. Equivalent discovery libraries are acceptable in other ecosystems.
+- When a config file is supported, the CLI must try to load a YAML file from `[cwd]/[tool-name].yml` by default.
+- The CLI must also support an explicit config path flag such as `--config`.
 - The application layer must not depend on the presence of the config file; it should receive parsed configuration values from the CLI layer.
 - The application layer may load or parse config files only when that behavior is an explicit requirement of the application contract for non-CLI consumers as well.
 
@@ -106,4 +105,4 @@ This keeps the user-facing command predictable while preserving a clean library 
 - [agentme-edr-009](../principles/009-error-handling.md) - Process error signaling and error handling expectations
 - [agentme-edr-010](010-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
 - [agentme-edr-014](014-python-project-tooling.md) - Python packaging and CLI entry-point guidance
-- [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig) - Example JSON configuration discovery library for JavaScript CLIs
+- [agentme-edr-027](../devops/027-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files
