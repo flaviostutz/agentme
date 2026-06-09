@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-028-ai-agents-implementation-quality-standards
+name: agentme-edr-policy-020-ai-agents-quality-standards
 description: Defines implementation quality standards for AI agents: tool definition patterns, error handling and recovery, observability, and unit testing. Apply alongside agentme-edr-019 when implementing or reviewing agent code. For agent architecture and structural decisions (framework, sandbox, naming, composition, system prompts) see agentme-edr-019.
 apply-to: AI agent implementation code — apply when writing tools, error handlers, logging, and unit tests for agents
 valid-from: 2026-06-09
 ---
 
-# agentme-edr-policy-028: AI agents implementation quality standards
+# agentme-edr-policy-020: AI agents quality standards
 
 ## Context and Problem Statement
 
@@ -179,4 +179,4 @@ def test_workflow_calls_subagent(mocker):
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards (LangChain configuration, mocking patterns)
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Hexagonal architecture (tool placement in adapters/connectors)
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
-- [agentme-edr-021](021-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking
+- [agentme-edr-028](028-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking

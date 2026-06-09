@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-021-ai-eval-standards
+name: agentme-edr-policy-028-ai-eval-standards
 description: Defines how to structure, write, and run eval tests for AI projects — folder layout, script requirements, and MLflow tracking. Use when implementing evals for LLM, Agent, or Workflow projects. For when evals are required see agentme-edr-007 rule 09-ai-project-testing-requirements.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-06-05
 ---
 
-# agentme-edr-policy-021: AI eval standards
+# agentme-edr-policy-028: AI eval standards
 
 ## Context and Problem Statement
 
@@ -86,5 +86,6 @@ with mlflow.start_run():
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09-ai-project-testing-requirements`) and statistical model eval targets (rule `07-statistical-models-must-have-eval-targets`)
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework and observability
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards
-- [agentme-edr-020](020-ai-workflow-development-standards.md) — Workflow development standards
+- [agentme-edr-021](021-ai-workflow-development-standards.md) — Workflow development standards
+
 - [agentme-edr-024](024-ml-dataset-structure.md) — ML dataset structure for eval datasets

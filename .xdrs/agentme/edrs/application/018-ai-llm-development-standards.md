@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-018-ai-llm-development-standards
-description: Defines the standard framework, provider configuration, observability approach, and LLM mocking patterns for simple LLM calls in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls using LangChain, manages prompt context, or handles conversation history. For agentic patterns see agentme-edr-019, for workflow patterns see agentme-edr-020.
+description: Defines the standard framework, provider configuration, observability approach, and LLM mocking patterns for simple LLM calls in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls using LangChain, manages prompt context, or handles conversation history. For agentic patterns see agentme-edr-019, for workflow patterns see agentme-edr-021.
 apply-to: Python projects that make direct LLM calls, manage prompt context, or handle conversation threads
 valid-from: 2026-06-05
 ---
@@ -29,7 +29,7 @@ Three distinct tiers of LLM-based computation are recognized in this policy. Eve
 
 These tiers nest: in general, a Workflow may contain Agent nodes; an Agent uses LLM calls internally. The tier of a component is determined by its outermost controlling structure.
 
-See [agentme-edr-019](019-ai-agents-development-standards.md) for Agent implementation standards and [agentme-edr-020](020-ai-workflow-development-standards.md) for Workflow implementation standards.
+See [agentme-edr-019](019-ai-agents-development-standards.md) for Agent implementation standards and [agentme-edr-021](021-ai-workflow-development-standards.md) for Workflow implementation standards.
 
 ### Details
 
@@ -174,8 +174,8 @@ prompt = PromptTemplate.from_file(
 ## References
 
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent implementation standards (deepagents, tool-invocation loops)
-- [agentme-edr-020](020-ai-workflow-development-standards.md) — Workflow implementation standards (LangGraph, MLflow run-level tracking)
+- [agentme-edr-021](021-ai-workflow-development-standards.md) — Workflow implementation standards (LangGraph, MLflow run-level tracking)
 - [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements including external API mocking guidance
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
-- [agentme-edr-021](021-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking
+- [agentme-edr-028](028-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking
