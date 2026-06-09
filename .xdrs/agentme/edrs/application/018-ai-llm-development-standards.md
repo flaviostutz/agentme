@@ -71,7 +71,7 @@ llm = ChatOpenAI(
 Enable LangChain auto-tracing at every application entry point by calling `mlflow.langchain.autolog()` during startup, before any LLM call is made.
 
 - This captures inputs, outputs, token counts, and latency for every LangChain chain or runnable automatically.
-- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 #### 04-unit-test-mocking
 

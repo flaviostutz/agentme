@@ -33,7 +33,7 @@ Use **MLflow** for all workflow observability and evaluation:
 - **LLM-level auto-tracing:** Enable LangChain auto-tracing per [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability` by calling `mlflow.langchain.autolog()` during application startup. This captures inputs, outputs, token counts, and latency for every LangChain call within workflow nodes.
 - Log run parameters (model name, temperature, prompt version) and output metrics (accuracy, latency, token counts) using `mlflow.log_param` / `mlflow.log_metric`.
 - Run a local MLflow tracking server with `mlflow ui` to inspect runs during development. Do not require a remote MLflow server for local development.
-- The project Makefile MUST expose a `dev-mlflow` target to start the local MLflow tracking server, per [agentme-edr-008](../../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start the local MLflow tracking server, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 #### 04-dataset-driven-accuracy-measurement
 

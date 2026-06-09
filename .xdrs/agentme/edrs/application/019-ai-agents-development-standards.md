@@ -50,6 +50,7 @@ Use deepagents sandbox whenever ANY of the following is true:
 
 **Integration requirements:**
 
+- The sandbox MUST always be initialized with `virtual_mode=True` to prevent the agent from reading or writing files outside the mounted workspace. Omitting this flag allows the agent unrestricted host filesystem access, which is a security violation.
 - Initialize the sandbox at the start of the agent run and shut it down in the same `try/finally` block.
 - Pass the sandbox handle into the agent's state so all tool calls share the same sandbox instance.
 - If the host-side code needs to pass files into the sandbox (e.g. generated config or input data), create a temporary directory with `tempfile.mkdtemp()`, write the files there, and mount it into the sandbox. Clean it up in the `finally` block.
@@ -69,7 +70,7 @@ def run_file_analysis_agent(input_files: List[Path]) -> AnalysisResult:
             shutil.copy(f, tmp_dir)
         
         # Initialize sandbox with mounted directory
-        sandbox = Sandbox(mount_paths={tmp_dir: "/workspace"})
+        sandbox = Sandbox(mount_paths={tmp_dir: "/workspace"}, virtual_mode=True)
         
         # Run agent with sandbox
         agent = FileAnalysisAgent(sandbox=sandbox)
@@ -188,7 +189,7 @@ Agent execution MUST be observable through logging and tracing:
 - Use structured logging (JSON) with fields: `iteration`, `tool_selected`, `tool_result_status`, `decision`.
 - For LLM calls within agents, follow [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability`.
 - When agents run as workflow nodes, MLflow tracking from the parent workflow automatically captures agent-level traces.
-- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 **Example structured log entry:**
 

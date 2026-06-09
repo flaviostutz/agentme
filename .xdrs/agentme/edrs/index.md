@@ -48,6 +48,7 @@ Repository structure, build conventions, and CI/CD pipelines.
 - [agentme-edr-006](devops/006-github-pipelines.md) - **GitHub CI/CD pipelines** - Define required CI stages and workflow structure
 - [agentme-edr-008](devops/008-common-targets.md) - **Common development script names** - Reuse standard build, lint, and test target names
 - [agentme-edr-017](devops/017-tool-execution-and-scripting.md) - **Tool execution and scripting** - Run tools consistently across shells, Makefiles, and CI
+- [agentme-edr-027](devops/027-environment-variable-configuration.md) - **Environment variable configuration files** - Manage non-secret configuration with `.env` files, `.gitignore` rules, stage variants, and Makefile loading
 
 ## Governance
 
