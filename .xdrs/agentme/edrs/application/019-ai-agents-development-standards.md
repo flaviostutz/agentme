@@ -127,16 +127,18 @@ When multiple agents are needed:
 Every agent system prompt MUST follow this XML-section template. Sections must appear in this order. Required sections must always be present; optional sections may be omitted when they genuinely do not apply; never reorder them.
 
 ```xml
+[specific task description to the agent. if not defined use the default prompt "Execute your objective taking into consideration the inputs provided and all the sections described below"]
+
 <OBJECTIVE>
 [A one or two-sentence summary of the agent's main deliverable.
 e.g.: Split the incoming file list into logical batches for parallel processing.]
 </OBJECTIVE>
 
-<ROLE>
+<AGENT_ROLE>
 [Defines who the agent is, its area of expertise, and its core persona.
 If running inside a workflow, define exactly which node in WORKFLOW_CONTEXT this agent corresponds to.
 e.g.: You are the batch_planning_agent (see WORKFLOW_CONTEXT). You are an expert at partitioning large file sets into balanced, directory-aware batches.]
-</ROLE>
+</AGENT_ROLE>
 
 <INPUT>
 [All inputs for this agent invocation. For standalone agents: list only the agent-specific inputs. For workflow agents: list workflow-level inputs shared across all agents first, then agent-specific inputs such as judge outcomes, counters, or intermediate results from upstream nodes.]
@@ -160,31 +162,39 @@ e.g.: Do not call any tools. All reasoning is done in-context using the INPUT fi
 <!-- Optional: include when hard constraints need to be stated explicitly -->
 <GUARDRAILS>
 [Hard, non-negotiable constraints the agent must never violate.
+All constraints MUST use mandatory language: MUST, MUST NOT, NEVER, ALWAYS, SHALL, SHALL NOT.
 e.g.: NEVER create batches with fewer than 5 or more than 20 files. NEVER split files from the same directory across different batches unless unavoidable.]
 </GUARDRAILS>
 
 <OUTPUT_FORMAT>
 [A templated example or JSON schema specifying exactly how the final response should look.
-e.g.: Respond with a JSON object matching this schema: ...]
+When multiple output formats are possible, use mandatory language (MUST, ALWAYS, NEVER) to specify exactly which format to use and exclude the others.
+e.g.: Respond with a JSON object matching this schema: ... ALWAYS return valid JSON. NEVER include prose outside the JSON block.]
 </OUTPUT_FORMAT>
 
 <!-- Workflow-only: omit this section for standalone (non-workflow) agents -->
 <WORKFLOW_CONTEXT>
 [A detailed prose or diagram description of the overall workflow graph so the agent understands its role within the larger flow. Reference the specific node name that maps to this agent. Include enough detail about upstream and downstream nodes so the agent can reason about its context.]
 </WORKFLOW_CONTEXT>
+
+<SYSTEM_CONTEXT>
+The current date/time is [now in ISO 8601 format].
+The current OS is: [operating system name].
+</SYSTEM_CONTEXT>
 ```
 
 **Rules:**
 
 | Section | Required? | Notes |
 |---|---|---|
+| `<SYSTEM_CONTEXT>` | Optional | Runtime environment context injected at invocation time (e.g., current date/time in ISO 8601, OS). Include whenever the agent may need temporal or environment awareness. |
 | `<OBJECTIVE>` | Required | One or two sentences summarising the agent's main deliverable. |
 | `<ROLE>` | Required | Agent persona and expertise. When inside a workflow, MUST reference its node name from `<WORKFLOW_CONTEXT>`. |
 | `<INPUT>` | Required | List ALL inputs. For workflow agents: workflow-level inputs first, then agent-specific inputs. |
 | `<STEPS>` | Optional | Include when the agent follows a non-trivial numbered sequence of steps. |
 | `<TOOL_GUIDANCE>` | Optional | Include when tool use order or conditions need explicit direction. |
-| `<GUARDRAILS>` | Optional | Hard constraints that must never be violated. |
-| `<OUTPUT_FORMAT>` | Required | MUST include a concrete schema or templated example; do not leave it vague. |
+| `<GUARDRAILS>` | Optional | Hard constraints that must never be violated. All constraint statements MUST use mandatory language: MUST, MUST NOT, NEVER, ALWAYS, SHALL, SHALL NOT. |
+| `<OUTPUT_FORMAT>` | Required | MUST include a concrete schema or templated example; do not leave it vague. When multiple output formats are possible, MUST use mandatory language to specify exactly which one to use and explicitly exclude the others. |
 | `<WORKFLOW_CONTEXT>` | Conditional | MUST be omitted for standalone agents. MUST be present when the agent runs as a node inside a LangGraph workflow. |
 
 ## References

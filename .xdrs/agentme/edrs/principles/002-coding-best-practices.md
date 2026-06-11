@@ -83,7 +83,28 @@ def _persist_order(order, total): ...
 
 ---
 
-#### 03-keep-readme-tests-and-examples-in-sync
+#### 03-put-entry-point-function-first
+
+Place the **entry-point function** (the outermost caller) at the **top** of the file. All helper or sub-functions it calls internally must appear **below** it.
+
+*Why:* Readers can follow the overall logic top-down without jumping around the file. The most important function is immediately visible when the file is opened.
+
+**Example (Python):**
+
+```python
+def process_order(order):          # entry point at the top
+    _validate_order(order)
+    total = _calculate_price(order)
+    _persist_order(order, total)
+
+def _validate_order(order): ...
+def _calculate_price(order) -> Decimal: ...
+def _persist_order(order, total): ...
+```
+
+---
+
+#### 04-keep-readme-tests-and-examples-in-sync
 
 Every change to a public interface, behavior, or configuration option must be reflected in:
 
@@ -95,7 +116,7 @@ Every change to a public interface, behavior, or configuration option must be re
 
 ---
 
-#### 04-declare-types-in-file-where-used
+#### 05-declare-types-in-file-where-used
 
 If a type (struct, interface, class, typedef, etc.) is used in only **one** file, declare it in that same file. Move a type to a shared module only when it is referenced in two or more files.
 
@@ -103,7 +124,7 @@ If a type (struct, interface, class, typedef, etc.) is used in only **one** file
 
 ---
 
-#### 05-keep-test-files-next-to-source
+#### 06-keep-test-files-next-to-source
 
 Where the language ecosystem supports it (e.g. JavaScript/TypeScript, Go, Rust), place test files **beside** the source file they cover and use a consistent naming convention rather than mirroring the source tree in a separate `tests/` folder.
 
