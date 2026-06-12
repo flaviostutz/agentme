@@ -25,4 +25,6 @@ Opiniated set of decisions and skills for common development tasks
 
 ### _local (reserved)
 
-Project-local XDRs that must not be shared with other contexts. Always keep this scope last so its decisions override or extend all scopes listed above. Keep `_local` canonical indexes in the workspace tree only; do not link them from this shared index. Readers and tools should still try to discover existing `_local` indexes in the current workspace by default.
+_local scope is the default scope for new xdrs and might override other scope decisions. These decisions are local and are not supposed to be shared in other contexts.
+
+Read _local scope index at `_local/index.md` when it exists.
