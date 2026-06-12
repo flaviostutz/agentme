@@ -23,41 +23,47 @@ For when evals are required per AI tier, see [agentme-edr-007](../principles/007
 
 #### 01-eval-folder-structure
 
-For each AI component being evaluated (an LLM chain, agent, or workflow), create a corresponding directory under `evals/` at the same level as `lib/` and `examples/`:
+Each named eval is a self-contained unit. Create one directory per eval under `evals/` at the same level as `lib/` and `examples/`:
 
 ```text
 evals/
-  <component>/
-    Makefile                  # eval targets for this component
-    dataset_<group>/          # one folder per eval group (see agentme-edr-024)
-    eval_<group>.py           # evaluation script for each group
+  eval-<name>/
+    dataset/              # EDR-024 compliant dataset (README.md, dataset.schema.json, data/)
+    eval-<name>.py        # evaluation script
+    eval-report.md        # generated report (overwritten on each run — see rule 03)
+    Makefile              # eval and run targets
+  eval-<name2>/
+    ...
 ```
 
-Where `<component>` is the name of the LLM chain, agent, or workflow being evaluated (e.g., `summarizer`, `file_analyzer_agent`, `document_review_workflow`).
+Where `<name>` identifies the specific evaluation scenario (e.g., `eval-basic`, `eval-complex`, `eval-edge-cases`).
 
-The per-component `evals/<component>/Makefile` MUST define:
+The `dataset/` subfolder MUST be a valid [agentme-edr-024](024-ml-dataset-structure.md) dataset — it MUST include `README.md` and `dataset.schema.json` at its root. For input/output pairs, use JSONL files per `agentme-edr-024.04-complex-structured-datasets-must-use-jsonl`.
+
+Each `evals/eval-<name>/Makefile` MUST define:
 
 | Target | Behaviour |
 |---|---|
-| `eval` | Runs all eval groups for the component |
-| `eval-<group>` | Runs one named group (e.g. `eval-simple`, `eval-complex`) |
+| `eval` | Runs the eval with threshold enforcement; exits non-zero on failure (CI-safe) |
+| `run` | Runs the eval without threshold enforcement (exploration / debugging) |
 
-The module root Makefile MUST expose a `make eval` target that delegates to `eval` in every `evals/<component>/Makefile`:
+The module root Makefile MUST expose a `make eval` target that delegates to `eval` in every `evals/eval-<name>/Makefile`:
 
 ```makefile
 eval:
-	$(MAKE) -C evals/summarizer eval
-	$(MAKE) -C evals/document_review_workflow eval
+	$(MAKE) -C evals/eval-basic eval
+	$(MAKE) -C evals/eval-complex eval
 ```
 
 #### 02-eval-script-requirements
 
-Each `eval_<group>.py` script MUST:
+Each `eval-<name>.py` script MUST:
 
-- Load the dataset from `evals/<component>/dataset_<group>/` following [agentme-edr-024](024-ml-dataset-structure.md). For input/output pairs, use the JSONL format per `agentme-edr-024.04-complex-structured-datasets-must-use-jsonl`.
+- Load the dataset from `dataset/` in the same eval folder, following [agentme-edr-024](024-ml-dataset-structure.md). For input/output pairs, use the JSONL format per `agentme-edr-024.04-complex-structured-datasets-must-use-jsonl`.
 - Run every input through the live component against **real LLM providers** (not mocked responses), to capture model drift.
 - Log per-sample and aggregate metrics to an MLflow experiment that runs **locally** — a remote MLflow server MUST NOT be required.
 - Compare outputs to expected values using project-defined quality thresholds. Thresholds MUST be declared explicitly (e.g., in a Makefile variable or README).
+- Write `eval-report.md` in the same folder per rule `03-eval-report-file`.
 - Exit with a non-zero status when any metric falls below its defined threshold, consistent with [agentme-edr-007](../principles/007-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`.
 
 **Example:**
@@ -68,17 +74,107 @@ from my_package.app.workflows.document_review_workflow.graph import graph
 
 EVAL_MIN_ACCURACY = 0.85
 
-with mlflow.start_run():
+with mlflow.start_run() as run:
     results = []
-    for sample in load_dataset("evals/document_review_workflow/dataset_basic/"):
+    for sample in load_dataset("dataset/"):
         output = graph.invoke({"document": sample["input"]})
         results.append(output["label"] == sample["expected_label"])
 
     accuracy = sum(results) / len(results)
     mlflow.log_metric("accuracy", accuracy)
 
+    write_eval_report(run, results, thresholds={"accuracy": EVAL_MIN_ACCURACY})
+
     if accuracy < EVAL_MIN_ACCURACY:
         raise SystemExit(f"Eval failed: accuracy {accuracy:.2f} < {EVAL_MIN_ACCURACY}")
+```
+
+#### 03-eval-report-file
+
+Each eval script MUST produce `eval-report.md` in the same `evals/eval-<name>/` folder and overwrite it on every run.
+
+**Generation constraint:** The report MUST be produced programmatically, reading raw metric values directly from MLflow. No LLM or generative model may write, summarize, or paraphrase any section of the report, to prevent hallucinated metric values.
+
+The report MUST follow this template:
+
+```markdown
+# Eval Report: <name>
+
+**Date:** <ISO date>
+**Dataset:** dataset/
+**Script:** eval-<name>.py
+**Thresholds:** accuracy ≥ <value>, F1 ≥ <value>
+
+## Overall Results
+
+| Metric    | Value  | 95% CI         | Threshold | Status  |
+|-----------|--------|----------------|-----------|---------|
+| Accuracy  | <val>  | [<low>, <high>]| ≥ <thr>   | ✓/✗ PASS/FAIL |
+| F1 Score  | <val>  | —              | ≥ <thr>   | ✓/✗ PASS/FAIL |
+| Precision | <val>  | —              | —         | —       |
+| Recall    | <val>  | —              | —         | —       |
+| Samples   | <n>    | —              | —         | —       |
+
+**Overall: PASS / FAIL**
+
+## Per-item Results
+
+| ID  | Input Summary | Expected | Actual | Correct |
+|-----|---------------|----------|--------|---------|
+| 001 | <summary>     | <label>  | <label>| ✓       |
+| 002 | <summary>     | <label>  | <label>| ✗       |
+
+## Notes
+
+- <observations, failure patterns, MLflow run link>
+```
+
+**Confidence interval:** The 95% CI for accuracy MUST be computed using the **Wilson score interval** (preferred over the normal approximation for small $n$). A wide interval signals that the dataset is too small to support confident conclusions and the sample count should be increased.
+
+The Wilson score bounds at 95% confidence ($z = 1.96$) are:
+
+$$\frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$$
+
+Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 are required; precision and recall are recommended.
+
+**Filled-in example** (`evals/eval-basic/eval-report.md` for a document review workflow):
+
+```markdown
+# Eval Report: eval-basic
+
+**Date:** 2026-06-12
+**Dataset:** dataset/
+**Script:** eval-basic.py
+**Thresholds:** accuracy ≥ 0.85, F1 ≥ 0.80
+
+## Overall Results
+
+| Metric    | Value | 95% CI       | Threshold | Status      |
+|-----------|-------|--------------|-----------|-------------|
+| Accuracy  | 0.88  | [0.69, 0.97] | ≥ 0.85    | ✓ PASS      |
+| F1 Score  | 0.86  | —            | ≥ 0.80    | ✓ PASS      |
+| Precision | 0.89  | —            | —         | —           |
+| Recall    | 0.84  | —            | —         | —           |
+| Samples   | 25    | —            | —         | —           |
+
+**Overall: PASS**
+
+> Note: CI [0.69, 0.97] is wide — 25 samples may be insufficient for high confidence. Consider expanding the dataset.
+
+## Per-item Results
+
+| ID  | Input Summary                       | Expected | Actual   | Correct |
+|-----|-------------------------------------|----------|----------|---------|
+| 001 | Contract renewal, 3 pages, standard | approve  | approve  | ✓       |
+| 002 | NDA with unusual liability clause   | escalate | escalate | ✓       |
+| 003 | Vendor invoice, missing PO number   | reject   | reject   | ✓       |
+| 004 | Employment agreement, standard terms| approve  | approve  | ✓       |
+| 005 | Amendment with redlined IP clause   | escalate | approve  | ✗       |
+
+## Notes
+
+- Sample 005 misclassified: redlined IP clause not flagged as escalation trigger. Possible model drift.
+- MLflow run: experiment `eval_basic` — view with `mlflow ui`
 ```
 
 ## References

@@ -107,12 +107,13 @@ Eval folder structure and script requirements are defined in [agentme-edr-028](0
 
 LangGraph node names MUST follow a suffix convention that communicates the node's role at a glance. Names MUST be action-oriented and descriptive.
 
-| Suffix | Node type | When to use |
+| Convention | Node type | When to use |
 |---|---|---|
-| `_llm` | LLM call | Any node whose primary action is a direct LLM inference call (see [agentme-edr-018](018-ai-llm-development-standards.md)) |
-| `_step` | Algorithmic step | Deterministic logic with no LLM involvement (transformation, validation, routing) |
-| `_tool` | Tool/API call | A node that wraps a single external tool or API (e.g. a REST endpoint, DB query) |
-| `_agent` | Subgraph agent | A node that invokes a nested subgraph containing its own tool-invocation cycle and LLM calls; use the **deepagents** library for these nodes (see [agentme-edr-019](019-ai-agents-development-standards.md)) |
+| suffix `_llm` | LLM call | Any node whose primary action is a direct LLM inference call (see [agentme-edr-018](018-ai-llm-development-standards.md)) |
+| suffix `_step` | Algorithmic step | Deterministic logic with no LLM involvement (transformation, validation, routing) |
+| suffix `_tool` | Tool/API call | A node that wraps a single external tool or API (e.g. a REST endpoint, DB query) |
+| suffix `_agent` | Subgraph agent | A node that invokes a nested subgraph containing its own tool-invocation cycle and LLM calls; use the **deepagents** library for these nodes (see [agentme-edr-019](019-ai-agents-development-standards.md)) |
+| prefix `evaluate_` | Judge node | A node that evaluates the quality, correctness, completeness, or progress of prior outputs and returns a structured verdict; MUST follow rule `13-judge-node-output-format` |
 
 The Python function implementing the node SHOULD share the same name as the node alias passed to `add_node`, so that graph definitions and stack traces remain unambiguous:
 
@@ -130,6 +131,8 @@ graph.add_node("code_reviewer_agent", code_reviewer_agent)
 ```
 
 Names MUST NOT use generic labels such as `node1`, `process`, or `run`. Each name must clearly express what action the node performs.
+
+Judge nodes use a **prefix** convention instead of a suffix: the name MUST start with `evaluate_` followed by the subject being judged (e.g. `evaluate_progress`, `evaluate_quality`, `evaluate_completeness`, `evaluate_relevance`). This makes judge nodes immediately distinguishable from all other node types at a glance.
 
 #### 10-workflow-unit-testing
 
@@ -221,6 +224,72 @@ Choose a name that summarises what the workflow consumes, processes, and produce
 - `MarketingCampaignExecutorWorkflow` — executes a marketing campaign end-to-end
 
 **Bad names** (FORBIDDEN): `MainWorkflow`, `AgentGraph`, `ProcessFlow`, `Workflow1`, `RunGraph`.
+
+#### 13-judge-node-output-format
+
+Every node whose name starts with `evaluate_` (a judge node) MUST return a structured verdict object as its output. This ensures all judge nodes are interchangeable and their results can be uniformly consumed by downstream routing logic, logged, and compared across runs.
+
+**Required output schema:**
+
+```python
+from typing import Literal, Optional
+from dataclasses import dataclass, field
+
+FindingLevel = Literal["OK", "INFO", "WARNING", "ERROR"]
+
+@dataclass
+class JudgeFinding:
+    level: FindingLevel
+    # MUST: short action-oriented label; < 10 words
+    title: str
+    # MUST when level != "OK": why this is an issue; < 30 words
+    reason: Optional[str] = None
+    # MUST when level != "OK": notes/findings using mandatory (MUST) or advisory (SHOULD) language; < 400 words
+    details: Optional[str] = None
+    # OPTIONAL: possible fixes, only when directly inferrable from the finding without further analysis; < 200 words
+    fix: Optional[str] = None
+
+@dataclass
+class JudgeVerdict:
+    # MUST: highest severity level across all findings; "OK" only when every finding is "OK"
+    verdict: FindingLevel
+    # MUST: at least one finding present
+    findings: list[JudgeFinding] = field(default_factory=list)
+```
+
+Example (for logging, state storage, and inter-node communication):
+
+```json
+{
+  "verdict": "WARNING",
+  "findings": [
+    {
+      "level": "OK",
+      "title": "All required sections present"
+    },
+    {
+      "level": "WARNING",
+      "title": "Code coverage below threshold",
+      "reason": "Current coverage is 62%, minimum required is 80%.",
+      "details": "The following modules have no test coverage: auth.py, payments.py. SHOULD add unit tests for all public methods in these modules.",
+      "fix": "Add unit tests for auth.py and payments.py. Run `make test-coverage` to verify the threshold is met."
+    }
+  ]
+}
+```
+
+**Routing from judge nodes:**
+
+Downstream conditional edges MUST route on `verdict` only:
+
+```python
+def route_after_evaluate_quality(state) -> str:
+    if state["evaluate_quality_result"].verdict in ("ERROR", "WARNING"):
+        return "revise_draft_llm"
+    return "publish_step"
+```
+
+**Logging:** Log `verdict` and the count of each level as MLflow metrics on the current run per rule `03-observability-and-experiment-tracking`.
 
 #### 15-workflow-state-persistence
 
