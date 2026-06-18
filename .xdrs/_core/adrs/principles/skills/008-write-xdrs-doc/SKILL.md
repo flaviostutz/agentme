@@ -1,5 +1,5 @@
 ---
-name: _core-adr-skill-008-write-xdrs-doc
+name: 008-write-xdrs-doc
 description: >
   Use when writing documents such as decisions, policies, skills, procedures, research, plans, articles, or presentations.
   Activate this skill when the user asks to create or write any XDRS element.

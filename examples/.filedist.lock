@@ -1,7 +1,7 @@
 version: 1
 packages:
   agentme: 0.0.1
-  xdrs-core@0.28.3: 0.28.3
+  xdrs-core@0.30.0: 0.30.0
 sets:
   - package: agentme
     selector:
@@ -11,30 +11,30 @@ sets:
       path: ./output
 files:
   output:
-    - .github/skills/001-review|xdrs-core|0.28.3|symlink|18c5f3a037d4|0
-    - .github/skills/008-write-xdrs-doc|xdrs-core|0.28.3|symlink|c3a23ff52f24|0
-    - .xdrs/_core/adrs/index.md|xdrs-core|0.28.3|file|ca7abba5dbdf|0
-    - .xdrs/_core/adrs/principles/001-xdrs-core.md|xdrs-core|0.28.3|file|0f2c3f610ddb|0
-    - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.28.3|file|ddf9b37f8830|0
-    - .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.28.3|file|92faf9ffa638|0
-    - .xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.28.3|file|1bba5558d7fa|0
-    - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|xdrs-core|0.28.3|file|3060fcc77aa7|0
-    - .xdrs/_core/adrs/principles/006-research-standards.md|xdrs-core|0.28.3|file|ff847fcd5914|0
-    - .xdrs/_core/adrs/principles/007-plan-standards.md|xdrs-core|0.28.3|file|ed6f135f86a4|0
-    - .xdrs/_core/adrs/principles/008-xdr-standards-structured.md|xdrs-core|0.28.3|file|3c6b7c9b1415|0
-    - .xdrs/_core/adrs/principles/009-presentation-standards.md|xdrs-core|0.28.3|file|d454789bedd2|0
-    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|xdrs-core|0.28.3|file|d4071aa47a37|0
-    - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|xdrs-core|0.28.3|file|76e6ae9392a1|0
-    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|xdrs-core|0.28.3|file|04262f4e9ea2|0
-    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|xdrs-core|0.28.3|file|904800bb5336|0
-    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|xdrs-core|0.28.3|file|9d38bf64a0aa|0
-    - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|xdrs-core|0.28.3|file|8a9c392061d2|0
-    - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|xdrs-core|0.28.3|file|69e9d4d8fe21|0
-    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|xdrs-core|0.28.3|file|d31cdc8956b9|0
-    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|xdrs-core|0.28.3|file|eaae488e6198|0
-    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|xdrs-core|0.28.3|file|0236f9e4819d|0
-    - .xdrs/_core/index.md|xdrs-core|0.28.3|file|de2c5180edbe|0
-    - AGENTS.md|xdrs-core|0.28.3|file|c258486519ae|0
-    - .xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md|agentme|0.0.1|file|837fa0344988|0
-checksum: 7a3b7f8c423c
+    - .agents/skills/001-review|xdrs-core|0.30.0|symlink|18c5f3a037d4|0
+    - .agents/skills/008-write-xdrs-doc|xdrs-core|0.30.0|symlink|c3a23ff52f24|0
+    - .xdrs/_core/adrs/index.md|xdrs-core|0.30.0|file|7367d1a2ced0|0
+    - .xdrs/_core/adrs/principles/001-xdrs-core.md|xdrs-core|0.30.0|file|0f2c3f610ddb|0
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.30.0|file|ddf9b37f8830|0
+    - .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.30.0|file|fe47ba81e2b6|0
+    - .xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.30.0|file|1bba5558d7fa|0
+    - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|xdrs-core|0.30.0|file|3060fcc77aa7|0
+    - .xdrs/_core/adrs/principles/006-research-standards.md|xdrs-core|0.30.0|file|ff847fcd5914|0
+    - .xdrs/_core/adrs/principles/007-plan-standards.md|xdrs-core|0.30.0|file|ed6f135f86a4|0
+    - .xdrs/_core/adrs/principles/008-xdr-standards-structured.md|xdrs-core|0.30.0|file|3c6b7c9b1415|0
+    - .xdrs/_core/adrs/principles/009-presentation-standards.md|xdrs-core|0.30.0|file|d454789bedd2|0
+    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|xdrs-core|0.30.0|file|d4071aa47a37|0
+    - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|xdrs-core|0.30.0|file|76e6ae9392a1|0
+    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|xdrs-core|0.30.0|file|e6f9d0f9a205|0
+    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|xdrs-core|0.30.0|file|452994eb069d|0
+    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|xdrs-core|0.30.0|file|4054074525c1|0
+    - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|xdrs-core|0.30.0|file|08cc2f327050|0
+    - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|xdrs-core|0.30.0|file|d6b435696670|0
+    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|xdrs-core|0.30.0|file|74cb4de9b664|0
+    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|xdrs-core|0.30.0|file|9ce759499c1a|0
+    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|xdrs-core|0.30.0|file|58d5e4175583|0
+    - .xdrs/_core/index.md|xdrs-core|0.30.0|file|15cb8156db83|0
+    - AGENTS.md|xdrs-core|0.30.0|file|c258486519ae|0
+    - .xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md|agentme|0.0.1|file|6a1d9c0475cc|0
+checksum: d4f4763a7af3
 

@@ -1,5 +1,5 @@
 ---
-name: _core-adr-skill-007-write-presentation
+name: 007-write-presentation
 description: >
   Creates a Marp slide presentation for an existing XDRS document (policy, research, article, or plan).
   Activate this skill when the user asks to create slides, a presentation, or a slide deck for an XDRS document.
