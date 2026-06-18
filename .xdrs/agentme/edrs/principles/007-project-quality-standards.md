@@ -118,13 +118,14 @@ Directory and file layout must be self-explanatory: source code, tests, configur
 
 #### 06-libraries-must-have-runnable-examples
 
-Projects that are libraries or shared utilities must include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples are executed as part of `make test`.
+Projects that are libraries or shared utilities must include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) must be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
 
 **Requirements:**
 - `examples/` must contain at least one subdirectory per major usage scenario
 - Each scenario subdirectory must have a `Makefile` with a `run` target
 - Examples must import the library as an external consumer (not via relative `../src` imports)
-- `make test` in the root must run all examples; failures block CI and releases
+- `make test` in the root must run all offline examples; failures block CI and releases
+- Examples that depend on external entities must not be included in `make test`
 
 **Directory layout:**
 
