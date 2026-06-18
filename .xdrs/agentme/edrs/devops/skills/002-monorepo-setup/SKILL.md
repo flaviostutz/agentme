@@ -1,5 +1,5 @@
 ---
-name: agentme-edr-skill-002-monorepo-setup
+name: 002-monorepo-setup
 description: >
   Step-by-step instructions for setting up and scaffolding a new monorepo following the standard
   layout, naming conventions, Makefiles, Mise tooling, and README requirements defined in

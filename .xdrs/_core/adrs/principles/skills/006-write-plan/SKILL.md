@@ -1,5 +1,5 @@
 ---
-name: _core-adr-skill-006-write-plan
+name: 006-write-plan
 description: >
   Creates a new plan document following XDRS plan standards: selects scope, type, subject, and number;
   then writes a focused execution plan with problem context, proposed solution, approach, milestones, and deliverables.

@@ -1,5 +1,5 @@
 ---
-name: _core-adr-skill-005-write-research
+name: 005-write-research
 description: >
   Creates a new research document following XDRS research standards: selects scope, type, subject, and number;
   then writes an IMRAD-based study with enough evidence and method detail to stand on its own as a technical paper.

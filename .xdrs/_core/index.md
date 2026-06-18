@@ -39,13 +39,13 @@ Slide presentations that support XDRS documents follow [_core-adr-policy-009](ad
 
 The `_core` scope ships with seven skills that automate the most common framework operations:
 
-- **_core-adr-skill-001-review** reviews code and files against applicable Policies
-- **_core-adr-skill-002-write-policy** guides creation of a new Policy document
-- **_core-adr-skill-003-write-skill** guides creation of a new skill package
-- **_core-adr-skill-004-write-article** guides creation of a new article
-- **_core-adr-skill-005-write-research** guides creation of a new research document
-- **_core-adr-skill-006-write-plan** guides creation of a new execution plan
-- **_core-adr-skill-007-write-presentation** guides creation of Marp slide presentations
+- **001-review** reviews code and files against applicable Policies
+- **002-write-policy** guides creation of a new Policy document
+- **003-write-skill** guides creation of a new skill package
+- **004-write-article** guides creation of a new article
+- **005-write-research** guides creation of a new research document
+- **006-write-plan** guides creation of a new execution plan
+- **007-write-presentation** guides creation of Marp slide presentations
 
 ### Getting started
 

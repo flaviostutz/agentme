@@ -1,5 +1,5 @@
 ---
-name: _core-adr-skill-002-write-policy
+name: 002-write-policy
 description: >
   Creates a new Policy interactively: selects type, scope, subject, and writes a focused, conflict-checked policy document.
   Activate this skill when the user asks to create, add, or write a new Policy (ADR, BDR, or EDR).
