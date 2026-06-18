@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "filedist": "^0.35.0"
+    "filedist": "^0.35.1"
   },
   "bin": "bin/filedist.js",
   "files": [
@@ -11,17 +11,13 @@
     "bin/filedist.js",
     ".filedist-package.yml",
     ".xdrs/agentme/**",
-    ".xdrs/index.md",
-    ".github/agents/speckit*",
-    ".github/prompts/speckit*",
-    ".specify/**",
-    ".vscode/settings.json"
+    ".xdrs/index.md"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/flaviostutz/agentme.git"
   },
   "devDependencies": {
-    "xdrs-core": "^0.28.3"
+    "xdrs-core": "^0.28.4"
   }
 }

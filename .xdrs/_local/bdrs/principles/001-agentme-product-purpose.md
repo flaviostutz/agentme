@@ -9,7 +9,7 @@ valid-from: 2026-05-25
 
 ## Context and Problem Statement
 
-agentme is an npm package that distributes opinionated XDRs and speckit agent skills to other
+agentme is an npm package that distributes opinionated XDRs and AI agent skills to other
 projects. Without a clear statement of its product purpose and how consumers are expected to use
 it, contributors may add artifacts that dilute the product focus or break the consumption model.
 
@@ -21,7 +21,7 @@ What is agentme's product purpose, who are its consumers, and how do they integr
 projects via filedist preset extraction.**
 
 Consumers install agentme as an npm dependency and run preset extraction to populate their own
-repository with a curated set of XDRs and speckit agent files. The product value is the curation:
+repository with a curated set of XDRs and agent files. The product value is the curation:
 only well-reviewed, non-conflicting, immediately usable artifacts are shipped.
 
 ### Implementation Details
@@ -34,9 +34,9 @@ agentme ships two kinds of artifacts:
    covering coding best practices, tooling, testing, project structure, and CI/CD pipelines.
    These are intended for other teams to adopt as their own decision baseline.
 
-2. **speckit agent files** (in `.github/agents/`, `.github/prompts/`, `.specify/`) — a complete
-   AI-assisted software development workflow for VS Code Copilot. Includes agent definitions,
-   prompt files, memory templates, and Bash scripts for managing feature specs and plans.
+2. **Agent workflow files** (in `.github/agents/`, `.github/prompts/`) — a complete
+   AI-assisted software development workflow for VS Code Copilot. Includes agent definitions
+   and prompt files.
 
 **Consumer workflow**
 
@@ -50,7 +50,6 @@ agentme ships two kinds of artifacts:
 | Preset | Contents |
 |--------|----------|
 | `basic` | agentme XDRs + `xdrs-core` baseline ADRs + `AGENTS.md` |
-| `speckit` | speckit agent/prompt files + `.specify/` templates + VS Code settings |
 | (none) | all of the above combined |
 
 **Business rules**
