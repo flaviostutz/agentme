@@ -9,12 +9,12 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.35.1
+        version: 0.35.1
     devDependencies:
       xdrs-core:
-        specifier: ^0.28.3
-        version: 0.28.3
+        specifier: ^0.28.4
+        version: 0.28.4
 
 packages:
 
@@ -29,12 +29,8 @@ packages:
     resolution: {integrity: sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ==}
     engines: {node: 18 || 20 || >=22}
 
-  filedist@0.34.2:
-    resolution: {integrity: sha512-xh1XvVOpGOi06dVGFG3qLrTSwGXguCMeShPyHV2eoNxiM1TH3z3VmjI9zqj9p0WqOy4RXX7duV2zByRjgzWKQg==}
-    hasBin: true
-
-  filedist@0.35.0:
-    resolution: {integrity: sha512-EEHJSRu6mCPPOM42npvQ33roOSUdORT5y2q30XWeBOssvpy5nGCN/r/O0+Lz/Dj+Dk7zFlD1kWHx0o+jv2hhmA==}
+  filedist@0.35.1:
+    resolution: {integrity: sha512-UPRXevG6lMgkPPFWknC9ZEaMB+YS096F2SAGjlTbNEF6hlbSraEivVRAGjS6OSecxWfvkdIl+/RSFiq9Y5nWDw==}
     hasBin: true
 
   ignore@7.0.5:
@@ -60,8 +56,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.28.3:
-    resolution: {integrity: sha512-BiCoIT2xQIRdH/Q7kt/UWPKuHritvcuYT+WeInzmMoORPv07OeGTpxDnZo5EBOuKqHrVa82UPSCHo1nGFs5GuQ==}
+  xdrs-core@0.28.4:
+    resolution: {integrity: sha512-HAGuOAJ9NOZmv6j6ChO+LdYoEstDSmrP6eEM3Ef5Uow1L8/agolvqGnb5l4ZBDOpdoaWFKp+FphM1OSusH+Obw==}
     hasBin: true
 
 snapshots:
@@ -74,16 +70,7 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
-  filedist@0.34.2:
-    dependencies:
-      ignore: 7.0.5
-      js-yaml: 4.1.1
-      minimatch: 10.2.5
-      mypkg: 1.0.0
-      package-manager-detector: 1.6.0
-      semver: 7.8.1
-
-  filedist@0.35.0:
+  filedist@0.35.1:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
@@ -108,8 +95,8 @@ snapshots:
 
   semver@7.8.1: {}
 
-  xdrs-core@0.28.3:
+  xdrs-core@0.28.4:
     dependencies:
-      filedist: 0.34.2
+      filedist: 0.35.1
       ignore: 7.0.5
       minimatch: 10.2.5

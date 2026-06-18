@@ -2,6 +2,6 @@ sets:
   - package: agentme
     selector:
       presets:
-        - speckit
+        - basic
     output:
       path: ./output

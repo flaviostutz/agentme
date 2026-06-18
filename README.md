@@ -1,6 +1,6 @@
 # agentme
 
-Curated distribution package of XDRs and speckit agent workflow files for AI-assisted software development.
+Curated distribution package of XDRs and AI agent workflow files for AI-assisted software development.
 
 This collection is being updated as we develop applications and feel the need for new instructions and skills to help with AI agents.
 
@@ -8,7 +8,7 @@ For guidance on turning recurring delivery friction into reusable decision recor
 
 ## Getting Started
 
-This will extract all the features of agentme (skills, github configurations, speckit, xdrs collection):
+This will extract all the features of agentme (skills, github configurations, xdrs collection):
 
 ```sh
 npx agentme
@@ -27,7 +27,6 @@ mise exec -- pnpm exec agentme check --output . --presets basic
 agentme is published as an npm package and consumed through `filedist`-based extraction. It ships a curated set of reusable artifacts for other repositories:
 
 - XDRs in `.xdrs/agentme/` for engineering, architecture, testing, tooling, and CI/CD standards.
-- speckit agent files in `.github/`, `.specify/`, and `.vscode/` for specification-driven AI development workflows.
 
 The package is intentionally static: consumers install it as a development dependency, extract files into their own repository, and commit the generated output.
 
@@ -36,7 +35,6 @@ The package is intentionally static: consumers install it as a development depen
 | Preset | Contents |
 | --- | --- |
 | `basic` | `xdrs-core` baseline ADRs, `AGENTS.md`, and agentme XDRs |
-| `speckit` | speckit agents, prompts, templates, scripts, memory files, and VS Code settings |
 | no preset | all shipped artifacts combined |
 
 Typical consumer workflow:
@@ -67,16 +65,6 @@ This is useful when you want feature work to leave behind maintainable documenta
 - application workflows and operating procedures;
 - product requirements and business constraints;
 - business decisions that explain why the feature behaves the way it does.
-
-### Keep project documentation current through the speckit workflow
-
-Use the `speckit` distribution when you want the delivery workflow itself to instruct agents to maintain ADRs, EDRs, and BDRs as implementation evolves. In this model, feature development and project documentation happen together: major technical and business decisions are continuously written back into XDRs instead of being deferred to a separate documentation pass.
-
-This is useful when you want to:
-
-- keep the project decision log up to date as new features are specified and implemented;
-- have architecture, engineering, and business documentation generated in a consistent XDR format;
-- reuse the same XDR-based approach across other repositories that consume agentme.
 
 ## Development
 
@@ -110,8 +98,7 @@ What these targets do:
 ├── bin/                CLI entrypoint delegated to filedist
 ├── dist/               Generated npm package tarballs
 ├── examples/           Runnable verification of consumer extraction behavior
-├── .github/            Shipped speckit agent and prompt files
-├── .specify/           Shipped speckit memory, scripts, and templates
+├── .github/            Shipped agent and prompt files
 └── .xdrs/              Shipped XDRs plus local project-only decision records
 ```
 
