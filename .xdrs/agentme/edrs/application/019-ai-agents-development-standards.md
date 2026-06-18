@@ -178,7 +178,7 @@ e.g.: Respond with a JSON object matching this schema: ... ALWAYS return valid J
 </WORKFLOW_CONTEXT>
 
 <SYSTEM_CONTEXT>
-The current date/time is [now in ISO 8601 format].
+The current date is [today in YYYY-MM-DD format].
 The current OS is: [operating system name].
 </SYSTEM_CONTEXT>
 ```
@@ -187,7 +187,7 @@ The current OS is: [operating system name].
 
 | Section | Required? | Notes |
 |---|---|---|
-| `<SYSTEM_CONTEXT>` | Optional | Runtime environment context injected at invocation time (e.g., current date/time in ISO 8601, OS). Include whenever the agent may need temporal or environment awareness. |
+| `<SYSTEM_CONTEXT>` | Optional | Runtime environment context injected at invocation time (e.g., current date in YYYY-MM-DD, OS). Include whenever the agent may need temporal or environment awareness. Time MUST NOT be included — it changes every second and breaks prompt caching. |
 | `<OBJECTIVE>` | Required | One or two sentences summarising the agent's main deliverable. |
 | `<ROLE>` | Required | Agent persona and expertise. When inside a workflow, MUST reference its node name from `<WORKFLOW_CONTEXT>`. |
 | `<INPUT>` | Required | List ALL inputs. For workflow agents: workflow-level inputs first, then agent-specific inputs. |
