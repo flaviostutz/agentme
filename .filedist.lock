@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: dc8d115acde4
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 3d1eab985c00
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     output: {}
@@ -31,5 +31,5 @@ files:
     - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dc8d115acde4|file|9ce759499c1a|0
     - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dc8d115acde4|file|58d5e4175583|0
     - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|dc8d115acde4|file|15cb8156db83|0
-checksum: 8bb8f994a761
+checksum: 52dc6b28e3d2
 
