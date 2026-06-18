@@ -23,36 +23,41 @@ For when evals are required per AI tier, see [agentme-edr-007](../principles/007
 
 #### 01-eval-folder-structure
 
-Each named eval is a self-contained unit. Create one directory per eval under `evals/` at the same level as `lib/` and `examples/`:
+Evals are grouped first by the component being evaluated, then by the specific evaluation scenario. Create one directory per component under `evals/`, and one directory per eval scenario inside it. Place `evals/` at the same level as `lib/` and `examples/`:
 
 ```text
 evals/
-  eval-<name>/
-    dataset/              # EDR-024 compliant dataset (README.md, dataset.schema.json, data/)
-    eval-<name>.py        # evaluation script
-    eval-report.md        # generated report (overwritten on each run — see rule 03)
-    Makefile              # eval and run targets
-  eval-<name2>/
+  <component>/           # the component being evaluated (e.g., workflow-x, agent-y, model-z)
+    eval-<name>/
+      dataset/           # EDR-024 compliant dataset (README.md, dataset.schema.json, data/)
+      eval-<name>.py     # evaluation script
+      eval-<name>-report.md     # generated report (overwritten on each run — see rule 03)
+      Makefile           # eval and run targets
+    eval-<name2>/
+      ...
+  <component2>/
     ...
 ```
 
-Where `<name>` identifies the specific evaluation scenario (e.g., `eval-basic`, `eval-complex`, `eval-edge-cases`).
+`<component>` MUST match the name of the component under evaluation and use lowercase hyphen-separated words (e.g., `workflow-document-review`, `agent-support`, `model-classifier`).
+
+`<name>` identifies the specific evaluation scenario using lowercase hyphen-separated words (e.g., `eval-basic`, `eval-complex`, `eval-edge-cases`, `eval-bias-test`).
 
 The `dataset/` subfolder MUST be a valid [agentme-edr-024](024-ml-dataset-structure.md) dataset — it MUST include `README.md` and `dataset.schema.json` at its root. For input/output pairs, use JSONL files per `agentme-edr-024.04-complex-structured-datasets-must-use-jsonl`.
 
-Each `evals/eval-<name>/Makefile` MUST define:
+Each `evals/<component>/eval-<name>/Makefile` MUST define:
 
 | Target | Behaviour |
 |---|---|
 | `eval` | Runs the eval with threshold enforcement; exits non-zero on failure (CI-safe) |
 | `run` | Runs the eval without threshold enforcement (exploration / debugging) |
 
-The module root Makefile MUST expose a `make eval` target that delegates to `eval` in every `evals/eval-<name>/Makefile`:
+The module root Makefile MUST expose a `make eval` target that delegates to `eval` in every `evals/<component>/eval-<name>/Makefile`:
 
 ```makefile
 eval:
-	$(MAKE) -C evals/eval-basic eval
-	$(MAKE) -C evals/eval-complex eval
+	$(MAKE) -C evals/workflow-document-review/eval-basic eval
+	$(MAKE) -C evals/workflow-document-review/eval-complex eval
 ```
 
 #### 02-eval-script-requirements
@@ -63,7 +68,7 @@ Each `eval-<name>.py` script MUST:
 - Run every input through the live component against **real LLM providers** (not mocked responses), to capture model drift.
 - Log per-sample and aggregate metrics to an MLflow experiment that runs **locally** — a remote MLflow server MUST NOT be required.
 - Compare outputs to expected values using project-defined quality thresholds. Thresholds MUST be declared explicitly (e.g., in a Makefile variable or README).
-- Write `eval-report.md` in the same folder per rule `03-eval-report-file`.
+- Write `eval-<name>-report.md` in the same folder per rule `03-eval-report-file`.
 - Exit with a non-zero status when any metric falls below its defined threshold, consistent with [agentme-edr-007](../principles/007-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`.
 
 **Example:**
@@ -91,7 +96,7 @@ with mlflow.start_run() as run:
 
 #### 03-eval-report-file
 
-Each eval script MUST produce `eval-report.md` in the same `evals/eval-<name>/` folder and overwrite it on every run.
+Each eval script MUST produce `eval-<name>-report.md` in the same `evals/<component>/eval-<name>/` folder and overwrite it on every run.
 
 **Generation constraint:** The report MUST be produced programmatically, reading raw metric values directly from MLflow. No LLM or generative model may write, summarize, or paraphrase any section of the report, to prevent hallucinated metric values.
 
@@ -137,7 +142,7 @@ $$\frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac
 
 Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 are required; precision and recall are recommended.
 
-**Filled-in example** (`evals/eval-basic/eval-report.md` for a document review workflow):
+**Filled-in example** (`evals/workflow-document-review/eval-basic/eval-basic-report.md` for a document review workflow):
 
 ```markdown
 # Eval Report: eval-basic
@@ -174,7 +179,7 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
 ## Notes
 
 - Sample 005 misclassified: redlined IP clause not flagged as escalation trigger. Possible model drift.
-- MLflow run: experiment `eval_basic` — view with `mlflow ui`
+- MLflow run: experiment `workflow-document-review/eval-basic` — view with `mlflow ui`
 ```
 
 ## References
