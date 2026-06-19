@@ -197,6 +197,58 @@ The current OS is: [operating system name].
 | `<OUTPUT_FORMAT>` | Required | MUST include a concrete schema or templated example; do not leave it vague. When multiple output formats are possible, MUST use mandatory language to specify exactly which one to use and explicitly exclude the others. |
 | `<WORKFLOW_CONTEXT>` | Conditional | MUST be omitted for standalone agents. MUST be present when the agent runs as a node inside a LangGraph workflow. |
 
+#### 07-agent-output-format
+
+The format of an agent's final output MUST be chosen based on who or what consumes it:
+
+| Consumer | Required format |
+|---|---|
+| Code (workflow node, downstream function, API caller) | JSON object matching a declared schema |
+| Human (user-facing summary, review comment, prose report) | Natural language; JSON is NOT required |
+
+**When output is consumed by code:**
+
+- The agent's `<OUTPUT_FORMAT>` system prompt section MUST specify a JSON schema or a concrete typed example.
+- The `<OUTPUT_FORMAT>` section MUST include the instruction: `ALWAYS return valid JSON. NEVER include prose outside the JSON block.`
+- The corresponding Python return type MUST be a typed dataclass or Pydantic model that mirrors the schema, not a plain `dict` or `str`.
+- The caller MUST parse and validate the JSON against the declared type before passing it downstream.
+
+**Example — code-consumed agent output:**
+
+```python
+from dataclasses import dataclass
+from typing import List
+import json
+
+@dataclass
+class FileAnalysisResult:
+    status: str          # "success" | "failure"
+    files_found: int
+    issues: List[str]
+
+# System prompt OUTPUT_FORMAT section:
+# <OUTPUT_FORMAT>
+# Respond with a JSON object matching this schema:
+# {
+#   "status": "success" | "failure",
+#   "files_found": <integer>,
+#   "issues": ["<string>", ...],
+#   "summary": "summary of the work performed. max 30 words",
+# }
+# ALWAYS return valid JSON. NEVER include prose outside the JSON block.
+# </OUTPUT_FORMAT>
+
+def parse_agent_output(raw: str) -> FileAnalysisResult:
+    data = json.loads(raw)
+    return FileAnalysisResult(**data)
+```
+
+**When output is consumed by a human:**
+
+- Natural language is correct and preferred.
+- Do NOT wrap prose in JSON — it adds noise without value.
+- The `<OUTPUT_FORMAT>` section MUST still describe the expected structure (e.g., a list of findings, a summary paragraph) using a prose template.
+
 ## References
 
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards (LangChain configuration, mocking patterns)
