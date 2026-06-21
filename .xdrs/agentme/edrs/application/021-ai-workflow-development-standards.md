@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-021-ai-workflow-development-standards
-description: Defines the standard toolchain, framework, observability, and workflow patterns for building LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI workflow projects that orchestrate LLM calls, agents, and algorithmic nodes. For simple LLM calls see agentme-edr-018, for agentic patterns see agentme-edr-019.
+description: Defines the standard toolchain, framework, observability, and workflow patterns for building LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI workflow projects that orchestrate LLM calls, agents, and algorithmic nodes. For simple LLM calls see agentme-edr-018, for agentic patterns see agentme-edr-019. For naming conventions (nodes, states, routes, judge output schema) see agentme-edr-029.
 apply-to: AI workflow projects using LangGraph StateGraph built with Python
 valid-from: 2026-06-05
 ---
@@ -105,53 +105,7 @@ Eval folder structure and script requirements are defined in [agentme-edr-028](0
 
 #### 09-node-naming-conventions
 
-LangGraph node names MUST follow a suffix convention that communicates the node's role at a glance. Names MUST be action-oriented and descriptive.
-
-| Convention | Node type | When to use |
-|---|---|---|
-| suffix `_llm` | LLM call | Any node whose primary action is a direct LLM inference call (see [agentme-edr-018](018-ai-llm-development-standards.md)) |
-| suffix `_step` | Algorithmic step | Deterministic logic with no LLM involvement (transformation, validation, routing) |
-| suffix `_tool` | Tool/API call | A node that wraps a single external tool or API (e.g. a REST endpoint, DB query) |
-| suffix `_agent` | Subgraph agent | A node that invokes a nested subgraph containing its own tool-invocation cycle and LLM calls; use the **deepagents** library for these nodes (see [agentme-edr-019](019-ai-agents-development-standards.md)) |
-| prefix `evaluate_` | Judge node | A node that evaluates the quality, correctness, completeness, or progress of prior outputs and returns a structured verdict; MUST follow rule `13-judge-node-output-format` |
-
-The Python function implementing the node SHOULD share the same name as the node alias passed to `add_node`, so that graph definitions and stack traces remain unambiguous:
-
-```python
-def draft_doc_llm(state): ...
-graph.add_node("draft_doc_llm", draft_doc_llm)
-
-# Tool node — calls the Stripe API
-def stripe_api_tool(state): ...
-graph.add_node("stripe_api_tool", stripe_api_tool)
-
-# Agent node — uses deepagents for tool-invocation loop
-def code_reviewer_agent(state): ...
-graph.add_node("code_reviewer_agent", code_reviewer_agent)
-```
-
-Names MUST NOT use generic labels such as `node1`, `process`, or `run`. Each name must clearly express what action the node performs.
-
-Judge nodes use a **prefix** convention instead of a suffix: the name MUST start with `evaluate_` followed by the subject being judged (e.g. `evaluate_progress`, `evaluate_quality`, `evaluate_completeness`, `evaluate_relevance`). This makes judge nodes immediately distinguishable from all other node types at a glance.
-
-**Grouping prefix for related nodes:** When multiple nodes deal with the same subject, entity, or workflow region, SHOULD use a shared grouping word as a prefix followed by a verb and the role suffix. The pattern is `<group>_<verb>_<role_suffix>`. This makes the graph topology scannable and clusters related nodes together alphabetically in logs, traces, and code.
-
-```python
-# Nodes grouped under the "invoice" subject
-def invoice_fetch_tool(state): ...       # fetches invoice data from an API
-def invoice_validate_step(state): ...    # validates invoice fields deterministically
-def invoice_summarize_llm(state): ...    # summarizes invoice content with an LLM
-def invoice_review_agent(state): ...     # runs an agent loop to review the invoice
-
-graph.add_node("invoice_fetch_tool", invoice_fetch_tool)
-graph.add_node("invoice_validate_step", invoice_validate_step)
-graph.add_node("invoice_summarize_llm", invoice_summarize_llm)
-graph.add_node("invoice_review_agent", invoice_review_agent)
-```
-
-The grouping prefix is optional for workflows where all nodes clearly belong to a single domain. It MUST be used when a workflow spans multiple subjects or regions (e.g. `invoice_*`, `payment_*`, `notification_*`) to prevent name collisions and to make the graph structure self-documenting.
-
-Grouping names MUST be consistent across the entire workflow. Do not use synonyms or near-synonyms for the same concept (e.g. do not mix `invoice_*` and `bill_*`, or `user_*` and `account_*`, when they refer to the same entity). Pick one word per concept and apply it everywhere.
+See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `01-node-naming-conventions`.
 
 #### 10-workflow-unit-testing
 
@@ -205,135 +159,15 @@ Workflows MUST accept the LLM instance as a constructor parameter so that unit t
 
 #### 11-state-type-conventions
 
-All TypedDict and dataclass types that represent LangGraph node or workflow state MUST end with `_state` in their name. This suffix signals at a glance that the type is a state boundary, not a plain data model.
-
-**Naming reference:**
-
-| Owner | Naming pattern | Example |
-|---|---|---|
-| Single agent / agent subgraph | `<agent_name>_agent_state` | `reviewer_agent_state` |
-| Full workflow (`StateGraph`) | `<workflow_name>_workflow_state` | `document_workflow_state` |
-| Named group of nodes sharing state | `<group_responsibility>_state` | `retrieval_pipeline_state` |
-
-**Boundary rules:**
-
-- Each agent or agent subgraph MUST define its own dedicated state type. Do not reuse or extend a generic state across unrelated agents.
-- Each workflow (`StateGraph`) MUST define its own top-level state type. The workflow state is the authoritative boundary for that graph's inputs and outputs.
-- When a group of nodes (not a full workflow and not a single agent) shares a state type, the type name MUST clearly reflect the shared responsibility. Generic names such as `shared_state`, `common_state`, or `global_state` are FORBIDDEN.
-- Large workflows MUST NOT use a single monolithic state that all nodes read and write. Split the state into per-phase or per-agent state types scoped to the subgraph or set of nodes that produce or consume each field.
-
-State type names SHOULD align with the agent or node names defined in rule `09-node-naming-conventions` (e.g., an agent node named `draft_doc_agent` has a state type named `draft_doc_agent_state`).
-
-**State attribute naming — grouping and consistency:**
-
-State attributes MUST follow the same grouping-prefix discipline as node names. When multiple attributes belong to the same subject, entity, or workflow phase, they MUST share a common prefix so that related fields cluster together and the state definition is self-documenting.
-
-- Use `<group>_<attribute>` for fields that belong to a specific subject or phase (e.g. `invoice_raw`, `invoice_validated`, `invoice_summary`).
-- The grouping prefix MUST be the same word used in the corresponding node names for that subject (e.g. nodes named `invoice_fetch_tool`, `invoice_validate_step` → state fields named `invoice_raw`, `invoice_validated`).
-- Do not use synonyms or near-synonyms for the same concept across attributes or across nodes and attributes (e.g. do not mix `invoice_*` fields with `bill_*` fields, or `user_*` fields with `account_*` fields when they refer to the same entity). Pick one word per concept and apply it everywhere.
-
-```python
-class document_workflow_state(TypedDict):
-    # "invoice" group — all fields related to the invoice entity
-    invoice_raw: str
-    invoice_validated: bool
-    invoice_summary: str
-
-    # "payment" group — all fields related to the payment entity
-    payment_status: str
-    payment_amount: float
-
-    # "evaluate" group — judge verdicts
-    evaluate_invoice_verdict: JudgeVerdict
-```
-
-Generic attribute names such as `data`, `result`, `output`, `info`, or `item` are FORBIDDEN unless they are top-level workflow inputs/outputs with no meaningful domain label.
+See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `02-state-type-conventions`.
 
 #### 12-workflow-naming-conventions
 
-LangGraph `StateGraph` instances and their enclosing classes MUST be given a meaningful name that conveys the workflow's input, output, and/or behavior. The name MUST end with `Workflow` (PascalCase class) or `_workflow` (snake_case variable or directory).
-
-Choose a name that summarises what the workflow consumes, processes, and produces — avoid generic labels such as `Pipeline`, `Flow`, `Graph`, or `Process`.
-
-| Context | Pattern | Example |
-|---|---|---|
-| Python class | `<DescriptiveName>Workflow` | `FileMapJudgeReduceWorkflow` |
-| Python variable / instance | `<descriptive_name>_workflow` | `file_map_judge_reduce_workflow` |
-| Directory under `app/workflows/` | `<descriptive_name>_workflow` | `financial_report_analysis_workflow/` |
-
-**Good names** communicate purpose at a glance:
-
-- `FileMapJudgeReduceWorkflow` — maps files, judges each, then reduces results
-- `FinancialReportAnalysisWorkflow` — analyses financial report inputs
-- `MarketingCampaignExecutorWorkflow` — executes a marketing campaign end-to-end
-
-**Bad names** (FORBIDDEN): `MainWorkflow`, `AgentGraph`, `ProcessFlow`, `Workflow1`, `RunGraph`.
+See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `04-workflow-naming-conventions`.
 
 #### 13-judge-node-output-format
 
-Every node whose name starts with `evaluate_` (a judge node) MUST return a structured verdict object as its output. This ensures all judge nodes are interchangeable and their results can be uniformly consumed by downstream routing logic, logged, and compared across runs.
-
-**Required output schema:**
-
-```python
-from typing import Literal, Optional
-from dataclasses import dataclass, field
-
-FindingLevel = Literal["OK", "INFO", "WARNING", "ERROR"]
-
-@dataclass
-class JudgeFinding:
-    level: FindingLevel
-    # MUST: short action-oriented label; < 10 words
-    title: str
-    # MUST when level != "OK": why this is an issue; < 30 words
-    reason: Optional[str] = None
-    # MUST when level != "OK": notes/findings using mandatory (MUST) or advisory (SHOULD) language; < 400 words
-    details: Optional[str] = None
-    # OPTIONAL: possible fixes, only when directly inferrable from the finding without further analysis; < 200 words
-    fix: Optional[str] = None
-
-@dataclass
-class JudgeVerdict:
-    # MUST: highest severity level across all findings; "OK" only when every finding is "OK"
-    verdict: FindingLevel
-    # MUST: at least one finding present
-    findings: list[JudgeFinding] = field(default_factory=list)
-```
-
-Example (for logging, state storage, and inter-node communication):
-
-```json
-{
-  "verdict": "WARNING",
-  "findings": [
-    {
-      "level": "OK",
-      "title": "All required sections present"
-    },
-    {
-      "level": "WARNING",
-      "title": "Code coverage below threshold",
-      "reason": "Current coverage is 62%, minimum required is 80%.",
-      "details": "The following modules have no test coverage: auth.py, payments.py. SHOULD add unit tests for all public methods in these modules.",
-      "fix": "Add unit tests for auth.py and payments.py. Run `make test-coverage` to verify the threshold is met."
-    }
-  ]
-}
-```
-
-**Routing from judge nodes:**
-
-Downstream conditional edges MUST route on `verdict` only:
-
-```python
-def route_after_evaluate_quality(state) -> str:
-    if state["evaluate_quality_result"].verdict in ("ERROR", "WARNING"):
-        return "revise_draft_llm"
-    return "publish_step"
-```
-
-**Logging:** Log `verdict` and the count of each level as MLflow metrics on the current run per rule `03-observability-and-experiment-tracking`.
+See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `03-judge-node-output-format`.
 
 #### 15-workflow-state-persistence
 
@@ -364,8 +198,13 @@ result = graph.invoke(input_state, config={"thread_id": "session-123"})
 - Workflows that may fail mid-execution and need to be retried from the last successful node
 - Multi-session workflows where state persists across user interactions
 
+#### 16-cross-element-naming-coherence
+
+See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `05-cross-element-naming-coherence`.
+
 ## References
 
+- [agentme-edr-029](029-ai-workflow-naming-conventions.md) — AI workflow naming conventions: node suffixes/prefixes, state types, judge output schema, workflow names, and cross-element coherence
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework, provider configuration, LLM observability, and unit test mocking
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards: deepagents framework, tool-invocation loops, and agent patterns
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Adapter/application layer separation that defines the project layout

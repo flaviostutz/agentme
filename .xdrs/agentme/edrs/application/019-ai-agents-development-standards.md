@@ -197,6 +197,22 @@ The current OS is: [operating system name].
 | `<OUTPUT_FORMAT>` | Required | MUST include a concrete schema or templated example; do not leave it vague. When multiple output formats are possible, MUST use mandatory language to specify exactly which one to use and explicitly exclude the others. |
 | `<WORKFLOW_CONTEXT>` | Conditional | MUST be omitted for standalone agents. MUST be present when the agent runs as a node inside a LangGraph workflow. |
 
+**Formatting rules:**
+
+- MUST use XML tags to delimit every section.
+- The content of each section MUST start on the line immediately after the opening tag — never inline with it.
+- Each closing tag MUST be followed by a blank line before the next opening tag, so sections are visually separated.
+
+```xml
+<OBJECTIVE>
+Produce a plan for the current batch of files.
+</OBJECTIVE>
+
+<ROLE>
+You are the batch_plan_agent.
+</ROLE>
+```
+
 #### 07-agent-output-format
 
 The format of an agent's final output MUST be chosen based on who or what consumes it:
