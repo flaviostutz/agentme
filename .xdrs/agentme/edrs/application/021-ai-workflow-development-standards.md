@@ -151,6 +151,8 @@ graph.add_node("invoice_review_agent", invoice_review_agent)
 
 The grouping prefix is optional for workflows where all nodes clearly belong to a single domain. It MUST be used when a workflow spans multiple subjects or regions (e.g. `invoice_*`, `payment_*`, `notification_*`) to prevent name collisions and to make the graph structure self-documenting.
 
+Grouping names MUST be consistent across the entire workflow. Do not use synonyms or near-synonyms for the same concept (e.g. do not mix `invoice_*` and `bill_*`, or `user_*` and `account_*`, when they refer to the same entity). Pick one word per concept and apply it everywhere.
+
 #### 10-workflow-unit-testing
 
 All LLM calls within workflow nodes are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. Workflow unit tests must run fully offline with no real LLM provider calls.
