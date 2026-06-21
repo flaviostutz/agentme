@@ -182,6 +182,12 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
 - MLflow run: experiment `workflow-document-review/eval-basic` — view with `mlflow ui`
 ```
 
+#### 04-eval-mlflow-unique-port
+
+Each `evals/<component>/eval-<name>/Makefile` MUST start its MLflow tracking server on a **unique port** to prevent conflicts when multiple eval Makefiles are run concurrently or in parallel (e.g., in CI or across multiple terminal sessions).
+
+Ports MUST be statically assigned per eval scenario and MUST NOT reuse the default `5000` port (reserved for `dev-mlflow` per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`). Assign ports starting at `5100` and incrementing by 1 for each additional eval scenario across the entire project.
+
 ## References
 
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09-ai-project-testing-requirements`) and statistical model eval targets (rule `07-statistical-models-must-have-eval-targets`)
