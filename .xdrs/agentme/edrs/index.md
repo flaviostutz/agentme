@@ -35,6 +35,7 @@ Language and framework-specific tooling and project structure.
 - [agentme-edr-019](application/019-ai-agents-development-standards.md) - **AI agents development standards** - Structural patterns for agents: framework selection, sandbox setup, naming conventions, composition, and system prompt structure
 - [agentme-edr-020](application/020-ai-agents-quality-standards.md) - **AI agents implementation quality standards** - Tool definition patterns, error handling, observability, and unit testing for agents
 - [agentme-edr-021](application/021-ai-workflow-development-standards.md) - **AI workflow development standards** - Standard toolchain (LangGraph), evaluation, and testing patterns for workflow projects
+- [agentme-edr-029](application/029-ai-workflow-naming-conventions.md) - **AI workflow naming conventions** - Node suffix/prefix roles, state type and attribute naming, judge output schema, workflow class names, and cross-element coherence rules
 - [agentme-edr-028](application/028-ai-eval-standards.md) - **AI eval standards** - Folder structure, script requirements, and MLflow tracking for eval tests across LLM, Agent, and Workflow tiers
 - [agentme-edr-024](application/024-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
 - [agentme-edr-025](application/025-ai-agent-xdrs-knowledge-layer.md) - **AI agent XDRS knowledge layer** - How to integrate XDRS as the runtime source of truth for policies and skills in AI agents (apply only when the project explicitly uses XDRS)
