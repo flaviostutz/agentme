@@ -224,6 +224,31 @@ All TypedDict and dataclass types that represent LangGraph node or workflow stat
 
 State type names SHOULD align with the agent or node names defined in rule `09-node-naming-conventions` (e.g., an agent node named `draft_doc_agent` has a state type named `draft_doc_agent_state`).
 
+**State attribute naming — grouping and consistency:**
+
+State attributes MUST follow the same grouping-prefix discipline as node names. When multiple attributes belong to the same subject, entity, or workflow phase, they MUST share a common prefix so that related fields cluster together and the state definition is self-documenting.
+
+- Use `<group>_<attribute>` for fields that belong to a specific subject or phase (e.g. `invoice_raw`, `invoice_validated`, `invoice_summary`).
+- The grouping prefix MUST be the same word used in the corresponding node names for that subject (e.g. nodes named `invoice_fetch_tool`, `invoice_validate_step` → state fields named `invoice_raw`, `invoice_validated`).
+- Do not use synonyms or near-synonyms for the same concept across attributes or across nodes and attributes (e.g. do not mix `invoice_*` fields with `bill_*` fields, or `user_*` fields with `account_*` fields when they refer to the same entity). Pick one word per concept and apply it everywhere.
+
+```python
+class document_workflow_state(TypedDict):
+    # "invoice" group — all fields related to the invoice entity
+    invoice_raw: str
+    invoice_validated: bool
+    invoice_summary: str
+
+    # "payment" group — all fields related to the payment entity
+    payment_status: str
+    payment_amount: float
+
+    # "evaluate" group — judge verdicts
+    evaluate_invoice_verdict: JudgeVerdict
+```
+
+Generic attribute names such as `data`, `result`, `output`, `info`, or `item` are FORBIDDEN unless they are top-level workflow inputs/outputs with no meaningful domain label.
+
 #### 12-workflow-naming-conventions
 
 LangGraph `StateGraph` instances and their enclosing classes MUST be given a meaningful name that conveys the workflow's input, output, and/or behavior. The name MUST end with `Workflow` (PascalCase class) or `_workflow` (snake_case variable or directory).
