@@ -35,6 +35,10 @@ Each artifact type has its own writing standard:
 
 Slide presentations that support XDRS documents follow [_core-adr-policy-009](adrs/principles/009-presentation-standards.md). Slides use the Marp Markdown format, live in `.assets/` next to the document they support, and must maintain bidirectional links with the parent document.
 
+### Domain scope meta governance
+
+[_core-adr-policy-010](adrs/principles/010-core-scope-naming.md) defines the `-core` suffix naming convention for XDRS scopes. A scope named `[domain]-core` (e.g., `security-core`) holds meta governance content — writing standards, templates, ownership, and process guidance — for all scopes sharing the same prefix. It must not contain consumable policies, and all contributors to same-prefix scopes must follow its standards.
+
 ### Available skills
 
 The `_core` scope ships with seven skills that automate the most common framework operations:

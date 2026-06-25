@@ -64,6 +64,7 @@ Policies can be of different kinds, depending on the nature of the decision:
   - `_local` is a reserved scope for XDRS elements created locally to a specific project or repository. XDRS elements in `_local` MUST NOT be shared with or propagated to other contexts. This scope MUST always be placed in the lowest position in the root `index.md` so that its decisions override or extend any decisions from higher-positioned scopes. Shared root `index.md` files MUST NOT include an explicit link to `_local`, because `_local` remains workspace-local and is not distributed with shared packages. Readers, tools, and agents SHOULD still try the default workspace-local path `_local/index.md` when it exists, even without a root-index link. Documents in non-`_local` scopes MUST NEVER link to any document inside `_local`; documents inside `_local` MAY link to other documents inside `_local`.
   - **Types:** `adrs`, `bdrs`, `edrs`
   - there can exist sufixes to the standard scope names (e.g: `business-x-mobileapp`, `business-y-servicedesk`)
+  - The `-core` suffix is a reserved special suffix (e.g., `security-core`, `platform-core`) that designates a scope as the meta governance layer for all scopes sharing the same prefix. See `_core-adr-policy-010` for the full convention.
 - **Subjects:** MUST be one of the following depending on the type of the Policy. Use the subject to indicate the main concern of the decision.
   - **ADR subjects**
     - `principles`: Cross-cutting architecture and policy foundations.
