@@ -9,12 +9,12 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.36.0
-        version: 0.36.0
+        specifier: ^0.37.0
+        version: 0.37.0
     devDependencies:
       xdrs-core:
-        specifier: ^0.30.1
-        version: 0.30.1
+        specifier: ^0.31.1
+        version: 0.31.1
 
 packages:
 
@@ -31,6 +31,10 @@ packages:
 
   filedist@0.36.0:
     resolution: {integrity: sha512-5KI5yjFJKHGhPRBXldgi+zAiaMdyHgMEIugrwFwoLXvXzucMvDC60b/vjWYq7M/cHYP1CB91dGtBvhae/gdiKA==}
+    hasBin: true
+
+  filedist@0.37.0:
+    resolution: {integrity: sha512-1k5NHajDFx+YT34IGoGsXW72anpljtGKXBOVyuYuS4ny92jmrzrT3eOST28AvaGwWAK46vfNjgU7ykNqz+lf3Q==}
     hasBin: true
 
   ignore@7.0.5:
@@ -56,8 +60,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.30.1:
-    resolution: {integrity: sha512-LwslauusuJ9AdH+AQFn642Sbo9TubT7+v59NWxX/et9GVOHqeRXqVFq7QSAA2qajNZmXNQd9Dp2TNASr9XQUoA==}
+  xdrs-core@0.31.1:
+    resolution: {integrity: sha512-9AUYoJMUAy0opMSMoamKPQXFKFMNFBlVbCOunrcBbU/LL+zaqfNFiN+tIHUsMks918BlnHB0snfBXLVTyO8cVQ==}
     hasBin: true
 
 snapshots:
@@ -71,6 +75,15 @@ snapshots:
       balanced-match: 4.0.4
 
   filedist@0.36.0:
+    dependencies:
+      ignore: 7.0.5
+      js-yaml: 4.1.1
+      minimatch: 10.2.5
+      mypkg: 1.0.0
+      package-manager-detector: 1.6.0
+      semver: 7.8.1
+
+  filedist@0.37.0:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
@@ -95,7 +108,7 @@ snapshots:
 
   semver@7.8.1: {}
 
-  xdrs-core@0.30.1:
+  xdrs-core@0.31.1:
     dependencies:
       filedist: 0.36.0
       ignore: 7.0.5

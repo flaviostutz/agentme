@@ -15,6 +15,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-007](principles/007-plan-standards.md) - **Plan standards** — How to structure ephemeral execution plans that implement decisions
 - [_core-adr-policy-008](principles/008-xdr-standards-structured.md) - **Policy standards - structured** — How to expose individually referenceable numbered rules inside a Policy when external citation by identifier is required
 - [_core-adr-policy-009](principles/009-presentation-standards.md) - **Presentation standards** — How to structure Marp slide presentations that support XDRS documents
+- [_core-adr-policy-010](principles/010-core-scope-naming.md) - **Core scope naming convention** — How to use the `-core` suffix on a scope to separate meta governance content from consumable policies in a domain
 
 ## Skills
 
