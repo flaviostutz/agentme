@@ -125,6 +125,7 @@ Rules to apply while drafting:
 2. Add a link to the plan in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`).
 3. Add back-references in the Policies, Research documents, and Skills that the plan relates to, under their `## References` section.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new plan. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
+5. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names, verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the plan satisfies any structural or content requirements from those Policies. Last-listed scope in `follows` takes precedence.
 
 ### Phase 7: Verify with Lint
 

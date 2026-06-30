@@ -30,7 +30,8 @@ Performs a structured review of code changes or files against the Policies in th
    - Check `valid-from:` first. If a date is present and has not yet been reached, the decision SHOULD be adopted for new implementations but is not enforced during reviews.
    - Check `apply-to:` second. Keep only Policies whose stated scope fits the files, systems, or workflows under review.
    - Check the decision text itself last for additional boundaries or exceptions that metadata does not encode.
-2. Filter relevance based on file types, domains, and architectural patterns in scope.
+2. **Meta-policy scopes:** For each scope containing files under review, read its `index.md` frontmatter and check for a `follows` field. `_core` Policies always apply to all scopes. If a scope declares `follows:` with additional core scope names (e.g., `follows: [myarea-core, shared-standards]`), verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately — do not proceed with the review — and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, load their Policies and apply them as mandatory governance. Last-listed scope in `follows` takes precedence when the same topic is addressed by multiple scopes.
+3. Filter relevance based on file types, domains, and architectural patterns in scope.
 
 ### Phase 3: Policy Review
 

@@ -65,6 +65,22 @@ Policies can be of different kinds, depending on the nature of the decision:
   - **Types:** `adrs`, `bdrs`, `edrs`
   - there can exist sufixes to the standard scope names (e.g: `business-x-mobileapp`, `business-y-servicedesk`)
   - The `-core` suffix is a reserved special suffix (e.g., `security-core`, `platform-core`) that designates a scope as the meta governance layer for all scopes sharing the same prefix. See `_core-adr-policy-010` for the full convention.
+  - **Scope types:** Every scope MUST declare its type via a `scope-type` field in its `index.md` YAML frontmatter. Allowed values:
+    - `core`: A meta-policy scope defining governance conventions for a group of scopes. It may set mandatory conventions (naming rules, subject taxonomy, scope ordering) enforced on related scopes. The built-in `_core` is the framework-level instance that applies globally; area-specific `core` scopes (e.g., `myarea-core`) layer governance on top. A scope with this type MUST have `core` in its name (e.g., `_core`, `myarea-core`, `security-core`). Area `core` scopes MUST NOT contradict `_core` structural rules; they may only extend them.
+    - `reference`: A blueprint, standard, or reference architecture meant to be copied or adapted — not a live service. Examples of what belongs here: industry standards (ISO, SOC2, PCI-DSS), vendor best-practice patterns, reference architectures. A scope with this type MUST have the word `reference` somewhere in its name (e.g., `domain1-reference-mobile`, `security-reference-baseline`, `aws-reference-landing-zone`).
+    - `platform`: An existing implementation, live service, or operational area that can be consumed directly without local instantiation. Defines something that exists and can be used, not merely a blueprint. A scope with this type MUST have the word `platform` somewhere in its name (e.g., `domain2-platform-aws`, `domain2-platform-callcenter`, `cloud-platform`).
+    - `domain`: The default type. Any business area, product domain, team, or general-purpose scope that does not fit one of the specific types above. No naming requirement.
+    - `_local`: Workspace-local decisions only. Never shared or distributed outside the local workspace. Reserved exclusively for the `_local` scope.
+  - Scope name suffixes are unlimited and may be used in any scope type. For `reference` and `platform` types only the presence of the keyword in the name is enforced, not its position (e.g., `domain2-reference-people-framework` and `domain2-platform-callcenter` are both valid).
+  - When writing or generating a new XDRS root `index.md`, use the following default ordering (scopes listed later override earlier ones): `core → reference → platform → domain → _local`.
+  - **Scope index frontmatter fields:** Every scope's `index.md` MUST include the following YAML frontmatter. Fields match the Policy frontmatter standard (`_core-adr-policy-002`) in purpose, adjusted for scope-level semantics:
+    - `name` (required): The scope identifier, must exactly match the scope directory name (e.g., `myteam`, `cloud-platform-aws`). Used by tools to verify scope identity.
+    - `description` (required): Short overview of what this scope covers and who the intended audience is. Used by AI agents for discovery and relevance matching. Max 40 words.
+    - `scope-type` (required): Scope classification type, see scope types above.
+    - `apply-to` (required): Declares in which contexts — teams, systems, codebases, or environments — the decisions in this scope are relevant. Max 30 words.
+    - `valid-from` (required): ISO date (YYYY-MM-DD) from which this scope became active.
+    - `metadata` (optional): Arbitrary key-value map for additional scope metadata.
+    - `follows` (optional): List of core scope names whose Policies apply as mandatory conventions to all documents in this scope, in addition to `_core` which always applies. Last-listed scope takes precedence when the same topic is covered by multiple scopes (e.g., `follows: [myarea-core, shared-standards]`).
 - **Subjects:** MUST be one of the following depending on the type of the Policy. Use the subject to indicate the main concern of the decision.
   - **ADR subjects**
     - `principles`: Cross-cutting architecture and policy foundations.

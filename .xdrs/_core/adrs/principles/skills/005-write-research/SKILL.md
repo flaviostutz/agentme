@@ -237,6 +237,7 @@ Before writing files, verify:
 5. **Standalone focus**: Does the text read as a technical paper rather than commentary about future ADRs, repository process, or artifact management?
 6. **Ratio fit**: Does the document stay within section word limits and pass the Python ratio check, or does the introduction explicitly justify the deviation?
 7. **References**: Are all related Policies, research docs, skills, articles, and external sources linked when relevant?
+8. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names, verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the research satisfies any structural or content requirements from those Policies. Last-listed scope in `follows` takes precedence.
 
 If any check fails, revise before continuing.
 

@@ -9,12 +9,12 @@ importers:
   .:
     dependencies:
       filedist:
-        specifier: ^0.37.0
-        version: 0.37.0
+        specifier: ^0.39.0
+        version: 0.39.0
     devDependencies:
       xdrs-core:
-        specifier: ^0.31.1
-        version: 0.31.1
+        specifier: ^0.31.2
+        version: 0.31.2
 
 packages:
 
@@ -29,12 +29,12 @@ packages:
     resolution: {integrity: sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ==}
     engines: {node: 18 || 20 || >=22}
 
-  filedist@0.36.0:
-    resolution: {integrity: sha512-5KI5yjFJKHGhPRBXldgi+zAiaMdyHgMEIugrwFwoLXvXzucMvDC60b/vjWYq7M/cHYP1CB91dGtBvhae/gdiKA==}
+  filedist@0.37.1:
+    resolution: {integrity: sha512-D2RSGQALkQDIIDOsmX0hIvI/TyPzhEIXFHYXM4PcOqV1NVaH1A0sRZbRi1Bs8dGE/FucSj3pAQslaUSl78Mc0Q==}
     hasBin: true
 
-  filedist@0.37.0:
-    resolution: {integrity: sha512-1k5NHajDFx+YT34IGoGsXW72anpljtGKXBOVyuYuS4ny92jmrzrT3eOST28AvaGwWAK46vfNjgU7ykNqz+lf3Q==}
+  filedist@0.39.0:
+    resolution: {integrity: sha512-yzKZ9p15RNspCGYCvKlx8of/n7h+DHuBHkQRHxVjx5eNERz7uvoDGs11vgGcw4k9QRrrErdt7t9Rwp+Wetbzsw==}
     hasBin: true
 
   ignore@7.0.5:
@@ -60,8 +60,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  xdrs-core@0.31.1:
-    resolution: {integrity: sha512-9AUYoJMUAy0opMSMoamKPQXFKFMNFBlVbCOunrcBbU/LL+zaqfNFiN+tIHUsMks918BlnHB0snfBXLVTyO8cVQ==}
+  xdrs-core@0.31.2:
+    resolution: {integrity: sha512-XMXIQ7RgbugsrcvUgjQMYpJPOLNJXp3yt9PoPBG9YXdJ6lxLVkhFE0NhJhbN0GMRp9AUksyqVm8ikl+4g3Y/kA==}
     hasBin: true
 
 snapshots:
@@ -74,7 +74,7 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
-  filedist@0.36.0:
+  filedist@0.37.1:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
@@ -83,7 +83,7 @@ snapshots:
       package-manager-detector: 1.6.0
       semver: 7.8.1
 
-  filedist@0.37.0:
+  filedist@0.39.0:
     dependencies:
       ignore: 7.0.5
       js-yaml: 4.1.1
@@ -108,8 +108,8 @@ snapshots:
 
   semver@7.8.1: {}
 
-  xdrs-core@0.31.1:
+  xdrs-core@0.31.2:
     dependencies:
-      filedist: 0.36.0
+      filedist: 0.37.1
       ignore: 7.0.5
       minimatch: 10.2.5
