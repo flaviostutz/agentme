@@ -1,3 +1,11 @@
+---
+scope-type: core
+name: _core
+description: Defines the XDRS framework structure, types, document standards, and conventions. Use when working with any XDRS scope or building AI-agent-compatible documentation.
+apply-to: All XDRS scopes and document types
+valid-from: 2025-01-01
+---
+
 # _core Scope Overview
 
 ## Overview
@@ -38,6 +46,10 @@ Slide presentations that support XDRS documents follow [_core-adr-policy-009](ad
 ### Domain scope meta governance
 
 [_core-adr-policy-010](adrs/principles/010-core-scope-naming.md) defines the `-core` suffix naming convention for XDRS scopes. A scope named `[domain]-core` (e.g., `security-core`) holds meta governance content — writing standards, templates, ownership, and process guidance — for all scopes sharing the same prefix. It must not contain consumable policies, and all contributors to same-prefix scopes must follow its standards.
+
+### Scope types
+
+Every XDRS scope declares a `scope-type` in its `index.md` YAML frontmatter. [_core-adr-policy-001](adrs/principles/001-xdrs-core.md) defines five allowed types: `core` (reserved for this scope), `reference` (blueprints and standards to be copied or adapted), `platform` (live services or areas usable directly), `domain` (the default for business areas, products, or teams), and `_local` (reserved for workspace-local decisions). The recommended root index ordering is `core → reference → platform → domain → _local`.
 
 ### Available skills
 
