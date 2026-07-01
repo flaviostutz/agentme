@@ -117,7 +117,7 @@ Rules:
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
-- Any non-Markdown files referenced from `SKILL.md` (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package.
+- Any non-Markdown files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - Always use lowercase file names.

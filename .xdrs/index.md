@@ -11,7 +11,7 @@ XDRS scopes listed last override the ones listed first
 ### _core
 
 Decisions about how XDRs work
-[View _core Scope Index](_core/index.md)
+[View scope _core](_core/index.md)
 
 ---
 
@@ -19,7 +19,7 @@ Decisions about how XDRs work
 
 Opiniated set of decisions and skills for common development tasks
 
-[View agentme Scope Index](agentme/index.md)
+[View scope agentme](agentme/index.md)
 
 ---
 

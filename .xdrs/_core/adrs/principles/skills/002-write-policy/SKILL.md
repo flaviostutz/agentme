@@ -159,6 +159,8 @@ Check every item before finalizing:
 6. **Conflicts section**: Is it present and filled if Phase 3 found any conflicts?
 7. **Index entries**: Will the new Policy be added to `[scope]/[type]/index.md` and the Policy root `index.md`?
 8. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names (e.g., `follows: [myarea-core]`), verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the document satisfies all requirements from those Policies. Scopes are applied in order; last-listed scope in `follows` takes precedence when the same topic is covered by multiple scopes.
+   - **Scope-type standards:** Read the target scope's `scope-type`. Search the `[type]/principles/` directories of all `core`-type scopes for a file ending in `{scope-type}-scope-type.md`. Apply its rules as requirements for the new Policy. Resolve any `NN-parent-scope-type` rule transitively. See `_core-adr-policy-010` rules 15 and 17.
+   - **Scope-local standards:** Search the target scope's own `[type]/principles/` for a file ending in `{scope-name}-core.md`. If found, apply its rules as requirements; they override scope-type standards on conflict. See `_core-adr-policy-010` rules 16 and 17.
 
 If any check fails, revise and re-run this phase before proceeding.
 

@@ -50,7 +50,7 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - Research documents SHOULD link in `## References` to the Policies, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
 - A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not required.
 - One research document MAY also be referenced by multiple Policies, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
-- Any non-Markdown files referenced by a research document (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files.
+- Any non-Markdown files referenced by a research document SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 - Research file names MUST be lowercase. Never use emojis.
 - A research document MAY exist before the related Policy is written, or remain after the Policy changes, as long as its status and references stay clear.
 
