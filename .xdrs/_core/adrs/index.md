@@ -15,7 +15,12 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-007](principles/007-plan-standards.md) - **Plan standards** — How to structure ephemeral execution plans that implement decisions
 - [_core-adr-policy-008](principles/008-xdr-standards-structured.md) - **Policy standards - structured** — How to expose individually referenceable numbered rules inside a Policy when external citation by identifier is required
 - [_core-adr-policy-009](principles/009-presentation-standards.md) - **Presentation standards** — How to structure Marp slide presentations that support XDRS documents
-- [_core-adr-policy-010](principles/010-core-scope-naming.md) - **Core scope naming convention** — How to use the `-core` suffix on a scope to separate meta governance content from consumable policies in a domain
+- [_core-adr-policy-010](principles/010-scope-governance.md) - **Scope governance** — How to define custom scope types, scope-local standards, and how all governance mechanisms apply with their precedence chain
+- [_core-adr-policy-011](principles/011-core-scope-type.md) - **core scope type** — Defines the `core` scope type: meta-governance scopes that hold writing standards, templates, and process guidance for a domain
+- [_core-adr-policy-012](principles/012-reference-scope-type.md) - **reference scope type** — Defines the `reference` scope type: blueprints and standards meant to be copied or adapted
+- [_core-adr-policy-013](principles/013-platform-scope-type.md) - **platform scope type** — Defines the `platform` scope type: live services or operational areas consumable directly
+- [_core-adr-policy-014](principles/014-standard-scope-type.md) - **standard scope type** — Defines the `standard` scope type: the default for business areas, products, and teams
+- [_core-adr-policy-015](principles/015-local-scope-type.md) - **_local scope type** — Defines the `_local` scope type: reserved for workspace-local decisions that must never be distributed
 
 ## Skills
 

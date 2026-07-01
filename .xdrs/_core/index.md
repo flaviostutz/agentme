@@ -43,13 +43,15 @@ Each artifact type has its own writing standard:
 
 Slide presentations that support XDRS documents follow [_core-adr-policy-009](adrs/principles/009-presentation-standards.md). Slides use the Marp Markdown format, live in `.assets/` next to the document they support, and must maintain bidirectional links with the parent document.
 
-### Domain scope meta governance
+### Standard scope meta governance
 
-[_core-adr-policy-010](adrs/principles/010-core-scope-naming.md) defines the `-core` suffix naming convention for XDRS scopes. A scope named `[domain]-core` (e.g., `security-core`) holds meta governance content — writing standards, templates, ownership, and process guidance — for all scopes sharing the same prefix. It must not contain consumable policies, and all contributors to same-prefix scopes must follow its standards.
+[_core-adr-policy-010](adrs/principles/010-scope-governance.md) defines the full scope governance model: how to define a custom scope type using `{scope-type}-scope-type` policies, how to define scope-local content standards using a `{scope-name}-core` policy, and how all governance mechanisms (`follows:`, scope-type standards, scope-local standards) apply with their precedence chain.
+
+[_core-adr-policy-011](adrs/principles/011-core-scope-type.md) defines the `core` scope type — meta-governance scopes named with the `-core` suffix (e.g., `security-core`) that hold writing standards, templates, ownership, and process guidance for a group of related scopes. They must not contain consumable policies, and all contributors to governed scopes must follow their standards via an explicit `follows:` declaration.
 
 ### Scope types
 
-Every XDRS scope declares a `scope-type` in its `index.md` YAML frontmatter. [_core-adr-policy-001](adrs/principles/001-xdrs-core.md) defines five allowed types: `core` (reserved for this scope), `reference` (blueprints and standards to be copied or adapted), `platform` (live services or areas usable directly), `domain` (the default for business areas, products, or teams), and `_local` (reserved for workspace-local decisions). The recommended root index ordering is `core → reference → platform → domain → _local`.
+Every XDRS scope declares a `scope-type` in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. The five built-in scope types are defined by [_core-adr-policy-011](adrs/principles/011-core-scope-type.md) (`core`), [_core-adr-policy-012](adrs/principles/012-reference-scope-type.md) (`reference`), [_core-adr-policy-013](adrs/principles/013-platform-scope-type.md) (`platform`), [_core-adr-policy-014](adrs/principles/014-standard-scope-type.md) (`standard`), and [_core-adr-policy-015](adrs/principles/015-local-scope-type.md) (`_local`). Custom scope types can be defined following [_core-adr-policy-010](adrs/principles/010-scope-governance.md). The recommended root index ordering is `core → reference → platform → standard → _local`.
 
 ### Available skills
 

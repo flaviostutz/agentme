@@ -33,7 +33,7 @@ Plans are Markdown documents placed inside a subject folder alongside policies. 
 - Plans MUST include an `Expected end date:` field in ISO format (YYYY-MM-DD) inside the `## Proposed Solution` section.
 - Always use lowercase file names.
 - Never use emojis in plan content.
-- Any non-Markdown files referenced by a plan (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `plans/.assets/` next to the plan files.
+- Any non-Markdown files referenced by a plan SHOULD be used only when they are materially necessary and MUST live in `plans/.assets/` next to the plan files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 
 **Folder layout**
 

@@ -64,23 +64,24 @@ Policies can be of different kinds, depending on the nature of the decision:
   - `_local` is a reserved scope for XDRS elements created locally to a specific project or repository. XDRS elements in `_local` MUST NOT be shared with or propagated to other contexts. This scope MUST always be placed in the lowest position in the root `index.md` so that its decisions override or extend any decisions from higher-positioned scopes. Shared root `index.md` files MUST NOT include an explicit link to `_local`, because `_local` remains workspace-local and is not distributed with shared packages. Readers, tools, and agents SHOULD still try the default workspace-local path `_local/index.md` when it exists, even without a root-index link. Documents in non-`_local` scopes MUST NEVER link to any document inside `_local`; documents inside `_local` MAY link to other documents inside `_local`.
   - **Types:** `adrs`, `bdrs`, `edrs`
   - there can exist sufixes to the standard scope names (e.g: `business-x-mobileapp`, `business-y-servicedesk`)
-  - The `-core` suffix is a reserved special suffix (e.g., `security-core`, `platform-core`) that designates a scope as the meta governance layer for all scopes sharing the same prefix. See `_core-adr-policy-010` for the full convention.
-  - **Scope types:** Every scope MUST declare its type via a `scope-type` field in its `index.md` YAML frontmatter. Allowed values:
-    - `core`: A meta-policy scope defining governance conventions for a group of scopes. It may set mandatory conventions (naming rules, subject taxonomy, scope ordering) enforced on related scopes. The built-in `_core` is the framework-level instance that applies globally; area-specific `core` scopes (e.g., `myarea-core`) layer governance on top. A scope with this type MUST have `core` in its name (e.g., `_core`, `myarea-core`, `security-core`). Area `core` scopes MUST NOT contradict `_core` structural rules; they may only extend them.
-    - `reference`: A blueprint, standard, or reference architecture meant to be copied or adapted — not a live service. Examples of what belongs here: industry standards (ISO, SOC2, PCI-DSS), vendor best-practice patterns, reference architectures. A scope with this type MUST have the word `reference` somewhere in its name (e.g., `domain1-reference-mobile`, `security-reference-baseline`, `aws-reference-landing-zone`).
-    - `platform`: An existing implementation, live service, or operational area that can be consumed directly without local instantiation. Defines something that exists and can be used, not merely a blueprint. A scope with this type MUST have the word `platform` somewhere in its name (e.g., `domain2-platform-aws`, `domain2-platform-callcenter`, `cloud-platform`).
-    - `domain`: The default type. Any business area, product domain, team, or general-purpose scope that does not fit one of the specific types above. No naming requirement.
-    - `_local`: Workspace-local decisions only. Never shared or distributed outside the local workspace. Reserved exclusively for the `_local` scope.
-  - Scope name suffixes are unlimited and may be used in any scope type. For `reference` and `platform` types only the presence of the keyword in the name is enforced, not its position (e.g., `domain2-reference-people-framework` and `domain2-platform-callcenter` are both valid).
-  - When writing or generating a new XDRS root `index.md`, use the following default ordering (scopes listed later override earlier ones): `core → reference → platform → domain → _local`.
+  - The `-core` suffix designates a scope as the meta governance layer for a domain. See `_core-adr-policy-011` for the `core` scope type definition.
+  - **Scope types:** Every scope MUST declare its type via a `scope-type` field in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. Custom scope-type names MUST NOT start with `_`. The five built-in scope types and their definitions are:
+    - `core` — see [`_core-adr-policy-011`](011-core-scope-type.md)
+    - `reference` — see [`_core-adr-policy-012`](012-reference-scope-type.md)
+    - `platform` — see [`_core-adr-policy-013`](013-platform-scope-type.md)
+    - `standard` — see [`_core-adr-policy-014`](014-standard-scope-type.md)
+    - `_local` — see [`_core-adr-policy-015`](015-local-scope-type.md)
+  - Scope name suffixes are unlimited and may be used in any scope type.
+  - When writing or generating a new XDRS root `index.md`, use the following default ordering (scopes listed later override earlier ones): `core → reference → platform → standard → _local`. Custom-type scopes SHOULD be placed in the `standard` position.
   - **Scope index frontmatter fields:** Every scope's `index.md` MUST include the following YAML frontmatter. Fields match the Policy frontmatter standard (`_core-adr-policy-002`) in purpose, adjusted for scope-level semantics:
     - `name` (required): The scope identifier, must exactly match the scope directory name (e.g., `myteam`, `cloud-platform-aws`). Used by tools to verify scope identity.
     - `description` (required): Short overview of what this scope covers and who the intended audience is. Used by AI agents for discovery and relevance matching. Max 40 words.
-    - `scope-type` (required): Scope classification type, see scope types above.
+    - `scope-type` (required): Scope classification type. Must match a `{scope-type}-scope-type` policy in any `core`-type scope's `principles/` directory. See `_core-adr-policy-010` for the full governance convention and `_core-adr-policy-011`, `012`–`015` for built-in type definitions.
     - `apply-to` (required): Declares in which contexts — teams, systems, codebases, or environments — the decisions in this scope are relevant. Max 30 words.
     - `valid-from` (required): ISO date (YYYY-MM-DD) from which this scope became active.
     - `metadata` (optional): Arbitrary key-value map for additional scope metadata.
-    - `follows` (optional): List of core scope names whose Policies apply as mandatory conventions to all documents in this scope, in addition to `_core` which always applies. Last-listed scope takes precedence when the same topic is covered by multiple scopes (e.g., `follows: [myarea-core, shared-standards]`).
+    - `follows` (optional): Core scope names whose Policies apply as mandatory conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: [myarea-core, shared-standards]`).
+    - `related-scopes` (optional): Scope names of parent, sibling, or child scopes. Use when structural links help verify policy correctness across related scopes.
 - **Subjects:** MUST be one of the following depending on the type of the Policy. Use the subject to indicate the main concern of the decision.
   - **ADR subjects**
     - `principles`: Cross-cutting architecture and policy foundations.
@@ -174,6 +175,8 @@ subject/
 ## References
 
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md) - Standards for writing individual Policy documents
+- [_core-adr-policy-010 - Scope governance](010-scope-governance.md) - Scope-type definition convention, scope-local standards, and governance application model
+- [_core-adr-policy-011 - core scope type](011-core-scope-type.md) - Defines the `core` scope type and meta-governance scope conventions
 - [001-review skill](skills/001-review/SKILL.md) - Skill for reviewing code changes against Policies
 - [002-write-policy skill](skills/002-write-policy/SKILL.md) - Skill for creating a new Policy following this standard
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)

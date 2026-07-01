@@ -1,3 +1,11 @@
+---
+name: agentme
+description: Curated library of XDRs and skills encoding best practices for AI coding agents across JavaScript, Go, and Python projects.
+scope-type: standard
+apply-to: AI coding agents and developers adopting agentme engineering standards.
+valid-from: 2025-01-01
+---
+
 # agentme Scope Overview
 
 ## Overview

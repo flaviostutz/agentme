@@ -39,7 +39,7 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 - Articles must remain consistent with the Policies, Research documents, and Skills they reference. When a referenced artifact changes, the article must be reviewed and updated.
 - Place an article in the subject folder that best matches its topic using the required list of subjects per type defined in `_core-adr-policy-001`. If an article spans more than one subject, place it in `principles`.
 - For simple structure, flow, layout, or relationship indications, articles SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
-- Any non-Markdown files referenced by an article (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `articles/.assets/` next to the article files.
+- Any non-Markdown files referenced by an article SHOULD be used only when they are materially necessary and MUST live in `articles/.assets/` next to the article files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 - Always use lowercase file names.
 - Never use emojis in article content.
 
