@@ -9,7 +9,7 @@ valid-from: 2026-05-27
 
 ## Context and Problem Statement
 
-ML projects accumulate datasets of different shapes: file-paired annotations, tabular CSVs, and structured JSONL records. Without a shared layout convention, tooling and agents cannot reliably discover schema files, consume data programmatically, or understand what a dataset contains.
+ML projects accumulate datasets of different shapes: file-paired annotations, tabular CSVs, and complex per-record structures. Without a shared layout convention, tooling and agents cannot reliably discover schema files, consume data programmatically, or understand what a dataset contains.
 
 How should ML datasets be organized on disk so they are self-describing, easy to consume, and consistent across dataset types?
 
@@ -58,6 +58,8 @@ Placing the annotation file next to its source file (same name + `.json`) keeps 
 
 Subdirectories inside `data/` are allowed when the number of files warrants grouping, but the `.json` sibling convention MUST be preserved at each level.
 
+Each `.json` annotation file MUST include a top-level `$schema` property whose value is the correct relative path to the dataset's root `dataset.schema.json`, accounting for subdirectory depth (e.g. `"$schema": "../dataset.schema.json"` at one level, `"../../dataset.schema.json"` at two levels). This is the standard editor-tooling convention for associating a JSON instance with its schema, and is validated by rule `06`.
+
 #### 03-tabular-datasets-must-use-csv-files-at-root
 
 Datasets composed of column-oriented tabular data MUST place CSV files at the root of the dataset folder. All tabular files MUST conform to the schema defined in `dataset.schema.json`, which MUST describe columns as named attributes with their types.
@@ -70,27 +72,40 @@ Datasets composed of column-oriented tabular data MUST place CSV files at the ro
     README.md
 ```
 
-Multiple CSV files are allowed when they represent different slices or splits of the same schema (e.g. train/test splits, subsets by source). All files in the same dataset MUST share the same column schema.
+Multiple CSV files are allowed when they represent different slices or splits of the same schema (e.g. train/test splits, subsets by source). All files in the same dataset MUST share the same column schema. Each row MUST also be validated by `make lint` per rule `06` — CSV has no `$schema` field (not applicable to that format), so only the row content is checked, not a schema pointer.
 
-#### 04-complex-structured-datasets-must-use-jsonl
+#### 04-complex-structured-datasets-must-use-per-entry-json-files
 
-Datasets with complex or heterogeneous per-record structures (e.g. LLM workflow evaluation sets, Q&A pairs, input → expected_output pairs) MUST use JSONL files (one JSON object per line) placed at the root of the dataset folder. Each line MUST conform to the schema defined in `dataset.schema.json`.
+Datasets with complex or heterogeneous per-record structures (e.g. LLM workflow evaluation sets, Q&A pairs, input → expected_output pairs) MUST use one JSON file per entry, placed inside the `data/` subfolder. Each file MUST conform to the schema defined in `dataset.schema.json`.
 
 ```
 /[name-of-dataset]/
-    simple-cases-test.jsonl
-    edge-cases-test.jsonl
-    dataset.schema.json    (schema defining the structure of each line in the JSONL files)
+    data/
+        case-001.json
+        case-002.json
+    dataset.schema.json    (schema defining the structure of each entry file)
     README.md
 ```
 
-Multiple JSONL files are allowed when they represent different splits or categories (e.g. easy vs. edge cases). All files in the same dataset MUST conform to the same line schema.
+Each entry file MUST include a top-level `$schema` property whose value is the correct relative path to the dataset's root `dataset.schema.json`, accounting for subdirectory depth (e.g. `"$schema": "../dataset.schema.json"` at one level, `"../../dataset.schema.json"` at two levels), validated by rule `06`.
+
+Subdirectories inside `data/` are allowed for grouping entries by collection source, time period, actor, or similar dimensions when the number of files warrants it. ALL files in one dataset MUST conform to the SAME `dataset.schema.json` — if a project needs a different schema for a different set of entries, that MUST be a separate dataset (its own folder, README, and `dataset.schema.json`), not multiple schemas inside one dataset.
 
 #### 05-referenced-files-must-live-in-data-folder
 
-When any dataset type (tabular, JSONL, or annotation-pair) contains references to external files as part of the data (e.g. a JSONL record that includes a file path), those referenced files MUST be stored inside the `data/` subfolder of the dataset. Paths inside data records MUST be relative to the dataset root.
+When any dataset type (tabular, per-entry JSON, or annotation-pair) contains references to external files as part of the data (e.g. an entry record that includes a file path), those referenced files MUST be stored inside the `data/` subfolder of the dataset. Paths inside data records MUST be relative to the dataset root.
+
+#### 06-datasets-must-be-lint-validated-against-schema
+
+Every dataset MUST expose a `make lint` target (in the Makefile of the project/component that owns the dataset) that validates its data against `dataset.schema.json` using the Python [`jsonschema`](https://pypi.org/project/jsonschema/) library:
+
+- Per-entry JSON files (rule `04`) and annotation-pair `.json` siblings (rule `02`) MUST each be validated against `dataset.schema.json`, and their `$schema` property MUST be present and resolve to the dataset's actual schema file.
+- CSV rows (rule `03`) MUST each be converted to a JSON object (column header → value) and validated against the same `dataset.schema.json`.
+- `make lint` MUST list every violation found across all files/rows before exiting with a non-zero status (not fail-fast on the first violation).
+- `jsonschema` MUST be declared as a normal project dependency per [agentme-edr-014](014-python-project-tooling.md); no special-casing.
 
 ## References
 
 - [JSON Schema specification](https://json-schema.org/)
-- [JSONL format](https://jsonlines.org/)
+- [jsonschema (Python library)](https://pypi.org/project/jsonschema/)
+- [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and dependency conventions

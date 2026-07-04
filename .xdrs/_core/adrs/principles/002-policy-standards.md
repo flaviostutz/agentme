@@ -64,6 +64,9 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - Policies MUST be concise and reference other Policies to avoid duplication.
 - The `### Details` section SHOULD state relevant boundaries or exceptions and what a reader should do or avoid in common cases. Use the frontmatter fields `apply-to` and `valid-from` as the first-pass filter for applicability, then keep nuanced boundaries in the decision text.
 - Use concise rules, examples, `Allowed` / `Disallowed` lists or checklists with required items to help the reader apply the decision correctly. Keep them short and decision-specific.
+- Policies MUST NOT include historical change notes or descriptions of what changed from a previous version. State only the current rule that must be followed. Historical context is available via git history or versioned packages.
+- When a policy covers elements that could be confused with each other, include explicit disambiguation statements clarifying the distinction before stating the rules for each.
+- Rules MUST focus on what is required or forbidden. Explanations of why a rule exists belong in a Research document, not in the Policy itself. Link to the relevant research when the rationale is important for adoption.
 - When the decision defines strong policies or rules that should be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the Policy MUST follow the extension [_core-adr-policy-008 - Policy standards - structured](008-xdr-standards-structured.md) instead of using plain bullet lists for those rules.
 - Conflict handling applies to Policy documents:
   - For cross-scope overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope.

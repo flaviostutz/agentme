@@ -35,7 +35,7 @@ Do not use `scope-type: platform` for blueprints or reference architectures. Use
 
 #### 03-naming-convention
 
-A scope of type `platform` MUST have the word "platform" somewhere in its name. The position of the word is not enforced. Examples: `domain2-platform-aws`, `domain2-platform-callcenter`, `cloud-platform`.
+A scope of type `platform` MUST follow the naming pattern `{domain}-plat-{name}`, where `{domain}` identifies the owning domain or team and `{name}` identifies the specific platform area. Examples: `domain2-plat-aws`, `domain2-plat-callcenter`, `cloud-plat-infra`.
 
 #### 04-content-guidance
 

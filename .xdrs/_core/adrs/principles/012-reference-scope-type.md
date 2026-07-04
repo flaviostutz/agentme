@@ -39,7 +39,7 @@ Do not use `scope-type: reference` for scopes that represent a live service, an 
 
 #### 03-naming-convention
 
-A scope of type `reference` MUST have the word "reference" somewhere in its name. The position of the word is not enforced. Examples: `domain1-reference-mobile`, `security-reference-baseline`, `aws-reference-landing-zone`, `sales-reference-procedures`, `finance-reference-compliance`, `marketing-reference-standards`.
+A scope of type `reference` MUST follow the naming pattern `{domain}-ref-{name}`, where `{domain}` identifies the owning domain or team and `{name}` identifies the specific reference area. Examples: `domain1-ref-mobile`, `security-ref-baseline`, `aws-ref-landing-zone`, `sales-ref-procedures`, `finance-ref-compliance`, `marketing-ref-standards`.
 
 #### 04-content-guidance
 

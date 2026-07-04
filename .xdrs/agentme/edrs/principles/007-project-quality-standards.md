@@ -262,3 +262,4 @@ AI projects are classified into three tiers — LLM, Agent, and Workflow — def
 - Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
 - Evals MUST run against real LLM providers (not mocks) to capture model drift.
 - For eval folder structure and script requirements, see [agentme-edr-028](../application/028-ai-eval-standards.md).
+- For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-030](../application/030-ai-test-types-taxonomy.md).
