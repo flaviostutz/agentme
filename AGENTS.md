@@ -25,10 +25,7 @@ This rule has NO exceptions. Simple questions ("which command?", "what pattern?"
    - Analyse your work against the Policies and ensure implementation decisions follow guidelines and patterns
    - Fix any issues
 
-4. **Document decisions as Policies when appropriate**
-   - Check if what is being performed shouldn't be documented as a Policy in _local scope (because the decision has potential to be reused in the future or the topic is complex and would benefit from a document for clarity). Create or update existing documents accordingly.
-
-5. **Do not perform git operations unless explicitelly asked**
+4. **Do not perform risky git operations unless explicitelly asked**
    - The developer should be in control of possible destructive operations on the workspace
 
 **This AGENTS.md file was created with xdrs-core and shouldn't be changed**

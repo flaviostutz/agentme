@@ -57,7 +57,7 @@ Content that MUST NOT be placed in a `core`-type scope:
 
 #### 06-follows-required
 
-A scope that is governed by a `core` scope MUST declare this relationship explicitly using `follows: [{core-scope-name}]` in its `index.md` frontmatter.
+A scope that is governed by a `core` scope MUST declare this relationship explicitly using `follows: {core-scope-name}` in its `index.md` frontmatter.
 
 #### 07-distribution
 

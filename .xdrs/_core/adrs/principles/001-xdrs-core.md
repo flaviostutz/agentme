@@ -80,7 +80,7 @@ Policies can be of different kinds, depending on the nature of the decision:
     - `apply-to` (required): Declares in which contexts — teams, systems, codebases, or environments — the decisions in this scope are relevant. Max 30 words.
     - `valid-from` (required): ISO date (YYYY-MM-DD) from which this scope became active.
     - `metadata` (optional): Arbitrary key-value map for additional scope metadata.
-    - `follows` (optional): Core scope names whose Policies apply as mandatory conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: [myarea-core, shared-standards]`).
+    - `follows` (optional): Core scope names whose Policies apply as mandatory conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: myarea-core, shared-standards`).
     - `related-scopes` (optional): Scope names of parent, sibling, or child scopes. Use when structural links help verify policy correctness across related scopes.
 - **Subjects:** MUST be one of the following depending on the type of the Policy. Use the subject to indicate the main concern of the decision.
   - **ADR subjects**
