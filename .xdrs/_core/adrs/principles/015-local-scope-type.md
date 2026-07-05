@@ -13,13 +13,13 @@ Every XDRS workspace may need project-specific overrides or local decisions that
 
 ## Decision Outcome
 
-**Reserve `scope-type: _local` exclusively for the `_local` scope, which holds workspace-local decisions that MUST NEVER leave the repository.**
+**Reserve `scope-type: _local` exclusively for the `_local` scope, which holds workspace-local decisions that MUST NOT leave the repository.**
 
 ### Details
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `_local`. A scope declares it by setting `scope-type: _local` in its `index.md` YAML frontmatter.
+The scope type defined by this policy is `_local`. A scope MUST declare it by setting `scope-type: _local` in its `index.md` YAML frontmatter.
 
 #### 02-when-to-use
 
@@ -33,7 +33,7 @@ The value `scope-type: _local` is reserved exclusively for the single scope name
 
 #### 04-never-distributed
 
-Content in the `_local` scope MUST NOT be shared with or propagated to any other context. It is workspace-local only and is never packaged for distribution.
+Content in the `_local` scope MUST NOT be shared with or propagated to any other context. It is workspace-local only and MUST NOT be packaged for distribution.
 
 ## References
 

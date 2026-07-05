@@ -21,7 +21,7 @@ Provides clear ownership by scope, predictable navigation, and reusable decision
 
 ### Details
 
-A standard Decision Record normally combines several concerns in the same document: a reason (why, options considered), a policy (rules, what is the decision), a plan (consequences, when it will be implemented), a how-to (step-by-step how-to procedure), and a view on a topic. The XDRS framework separates these concerns into different document types: Policies as the source of truth for the core of the decision, Research for reasoning and evidence, Plans for implementation approach, Skills for execution procedures, and Articles for topic overviews. Supporting artifacts may explain, justify, or operationalize the policy, but they do not replace it. The compilation process of a raw Decision Record is to distribute it into those different documents and create links between them. You can also use the framework standalone, generating these elements individually directly during the writing process.
+A standard Decision Record normally combines several concerns in the same document: a reason (why, options considered), a policy (rules, what is the decision), a plan (consequences, when it will be implemented), a how-to (step-by-step how-to procedure), and a view on a topic. The XDRS framework separates these concerns into different document types: Policies as the source of truth for the core of the decision, Research for reasoning and evidence, Plans for implementation approach, Skills for execution procedures, and Articles for topic overviews. Supporting artifacts MAY explain, justify, or operationalize the policy, but they do not replace it. The compilation process of a raw Decision Record is to distribute it into those different documents and create links between them. You can also use the framework standalone, generating these elements individually directly during the writing process.
 
 Policies can be of different kinds, depending on the nature of the decision:
 - BDR (Business Decision Record): Captures business process, product features, procedures and strategic decisions. Examples: business rules, product policies, customer service, business workflow, control frameworks for regulators for finance, product procedures and manuals, KYC requirements, business requirements in general
@@ -35,7 +35,7 @@ Policies can be of different kinds, depending on the nature of the decision:
 - Make it clear if an instruction is mandatory or advisory.
   - Policy documents MUST use BCP 14 (RFC 2119 / RFC 8174) keywords when expressing normative requirements
     - Use **MUST** / **MUST NOT** for absolute requirements or prohibitions.
-    - Use **SHOULD** / **SHOULD NOT** for strong recommendations where valid exceptions exist but MUST be deliberately justified.
+    - Use **SHOULD** / **SHOULD NOT** for strong recommendations where valid exceptions exist but MUST be justified.
     - Use **MAY** / **OPTIONAL** for truly optional choices.
     - Avoid overusing normative keywords; reserve them for rules that genuinely require unambiguous compliance or optionality.
     - Uppercase statements are ALWAYS enforced.
@@ -48,7 +48,7 @@ Policies can be of different kinds, depending on the nature of the decision:
   `[xdrs-root]/[scope]/[type]/[subject]/[number]-[short-title].md`
   where `[xdrs-root]` is the XDRS root folder (default: `.xdrs/`).
 - MUST ignore symlinks paths. MUST NOT create or update documents inside symlinked folders.
-- **Files listed in `.filedist.lock` are external XDRs.** A file whose path appears in the workspace root `.filedist.lock` file was distributed from an external source repository. It MUST NEVER be modified locally. To change it, submit the change to the source repository and re-extract the updated package. The `.filedist.lock` format is one entry per line: `<relative-path>|<package>|<version>`. A scope is considered external when any of its files appear in `.filedist.lock`, and tools (such as `xdrs-core lint`) will skip external scopes by default. The `.filedist.lock` file can also be used to detect which files changed when bumping an external scope to a newer version: compare the version field in `.filedist.lock` entries before and after the upgrade and diff the affected paths to understand what decisions were added, updated, or removed.
+- **Files listed in `.filedist.lock` are external XDRs.** A file whose path appears in the workspace root `.filedist.lock` file was distributed from an external source repository. It MUST NOT be modified locally. To change it, submit the change to the source repository and re-extract the updated package. The `.filedist.lock` format is one entry per line: `<relative-path>|<package>|<version>`. A scope is considered external when any of its files appear in `.filedist.lock`, and tools (such as `xdrs-core lint`) will skip external scopes by default. The `.filedist.lock` file can also be used to detect which files changed when bumping an external scope to a newer version: compare the version field in `.filedist.lock` entries before and after the upgrade and diff the affected paths to understand what decisions were added, updated, or removed.
 - Optional supporting artifacts under the same subject:
   - `[xdrs-root]/[scope]/[type]/[subject]/researches/[number]-[short-title].md`
   - `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`
@@ -69,7 +69,7 @@ Policies can be of different kinds, depending on the nature of the decision:
 - **Scopes:** 
   - Short name that defines a group or a package of XDRS
   - examples: `business-x`, `business-y`, `team-43`, `_core`
-  - `_local` is a reserved scope for XDRS elements created locally to a specific project or repository. XDRS elements in `_local` MUST NOT be shared with or propagated to other contexts. This scope MUST always be placed in the lowest position in the root `index.md` so that its decisions override or extend any decisions from higher-positioned scopes. Shared root `index.md` files MUST NOT include an explicit link to `_local`, because `_local` remains workspace-local and is not distributed with shared packages. Readers, tools, and agents SHOULD still try the default workspace-local path `_local/index.md` when it exists, even without a root-index link. Documents in non-`_local` scopes MUST NEVER link to any document inside `_local`; documents inside `_local` MAY link to other documents inside `_local`.
+  - `_local` is a reserved scope for XDRS elements created locally to a specific project or repository. XDRS elements in `_local` MUST NOT be shared with or propagated to other contexts. This scope MUST be placed in the lowest position in the root `index.md` so that its decisions override or extend any decisions from higher-positioned scopes. Shared root `index.md` files MUST NOT include an explicit link to `_local`, because `_local` remains workspace-local and is not distributed with shared packages. Readers, tools, and agents SHOULD still try the default workspace-local path `_local/index.md` when it exists, even without a root-index link. Documents in non-`_local` scopes MUST NOT link to any document inside `_local`; documents inside `_local` MAY link to other documents inside `_local`.
   - **Types:** `adrs`, `bdrs`, `edrs`
   - there can exist sufixes to the standard scope names (e.g: `business-x-mobileapp`, `business-y-servicedesk`)
   - The `-core` suffix designates a scope as the meta governance layer for a domain. See `_core-adr-policy-011` for the `core` scope type definition.
@@ -136,7 +136,7 @@ Policies can be of different kinds, depending on the nature of the decision:
       - Examples: CI/CD stages, branch strategy, release promotion gates.
     - `governance`: Engineering governance, risk controls, and compliance mechanics.
       - Examples: dependency governance, approval policies, mandatory quality checks.
-- Never use emojis
+- MUST NOT use emojis
 - **Links:** Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
 - **Indexes**
   - Every document in the collection (Policies, skills, articles, research, and plans) MUST be reachable through the index chain: root index → scope index → type index → document. A document that exists on disk but is not linked from its canonical type index is considered an orphan and MUST be added to the index or removed.
@@ -145,13 +145,13 @@ Policies can be of different kinds, depending on the nature of the decision:
     - Organize XDRS documents by subject for easier navigation
     - Add a short description of what this scope is about (responsibilities, general worries, teams involved, link to discussion process, etc)
     - Add a list of other scope indexes that this scope might be related to (only add scopes that might be overridden). E.g: "business-x-mobileapp" scope could refer to "business-x" and "sensitive-data" scopes in its index list. XDRS in scopes listed last override XDRS in scopes listed first when addressing the same topic.
-    - Each XDRS element entry in the index MUST include a short description of its content, preferably with an imperative statement or the question it answers, when possible (<15 words). Example: "Use this while planning a new feature", "What communication tone we use with our customers?", "PNPM vs Yarn comparison study"
+    - Each XDRS element entry in the index MUST include a short description of its content. The description SHOULD use an imperative statement or the question it answers when possible (<15 words). Example: "Use this while planning a new feature", "What communication tone we use with our customers?", "PNPM vs Yarn comparison study"
   - Outside the scopes, keep a root index in `[xdrs-root]/index.md` that links to each scope index (`[xdrs-root]/[scope]/index.md`). Add the text "XDRS scopes listed last override the ones listed first". The root index MUST NOT link directly to type indexes; readers navigate from the scope index to the type indexes. Use the link text pattern `View scope [scope_name]` for each scope link (e.g. `[View scope myteam] linking to (myteam/index.md)`).
   - MUST verify if indexes are up to date after making changes
 - **Scope index**
   - Each scope folder MUST maintain an `index.md` file at `[xdrs-root]/[scope]/index.md`.
   - The scope index is a short article (under 1000 words) that provides an overview of all XDRS contents within that scope. Follow article standards (`_core-adr-policy-004`) when writing this file.
-  - The audience for the scope index are engineers, architects, or business analysts who want to check if the scope's contents are useful for them before diving into the specific documents. Write a guided summary that helps them decide whether to explore further.
+  - The audience for the scope index are engineers, architects, or business analysts who want to check if the scope's contents are useful before diving into specific documents. Write a guided summary that helps them decide whether to explore further.
   - Focus on the most relevant content of the scope: what decisions are covered, what problems they address, and how the scope relates to other scopes.
   - At the end of the scope index, MUST add links to the canonical type indexes (`adrs/index.md`, `bdrs/index.md`, `edrs/index.md`) that exist within the scope.
   - Whenever the contents of a scope change (new Policies, skills, articles, research, or plans are added, updated, or removed), evaluate whether the scope index SHOULD be updated to reflect the newer contents.

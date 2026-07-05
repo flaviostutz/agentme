@@ -37,7 +37,7 @@ Write instructions so that each step is unambiguous and self-contained. Avoid im
 Skills are procedures, Policies are guardrails and decisions, Research documents capture the explored option space and findings behind a decision, and Articles are synthetic views that combine information from multiple artifacts.
 Skills MUST link back and forth to their related Policies when the relationship is direct, and link to related Research or Articles when they provide important context.
 - Skills are task-based artifacts. They SHOULD have a clear starting trigger, an expected end result, and enough detail for a human or agent to verify that the task finished correctly.
-- A skill is not policy by itself. If following a skill is mandatory, that obligation MUST come from a Policy or another explicit policy that references the skill.
+- A skill is not policy by itself. If following a skill is REQUIRED, that obligation MUST come from a Policy or another explicit policy that references the skill.
 - When a skill reads, operationalizes, or enforces Policies, it MUST evaluate the Policy metadata first. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills MUST NOT treat out-of-window or out-of-scope Policies as current requirements.
 - Skills and Policies have a many-to-many relationship: one skill MAY operationalize multiple Policies, and one Policy MAY be executed through multiple skills in different contexts.
 

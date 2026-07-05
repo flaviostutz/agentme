@@ -21,22 +21,22 @@ Most XDRS scopes represent a business area, a product, a team, or a general grou
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `standard`. A scope declares it by setting `scope-type: standard` in its `index.md` YAML frontmatter.
+The scope type defined by this policy is `standard`. A scope MUST declare it by setting `scope-type: standard` in its `index.md` YAML frontmatter.
 
 #### 02-when-to-use
 
-Use `scope-type: standard` for:
+`scope-type: standard` SHOULD be used for:
 
 - Business areas, business units, or product lines.
 - Product or feature team scopes.
 - Cross-cutting engineering or architecture scopes that are not a platform or reference model.
 - Any scope that does not fit `core`, `reference`, `platform`, or `_local`.
 
-This is the default scope type. When uncertain, use `standard`.
+This is the default scope type. When uncertain, `standard` SHOULD be used.
 
 #### 03-naming-convention
 
-There is no naming requirement for `standard`-type scopes. Any valid scope name is acceptable (e.g., `business-x`, `team-43`, `mobile-app`, `checkout`).
+There is no naming requirement for `standard`-type scopes. Any valid scope name is acceptable (e.g., `business-x`, `team-43`, `mobile-app`, `checkout`). Scopes MUST follow the general scope naming rules defined in `_core-adr-policy-001`.
 
 #### 04-ordering
 

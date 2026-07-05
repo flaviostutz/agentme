@@ -48,7 +48,7 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - Be strict about the goal of each section. Avoid duplicating the same material across sections and prefer clarity over rhetorical flourishes.
 - Research documents SHOULD stay under 5000 words total. They MAY exceed that only when the `## Introduction` explicitly states that the study will be lengthy because a very detailed analysis is required.
 - Research documents SHOULD link in `## References` to the Policies, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
-- A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not mandatory.
+- A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not REQUIRED.
 - One research document MAY also be referenced by multiple Policies, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
 - Any non-Markdown files referenced by a research document SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 - Research file names MUST be lowercase. MUST NOT use emojis.

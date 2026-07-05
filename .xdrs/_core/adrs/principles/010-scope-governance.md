@@ -52,7 +52,7 @@ A scope-type definition policy SHOULD define:
 
 - Naming conventions for scope instances of this type.
 - What content SHOULD be placed in scopes of this type.
-- What content SHOULD NEVER be placed in scopes of this type.
+- What content SHOULD NOT be placed in scopes of this type.
 - Special instructions on how to organise or write content in scopes of this type.
 
 ##### 05-def-instance-declaration
@@ -130,7 +130,7 @@ When multiple standards address the same topic, the following precedence applies
 3. `follows:` scope standards (last-listed `follows:` scope wins among themselves)
 4. Scope-local `{scope-name}-core` policy standards
 
-All of the above are subordinate to `_core` structural rules, which cannot be overridden.
+All of the above are subordinate to `_core` structural rules, which MUST NOT be overridden.
 
 ##### 18-ordering-custom-types
 
