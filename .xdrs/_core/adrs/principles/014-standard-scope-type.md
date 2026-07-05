@@ -40,7 +40,7 @@ There is no naming requirement for `standard`-type scopes. Any valid scope name 
 
 #### 04-ordering
 
-In the root `index.md`, `standard`-type scopes are placed after `platform` scopes and before `_local`. Custom scope types should also be placed in this position. Scopes listed later override scopes listed earlier on the same topic.
+In the root `index.md`, `standard`-type scopes are placed after `platform` scopes and before `_local`. Custom scope types SHOULD also be placed in this position. Scopes listed later override scopes listed earlier on the same topic.
 
 ## References
 

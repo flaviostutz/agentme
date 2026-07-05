@@ -21,12 +21,12 @@ How should skills be authored, structured, and organized within a project so tha
 
 Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDRS subject folder under a `skills/` sub-directory. Each skill occupies its own numbered package folder, mirroring the XDRS numbering convention.
 
-A skill may target a human operator, an AI agent, or both. Instructions must be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
+A skill MAY target a human operator, an AI agent, or both. Instructions MUST be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
 
 ### Details
 
 **Automation gradient**
-Skills exist on a spectrum from fully manual (human-only) to fully automated (agent-only). A skill should be written so it can be executed at any point on that spectrum:
+Skills exist on a spectrum from fully manual (human-only) to fully automated (agent-only). A skill SHOULD be written so it can be executed at any point on that spectrum:
 - Human reads and follows each step manually.
 - Human delegates some steps to an AI assistant.
 - An AI agent executes the skill autonomously.
@@ -35,11 +35,11 @@ Write instructions so that each step is unambiguous and self-contained. Avoid im
 
 **Relation with Policies, Research, and Articles**
 Skills are procedures, Policies are guardrails and decisions, Research documents capture the explored option space and findings behind a decision, and Articles are synthetic views that combine information from multiple artifacts.
-Always create links back and forth between skills <-> Policies when the relationship is direct, and link to related Research or Articles when they provide important context.
-- Skills are task-based artifacts. They should have a clear starting trigger, an expected end result, and enough detail for a human or agent to verify that the task finished correctly.
-- A skill is not policy by itself. If following a skill is mandatory, that obligation must come from a Policy or another explicit policy that references the skill.
-- When a skill reads, operationalizes, or enforces Policies, it MUST evaluate the Policy metadata first. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills must not treat out-of-window or out-of-scope Policies as current requirements.
-- Skills and Policies have a many-to-many relationship: one skill may operationalize multiple Policies, and one Policy may be executed through multiple skills in different contexts.
+Skills MUST link back and forth to their related Policies when the relationship is direct, and link to related Research or Articles when they provide important context.
+- Skills are task-based artifacts. They SHOULD have a clear starting trigger, an expected end result, and enough detail for a human or agent to verify that the task finished correctly.
+- A skill is not policy by itself. If following a skill is mandatory, that obligation MUST come from a Policy or another explicit policy that references the skill.
+- When a skill reads, operationalizes, or enforces Policies, it MUST evaluate the Policy metadata first. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the current task context, and the decision text itself determines any remaining boundaries. All documents present in the collection are considered active. Skills MUST NOT treat out-of-window or out-of-scope Policies as current requirements.
+- Skills and Policies have a many-to-many relationship: one skill MAY operationalize multiple Policies, and one Policy MAY be executed through multiple skills in different contexts.
 
 Place a skill under the XDRS type that matches the nature of the activity the skill performs:
 - **EDR skills** - engineering workflows, tool usage, coding procedures, implementation how-tos (e.g. how to design a webpage, how to run a CI pipeline, how to debug a service)
@@ -76,7 +76,7 @@ Examples:
 **Skill numbering**
 
 - Each skill has a number unique within its `scope/type/subject/skills/` namespace.
-- Determine the next number by checking the highest number already present in that namespace. Never reuse numbers of deleted skills.
+- Determine the next number by checking the highest number already present in that namespace. MUST NOT reuse numbers of deleted skills.
 - Gaps in the sequence are expected and allowed.
 
 **SKILL.md format** (agentskills spec)
@@ -119,9 +119,9 @@ Rules:
 - For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
 - Any non-Markdown files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
-- Use relative paths for all links; never use absolute paths starting with `/`.
-- Always use lowercase file names.
-- Never use emojis in skill content.
+- Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
+- File names MUST be lowercase.
+- MUST NOT use emojis in skill content.
 
 **Validation**
 
