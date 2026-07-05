@@ -32,14 +32,18 @@ Every golden dataset entry (a JSON file in `golden_dataset/data/`) MUST have thi
   "$schema": "../dataset.schema.json",
   "test_types": ["functional"],
   "input": "...",
-  "expected_output": "..."
+  "expected_output": "...",
+  "mock_fixtures": {
+    "system_y": [{"123": {"name": "Flavio"}}, {"456": {"name": "Andrew"}}]
+  }
 }
 ```
 
 - `test_types` — array, values MUST come from rule `04`'s enum, MUST contain at least one value. An entry MAY carry more than one value additively (e.g. `["functional", "smoke", "human"]`) — no test type excludes another.
 - `input` — for Prompt-tier components, a raw prompt string or the prompt template's input parameters object; for Agent/Workflow-tier components, the input attributes object passed to the component.
 - `expected_output` — the fields used to score the entry under each of its automated `test_types`: output attributes for an LLM-as-judge rubric, a target for vector-similarity scoring, or exact attribute values for strict comparison. When `human` is one of the entry's `test_types`, `expected_output` MUST additionally include a `human_test` string field with manual-verification instructions (e.g. `"check for ethical issues, verify record change in system X"`) — this supplements, and never replaces, the entry's automated scoring fields.
-- The dataset's `dataset.schema.json` MUST require `test_types`, `input`, and `expected_output`, per [agentme-edr-024](024-ml-dataset-structure.md) rule `04`.
+- `mock_fixtures` — optional object; keys identify the adapter or external system to mock (SHOULD match the connector folder name under `adapters/connectors/<name>` for readability, though not enforced), values are any valid JSON interpreted by the mock implementation. When present, eval.py MUST configure each named mock adapter with its fixture data BEFORE invoking the component for that entry; each entry MUST use fresh mock instances to prevent state from bleeding across entries. `mock_fixtures` applies to all `test_types` including `human` — the component is still invoked for human entries to capture `actual_output`. `mock_fixtures` MUST NOT include keys for LLM adapters: all golden dataset test types are rated `mocks disallowed for LLM calls` (rule `03`), so the LLM call MUST always be real; LLM provider mocking belongs exclusively to unit tests via [agentme-edr-018](018-ai-llm-development-standards.md) rule `04`. See [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
+- The dataset's `dataset.schema.json` MUST require `test_types`, `input`, and `expected_output`, and SHOULD declare `mock_fixtures` as optional (`"type": "object", "additionalProperties": {}`), per [agentme-edr-024](024-ml-dataset-structure.md) rule `04`.
 
 #### 03-mocks-allowed-values
 
@@ -85,6 +89,7 @@ The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subs
 
 - [agentme-edr-024](024-ml-dataset-structure.md) — Golden dataset file layout, per-entry JSON format, `$schema` pointer, and schema-lint validation
 - [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy
+- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters referenced by `mock_fixtures`
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Rule `09` tier-level testing requirements (the only mandated AI testing baseline)
 - [agentme-edr-008](../devops/008-common-targets.md) — Rule `03` `eval-<qualifier>` Makefile convention; rule `03`'s `test-smoke` (distinguished in rule `07`)
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM tier definition and mocking utilities referenced by the `mocks allowed` value

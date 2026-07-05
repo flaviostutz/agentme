@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-028-ai-eval-standards
-description: Defines how to structure, write, and run eval tests for AI projects — folder layout, golden dataset, --type test-type filtering, per-type Makefile targets and reports, and MLflow tracking. Use when implementing evals for LLM, Agent, or Workflow projects. For when evals are required see agentme-edr-007 rule 09-ai-project-testing-requirements. For the test type taxonomy see agentme-edr-030.
+description: Defines how to structure, write, and run eval tests for AI projects — folder layout, golden dataset, --type test-type filtering, mock_fixtures wiring, entry-first eval loop, per-type Makefile targets and reports, and MLflow tracking. Use when implementing evals for LLM, Agent, or Workflow projects. For when evals are required see agentme-edr-007 rule 09-ai-project-testing-requirements. For the test type taxonomy and mock_fixtures envelope see agentme-edr-030. For mock file naming see agentme-edr-026 rule 10.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-06-05
 ---
@@ -86,20 +86,20 @@ lint:
 
 Each `eval.py` script MUST:
 
-- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-024](024-ml-dataset-structure.md) and the entry envelope in [agentme-edr-030](030-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`).
-- Accept a required `--type=<test_type>|all` CLI argument and filter entries whose `test_types` array contains the requested value; `--type=all` includes every entry, evaluated once for each `test_types` value it carries.
-- When an entry carries more than one `test_types` value, invoke the real component only **once** per entry per run and cache its `actual_output`; run each applicable type's scorer against that single cached output — never invoke the component twice for the same entry.
-- Run every invocation through the live component against **real LLM providers** (not mocked responses), to capture model drift.
-- `--type=human` MUST NOT invoke an automated scorer: export each entry where `human` ∈ `test_types` (its `input`, `expected_output.human_test` instructions, and `actual_output`) into a manual-review checklist, and MUST NOT enforce a pass/fail threshold for it. An entry's OTHER `test_types` (e.g. `functional`) are still scored automatically under their own `--type=` invocation, since `human` is an additive label, not an exclusive one.
-- Log per-sample and aggregate metrics to a **local** MLflow experiment scoped to the invoked `--type` value (e.g. `<component>/<eval-name>/smoke`, or `<component>/<eval-name>/all` when `--type=all` — see rule `04`); a remote MLflow server MUST NOT be required.
+- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-024](024-ml-dataset-structure.md) and the entry envelope in [agentme-edr-030](030-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`, optional `mock_fixtures`).
+- Accept a required `--type=<test_type>|all` CLI argument and filter entries whose `test_types` array contains the requested value; `--type=all` includes every entry.
+- Iterate **entry-first**: for each entry in the filtered set, invoke the real component exactly once; then score that single `actual_output` for every `test_types` value the entry carries that falls within the current `--type` scope — never invoke the component more than once per entry per run.
+- When an entry contains `mock_fixtures` ([agentme-edr-030](030-ai-test-types-taxonomy.md) rule `02`), configure each named mock adapter with its fixture data BEFORE invoking the component for that entry. Each entry MUST use fresh mock instances so fixture state does not bleed across entries. `mock_fixtures` applies to all test types including `human`. `mock_fixtures` MUST NOT configure LLM adapters — the LLM call MUST always be real (see [agentme-edr-030](030-ai-test-types-taxonomy.md) rule `03`). How mock adapters are discovered and instantiated is left to the project; see [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
+- Run every component invocation against **real LLM providers** (not mocked responses), to capture model drift.
+- For `human` entries: invoke the component to capture `actual_output`, export each entry's `input`, `expected_output.human_test` instructions, and `actual_output` into a manual-review checklist (`report-human.md`). MUST NOT invoke an automated scorer and MUST NOT enforce a pass/fail threshold for it. Other `test_types` on the same entry (e.g. `functional`) are still scored automatically.
+- After all entries are processed, compute aggregate metrics per test type, log them to a local MLflow experiment (see rule `04`), write one `report-<type>.md` per evaluated test type (rule `03`), and exit with a non-zero status when any metric falls below its defined threshold per [agentme-edr-007](../principles/007-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`. The `human` type has no threshold and does not trigger a non-zero exit.
 - Compare outputs to expected values using project-defined quality thresholds per test type. Thresholds MUST be declared explicitly (e.g., in a Makefile variable or README) — this Policy does not mandate which test types a project must threshold or what value to use (see [agentme-edr-030](030-ai-test-types-taxonomy.md) rule `06`).
-- Write one `report-<type>.md` per evaluated test type in the same folder per rule `03`.
-- Exit with a non-zero status when any metric falls below its defined threshold, consistent with [agentme-edr-007](../principles/007-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`. This does not apply to the `human` type, which has no automated threshold.
 
 **Example:**
 
 ```python
 import argparse
+from collections import defaultdict
 import mlflow
 from my_package.app.workflows.document_review_workflow.graph import graph
 
@@ -110,26 +110,38 @@ parser.add_argument("--type", required=True)
 args = parser.parse_args()
 
 entries = load_golden_dataset("golden_dataset/", test_type=args.type)  # "all" loads every entry
+resolved_types = resolve_types(args.type, entries)
 
-mlflow.set_experiment(f"document-review/eval-basic/{args.type}")
+mlflow.set_experiment("document-review/eval-basic")
 
 with mlflow.start_run():
-    for test_type in resolve_types(args.type, entries):
-        typed_entries = [e for e in entries if test_type in e["test_types"]]
-        results = []
-        for entry in typed_entries:
-            actual_output = get_or_invoke_once(entry, graph)  # invoke once, reuse across types
+    mlflow.set_tag("test_types", ",".join(sorted(resolved_types)))
+
+    results = defaultdict(list)
+
+    # Entry-first loop: invoke each entry exactly once
+    for entry in entries:
+        # Configure mock adapters from mock_fixtures before invocation
+        # (implementation left to the project — see agentme-edr-026 rule 10)
+        if entry.get("mock_fixtures"):
+            configure_mocks(entry["mock_fixtures"])  # project-defined helper
+
+        actual_output = invoke_component(entry, graph)
+
+        for test_type in [t for t in entry["test_types"] if t in resolved_types]:
             if test_type == "human":
                 export_human_review(entry, actual_output)
                 continue
-            results.append(score(test_type, actual_output, entry["expected_output"]))
+            results[test_type].append(score(test_type, actual_output, entry["expected_output"]))
 
+    # Aggregate, report, and enforce thresholds per test type
+    for test_type in resolved_types:
         if test_type == "human":
             continue
 
-        accuracy = sum(results) / len(results)
+        accuracy = sum(results[test_type]) / len(results[test_type])
         mlflow.log_metric(f"{test_type}_accuracy", accuracy)
-        write_eval_report(test_type, results, thresholds={"accuracy": EVAL_MIN_ACCURACY[test_type]})
+        write_eval_report(test_type, results[test_type], thresholds={"accuracy": EVAL_MIN_ACCURACY[test_type]})
 
         if accuracy < EVAL_MIN_ACCURACY[test_type]:
             raise SystemExit(f"Eval failed: {test_type} accuracy {accuracy:.2f} < {EVAL_MIN_ACCURACY[test_type]}")
@@ -220,7 +232,7 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
 ## Notes
 
 - Sample 005 misclassified: redlined IP clause not flagged as escalation trigger. Possible model drift.
-- MLflow run: experiment `workflow-document-review/eval-basic/functional` — view with `mlflow ui`
+- MLflow run: experiment `workflow-document-review/eval-basic`, tag `test_types=functional` — view with `mlflow ui`
 ```
 
 **`human` type artifact:** instead of `report-human.md` with metrics, `--type=human` produces a checklist artifact (still named `report-human.md`) listing, per entry, its `input`, `expected_output.human_test` instructions, and the captured `actual_output` — with no Overall Results table, threshold, or PASS/FAIL section, since this type is never auto-scored.
@@ -231,12 +243,13 @@ Each `evals/<component>/eval-<name>/Makefile` MUST start its MLflow tracking ser
 
 Ports MUST be statically assigned per eval scenario (not per test type) and MUST NOT reuse the default `5000` port (reserved for `dev-mlflow` per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`). Assign ports starting at `5100` and incrementing by 1 for each additional eval scenario across the entire project.
 
-The MLflow **experiment** (not the port) is scoped to the invoked `--type` value: `make eval-smoke` logs into an experiment containing only smoke-labeled runs (e.g. `<component>/<eval-name>/smoke`), while `make eval` (`--type=all`) logs into one experiment containing runs for every included test type (e.g. `<component>/<eval-name>/all`), each run tagged with its `test_type` since one entry can belong to more than one type.
+The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-name>` (e.g. `document-review/eval-basic`). Each `mlflow.start_run()` call MUST set a `test_types` tag listing the test types evaluated in that invocation (comma-separated, e.g. `"functional,smoke"` for `--type=all`, `"smoke"` for `--type=smoke`). A remote MLflow server MUST NOT be required — all tracking is local.
 
 ## References
 
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09-ai-project-testing-requirements`) and statistical model eval targets (rule `07-statistical-models-must-have-eval-targets`)
-- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope, and mocking constraints per type
+- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), and mocking constraints per type
+- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters used in `mock_fixtures`
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework and observability
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards
 - [agentme-edr-021](021-ai-workflow-development-standards.md) — Workflow development standards

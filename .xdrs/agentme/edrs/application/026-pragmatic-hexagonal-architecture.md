@@ -125,9 +125,37 @@ def test_create_order_persists_record():
     assert fake_db.find(order.id) is not None
 ```
 
-Inbound adapters (`cli/`, `http/`, `grpc/`) are entry points and do not need to be mocked — test the `app/` layer directly by injecting fakes for its outbound connectors.
+Inbound adapters (`cli/`, `http/`, `grpc/`) are entry points and do not need to be mocked — test the `app/` layer directly by injecting fakes for its outbound connectors. See rule `10` for the naming and placement convention for shared mock files.
+
+#### 10-mock-file-strategy
+
+When a mock implementation needs to be **reused across multiple tests or imported by an eval script** (e.g. `eval.py` using `mock_fixtures` from [agentme-edr-030](030-ai-test-types-taxonomy.md) rule `02`), define it in a dedicated `_mock` file rather than inline.
+
+**When to use a `_mock` file vs inline:**
+- Single-test use → define the mock inline inside the test file (per rule `09` example; no file needed)
+- Reusable across multiple tests OR used from `eval.py` → define in a separate `_mock` file
+
+**Scope:** applies to any source file in `adapters/connectors/`, `app/`, or `shared/`. MUST NOT be used for inbound adapters (`cli/`, `http/`, `grpc/`) — those are entry points and are never mocked (rule `09`).
+
+**Naming:** insert `_mock` immediately before the file extension:
+
+| Source file | Mock file |
+|---|---|
+| `client.py` | `client_mock.py` |
+| `order_service.ts` | `order_service_mock.ts` |
+| `user_store.go` | `user_store_mock_test.go` |
+
+**Placement:** follows the project's test file placement convention per [agentme-edr-004](../principles/004-unit-test-requirements.md) rule `04`:
+- Co-located test convention (TypeScript, Go) → mock file in the same directory as the source file
+- Separate test folder convention (Python) → mock file mirrors the source path under the test folder (e.g. `lib/src/<pkg>/adapters/connectors/user-db/client.py` → `lib/tests/<pkg>/adapters/connectors/user-db/client_mock.py`)
+
+**Mock contract:**
+- MUST accept a `fixtures` parameter (constructor argument or factory function argument); the value is whatever `mock_fixtures[key]` contains from the dataset entry — its internal structure is opaque and interpreted by the mock implementation
+- MUST NOT fall back to real external calls under any circumstance — if a call cannot be satisfied from the provided fixtures, MUST raise an explicit error (never silently return `null`, `undefined`, or an empty value)
 
 ## References
 
 - [agentme-edr-016](../principles/016-cross-language-module-structure.md) — Defines the module-root structure (Makefile, dist/, .cache/) that wraps this internal layout
 - [agentme-edr-002](../principles/002-coding-best-practices.md) — File size limits and code organization practices that complement this architecture
+- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Rule `04`: test file placement convention per language (governs `_mock` file placement in rule `10`)
+- [agentme-edr-030](030-ai-test-types-taxonomy.md) — Rule `02`: `mock_fixtures` golden dataset envelope that drives `_mock` usage in eval scripts
