@@ -1,6 +1,6 @@
 ---
 name: _core-adr-policy-015-local-scope-type
-description: Defines the `_local` scope type — reserved exclusively for the `_local` scope, which holds workspace-local decisions that must never be distributed or shared outside the current repository. Use when understanding what the `_local` scope type means.
+description: Defines the `_local` scope type — reserved exclusively for the `_local` scope, which holds workspace-local decisions that MUST NOT be distributed or shared outside the current repository. Use when understanding what the `_local` scope type means.
 apply-to: All XDRS workspace authors
 valid-from: 2026-07-01
 ---
@@ -13,7 +13,7 @@ Every XDRS workspace may need project-specific overrides or local decisions that
 
 ## Decision Outcome
 
-**Reserve `scope-type: _local` exclusively for the `_local` scope, which holds workspace-local decisions that must never leave the repository.**
+**Reserve `scope-type: _local` exclusively for the `_local` scope, which holds workspace-local decisions that MUST NEVER leave the repository.**
 
 ### Details
 
@@ -29,7 +29,7 @@ The `_local` scope holds project-specific decisions, local overrides, and worksp
 
 #### 03-exclusive-reservation
 
-The value `scope-type: _local` is reserved exclusively for the single scope named `_local`. No other scope may use this scope type.
+The value `scope-type: _local` is reserved exclusively for the single scope named `_local`. Other scopes MUST NOT use this scope type.
 
 #### 04-never-distributed
 

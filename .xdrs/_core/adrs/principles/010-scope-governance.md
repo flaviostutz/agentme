@@ -44,11 +44,11 @@ Note: this naming applies to the **policy name** only, not to any scope director
 A scope-type definition policy MUST define:
 
 - The scope type name (the value that instances declare in their `scope-type:` field).
-- When to use this scope type and what kinds of scopes should declare it.
+- When to use this scope type and what kinds of scopes SHOULD declare it.
 
 ##### 04-def-preferred-content
 
-A scope-type definition policy SHOULD preferably define:
+A scope-type definition policy SHOULD define:
 
 - Naming conventions for scope instances of this type.
 - What content SHOULD be placed in scopes of this type.
@@ -87,7 +87,7 @@ A scope-local standards policy MUST be placed in the `principles` subject of any
 
 ##### 11-local-optional
 
-Creating a scope-local standards policy is optional. It is recommended when a scope has specific structural, authoring, or content constraints that differ from `_core` defaults or the scope's declared scope-type standards.
+Creating a scope-local standards policy is optional. It SHOULD be created when a scope has specific structural, authoring, or content constraints that differ from `_core` defaults or the scope's declared scope-type standards.
 
 ##### 12-local-content
 

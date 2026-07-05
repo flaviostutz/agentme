@@ -36,7 +36,7 @@ Use `scope-type: core` when the scope's purpose is to hold meta governance conte
 
 #### 03-naming-convention
 
-A scope of type `core` MUST have "core" somewhere in its name (e.g., `_core`, `myarea-core`, `security-core`). The `-core` suffix is the recommended pattern. The built-in `_core` scope is the only exception to the suffix requirement.
+A scope of type `core` MUST have "core" somewhere in its name (e.g., `_core`, `myarea-core`, `security-core`). The `-core` suffix SHOULD be used as the naming pattern. The built-in `_core` scope is the only exception to the suffix requirement.
 
 #### 04-allowed-content
 
@@ -61,7 +61,7 @@ A scope that is governed by a `core` scope MUST declare this relationship explic
 
 #### 07-distribution
 
-A `core`-type scope MAY be distributed to consumers alongside the companion consumable scope, or kept internal to the team that maintains the domain. When distributed, consumers who extend or contribute to the domain scope locally MUST follow its standards. When not distributed, internal contributors must still comply.
+A `core`-type scope MAY be distributed to consumers alongside the companion consumable scope, or kept internal to the team that maintains the domain. When distributed, consumers who extend or contribute to the domain scope locally MUST follow its standards. When not distributed, internal contributors MUST still comply.
 
 ## References
 

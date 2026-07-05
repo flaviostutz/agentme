@@ -43,6 +43,7 @@ Performs a structured review of code changes or files against the Policies in th
    - **Drop any finding that cannot be traced to a specific rule in an Accepted Policy.** General good-practice observations, personal opinions, or inferred issues without an explicit Policy backing must not be reported.
    - Classify as ERROR (mandatory) or WARNING (advisory).
    - Include: location, description, Policy reference (file + line), suggestion.
+   - **Normative language check (Policy documents only):** For every Policy document in scope, verify that normative statements use uppercase BCP 14 keywords as required by `_core-adr-policy-001`. Flag as ERROR when a lowercase `must`, `must not`, `always`, or `never` is used in a normative requirement context (Details or Decision Outcome sections). Flag as WARNING when lowercase `should`, `should not`, `recommended`, `advised`, `may`, `possibly`, or `optionally` appear in a normative or permissive context where the uppercase form is expected. Context sections and question statements are exempt.
 2. Reduce false positives:
    - Evaluate ERROR findings for mandatory language in the Policy ("must", "always", "never", "required", "mandatory"). Drop or downgrade to WARNING if the language is advisory ("should", "recommended", "advised").
    - Remove findings unrelated to actual changes.

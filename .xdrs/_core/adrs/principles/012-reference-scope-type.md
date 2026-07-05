@@ -32,7 +32,7 @@ Use `scope-type: reference` when the scope contains:
 - Industry standards or compliance frameworks to be adopted or mapped against (e.g., ISO 27001, SOC2, PCI-DSS, GDPR, financial regulations, accounting standards).
 - Vendor best-practice patterns or recommended architectures.
 - Reference architectures or canonical system blueprints meant to be instantiated or adapted locally.
-- Business area procedure standards: how sales processes should be conducted, how customer data must be handled, how marketing communications must comply with applicable regulations.
+- Business area procedure standards: how sales processes SHOULD be conducted, how customer data MUST be handled, how marketing communications MUST comply with applicable regulations.
 - Operational compliance guidelines: finance controls, accounting procedures, public communication standards, customer data management rules.
 
 Do not use `scope-type: reference` for scopes that represent a live service, an active team, or a production system. Use `scope-type: platform` for those.
@@ -43,7 +43,7 @@ A scope of type `reference` MUST follow the naming pattern `{domain}-ref-{name}`
 
 #### 04-content-guidance
 
-Content in a `reference`-type scope describes how something should or could be done — whether that is building a system, running a business process, or complying with a regulation. It should not describe what is currently deployed or actively managed.
+Content in a `reference`-type scope describes how something could be done — whether that is building a system, running a business process, or complying with a regulation. It SHOULD NOT describe what is currently deployed or actively managed.
 
 Policies, decisions, and standards here are to be read, adopted, adapted, or mapped — not consumed directly as live service or operational documentation. Examples include:
 

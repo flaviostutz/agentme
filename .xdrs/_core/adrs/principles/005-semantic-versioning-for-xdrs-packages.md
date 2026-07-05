@@ -17,7 +17,7 @@ Question: How should semantic versioning be used when publishing or versioning a
 
 **semantic versioning aligned with decision impact**
 
-XDRS packages must use semantic versioning so the package version communicates the expected upgrade impact on consuming teams and projects.
+XDRS packages MUST use semantic versioning so the package version communicates the expected upgrade impact on consuming teams and projects.
 
 ### Details
 
@@ -29,7 +29,7 @@ XDRS packages must use semantic versioning so the package version communicates t
 **MAJOR**
 - Use a major bump for breaking changes.
 - Use a major bump when an existing Policy changes meaning in a way that can require consuming teams to revisit architecture, governance, operations, or implementation decisions.
-- Use a major bump when impactful concepts are introduced or changed in a way that materially alters how the package should be adopted or interpreted.
+- Use a major bump when impactful concepts are introduced or changed in a way that materially alters how the package SHOULD be adopted or interpreted.
 - Typical cases: removed or renamed Policies that affect references, changed mandatory rules, changed conflict/override behavior, or changed guidance that invalidates previously compliant usage.
 
 **MINOR**

@@ -23,25 +23,25 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 
 **Human-first writing**
 
-- The primary objective of an article is to make information available and accessible to humans. Good copywriting style, storytelling, clear organization, and clustering of related information are essential. Avoid repetitive content; each sentence should add new value.
+- The primary objective of an article is to make information available and accessible to humans. Good copywriting style, storytelling, clear organization, and clustering of related information are essential. Avoid repetitive content; each sentence SHOULD add new value.
 - Articles SHOULD stay under 2000 words (approximately a 10-minute read) to maximize reader engagement. When planning an article, keep it as small as possible. Break large subjects into separate chapters, each in its own article, so readers can consume and understand sections independently.
 - When a topic is broken into multiple articles, organize them as a **series**: each article MUST declare its position at the very top (e.g., `_This is article 2/4 of the "Engineering Practices" series._`) and MUST link to the previous and next articles in the series so readers can navigate the sequence without returning to an index.
-- Articles should be kept under 8000 words (hard limit). Move or point to detailed contents referenced in Policy decisions, researches, plans, or skills.
+- Articles MUST NOT exceed 8000 words (hard limit). Move or point to detailed contents referenced in Policy decisions, researches, plans, or skills.
 
 **Content and structure**
 
 - Articles are views, not decisions. They summarize and synthesize content from Policies, Research, and Skills but are NOT the source of truth. When there is a conflict between an article and a Policy, the Policy takes precedence.
-- Articles are not limited to synthesizing Policies. They may also document application features, APIs, general project information, reference tables, diagrams, FAQs and other elements useful to their intended audience.
-- Articles must reference the Policies, Research documents, and Skills they synthesize. Never duplicate decision content; link back to the authoritative sources.
-- Articles may serve as indexes, combining related artifacts on a specific topic into a single navigable document.
-- In more complex cases, an article may be an index of links to other articles, grouping related documentation into a single entry point that guides readers across a set of related topics.
-- When an article tells readers which decisions to follow, it SHOULD check `valid-from:` first to determine the convergence date, `apply-to:` second to determine context fit, and the decision text itself last. All documents present in the collection are considered active; articles must not present out-of-window or out-of-scope Policies as current rules for the discussed context.
-- Articles must remain consistent with the Policies, Research documents, and Skills they reference. When a referenced artifact changes, the article must be reviewed and updated.
+- Articles are not limited to synthesizing Policies. They MAY also document application features, APIs, general project information, reference tables, diagrams, FAQs and other elements useful to their intended audience.
+- Articles MUST reference the Policies, Research documents, and Skills they synthesize. MUST NOT duplicate decision content; link back to the authoritative sources.
+- Articles MAY serve as indexes, combining related artifacts on a specific topic into a single navigable document.
+- In more complex cases, an article MAY be an index of links to other articles, grouping related documentation into a single entry point that guides readers across a set of related topics.
+- When an article tells readers which decisions to follow, it SHOULD check `valid-from:` first to determine the convergence date, `apply-to:` second to determine context fit, and the decision text itself last. All documents present in the collection are considered active; articles MUST NOT present out-of-window or out-of-scope Policies as current rules for the discussed context.
+- Articles MUST remain consistent with the Policies, Research documents, and Skills they reference. When a referenced artifact changes, the article MUST be reviewed and updated.
 - Place an article in the subject folder that best matches its topic using the required list of subjects per type defined in `_core-adr-policy-001`. If an article spans more than one subject, place it in `principles`.
 - For simple structure, flow, layout, or relationship indications, articles SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
 - Any non-Markdown files referenced by an article SHOULD be used only when they are materially necessary and MUST live in `articles/.assets/` next to the article files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
-- Always use lowercase file names.
-- Never use emojis in article content.
+- File names MUST be lowercase.
+- MUST NOT use emojis in article content.
 
 **Folder layout**
 
@@ -64,7 +64,7 @@ Examples:
 
 - Each article has a number unique within its `scope/type/subject/articles/` namespace.
 - Determine the next number by checking the highest number already present in that namespace.
-- Never reuse numbers of deleted articles. Gaps in the sequence are expected and allowed.
+- MUST NOT reuse numbers of deleted articles. Gaps in the sequence are expected and allowed.
 
 **Article template**
 

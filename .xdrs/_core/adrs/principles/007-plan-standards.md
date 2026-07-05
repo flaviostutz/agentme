@@ -24,15 +24,15 @@ Plans are Markdown documents placed inside a subject folder alongside policies. 
 - Plans describe a problem (why), what we will do to solve the problem, and the approach and activities needed to solve it (how).
 - Plans are NOT the source of truth. When a plan and a Policy disagree, the Policy takes precedence.
 - Plans are ephemeral. They MUST be deleted after full implementation. The lasting outputs of a plan are actual actions or Decisions, Skills, Articles, Research documents, and other artifacts that result from execution.
-- Plans may be used to implement a certain Decision. They may also use Research documents to help with the planning process. Articles may be written on top of a plan to give more context and connect more details present in other decisions and research to people involved in the plan.
-- During the implementation of a plan, new Decisions, Articles, Skills, Research documents, and even other Plans may be created. Always link all related elements to each other.
-- A plan can be high level, describing only one milestone, or more complex, describing a WBS (work breakdown structure) along with owners, multiple milestones in a tactical sequence, and checklists to verify completeness. Actual tasks performed by actors should normally be tracked in specialized software such as GitHub or Azure DevOps.
-- The total time to deliver a plan should not be more than 2 years. If more time is needed, create a new plan later with what was learned.
+- Plans MAY be used to implement a certain Decision. They MAY also use Research documents to help with the planning process. Articles MAY be written on top of a plan to give more context and connect more details present in other decisions and research to people involved in the plan.
+- During the implementation of a plan, new Decisions, Articles, Skills, Research documents, and even other Plans MAY be created. All related elements MUST be linked to each other.
+- A plan can be high level, describing only one milestone, or more complex, describing a WBS (work breakdown structure) along with owners, multiple milestones in a tactical sequence, and checklists to verify completeness. Actual tasks performed by actors SHOULD be tracked in specialized software such as GitHub or Azure DevOps.
+- The total time to deliver a plan SHOULD NOT be more than 2 years. If more time is needed, create a new plan later with what was learned.
 - Plans MUST live under `plans/` inside the relevant subject folder: `.xdrs/[scope]/[type]/[subject]/plans/[number]-[short-title].md`
 - The `[subject]` component MUST be one of the allowed subjects for the chosen type. The required list of allowed subjects per type is defined in `_core-adr-policy-001`.
 - Plans MUST include an `Expected end date:` field in ISO format (YYYY-MM-DD) inside the `## Proposed Solution` section.
-- Always use lowercase file names.
-- Never use emojis in plan content.
+- File names MUST be lowercase.
+- MUST NOT use emojis in plan content.
 - Any non-Markdown files referenced by a plan SHOULD be used only when they are materially necessary and MUST live in `plans/.assets/` next to the plan files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
 
 **Folder layout**
@@ -55,7 +55,7 @@ Examples:
 
 - Each plan has a number unique within its `scope/type/subject/plans/` namespace.
 - Determine the next number by checking the highest number already present in that namespace.
-- Never reuse numbers of deleted plans. Gaps in the sequence are expected and allowed.
+- MUST NOT reuse numbers of deleted plans. Gaps in the sequence are expected and allowed.
 
 **Plan template**
 

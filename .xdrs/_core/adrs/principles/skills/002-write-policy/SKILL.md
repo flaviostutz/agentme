@@ -153,6 +153,7 @@ Check every item before finalizing:
 
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
 2. **Frontmatter**: Are `apply-to:` and `valid-from:` both present? `apply-to:` must describe the applicable context (use `All scopes` when broadly applicable). `valid-from:` must be set (use today's date if the user did not specify one).
+3. **Normative language**: Does every normative requirement in the Details and Decision Outcome sections use uppercase BCP 14 keywords per `_core-adr-policy-001`? Replace any lowercase `must`/`should`/`may` that express requirements, prohibitions, or permissions with MUST/MUST NOT, SHOULD/SHOULD NOT, or MAY/OPTIONAL respectively. Lowercase forms are only acceptable in Context sections, question statements, or when used with their ordinary English meaning.
 3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
 4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
 5. **Redundancy**: Is the Policy the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?
