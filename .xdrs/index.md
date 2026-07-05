@@ -15,6 +15,14 @@ Decisions about how XDRs work
 
 ---
 
+### agentme-core
+
+Meta-governance for the agentme scope (writing standards, content conventions, authoring guidance). Not distributed to consumers.
+
+[View scope agentme-core](agentme-core/index.md)
+
+---
+
 ### agentme
 
 Opiniated set of decisions and skills for common development tasks
