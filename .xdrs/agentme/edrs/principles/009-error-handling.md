@@ -21,9 +21,7 @@ What error handling practices should be followed across all languages and projec
 
 #### 01-catch-only-where-handled
 
-Never catch an exception unless the catching site can genuinely recover from it, translate it into a meaningful domain error, or enrich it with context before re-throwing. Do **not** swallow exceptions silently. When suppressing an exception is intentional, always add a comment explaining exactly why, or log it at an appropriate level.
-
-*Why:* Swallowed exceptions hide bugs and make incidents impossible to diagnose. Every silent `catch` is a future mystery.
+MUST NOT catch an exception unless the catching site can genuinely recover from it, translate it into a meaningful domain error, or enrich it with context before re-throwing. MUST NOT swallow exceptions silently. When suppressing an exception is intentional, MUST add a comment explaining exactly why, or log it at an appropriate level.
 
 **Examples:**
 
@@ -77,9 +75,7 @@ except CacheError:
 
 #### 02-avoid-exceptions-in-public-interfaces
 
-At module and service boundaries, prefer returning a value that signals success or failure (e.g., a result type, a discriminated union, or a `(value, error)` tuple as in Go) over throwing exceptions. This forces callers to explicitly acknowledge and handle the error case before using the result.
-
-*Why:* Exceptions are invisible in signatures. A caller who doesn't know an exception can be thrown will never write a handler. Explicit error return values make the contract visible and encourage handling at the call site.
+At module and service boundaries, SHOULD prefer returning a value that signals success or failure (e.g., a result type, a discriminated union, or a `(value, error)` tuple as in Go) over throwing exceptions. This forces callers to explicitly acknowledge and handle the error case before using the result.
 
 **Examples:**
 
@@ -161,9 +157,7 @@ def fetch_user(user_id: str) -> Ok[User] | Err:
 
 #### 03-centralise-repetitive-catch-logic
 
-If the same `try/catch` pattern (e.g., logging, classifying HTTP errors, wrapping exceptions) appears in multiple places, extract it into a shared utility. Do not copy-paste catch blocks across the codebase.
-
-*Why:* Scattered catch blocks drift out of sync — one gets updated, the others don't. A central utility is tested once and applied everywhere consistently.
+If the same `try/catch` pattern (e.g., logging, classifying HTTP errors, wrapping exceptions) appears in multiple places, MUST be extracted into a shared utility. MUST NOT copy-paste catch blocks across the codebase.
 
 **Examples:**
 
@@ -213,13 +207,11 @@ def save_order(order: Order): ...
 
 #### 04-communicate-failure-at-boundaries
 
-Every system boundary must signal failure explicitly:
+Every system boundary MUST signal failure explicitly:
 
-- **OS processes** must exit with a **non-zero exit code** when something went wrong. Exit code `0` means success.
-- **HTTP services** must return a **non-2xx/3xx status code** on error, accompanied by a response body that describes the problem without exposing internal system details (stack traces, SQL queries, internal paths, etc.).
-- **All error responses** should be logged to the console/structured logger, especially system-level or unexpected errors. Operational teams must be able to find the cause from logs alone.
-
-*Why:* Orchestrators, CI runners, load balancers, and callers all rely on these signals to detect failures automatically. A process or service that reports success on failure leads to silent data corruption and missed alerts.
+- **OS processes** MUST exit with a **non-zero exit code** when something went wrong. Exit code `0` means success.
+- **HTTP services** MUST return a **non-2xx/3xx status code** on error, accompanied by a response body that describes the problem without exposing internal system details (stack traces, SQL queries, internal paths, etc.).
+- **All error responses** SHOULD be logged to the console/structured logger, especially system-level or unexpected errors. Operational teams must be able to find the cause from logs alone.
 
 **Examples:**
 
@@ -276,11 +268,9 @@ def create_order_endpoint(payload: OrderRequest):
 
 #### 05-write-test-cases-for-error-scenarios
 
-Every module that handles errors must have dedicated test cases that verify the error paths. Do not only test the happy path.
+Every module that handles errors MUST have dedicated test cases that verify the error paths. Do not only test the happy path.
 
-*Why:* Error handling code is the code most likely to be broken and the code least likely to be exercised in manual testing. Without automated tests, regressions in error paths go undetected until production.
-
-Typical error scenarios to cover:
+**Mocking strategy:** External dependencies (databases, HTTP services, file systems) MUST be mocked in error-path unit tests. Simulate failure by configuring the mock to throw or return an error value — do not rely on a real dependency being unavailable.
 
 - The dependency (DB, HTTP service, file system) is unavailable or times out.
 - The input is invalid, missing, or out of range.

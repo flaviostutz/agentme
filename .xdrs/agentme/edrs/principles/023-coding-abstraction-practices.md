@@ -21,9 +21,7 @@ What principles should guide the decision to introduce — or reject — an abst
 
 #### 01-prioritize-functional-programming
 
-Prefer functional programming: pure functions with clear input → processing → output flow. Object-oriented patterns (classes, inheritance) are allowed **only** when there is a clear benefit from the additional abstraction they bring — e.g., when complex context management or true inheritance hierarchies are intrinsically part of the best solution for a problem.
-
-*Why:* Functional units are simpler to reason about, test, and compose. OO introduces shared mutable state and implicit coupling that must earn its place.
+Prefer functional programming: pure functions with clear input → processing → output flow. Object-oriented patterns (classes, inheritance) MAY only be used when there is a clear benefit from the additional abstraction they bring — e.g., when complex context management or true inheritance hierarchies are intrinsically part of the best solution for a problem.
 
 ---
 
@@ -43,7 +41,7 @@ These patterns obfuscate the main program flow and create behavioral indirection
 
 #### 03-trivial-wrappers-are-prohibited
 
-A function that merely delegates to another function or API call without adding meaningful logic, domain intent, or readability **must be inlined**. A wrapper is justified only when it:
+A function that merely delegates to another function or API call without adding meaningful logic, domain intent, or readability **MUST be inlined**. A wrapper is justified only when it:
 
 - Encapsulates non-trivial logic (validation, retry, transformation).
 - Communicates a domain concept the underlying expression does not convey.
@@ -76,7 +74,7 @@ A function that constructs an object (e.g., configuration, options) is only just
 - Combines data in a non-linear or conditional way.
 - Is reused by multiple callers.
 
-A function that restructures simple static data in an almost 1-to-1 mapping forces the reader to trace indirection for no benefit and must be inlined.
+A function that restructures simple static data in an almost 1-to-1 mapping forces the reader to trace indirection for no benefit and MUST be inlined.
 
 **Bad — trivial factory:**
 

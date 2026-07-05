@@ -21,11 +21,9 @@ What coding practices should be followed across all languages and projects to ke
 
 #### 01-keep-files-short
 
-A file must not exceed **400 lines**. When a file grows beyond this limit, split related functions or types into separate, focused modules.
+A file MUST NOT exceed **400 lines**. When a file grows beyond this limit, split related functions or types into separate, focused modules.
 
 One exception are test files, which normally are bigger than the tested resources.
-
-*Why:* Large files make navigation slow, increase merge conflicts, and obscure the single-responsibility principle.
 
 **Example (TypeScript):**
 
@@ -49,8 +47,6 @@ src/
 #### 02-apply-template-method-pattern
 
 When a function's main logic contains well-defined sections and **any individual section exceeds ~20 lines**, extract each section into its own named function. The outer function becomes an orchestrator that calls the extracted helpers in sequence.
-
-*Why:* Named sub-functions serve as inline documentation, are independently testable, and reduce cognitive load.
 
 **Example (Python):**
 
@@ -85,9 +81,7 @@ def _persist_order(order, total): ...
 
 #### 03-put-entry-point-function-first
 
-Place the **entry-point function** (the outermost caller) at the **top** of the file. All helper or sub-functions it calls internally must appear **below** it.
-
-*Why:* Readers can follow the overall logic top-down without jumping around the file. The most important function is immediately visible when the file is opened.
+Place the **entry-point function** (the outermost caller) at the **top** of the file. All helper or sub-functions it calls internally MUST appear **below** it.
 
 **Example (Python):**
 
@@ -106,21 +100,17 @@ def _persist_order(order, total): ...
 
 #### 04-keep-readme-tests-and-examples-in-sync
 
-Every change to a public interface, behavior, or configuration option must be reflected in:
+Every change to a public interface, behavior, or configuration option MUST be reflected in:
 
 - `README.md` — update usage examples, option tables, and feature descriptions.
 - Unit/integration tests — update or add tests that cover the changed behavior.
 - `examples/` resources — update runnable examples so they continue to work.
-
-*Why:* Stale documentation and broken examples erode trust and waste time for consumers of the code.
 
 ---
 
 #### 05-declare-types-in-file-where-used
 
 If a type (struct, interface, class, typedef, etc.) is used in only **one** file, declare it in that same file. Move a type to a shared module only when it is referenced in two or more files.
-
-*Why:* Co-locating a type with its sole consumer removes the need to navigate to a separate types file and makes the type's purpose immediately obvious from context.
 
 ---
 

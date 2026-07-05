@@ -57,8 +57,6 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 - **MUST** contain a `README.md` with: purpose, architecture overview, how to build, and how to run.
 - **MAY** contain `examples/`, `tests_integration/`, and `tests_benchmark/` when those artifacts apply to multiple modules inside the application.
 
-*Why:* Isolating applications prevents implicit coupling and makes the `shared/` boundary explicit and intentional.
-
 #### 03-module-folders
 
 - A module is a subfolder inside an application that is independently compilable and produces a build artifact.
@@ -87,8 +85,6 @@ Module Makefiles **SHOULD** also provide `lint-fix` and `install` when the under
 The root `Makefile` **MUST** also define a `setup` target that guides a new contributor to prepare their machine.
 The root `setup` target **MUST** run `mise install` and any small repository bootstrap required before routine targets work.
 
-*Why:* Makefiles provide a universal, stack-agnostic entry point regardless of programming language.
-
 #### 06-mise-for-tooling-management
 
 - [Mise](https://mise.jdx.dev/) **MUST** be used to pin all tool versions (compilers, runtimes, CLI tools).
@@ -99,8 +95,6 @@ The root `setup` target **MUST** run `mise install` and any small repository boo
 - When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run through `make <target>`, and the Makefile recipes **MUST** execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
 - If a required tool is missing, the first remediation step **MUST** be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
 - Root and module `Makefile` targets **MUST** work when invoked as plain `make <target>` after `make setup`.
-
-*Why:* Eliminates "works on my machine" build failures by ensuring identical tool versions across all environments.
 
 #### 07-root-readme
 
@@ -115,8 +109,6 @@ The repository root **MUST** ignore `dist/` and `.cache/` so module artifacts an
 All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g., `graphvisualizer/renderer/1.0.0`, `shared/libs/mylib/2.1.0`).
 
 `<module-name>` is preferably the path-like identifier of the module being released. A custom name is allowed but the folder name is strongly preferred.
-
-*Why:* Namespacing tags by module prevents collisions and makes it easy to filter release history when multiple modules release independently.
 
 ---
 

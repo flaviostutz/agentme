@@ -70,6 +70,28 @@ All services must expose a `GET /health` endpoint that validates external depend
 - Monitoring: periodic polling with alerts on `210` and `503` responses
 - CI/CD: poll `/health` to confirm deployment success
 
+**Unit testing and mocking strategy:** Each dependency checker MUST be injectable so unit tests can simulate `OK`, `WARNING`, and `ERROR` states independently without a real database or API. Integration tests MUST NOT mock dependency checkers — they must run against real dependencies to verify the wiring.
+
+```typescript
+// Good — injectable checkers; unit test controls each state
+function buildHealthHandler(checkers: DependencyChecker[]) {
+  return async () => {
+    const results = await Promise.all(checkers.map(c => c.check()));
+    const status = results.some(r => r.status === "ERROR") ? "ERROR"
+      : results.some(r => r.status === "WARNING") ? "WARNING" : "OK";
+    return { health: status };
+  };
+}
+
+it("returns ERROR when the database checker fails", async () => {
+  const handler = buildHealthHandler([
+    { check: async () => ({ name: "db", status: "ERROR" }) },
+  ]);
+  const response = await handler();
+  expect(response.health).toBe("ERROR");
+});
+```
+
 ## Considered Options
 
 * (REJECTED) **No health checks** — detect failures through request errors

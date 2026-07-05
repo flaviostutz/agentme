@@ -142,6 +142,24 @@ Prefer fetching the secret inside the function that directly needs it rather tha
 
 Passing secrets via function arguments is acceptable when the consuming function cannot access the connector directly, but the default design should fetch at the point of use.
 
+#### 09-unit-testing-and-mocking-strategy
+
+Code that calls the secret connector MUST accept it as an injectable parameter. Unit tests MUST inject a fake connector that returns a pre-configured value without touching the OS keychain or any cloud secret manager.
+
+```python
+# Good — injectable connector; unit test provides a fake
+class MyService:
+    def __init__(self, secrets: SecretConnector):
+        self.api_key = secrets.get("api-key")
+
+def test_service_uses_api_key():
+    fake = FakeSecretConnector({"api-key": "test-key-123"})
+    svc = MyService(secrets=fake)
+    assert svc.api_key == "test-key-123"
+```
+
+Integration tests MAY use the real keychain on developer machines or CI after `make setup-secrets` has been run.
+
 ## References
 
 - [agentme-edr-008](../devops/008-common-targets.md) - Common development script names (defines Makefile target conventions)
