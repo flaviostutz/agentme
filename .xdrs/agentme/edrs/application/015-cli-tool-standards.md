@@ -23,21 +23,21 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 #### CLI command surface
 
-- CLI tools should default to the format `[tool] [command] [options] [arguments]`.
+- CLI tools SHOULD default to the format `[tool] [command] [options] [arguments]`.
 - Example: `filedist extract --packages=test mydir`
-- A single-action tool may omit `[command]` only when adding a subcommand would be artificial and there is no meaningful action split.
-- Every CLI tool must expose:
+- A single-action tool MAY omit `[command]` only when adding a subcommand would be artificial and there is no meaningful action split.
+- Every CLI tool MUST expose:
   - `--help` on the root command
   - `--version` on the root command
   - `--verbose` on the root command and on subcommands when flags are parsed per command
-- Root `--help` output must list all available commands, key options, and usage examples. Command-specific help must describe that command's arguments and options.
+- Root `--help` output MUST list all available commands, key options, and usage examples. Command-specific help MUST describe that command's arguments and options.
 
 #### CLI to application separation
 
 - Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md).
-- The CLI layer must only parse arguments, load config, call the application layer, and format output.
-- Domain logic must live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
-- Every feature available through the CLI must also be available through the application API.
+- The CLI layer MUST only parse arguments, load config, call the application layer, and format output.
+- Domain logic MUST live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
+- Every feature available through the CLI MUST also be available through the application API.
 - Organize the application layer by action so the mapping stays direct and obvious.
   - `extract` command -> `app/extract(...)`
   - `validate` command -> `app/validate(...)`
@@ -45,49 +45,49 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 #### Application API shape
 
-- Each CLI action should map to a dedicated exported application function with typed inputs and outputs appropriate for the language.
-- Application APIs should accept in-memory options objects or typed parameters, not require config files or environment variables unless application-level config-file support is an explicit requirement.
+- Each CLI action SHOULD map to a dedicated exported application function with typed inputs and outputs appropriate for the language.
+- Application APIs SHOULD accept in-memory options objects or typed parameters, not require config files or environment variables unless application-level config-file support is an explicit requirement.
 - The CLI layer is responsible for translating flags, positional arguments, and config-file contents into application inputs.
-- The application layer should return explicit results and errors so the CLI can decide what to print and which exit code to use.
+- The application layer SHOULD return explicit results and errors so the CLI can decide what to print and which exit code to use.
 
 #### Configuration
 
 - Prefer flags and positional arguments for simple inputs.
 - When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-027](../devops/027-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
-- By default, config-file discovery and loading must happen in the CLI layer, not in the application layer.
-- When a config file is supported, the CLI must try to load a YAML file from `[cwd]/[tool-name].yml` by default.
-- The CLI must also support an explicit config path flag such as `--config`.
-- The application layer must not depend on the presence of the config file; it should receive parsed configuration values from the CLI layer.
-- The application layer may load or parse config files only when that behavior is an explicit requirement of the application contract for non-CLI consumers as well.
+- By default, config-file discovery and loading MUST happen in the CLI layer, not in the application layer.
+- When a config file is supported, the CLI MUST try to load a YAML file from `[cwd]/[tool-name].yml` by default.
+- The CLI MUST also support an explicit config path flag such as `--config`.
+- The application layer MUST NOT depend on the presence of the config file; it SHOULD receive parsed configuration values from the CLI layer.
+- The application layer MAY load or parse config files only when that behavior is an explicit requirement of the application contract for non-CLI consumers as well.
 
 #### Output and progress
 
-- Standard output must show a start message when work begins and a result message when work completes successfully.
+- Standard output MUST show a start message when work begins and a result message when work completes successfully.
 - When processing is long-running or multi-stage, print concise intermediate progress messages.
-- `--verbose` must reveal more internal detail about what the tool is doing without changing the meaning of the command result.
-- Default output should stay concise and readable for humans.
-- Errors should be written to standard error with an actionable message. Stack traces or raw internal errors should stay hidden by default and may be shown in verbose mode.
+- `--verbose` MUST reveal more internal detail about what the tool is doing without changing the meaning of the command result.
+- Default output SHOULD stay concise and readable for humans.
+- Errors SHOULD be written to standard error with an actionable message. Stack traces or raw internal errors SHOULD stay hidden by default and MAY be shown in verbose mode.
 
 #### Exit behavior
 
 - Exit with `0` only when the requested action completed successfully.
 - Exit with `1` when the requested action could not be completed.
-- The application layer should surface failure as return values, result objects, or language-idiomatic errors; the CLI is responsible for converting that outcome into user-facing messages and process exit codes.
+- The application layer SHOULD surface failure as return values, result objects, or language-idiomatic errors; the CLI is responsible for converting that outcome into user-facing messages and process exit codes.
 
 #### Documentation
 
-- `README.md` must include at least 4 CLI usage examples.
-- `README.md` must include at least 2 application API examples for the same operation also available through the CLI.
-- If the tool supports config files, at least 1 README example should show config-file usage.
-- Examples must use the public command and public application API, not internal modules or private files.
+- `README.md` MUST include at least 4 CLI usage examples.
+- `README.md` MUST include at least 2 application API examples for the same operation also available through the CLI.
+- If the tool supports config files, at least 1 README example SHOULD show config-file usage.
+- Examples MUST use the public command and public application API, not internal modules or private files.
 
 #### Distribution and versioning
 
-- The implementation language is project-dependent, but the packaging and entry-point strategy must match how users are expected to run the tool.
+- The implementation language is project-dependent, but the packaging and entry-point strategy MUST match how users are expected to run the tool.
 - Choose language tooling that stays compatible with ecosystem launchers such as `npx`, `pnpm dlx`, `uvx`, or equivalent distribution commands for that ecosystem.
-- `--version` must print the same version declared in the published package or release artifact metadata.
+- `--version` MUST print the same version declared in the published package or release artifact metadata.
 - Do not hard-code a second version string that can drift from the published package version.
-- Language-specific project structure and packaging rules still apply and should be combined with this XDR, especially [agentme-edr-003](003-javascript-project-tooling.md), [agentme-edr-010](010-golang-project-tooling.md), and [agentme-edr-014](014-python-project-tooling.md).
+- Language-specific project structure and packaging rules still apply and SHOULD be combined with this XDR, especially [agentme-edr-003](003-javascript-project-tooling.md), [agentme-edr-010](010-golang-project-tooling.md), and [agentme-edr-014](014-python-project-tooling.md).
 
 ## Considered Options
 

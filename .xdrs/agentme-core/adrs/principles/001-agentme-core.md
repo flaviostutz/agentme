@@ -15,7 +15,7 @@ What is the `agentme` scope's identity, who does it serve, and how must content 
 
 ## Decision Outcome
 
-**The `agentme` scope targets the software development phase of codebases in any language, and its primary consumers are AI coding agents and automated PR review bots. All content must be pragmatic, example-driven, and structured to cover design, implementation, and testing in coherent, immediately actionable guidance.**
+**The `agentme` scope targets the software development phase of codebases in any language, and its primary consumers are AI coding agents, automated PR review bots, and development teams. All content must be pragmatic, immediately actionable, and structured to cover design, implementation, testing, or development team governance in coherent guidance.**
 
 ### Details
 
@@ -40,8 +40,9 @@ Content in `agentme` MUST address at least one of the following development-phas
 - Design: structure, architecture, module boundaries, abstraction levels.
 - Implementation: concrete coding patterns, idioms, tool usage, naming, error handling.
 - Testing: unit testing, integration testing, AI-specific evals, test structure, coverage requirements.
+- Development team governance: practices that govern how development teams work during the development phase — contribution workflows, code-review standards, XDR enrichment processes, team-wide quality agreements.
 
-Content that addresses only documentation, deployment, or organizational process does not belong in `agentme` unless it directly enables the development phase (e.g., a CI/CD standard that enforces test gates belongs; a personnel policy does not).
+Content that addresses only deployment infrastructure, HR, or organizational process unrelated to the development phase does not belong in `agentme` (e.g., a CI/CD standard that enforces test gates belongs; a personnel policy does not).
 
 #### 04-pragmatic-approach
 
@@ -58,7 +59,7 @@ Do not add examples for rules that are already self-explanatory from their prose
 
 A policy that introduces a design pattern (e.g., hexagonal architecture, agent composition) MUST also state how that pattern is implemented and tested. It is not sufficient to define the structure without also stating the testing strategy. Likewise, a testing policy MUST reference the implementation conventions it validates.
 
-Every policy that involves testable behavior MUST define the mocking strategy: whether tests for that concern MUST use mocks, MUST NOT use mocks, or MAY choose — and the reason for that choice. Only leave the mock strategy open if not applicable or the actual implementation strategy is still unknown for the specific case.
+When a policy introduces testable behavior whose mocking requirements are not already covered by an existing `agentme` policy, it SHOULD define or reference the applicable mocking strategy. When a canonical mock strategy policy already covers the concern, the policy MUST link to it and cite the specific rule rather than restating the strategy inline.
 
 When a single document would become too long, a policy MAY delegate to a linked policy or skill for one of the three concerns, but the linking document MUST explicitly point to the delegate and explain the relationship.
 

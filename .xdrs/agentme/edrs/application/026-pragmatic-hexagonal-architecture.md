@@ -56,6 +56,14 @@ Every application is conceptually divided into three layers:
 - Group related logic into subfolders (aggregation roots)
 - Environment variables must be read only in the bootstrap/entry-point layer of inbound adapters, converted into typed configuration objects, and passed explicitly to all other components
 
+- Data flow examples
+
+```text
+HTTP request  →  adapters/http/     →  app/create-user     →  adapters/connectors/postgres/
+CLI command   →  adapters/cli/      →  app/create-dir      →  adapters/connectors/local-fs/
+Kafka message →  adapters/kafka/    →  app/process-event   →  adapters/connectors/stripe-api/
+```
+
 #### 04-mandatory-folder-structure
 
 ```text
@@ -98,13 +106,26 @@ mysystem/
 - Trivial scripts and single-purpose tools (fewer than ~300 lines with a single I/O boundary) MAY skip this layering
 - All other projects MUST use this structure from the start
 
-#### 08-examples-of-data-flow
+#### 09-unit-testing-and-mocking-strategy
 
-```text
-HTTP request  →  adapters/http/     →  app/create-user     →  adapters/connectors/postgres/
-CLI command   →  adapters/cli/      →  app/create-dir      →  adapters/connectors/local-fs/
-Kafka message →  adapters/kafka/    →  app/process-event   →  adapters/connectors/stripe-api/
+Unit tests for the `app/` layer MUST mock outbound adapter/connector interfaces at the `app/` → `adapters/connectors/` boundary. Inject connectors as constructor parameters or function arguments so tests can substitute them without touching real databases, HTTP APIs, or external services.
+
+The connector implementations themselves SHOULD have their own unit tests that mock the underlying SDK or HTTP client.
+
+```python
+# Good — inject connector; unit test mocks it
+class OrderService:
+    def __init__(self, db: OrderRepository):
+        self.db = db
+
+def test_create_order_persists_record():
+    fake_db = FakeOrderRepository()
+    service = OrderService(db=fake_db)
+    order = service.create({"item": "widget", "qty": 2})
+    assert fake_db.find(order.id) is not None
 ```
+
+Inbound adapters (`cli/`, `http/`, `grpc/`) are entry points and do not need to be mocked — test the `app/` layer directly by injecting fakes for its outbound connectors.
 
 ## References
 
