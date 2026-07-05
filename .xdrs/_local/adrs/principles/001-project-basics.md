@@ -23,7 +23,7 @@ agentme ships two kinds of artifacts: XDRs (ADR/BDR/EDR) that capture best pract
 
 - XDRs cover best practices for coding: architectural decisions, engineering workflows, and tooling choices relevant to AI-assisted software development.
 - Skills package reusable step-by-step procedures that AI coding agents can load and execute.
-- Both artifacts must be self-contained, unambiguous, and immediately usable without additional context.
+- Both artifacts MUST be self-contained, unambiguous, and immediately usable without additional context.
 
 **Consistency requirements**
 
@@ -36,7 +36,7 @@ Because agentme XDRs and skills are used as a source of truth by other projects,
 
 **Consumer integration**
 
-Projects that import agentme XDRs must add the `agentme` scope to their `.xdrs/index.md` above `_local`, so local overrides remain in effect.
+Projects that import agentme XDRs MUST add the `agentme` scope to their `.xdrs/index.md` above `_local`, so local overrides remain in effect.
 
 ## References
 

@@ -15,7 +15,7 @@ What is the `agentme` scope's identity, who does it serve, and how must content 
 
 ## Decision Outcome
 
-**The `agentme` scope targets the software development phase of codebases in any language, and its primary consumers are AI coding agents, automated PR review bots, and development teams. All content must be pragmatic, immediately actionable, and structured to cover design, implementation, testing, or development team governance in coherent guidance.**
+**The `agentme` scope targets the software development phase of codebases in any language, and its primary consumers are AI coding agents, automated PR review bots, and development teams. All content MUST be pragmatic, immediately actionable, and structured to cover design, implementation, testing, or development team governance in coherent guidance.**
 
 ### Details
 

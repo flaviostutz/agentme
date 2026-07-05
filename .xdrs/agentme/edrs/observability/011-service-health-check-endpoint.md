@@ -17,7 +17,7 @@ How should services expose their health status and validate operational readines
 
 **Standardized `/health` endpoint with dependency validation**
 
-All services must expose a `GET /health` endpoint that validates external dependencies using read-only operations and returns structured status with appropriate HTTP codes.
+All services **MUST** expose a `GET /health` endpoint that validates external dependencies using read-only operations and returns structured status with appropriate HTTP codes.
 
 ### Details
 
@@ -45,12 +45,12 @@ All services must expose a `GET /health` endpoint that validates external depend
 
 - `health` (required): overall state — `OK`, `WARNING`, or `ERROR`
 - `latencyMs` (required): total milliseconds to run all checks
-- `message` (required): human-readable summary; must never expose credentials, internal IPs, or stack traces
+- `message` (required): human-readable summary; **MUST NEVER** expose credentials, internal IPs, or stack traces
 
 **Dependency validation rules:**
 
 - Check all external dependencies (databases, downstream APIs, queues, caches) using read-only operations (e.g., `SELECT 1`, lightweight GET, connection ping)
-- Never execute write operations or create side effects
+- **MUST NOT** execute write operations or create side effects
 - `OK`: all dependencies healthy within expected thresholds
 - `WARNING`: non-critical dependency degraded, or elevated but acceptable response times
 - `ERROR`: critical dependency unavailable or service unable to process requests
@@ -70,7 +70,7 @@ All services must expose a `GET /health` endpoint that validates external depend
 - Monitoring: periodic polling with alerts on `210` and `503` responses
 - CI/CD: poll `/health` to confirm deployment success
 
-**Unit testing and mocking strategy:** Each dependency checker MUST be injectable so unit tests can simulate `OK`, `WARNING`, and `ERROR` states independently without a real database or API. Integration tests MUST NOT mock dependency checkers — they must run against real dependencies to verify the wiring.
+**Unit testing and mocking strategy:** Each dependency checker MUST be injectable so unit tests can simulate `OK`, `WARNING`, and `ERROR` states independently without a real database or API. Integration tests MUST NOT mock dependency checkers — they MUST run against real dependencies to verify the wiring.
 
 ```typescript
 // Good — injectable checkers; unit test controls each state

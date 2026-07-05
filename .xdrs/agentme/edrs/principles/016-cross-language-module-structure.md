@@ -17,7 +17,7 @@ What baseline structure rules must every buildable module follow regardless of l
 
 **Standardize every buildable module around its own folder root, with `dist/`, `.cache/`, sibling consumer examples, a module README, and predictable test locations.**
 
-Language-specific EDRs may add ecosystem details, but they must not redefine these baseline folder responsibilities.
+Language-specific EDRs MAY add ecosystem details, but they MUST NOT redefine these baseline folder responsibilities.
 
 ### Details
 
@@ -27,7 +27,7 @@ A module is the smallest independently buildable, testable, or publishable unit.
 
 - a `Makefile` following [agentme-edr-008](../devops/008-common-targets.md)
 - a `README.md` for the module itself
-- all configuration files required to build, lint, test, package, or publish that module
+- all configuration files needed to build, lint, test, package, or publish that module
 - its generated `dist/` directory when the module produces distributable artifacts
 - a module-local `.cache/` when tool caches are not intentionally shared with a parent aggregation root
 
@@ -44,11 +44,11 @@ Example module root:
 
 #### 02-parent-folders-are-aggregation-roots
 
-Parent folders such as a repository root, an application folder, or `lib/` may aggregate multiple modules. They may also hold shared consumer examples or multi-module test harnesses.
+Parent folders such as a repository root, an application folder, or `lib/` MAY aggregate multiple modules. They MAY also hold shared consumer examples or multi-module test harnesses.
 
-They MUST keep the public aggregation obvious: deleting an aggregation folder should remove a coherent API surface or entry-point area, not scatter unrelated internal implementation across the repository.
+They MUST keep the public aggregation obvious: deleting an aggregation folder SHOULD remove a coherent API surface or entry-point area, not scatter unrelated internal implementation across the repository.
 
-Recommended aggregation pattern:
+Example aggregation pattern:
 
 ```text
 <parent>/
@@ -88,7 +88,7 @@ Examples that demonstrate how to consume a library or reusable module MUST live 
 Examples MUST exercise the module through its public distribution surface:
 
 - use the package built into `dist/` when the ecosystem supports local packaged artifacts
-- otherwise use the public module path or equivalent consumer-facing import surface, never relative source-file imports or direct references to internal implementation paths
+- otherwise use the public module path or equivalent consumer-facing import surface; **MUST NOT** use relative source-file imports or direct references to internal implementation paths
 
 Example:
 
@@ -106,7 +106,7 @@ Each module MUST contain a `README.md` that shows how to use the module as a con
 
 The end of the README MUST also include short developer instructions for that module, covering at least the standard build, lint, and test entry points.
 
-Repository-level READMEs may describe the workspace, but they do not replace the module README.
+Repository-level READMEs MAY describe the workspace, but they do not replace the module README.
 
 #### 07-tests-use-predictable-locations
 
