@@ -15,9 +15,9 @@ What contributor workflow guidance must every project publish so contributors kn
 
 ## Decision Outcome
 
-**Every project must publish a root CONTRIBUTING.md with a small, explicit contribution workflow.**
+**Every project MUST publish a root CONTRIBUTING.md with a small, explicit contribution workflow.**
 
-Projects must keep a `CONTRIBUTING.md` file at the repository root. The file must explain where bugs, feature discussions, and code changes belong so contributors follow a predictable workflow before opening pull requests.
+Projects MUST keep a `CONTRIBUTING.md` file at the repository root. The file MUST explain where bugs, feature discussions, and code changes belong so contributors follow a predictable workflow before opening pull requests.
 
 ### Details
 
