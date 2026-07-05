@@ -13,7 +13,7 @@ Policy framework elements (types, scopes, subjects, folder structure) are define
 
 ## Decision Outcome
 
-**Structured policies with a mandatory template, applicability metadata, and clear conflict rules**
+**Structured policies with a MANDATORY template, applicability metadata, and clear conflict rules**
 
 Policy documents are the authoritative source of truth for their scope, type, and subject. They MUST be concise, template-compliant, and clear about applicability so that humans and AI agents can reliably determine whether and how to apply any decision.
 
@@ -62,7 +62,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
   - Types in IDs: `adr-policy`, `bdr-policy`, `edr-policy`
   - Define the next number of a Policy by checking what is the highest number present in the type+scope. Don't fill numbering gaps, as they might be old deleted Policies and we MUST NOT reuse numbers of different documents/decisions. Numbering gaps are expected.
 - Policies MUST be concise and reference other Policies to avoid duplication.
-- The `### Details` section SHOULD state relevant boundaries or exceptions and what a reader should do or avoid in common cases. Use the frontmatter fields `apply-to` and `valid-from` as the first-pass filter for applicability, then keep nuanced boundaries in the decision text.
+- The `### Details` section SHOULD state relevant boundaries or exceptions and what a reader SHOULD do or avoid in common cases. Use the frontmatter fields `apply-to` and `valid-from` as the first-pass filter for applicability, then keep nuanced boundaries in the decision text.
 - Use concise rules, examples, `Allowed` / `Disallowed` lists or checklists with required items to help the reader apply the decision correctly. Keep them short and decision-specific.
 - Policies MUST NOT include historical change notes or descriptions of what changed from a previous version. State only the current rule that MUST be followed. Historical context is available via git history or versioned packages.
 - When a policy covers elements that could be confused with each other, include explicit disambiguation statements clarifying the distinction before stating the rules for each.

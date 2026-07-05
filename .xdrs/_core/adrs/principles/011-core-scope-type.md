@@ -28,11 +28,11 @@ A scope declared with `scope-type: core` is reserved for the meta organisation o
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `core`. A scope declares it by setting `scope-type: core` in its `index.md` YAML frontmatter.
+The scope type defined by this policy is `core`. A scope MUST declare it by setting `scope-type: core` in its `index.md` YAML frontmatter.
 
 #### 02-when-to-use
 
-Use `scope-type: core` when the scope's purpose is to hold meta governance content for a domain: writing standards, structural templates, process guidance for authoring or reviewing, skill files for domain-specific workflows, and ownership or contact information. Do not use it for scopes that contain actual rules or decisions intended for other teams to follow.
+`scope-type: core` MUST be used when the scope's purpose is to hold meta governance content for a domain: writing standards, structural templates, process guidance for authoring or reviewing, skill files for domain-specific workflows, and ownership or contact information. It MUST NOT be used for scopes that contain actual rules or decisions intended for other teams to follow.
 
 #### 03-naming-convention
 
@@ -40,7 +40,7 @@ A scope of type `core` MUST have "core" somewhere in its name (e.g., `_core`, `m
 
 #### 04-allowed-content
 
-Content that belongs in a `core`-type scope:
+A `core`-type scope SHOULD contain only the following types of content:
 
 - Writing standards and templates specific to the domain.
 - Structural conventions for that domain's policies.

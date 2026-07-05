@@ -60,7 +60,7 @@ Numbered rule blocks MUST be added to a Policy when the decision defines strong 
 
 #### 02-rule-numbering-must-be-stable
 
-Rule numbers MUST NEVER be reused within the same document. When a rule is removed, its number becomes permanently retired for that document. Gaps in the sequence are expected and MUST NOT be filled by renumbering remaining rules, as existing citations depend on number stability.
+Rule numbers MUST NOT be reused within the same document. When a rule is removed, its number becomes permanently retired for that document. Gaps in the sequence are expected and MUST NOT be filled by renumbering remaining rules, as existing citations depend on number stability.
 
 #### 03-rule-body-must-use-normative-language
 

@@ -23,7 +23,7 @@ How should a scope that exists as a reference model or standard be identified?
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `reference`. A scope declares it by setting `scope-type: reference` in its `index.md` YAML frontmatter.
+The scope type defined by this policy is `reference`. A scope MUST declare it by setting `scope-type: reference` in its `index.md` YAML frontmatter.
 
 #### 02-when-to-use
 

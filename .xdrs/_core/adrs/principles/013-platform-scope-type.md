@@ -21,17 +21,17 @@ How should a scope that documents a live, consumable platform or service be iden
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `platform`. A scope declares it by setting `scope-type: platform` in its `index.md` YAML frontmatter.
+The scope type defined by this policy is `platform`. A scope MUST declare it by setting `scope-type: platform` in its `index.md` YAML frontmatter.
 
 #### 02-when-to-use
 
-Use `scope-type: platform` when the scope documents:
+`scope-type: platform` MUST be used when the scope documents:
 
 - An existing cloud or runtime environment that teams can deploy to directly.
 - A shared foundational service available for consumption (e.g., a payment platform, a data platform, a messaging service).
 - An operational area or live capability that can be used without local instantiation.
 
-Do not use `scope-type: platform` for blueprints or reference architectures. Use `scope-type: reference` for those. Do not use it for business domains, products, or teams — use `scope-type: standard` for those.
+`scope-type: platform` MUST NOT be used for blueprints or reference architectures — use `scope-type: reference` for those. It MUST NOT be used for business domains, products, or teams — use `scope-type: standard` for those.
 
 #### 03-naming-convention
 
@@ -39,7 +39,7 @@ A scope of type `platform` MUST follow the naming pattern `{domain}-plat-{name}`
 
 #### 04-content-guidance
 
-Content in a `platform`-type scope describes what is available, how to access it, what decisions govern its use, and what constraints or service levels apply. It documents a live service — not a blueprint to copy.
+Content in a `platform`-type scope SHOULD describe what is available, how to access it, what decisions govern its use, and what constraints or service levels apply. It MUST document a live service — not a blueprint to copy.
 
 ## References
 

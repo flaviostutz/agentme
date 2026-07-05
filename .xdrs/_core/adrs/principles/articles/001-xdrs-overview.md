@@ -152,15 +152,14 @@ guidance, and the explanatory overview close together without collapsing them in
 
 Follow [_core-adr-policy-001](../001-xdrs-core.md) and [_core-adr-policy-002](../002-policy-standards.md) strictly. Key rules:
 
-- Use **mandatory language** (`must`, `never`, `required`) for non-negotiable rules and
-  **advisory language** (`should`, `recommended`) for guidance.
+- Use uppercase BCP 14 keywords: MUST/MUST NOT for non-negotiable rules, SHOULD/SHOULD NOT for strong recommendations, MAY/OPTIONAL for optional choices.
 - Before citing a Policy as a requirement, check `Valid` first, then `Applied to`, and finally the decision text to confirm the decision is in scope for the current case.
 - All documents present in the collection are considered active. Remove documents that are no longer relevant.
 - Keep Policies under 1300 words as a rule of thumb (exceptions up to 2600 words for templates or more elaborate decisions). Move procedural detail to a co-located Skill.
 - Keep exploratory option analysis in a co-located Research document instead of bloating the Policy.
-- Always update the scope+type index and the root index after adding or changing a Policy.
-- Use `_local` scope when a decision is project-specific and must not be shared.
-- Never reuse a number once it has been assigned, even if the Policy is deleted.
+- ALWAYS update the scope+type index and the root index after adding or changing a Policy.
+- Use `_local` scope when a decision is project-specific and MUST NOT be shared.
+- NEVER reuse a number once it has been assigned, even if the Policy is deleted.
 
 ### How to extend
 
