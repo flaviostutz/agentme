@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: b6752be0341c
+  git:https://github.com/flaviostutz/xdrs-core.git@main: fc77e1f9be36
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -30,11 +30,11 @@ files:
     - .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|122304c9dab2|0
     - .xdrs/_core/adrs/principles/008-xdr-standards-structured.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|e0d395e66c7e|0
     - .xdrs/_core/adrs/principles/010-scope-governance.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|53388e671fd6|0
-    - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d5f7ef7b4f90|0
     - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|459607bd47b0|0
     - .xdrs/_core/adrs/principles/013-platform-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|8acc355177c7|0
     - .xdrs/_core/adrs/principles/014-standard-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|4d350c74e7d4|0
     - .xdrs/_core/adrs/principles/015-local-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d48a4585c0b1|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|346ac011e9b5|0
-checksum: 657d99a3856e
+    - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|fc77e1f9be36|file|daae7fa6f1f8|0
+checksum: dd41ab691398
 

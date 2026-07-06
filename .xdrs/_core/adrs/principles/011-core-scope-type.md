@@ -63,6 +63,14 @@ A scope that is governed by a `core` scope MUST declare this relationship explic
 
 A `core`-type scope MAY be distributed to consumers alongside the companion consumable scope, or kept internal to the team that maintains the domain. When distributed, consumers who extend or contribute to the domain scope locally MUST follow its standards. When not distributed, internal contributors MUST still comply.
 
+#### 08-unavailable-core-read-only
+
+A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent, the companion scope MUST be treated as READ-ONLY: no content in it MUST be added, changed, or removed. The scope lacks the meta governance that defines how its content must be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
+
+#### 09-distribution-advisable
+
+Distributing `-core` scopes alongside their companion consumable scope to downstream consumers SHOULD be done when possible. Having the meta governance available locally allows tools, agents, and contributors to reason about authoring standards, validate content, and apply scope-local conventions correctly. Distribution is not mandatory; the companion scope remains valid and usable in READ-ONLY mode when the `-core` scope is absent (see `08-unavailable-core-read-only`).
+
 ## References
 
 - [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — full scope governance model including when to prefer a `{scope-name}-core` policy (scope-local) vs. this pattern
