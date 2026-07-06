@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: fc77e1f9be36
+  git:https://github.com/flaviostutz/xdrs-core.git@main: c1a5f20e4107
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -25,7 +25,6 @@ files:
     - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|ce490955bb3f|0
     - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|be0d3fcc9354|0
     - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|b055822c0831|0
-    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|b6da1103e934|0
     - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|923d638c9f01|0
     - .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|122304c9dab2|0
     - .xdrs/_core/adrs/principles/008-xdr-standards-structured.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|e0d395e66c7e|0
@@ -36,5 +35,6 @@ files:
     - .xdrs/_core/adrs/principles/015-local-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d48a4585c0b1|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|346ac011e9b5|0
     - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|fc77e1f9be36|file|daae7fa6f1f8|0
-checksum: dd41ab691398
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|c1a5f20e4107|file|123be0cdd624|0
+checksum: 80fb310ab06a
 
