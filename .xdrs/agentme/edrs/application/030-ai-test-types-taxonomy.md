@@ -43,6 +43,7 @@ Every golden dataset entry (a JSON file in `golden_dataset/data/`) MUST have thi
 - `input` — for Prompt-tier components, a raw prompt string or the prompt template's input parameters object; for Agent/Workflow-tier components, the input attributes object passed to the component.
 - `expected_output` — the fields used to score the entry under each of its automated `test_types`: output attributes for an LLM-as-judge rubric, a target for vector-similarity scoring, or exact attribute values for strict comparison. When `human` is one of the entry's `test_types`, `expected_output` MUST additionally include a `human_test` string field with manual-verification instructions (e.g. `"check for ethical issues, verify record change in system X"`) — this supplements, and MUST NOT replace, the entry's automated scoring fields.
 - `mock_fixtures` — optional object; keys identify the adapter or external system to mock (SHOULD match the connector folder name under `adapters/connectors/<name>` for readability, though not enforced), values are any valid JSON interpreted by the mock implementation. When present, eval.py MUST configure each named mock adapter with its fixture data BEFORE invoking the component for that entry; each entry MUST use fresh mock instances to prevent state from bleeding across entries. `mock_fixtures` applies to all `test_types` including `human` — the component is still invoked for human entries to capture `actual_output`. `mock_fixtures` MUST NOT include keys for LLM adapters: all golden dataset test types are rated `mocks disallowed for LLM calls` (rule `03`), so the LLM call MUST be real; LLM provider mocking belongs exclusively to unit tests via [agentme-edr-018](018-ai-llm-development-standards.md) rule `04`. See [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
+- `repeat_count` — optional positive integer, used exclusively by entries carrying `repeatability` in `test_types` (rule `08`). Declares how many times [agentme-edr-028](028-ai-eval-standards.md) rule `05` MUST invoke the component for that entry.
 - The dataset's `dataset.schema.json` MUST require `test_types`, `input`, and `expected_output`, and SHOULD declare `mock_fixtures` as optional (`"type": "object", "additionalProperties": {}`), per [agentme-edr-024](024-ml-dataset-structure.md) rule `04`.
 
 #### 03-mocks-allowed-values
@@ -57,7 +58,7 @@ The taxonomy in rule `05` rates each test type using one of three values:
 
 #### 04-test-types-enum
 
-A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `human`. These correspond to the dataset-driven rows of rule `05`. **Unit test** and **Integration test** (the two Code-level rows) are NOT part of this enum — they have no golden dataset entries and remain governed entirely by [agentme-edr-004](../principles/004-unit-test-requirements.md) and [agentme-edr-007](../principles/007-project-quality-standards.md) rule `08`.
+A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `human`, `repeatability`. These correspond to the dataset-driven rows of rule `05`. **Unit test** and **Integration test** (the two Code-level rows) are NOT part of this enum — they have no golden dataset entries and remain governed entirely by [agentme-edr-004](../principles/004-unit-test-requirements.md) and [agentme-edr-007](../principles/007-project-quality-standards.md) rule `08`.
 
 #### 05-test-type-taxonomy
 
@@ -72,6 +73,7 @@ Test types MUST be selected from this taxonomy. Each test type is named with its
 | Robustness test | Responsible AI | Verify stable behavior under noisy/out-of-distribution input | mocks disallowed for LLM calls | Inputs come from untrusted/variable sources | Protects reliability/SLAs | Confirms graceful degradation, guides input validation | 3 |
 | Explainability test | Responsible AI | Verify output is justifiable with a faithful rationale | mocks disallowed for LLM calls | Output must be justified to users/auditors/regulators | Required for auditability; builds user trust | Gives rationale trace for debugging wrong answers | 2 |
 | Groundedness (RAG) eval | Quality eval | Verify the answer is supported by retrieved context | mocks disallowed for LLM calls | System uses retrieval-augmented generation | Avoids confidently-wrong answers reaching customers | Pinpoints retrieval/prompt bugs | 4 |
+| Repeatability test | Quality eval | Verify output stability/variance across N repeated invocations of the same input under fixed configuration | mocks disallowed for LLM calls | Non-deterministic components (temperature > 0, agentic tool-selection loops, sampling-based decoding) used in decision-critical or user-facing flows | Protects against silently flaky behavior reaching production; supports consistency SLAs | Detects prompt/agent designs too sensitive to sampling noise; informs temperature/seed tuning | 3 |
 | Human evaluation | Quality eval | Manually verify aspects automated scoring can't (ethics, side effects, external state) | mocks disallowed for LLM calls | Before major releases; periodic spot-check | Defensible, human-reviewed sign-off | Catches what automated metrics miss | 3 |
 | Functional eval (golden-dataset accuracy / LLM-as-judge) | Quality eval | Measure output correctness against the golden dataset | mocks disallowed for LLM calls | Required before every Workflow release ([agentme-edr-007](../principles/007-project-quality-standards.md) rule `09`); advised elsewhere | Auditable evidence of business correctness before release | Detects regressions from model/provider/prompt changes | 5 |
 | Smoke test | Quality eval | Fast pass/fail check on a small, critical subset before running fuller suites | mocks disallowed for LLM calls | Every commit/PR, before functional/responsible-AI evals run | Cheap early warning before slower evals run | Fast, cheap feedback loop | 4 |
@@ -87,12 +89,27 @@ Priority, Relevance, and When to Apply in rule `05` are guidance for prioritizat
 
 The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subset of the golden-dataset functional eval) is a different concept from [agentme-edr-008](../devops/008-common-targets.md)'s existing `test-smoke` target (a fast subset of code-level tests). Both MAY exist in the same project; teams MUST NOT conflate them.
 
+#### 08-repeatability-entry-envelope-and-scoring
+
+Entries carrying `repeatability` MUST declare `repeat_count` (rule `02`). [agentme-edr-028](028-ai-eval-standards.md) rule `05` defines how these entries are invoked and scored; this rule defines how to choose `repeat_count` and its scoring intent.
+
+**Choosing `repeat_count`:** SHOULD start at 3 for a cheap first pass across the full dataset; entries showing any disagreement SHOULD be escalated to 10-20 repeats for a statistically confident per-entry rate. 5 is a reasonable single-pass default when a two-phase approach is not used. Projects SHOULD calibrate `repeat_count` once per component by plotting cumulative agreement rate against repeat count for a few representative entries and picking the point where it plateaus, rather than guessing.
+
+**Scoring:** each entry's `repeat_count` outputs MUST be compared to each other, not to `expected_output` — `expected_output` for a `repeatability` entry instead declares the agreement metric and its threshold (e.g. `{"metric": "exact_match_rate", "threshold": 0.8}`). Use exact-match or structured-field agreement for classification/structured outputs; use semantic-similarity or LLM-as-judge agreement (kept at low/zero temperature to avoid measuring the judge's own variance) for free text.
+
+**Scoping:** this test type MUST NOT be applied to components whose intended behavior is diverse or creative output (e.g. brainstorming, creative writing) — low agreement there is correct behavior, not a defect.
+
+#### 09-repeatability-is-distinct-from-reproducibility
+
+`repeatability` (this test type: output stability across repeated invocations of the same input, same configuration, same short time window) is a different concept from build/environment reproducibility (e.g. pinned dependencies, reproducible builds, [agentme-edr-027](../devops/027-environment-variable-configuration.md)'s environment-configuration conventions). Teams MUST NOT conflate the two when discussing or documenting this test type.
+
 ## References
 
 - [agentme-edr-024](024-ml-dataset-structure.md) — Golden dataset file layout, per-entry JSON format, `$schema` pointer, and schema-lint validation
-- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy
+- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy; rule `05` defines the invoke-`repeat_count`-times exception and rule `06` the repeatability report/cadence
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters referenced by `mock_fixtures`
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Rule `09` tier-level testing requirements (the only mandated AI testing baseline)
 - [agentme-edr-008](../devops/008-common-targets.md) — Rule `03` `eval-<qualifier>` Makefile convention; rule `03`'s `test-smoke` (distinguished in rule `07`)
+- [agentme-edr-027](../devops/027-environment-variable-configuration.md) — Environment-configuration conventions referenced in rule `09`'s reproducibility disambiguation
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM tier definition and mocking utilities referenced by the `mocks allowed` value
 - [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements underlying the Code-level rows
