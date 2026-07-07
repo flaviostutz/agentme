@@ -88,7 +88,7 @@ Examples that demonstrate how to consume a library or reusable module MUST live 
 Examples MUST exercise the module through its public distribution surface:
 
 - use the package built into `dist/` when the ecosystem supports local packaged artifacts
-- otherwise use the public module path or equivalent consumer-facing import surface; **MUST NOT** use relative source-file imports or direct references to internal implementation paths
+- otherwise use the public module path or equivalent consumer-facing import surface; MUST NOT use relative source-file imports or direct references to internal implementation paths
 
 Example:
 

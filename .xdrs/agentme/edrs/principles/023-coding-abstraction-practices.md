@@ -41,7 +41,7 @@ These patterns obfuscate the main program flow and create behavioral indirection
 
 #### 03-trivial-wrappers-are-prohibited
 
-A function that merely delegates to another function or API call without adding meaningful logic, domain intent, or readability **MUST be inlined**. A wrapper is justified only when it:
+A function that merely delegates to another function or API call without adding meaningful logic, domain intent, or readability MUST be inlined. A wrapper is justified only when it:
 
 - Encapsulates non-trivial logic (validation, retry, transformation).
 - Communicates a domain concept the underlying expression does not convey.

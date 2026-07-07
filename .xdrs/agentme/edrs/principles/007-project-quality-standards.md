@@ -15,9 +15,9 @@ What minimum quality standards must every project in the organization meet to en
 
 ## Decision Outcome
 
-Every project must meet the minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run. Integration tests are advised but not required. Projects with statistical models must have evaluation targets with performance thresholds.
+Every project MUST meet the minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run. Integration tests are advised but not required. Projects with statistical models MUST have evaluation targets with performance thresholds.
 
-These standards form a non-negotiable baseline. Individual projects may raise the bar but must never fall below it.
+These standards form a non-negotiable baseline. Individual projects may raise the bar but MUST NEVER fall below it.
 
 ### Details
 
@@ -52,14 +52,14 @@ myFunction({ input: "value" });
 
 #### 02-unit-tests-must-run-on-every-release
 
-A unit test suite MUST run automatically before every release. Failing tests must block the release — no silent skips or overrides.
+A unit test suite MUST run automatically before every release. Failing tests MUST block the release — no silent skips or overrides.
 
 **Requirements:**
-- A `make test` target must exist and run the full suite
-- CI/CD must invoke it before publish/deploy
+- A `make test` target MUST exist and run the full suite
+- CI/CD MUST invoke it before publish/deploy
 - Test failures block the release
 
-**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects must never be deployed to production.
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NEVER be deployed to production.
 
 **Reference:** [agentme-edr-004](004-unit-test-requirements.md) for detailed unit test requirements.
 
@@ -85,7 +85,7 @@ Projects larger than 10 files or 200 lines of code MUST have a linter configured
 - Linter config is checked in (e.g., `.eslintrc.js`, `pyproject.toml`, `.golangci.yml`)
 - CI runs `make lint` before merging or releasing
 
-**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects must never be deployed to production.
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NEVER be deployed to production.
 
 **Reference:** [agentme-edr-003](../application/003-javascript-project-tooling.md) for JavaScript-specific tooling.
 
@@ -93,11 +93,11 @@ Projects larger than 10 files or 200 lines of code MUST have a linter configured
 
 #### 05-project-structure-must-be-clear
 
-Directory and file layout MUST be self-explanatory: source code, tests, configuration, and examples must be clearly separated and named.
+Directory and file layout MUST be self-explanatory: source code, tests, configuration, and examples MUST be clearly separated and named.
 
 **Requirements:**
-- Directory names must reflect their purpose (`src/`, `lib/`, `tests/`, `examples/`, `docs/`)
-- README must describe the top-level layout if non-obvious
+- Directory names MUST reflect their purpose (`src/`, `lib/`, `tests/`, `examples/`, `docs/`)
+- README MUST describe the top-level layout if non-obvious
 - No orphaned or unexplained directories or files at the project root
 
 **Example layout (TypeScript project):**
@@ -118,14 +118,14 @@ Directory and file layout MUST be self-explanatory: source code, tests, configur
 
 #### 06-libraries-must-have-runnable-examples
 
-Projects that are libraries or shared utilities MUST include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) must be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
+Projects that are libraries or shared utilities MUST include an `examples/` directory. Each subdirectory represents a usage scenario and MUST be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) MUST be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
 
 **Requirements:**
-- `examples/` must contain at least one subdirectory per major usage scenario
-- Each scenario subdirectory must have a `Makefile` with a `run` target
-- Examples must import the library as an external consumer (not via relative `../src` imports)
-- `make test` in the root must run all offline examples; failures block CI and releases
-- Examples that depend on external entities must not be included in `make test`
+- `examples/` MUST contain at least one subdirectory per major usage scenario
+- Each scenario subdirectory MUST have a `Makefile` with a `run` target
+- Examples MUST import the library as an external consumer (not via relative `../src` imports)
+- `make test` in the root MUST run all offline examples; failures block CI and releases
+- Examples that depend on external entities MUST NOT be included in `make test`
 
 **Directory layout:**
 
@@ -173,13 +173,13 @@ all:
 Projects that contain statistical models (e.g., ML models, LLM-based evaluators, classifiers, ranking systems, or any component whose output quality is measured probabilistically) MUST define measurable performance thresholds and verify them automatically.
 
 **Requirements:**
-- A `make eval` target must exist and execute all performance evaluations
-- Each evaluation must have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
-- Thresholds must be declared explicitly in the project (e.g., in a config file, `Makefile` variable, or documented in `README.md`)
-- `make eval` must **exit with a non-zero status** (fail) if:
+- A `make eval` target MUST exist and execute all performance evaluations
+- Each evaluation MUST have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
+- Thresholds MUST be declared explicitly in the project (e.g., in a config file, `Makefile` variable, or documented in `README.md`)
+- `make eval` MUST **exit with a non-zero status** (fail) if:
   - The evaluation cannot be executed (missing data, environment errors, model load failures)
   - Any metric falls below its defined minimum threshold
-- CI/CD must invoke `make eval` before releasing any version that changes model weights, prompts, or evaluation logic
+- CI/CD MUST invoke `make eval` before releasing any version that changes model weights, prompts, or evaluation logic
 
 **Threshold declaration example (Makefile):**
 

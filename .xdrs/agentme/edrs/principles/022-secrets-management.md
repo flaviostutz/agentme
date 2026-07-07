@@ -96,11 +96,11 @@ $ make run
 # Application starts successfully
 ```
 
-#### 05a-makefile-uses-security-utility
+#### 10-makefile-uses-security-utility
 
-Makefile targets (e.g., `setup-secrets`) must use the macOS native `security` CLI to store and retrieve secrets from the keychain. This restricts Makefile-based secret management to macOS developer machines, which is acceptable since all contributors are expected to use macOS.
+Makefile targets (e.g., `setup-secrets`) MUST use the macOS native `security` CLI to store and retrieve secrets from the keychain. This restricts Makefile-based secret management to macOS developer machines, which is acceptable since all contributors are expected to use macOS.
 
-Do **not** use `keyring` or other cross-platform libraries in Makefiles — `security` is simpler to invoke from shell and requires no additional dependencies.
+Do not use `keyring` or other cross-platform libraries in Makefiles — `security` is simpler to invoke from shell and requires no additional dependencies.
 
 Storing a secret:
 ```makefile
@@ -120,7 +120,7 @@ In library code (Python, JS/TS, Go), continue using the cross-platform libraries
 
 #### 06-never-log-or-leak-secrets
 
-Secrets MUST NEVER be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages must reference the secret name or identifier, never its value.
+Secrets MUST NEVER be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages MUST reference the secret name or identifier, never its value.
 
 ---
 

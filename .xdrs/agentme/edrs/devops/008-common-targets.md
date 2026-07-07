@@ -23,18 +23,18 @@ Standardizing both the target names and the execution chain removes per-project 
 
 #### 01-every-project-must-have-root-makefile
 
-The project root **MUST** contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines **MUST** invoke routine actions through this `Makefile`, **NEVER** by calling underlying tools directly in documentation, CI, or daily workflow commands.
+The project root MUST contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines MUST invoke routine actions through this `Makefile`, NEVER by calling underlying tools directly in documentation, CI, or daily workflow commands.
 
 `make <target>` is the shared contract across projects and languages.
 
-- The root `Makefile` **MUST** be the entry point for both developers and pipelines.
-- The root `Makefile` **MUST** expose at minimum the common targets defined in this XDR.
-- Reverse-compatibility wrappers are allowed when an ecosystem expects them, but they **MUST** stay trivial.
+- The root `Makefile` MUST be the entry point for both developers and pipelines.
+- The root `Makefile` MUST expose at minimum the common targets defined in this XDR.
+- Reverse-compatibility wrappers are allowed when an ecosystem expects them, but they MUST stay trivial.
 	- Allowed: `package.json` script `"test": "make test"`
 	- Not allowed: `make test` -> `npm run test` -> tool command
-- Project logic **MUST NOT** live in npm scripts, Mise tasks, shell wrappers, or other secondary runners when the same logic belongs in the `Makefile`.
+- Project logic MUST NOT live in npm scripts, Mise tasks, shell wrappers, or other secondary runners when the same logic belongs in the `Makefile`.
 
-*Why:* The project entry point **MUST** stay language-agnostic and obvious. A developer **SHOULD** be able to inspect the `Makefile` and immediately see which real tool commands will run.
+*Why:* The project entry point MUST stay language-agnostic and obvious. A developer SHOULD be able to inspect the `Makefile` and immediately see which real tool commands will run.
 
 #### 02-makefile-recipes-must-use-mise
 
@@ -47,10 +47,10 @@ make <target>
 			-> explicit tool command
 ```
 
-- The `setup` target **MUST** run `mise install` and any small project-specific bootstrap needed before normal targets work.
-- Routine targets such as `build`, `lint`, `test`, `run`, and `publish` **MUST** be invoked as `make <target>` by both contributors and CI.
-- Each Makefile recipe **MUST** call the real underlying command through `mise exec --`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
-- Makefile recipes **MUST NOT** add extra script layers such as `npm run`, `pnpm run`, `yarn run`, `mise run`, `mise tasks`, or shell aliases when those layers only forward to another command.
+- The `setup` target MUST run `mise install` and any small project-specific bootstrap needed before normal targets work.
+- Routine targets such as `build`, `lint`, `test`, `run`, and `publish` MUST be invoked as `make <target>` by both contributors and CI.
+- Each Makefile recipe MUST call the real underlying command through `mise exec --`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
+- Makefile recipes MUST NOT add extra script layers such as `npm run`, `pnpm run`, `yarn run`, `mise run`, `mise tasks`, or shell aliases when those layers only forward to another command.
 - Calling the actual tool is allowed even when that tool itself launches another program as part of its normal interface.
 	- Allowed: `mise exec -- pnpm exec eslint ./src`
 	- Allowed: `mise exec -- go test -cover ./...`
@@ -66,7 +66,7 @@ make <target>
 
 #### 03-standard-target-groups-and-names
 
-Targets are organized into five lifecycle groups. Projects **MUST** use these names unchanged. Extensions are allowed (see rule 5) but the core names **MUST NOT** be repurposed.
+Targets are organized into five lifecycle groups. Projects MUST use these names unchanged. Extensions are allowed (see rule 5) but the core names MUST NOT be repurposed.
 
 ##### Developer group
 
