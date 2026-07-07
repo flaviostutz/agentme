@@ -29,7 +29,7 @@ The core architectural decision [_core-adr-policy-001](adrs/principles/001-xdrs-
 Each artifact type has its own writing standard:
 
 - **Policy documents** follow [_core-adr-policy-002](adrs/principles/002-policy-standards.md), which defines the mandatory template, frontmatter metadata, applicability rules, conflict handling, and word limits that keep decisions concise and authoritative.
-- **Structured Policies** with individually referenceable rules follow the extension [_core-adr-policy-008](adrs/principles/008-xdr-standards-structured.md), adding numbered rule blocks and a dot-notation citation syntax.
+- **Structured Policies** with individually referenceable rules follow the extension [_core-adr-policy-008](adrs/principles/008-policy-structured-standards.md), adding numbered rule blocks and a dot-notation citation syntax.
 - **Skills** follow [_core-adr-policy-003](adrs/principles/003-skill-standards.md), using the agentskills format so they work for both humans and AI agents on an automation gradient from fully manual to fully automated.
 - **Articles** follow [_core-adr-policy-004](adrs/principles/004-article-standards.md), providing synthetic views that combine and link multiple Policies, research, and skills without replacing them as the source of truth.
 - **Research** follows [_core-adr-policy-006](adrs/principles/006-research-standards.md), using an IMRAD-based structure for studies that back decisions with reproducible evidence.

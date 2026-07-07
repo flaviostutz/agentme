@@ -78,7 +78,7 @@ Choose a title that clearly states the question this Policy answers, not the ans
 Use the mandatory template from `002-policy-standards`:
 
 **Check if the decision requires a structured set of rules:**
-If the decision defines strong rules or policies that must be stated explicitly, or if other documents, skills, or agents have a clear need to reference individual rules, you MUST apply the structured rule format from `_core-adr-policy-008-policy-standards-structured`. This means:
+If the decision defines strong rules or policies that must be stated explicitly, or if other documents, skills, or agents have a clear need to reference individual rules, you MUST apply the structured rule format from `_core-adr-policy-008-policy-structured-standards`. This means:
   - Place each rule as a numbered heading block inside `### Details`.
   - Use the format:
     #### [NN]-[short-descriptive-title-in-kebab-case]
@@ -101,7 +101,7 @@ Access logs must be retained for at least 90 days and reviewed monthly for suspi
 All external integrations should be reviewed annually for compliance with current security standards.
 ```
 
-Refer to `_core-adr-policy-008-policy-standards-structured` for full requirements and citation syntax.
+Refer to `_core-adr-policy-008-policy-structured-standards` for full requirements and citation syntax.
 
 ```
 ---

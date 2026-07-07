@@ -69,7 +69,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - When a policy covers elements that could be confused with each other, include explicit disambiguation statements clarifying the distinction before stating the rules for each.
 - A "why" explanation for a policy rule MAY only be included if it is brief, non-obvious, relevant to the reader, and not longer than the rule itself.
 - Rules MUST focus on what is required or forbidden. Explanations of why a rule exists belong in a Research document, not in the Policy itself. Link to the relevant research when the rationale is important for adoption.
-- When the decision defines strong policies or rules that SHOULD be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the Policy MUST follow the extension [_core-adr-policy-008 - Policy standards - structured](008-xdr-standards-structured.md) instead of using plain bullet lists for those rules.
+- When the decision defines strong policies or rules that SHOULD be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the Policy MUST follow the extension [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) instead of using plain bullet lists for those rules.
 - Conflict handling applies to Policy documents:
   - For cross-scope overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope.
   - **Within-scope conflicts:** Policies within the same type+scope MUST NOT conflict. If two Policies appear to conflict, one SHOULD be updated, removed, or the conflict resolved through a new Policy.
@@ -158,4 +158,4 @@ Question: In the end, state explicitly the question that needs to be answered. E
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)
-- [_core-adr-policy-008 - Policy standards - structured](008-xdr-standards-structured.md) - Extension for Policies that expose individually referenceable rules
+- [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) - Extension for Policies that expose individually referenceable rules
