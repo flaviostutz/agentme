@@ -27,21 +27,36 @@ Synthetic views combining agentme XDRs and skills around a specific topic.
 
 Language and framework-specific tooling and project structure.
 
+### Language and framework tooling
+
 - [agentme-edr-003](application/003-javascript-project-tooling.md) - **JavaScript project tooling and structure** - Scaffold JavaScript libraries with the standard toolchain *(includes skill: [001-create-javascript-project](application/skills/001-create-javascript-project/SKILL.md))*
 - [agentme-edr-010](application/010-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [003-create-golang-project](application/skills/003-create-golang-project/SKILL.md))*
 - [agentme-edr-014](application/014-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [005-create-python-project](application/skills/005-create-python-project/SKILL.md))*
 - [agentme-edr-015](application/015-cli-tool-standards.md) - **CLI tool standards** - Define command UX and behavior for CLI tools
+- [agentme-edr-026](application/026-pragmatic-hexagonal-architecture.md) - **Pragmatic hexagonal architecture** - Organize application layers as External/Adapters/Application with practical coupling rules
+- [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
+
+### AI development
+
+Standards for building LLM, Agent, and Workflow components.
+
 - [agentme-edr-018](application/018-ai-llm-development-standards.md) - **AI LLM development standards** - Standard framework (LangChain) and patterns for simple LLM calls with explicit configuration (no environment variables)
 - [agentme-edr-019](application/019-ai-agents-development-standards.md) - **AI agents development standards** - Structural patterns for agents: framework selection, sandbox setup, naming conventions, composition, and system prompt structure
 - [agentme-edr-020](application/020-ai-agents-quality-standards.md) - **AI agents implementation quality standards** - Tool definition patterns, error handling, observability, and unit testing for agents
 - [agentme-edr-021](application/021-ai-workflow-development-standards.md) - **AI workflow development standards** - Standard toolchain (LangGraph), evaluation, and testing patterns for workflow projects
 - [agentme-edr-029](application/029-ai-workflow-naming-conventions.md) - **AI workflow naming conventions** - Node suffix/prefix roles, state type and attribute naming, judge output schema, workflow class names, and cross-element coherence rules
-- [agentme-edr-028](application/028-ai-eval-standards.md) - **AI eval standards** - Folder structure, script requirements, and MLflow tracking for eval tests across LLM, Agent, and Workflow tiers
-- [agentme-edr-030](application/030-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (safety, responsible-AI, quality-eval, prompt, code-level) with group, objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope
-- [agentme-edr-024](application/024-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
 - [agentme-edr-025](application/025-ai-agent-xdrs-knowledge-layer.md) - **AI agent XDRS knowledge layer** - How to integrate XDRS as the runtime source of truth for policies and skills in AI agents (apply only when the project explicitly uses XDRS)
-- [agentme-edr-026](application/026-pragmatic-hexagonal-architecture.md) - **Pragmatic hexagonal architecture** - Organize application layers as External/Adapters/Application with practical coupling rules
-- [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
+
+### AI evaluation and testing
+
+Standards for eval datasets, scripts, reports, and test type taxonomy.
+
+- [agentme-edr-030](application/030-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (`functional`, `safety`, `smoke`, `repeatability`, `adversarial`, `fairness`, and 6 others) with group, objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope
+- [agentme-edr-028](application/028-ai-eval-core-standards.md) - **AI eval core standards** - Eval folder structure and Makefile interface; LLM-as-judge binary scoring contract applicable to all AI tiers and test types
+- [agentme-edr-031](application/031-ai-eval-script.md) - **AI eval script** - eval.py requirements: entry-first loop, --type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment conventions
+- [agentme-edr-032](application/032-ai-eval-report-format.md) - **AI eval report format** - report-<type>.md template, Wilson score confidence interval, convergence analysis, and human-type checklist artifact
+- [agentme-edr-033](application/033-ai-eval-repeatability.md) - **AI eval repeatability** - Repeatability test type: REPEAT_COUNT loop exception, semantic-similarity and LLM-as-judge scoring, repeatability_accuracy metric, report shape, and run cadence
+- [agentme-edr-024](application/024-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
 
 ## Devops
 

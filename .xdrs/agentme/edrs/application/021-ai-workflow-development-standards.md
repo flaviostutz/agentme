@@ -37,7 +37,7 @@ Use **MLflow** for all workflow observability and evaluation:
 
 #### 04-dataset-driven-accuracy-measurement
 
-Projects MUST follow the eval dataset and implementation requirements defined in [agentme-edr-028](028-ai-eval-standards.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
+Projects MUST follow the eval dataset and implementation requirements defined in [agentme-edr-028](028-ai-eval-core-standards.md) and [agentme-edr-031](031-ai-eval-script.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
 
 #### 05-flow-documentation
 
@@ -101,7 +101,7 @@ lib/src/<package_name>/
 
 #### 08-workflow-evals
 
-Projects MUST follow the eval folder structure and script requirements defined in [agentme-edr-028](028-ai-eval-standards.md).
+Projects MUST follow the eval folder structure defined in [agentme-edr-028](028-ai-eval-core-standards.md) rule `01` and the eval script requirements defined in [agentme-edr-031](031-ai-eval-script.md). For LLM-as-judge scoring used in workflow verification nodes and evals, see [agentme-edr-028](028-ai-eval-core-standards.md) rule `02`.
 
 #### 09-node-naming-conventions
 
@@ -207,5 +207,8 @@ All workflow elements MUST maintain naming coherence as defined in [agentme-edr-
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Adapter/application layer separation that defines the project layout
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
 - [agentme-edr-024](024-ml-dataset-structure.md) — ML dataset structure for eval datasets
-- [agentme-edr-028](028-ai-eval-standards.md) — AI eval standards: folder structure, script requirements, and MLflow tracking
+- [agentme-edr-028](028-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract for all tiers (rule `02`)
+- [agentme-edr-031](031-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
+- [agentme-edr-032](032-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
+- [agentme-edr-033](033-ai-eval-repeatability.md) — AI eval repeatability: REPEAT_COUNT loop, scoring methods, and release cadence
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
