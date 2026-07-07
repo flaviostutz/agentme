@@ -29,7 +29,7 @@ Separating these concerns eliminates accidental publishes from CI runs, ensures 
 | `release.yml` | `workflow_dispatch` | Tag the next version using monotag |
 | `publish.yml` | `push` of tags matching `*` | Publish artifacts for the tagged version |
 
-All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via `jdx/mise-action`. Projects should have a .mise.toml file to configure it
+All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via `jdx/mise-action`. Projects SHOULD have a `.mise.toml` file to configure it
 
 ---
 

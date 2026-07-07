@@ -22,6 +22,8 @@ What unit testing practices should be followed to ensure tests are meaningful, r
 #### 01-must-have-at-least-one-assertion-per-test
 
 Every test MUST have at least one assertion that validates the expected behavior.
+
+```typescript
 // bad — no assertion; passes even when code is broken
 it("processes the order", () => { processOrder(mockOrder); });
 
@@ -111,7 +113,7 @@ export function makeOrder(overrides: Partial<Order> = {}): Order {
 
 Tests SHOULD use the lowest-cost alternative that exercises real behavior:
 
-1. **Real implementation** — always prefer this
+1. **Real implementation** — MUST be preferred
 2. **In-memory / lightweight fake** — e.g. in-memory DB, stub HTTP server
 3. **Recorded fixture** — replay captured real responses
 4. **Mock / stub** — only for external APIs, irreversible operations, or hardware I/O

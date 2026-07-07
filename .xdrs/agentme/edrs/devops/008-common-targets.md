@@ -23,7 +23,7 @@ Standardizing both the target names and the execution chain removes per-project 
 
 #### 01-every-project-must-have-root-makefile
 
-The project root MUST contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines MUST invoke routine actions through this `Makefile`, NEVER by calling underlying tools directly in documentation, CI, or daily workflow commands.
+The project root MUST contain a single authoritative `Makefile` that exposes the standard target names defined in rule 3. Developers and CI pipelines MUST invoke routine actions through this `Makefile`, MUST NOT call underlying tools directly in documentation, CI, or daily workflow commands.
 
 `make <target>` is the shared contract across projects and languages.
 
@@ -150,28 +150,6 @@ The prefix convention ensures developers can infer the purpose of any target wit
 
 ---
 
-#### 09-ai-project-dev-targets
-
-AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
-
-**Example implementation:**
-
-```makefile
-dev-mlflow:
-	mise exec -- mlflow ui --host 0.0.0.0 --port 5000
-	open http://localhost:5000/
-```
-
----
-
-#### 08-default-targets-must-only-include-offline-subtargets
-
-`make all`, `make test`, and `make lint` **MUST** include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
-
-Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) **MUST** exist as named targets so developers can invoke them explicitly, but **MUST NOT** be invoked from `all`, `test`, or `lint`.
-
----
-
 #### 06-monorepo-usage
 
 In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to child Makefiles in sequence. The parent Makefile **SHOULD** call `$(MAKE) -C <child> <target>` directly, while each child `Makefile` runs its actual tool commands through `mise exec --`.
@@ -236,6 +214,28 @@ make clean
 
 # run build + lint + test in one shot (pre-push check)
 make all
+```
+
+---
+
+#### 08-default-targets-must-only-include-offline-subtargets
+
+`make all`, `make test`, and `make lint` **MUST** include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
+
+Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) **MUST** exist as named targets so developers can invoke them explicitly, but **MUST NOT** be invoked from `all`, `test`, or `lint`.
+
+---
+
+#### 09-ai-project-dev-targets
+
+AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
+
+**Example implementation:**
+
+```makefile
+dev-mlflow:
+	mise exec -- mlflow ui --host 0.0.0.0 --port 5000
+	open http://localhost:5000/
 ```
 
 ## Considered Options

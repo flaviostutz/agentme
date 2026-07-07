@@ -34,13 +34,13 @@ A single dependency manager, isolated package internals under `lib/`, and a stan
 | **pytest-cov** | Coverage reporting and threshold enforcement |
 | **pip-audit** | Dependency CVE audit |
 
-All routine commands must run through the project `Makefile`, never by calling `uv`, `ruff`, `pytest`, or `ty` directly in docs, CI, or daily development workflows.
+All routine commands MUST run through the project `Makefile`. MUST NOT call `uv`, `ruff`, `pytest`, or `ty` directly in docs, CI, or daily development workflows.
 
 The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Using routine project CLI commands directly outside the Makefile contract is not allowed.
 
-The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands must set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
+The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands MUST set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
 
-All tool caches, incremental state files, and workspace-local outputs MUST be written under `.cache/`. Cache paths MUST be declared in the tool's own configuration file — never on the command line or as Makefile CLI flags — so the location is enforced regardless of how the tool is invoked. Configure the following in `lib/pyproject.toml`:
+All tool caches, incremental state files, and workspace-local outputs MUST be written under `.cache/`. Cache paths MUST be declared in the tool's own configuration file — MUST NOT be on the command line or as Makefile CLI flags — so the location is enforced regardless of how the tool is invoked. Configure the following in `lib/pyproject.toml`:
 
 | Tool | Config section | Setting | Value |
 |------|---------------|---------|-------|
@@ -50,7 +50,7 @@ All tool caches, incremental state files, and workspace-local outputs MUST be wr
 | **coverage HTML** | `[tool.coverage.html]` | `directory` | `".cache/coverage-html"` |
 | **uv** | `[tool.uv]` in `lib/pyproject.toml` | `cache-dir` | `".cache/uv"` |
 
-No tool MUST write cache or state files to the project root, `src/`, `tests/`, or any directory outside `.cache/`. Passing cache paths as CLI flags or Makefile recipe-level env overrides instead of `pyproject.toml` settings is not allowed.
+Tools MUST NOT write cache or state files to the project root, `src/`, `tests/`, or any directory outside `.cache/`. Passing cache paths as CLI flags or Makefile recipe-level env overrides instead of `pyproject.toml` settings is not allowed.
 
 #### Project structure
 
@@ -98,7 +98,7 @@ Use the `lib/src/` layout for import safety and packaging clarity. Keep tests un
 
 Internal source code MUST be organized following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
 
-Libraries and shared utilities must include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples must import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification must install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
+Libraries and shared utilities MUST include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples MUST import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification MUST install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
 
 Python keeps unit tests under `lib/tests/` by default because that remains the more common and maintainable convention for typed/package-based projects than co-locating tests beside every source file. Integration tests belong in `lib/tests_integration/`, and benchmark harnesses belong in `lib/tests_benchmark/` when they are more than a single micro-benchmark helper.
 
@@ -114,7 +114,7 @@ When ty runs from `lib/`, it auto-discovers the virtual environment via the `VIR
 
 Ruff is the default formatter and linter. Do not add Black, isort, or Flake8 unless another XDR for that repository explicitly requires them.
 
-All Python projects must configure the following sections in `lib/pyproject.toml`. The cache-related settings are mandatory per the `.cache/` policy above:
+All Python projects MUST configure the following sections in `lib/pyproject.toml`. The cache-related settings are mandatory per the `.cache/` policy above:
 
 ```toml
 [tool.pytest.ini_options]
@@ -155,11 +155,11 @@ ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
 ignore-overlong-task-comments = true
 ```
 
-Adjust `target-version` to match the project's minimum supported Python version. The `cache-dir` keeps Ruff's cache under `.cache/ruff` alongside other tool caches. The `src` list must include every directory that contains importable Python code. The `select` list enables a broad set of rules covering style, correctness, performance, security, and documentation. The `ignore` list suppresses rules that are either too noisy or conflict with the chosen docstring style.
+Adjust `target-version` to match the project's minimum supported Python version. The `cache-dir` keeps Ruff's cache under `.cache/ruff` alongside other tool caches. The `src` list MUST include every directory that contains importable Python code. The `select` list enables a broad set of rules covering style, correctness, performance, security, and documentation. The `ignore` list suppresses rules that are either too noisy or conflict with the chosen docstring style.
 
-ty must run on every lint pass. The default rule set is the minimum baseline; projects may enable stricter rules as the codebase matures.
+ty MUST run on every lint pass. The default rule set is the minimum baseline; projects may enable stricter rules as the codebase matures.
 
-Pytest coverage must fail below 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md).
+Pytest coverage MUST fail below 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md).
 
 #### Makefile targets
 
@@ -198,7 +198,7 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 | `dev` | Same as `run`, optionally with repository-specific dev defaults |
 | `publish` | `mise exec -- uv publish --project .` after versioning and packaging are complete |
 
-The root `Makefile` must remain the only contract for CI and contributors, in line with [agentme-edr-008](../devops/008-common-targets.md).
+The root `Makefile` MUST remain the only contract for CI and contributors, in line with [agentme-edr-008](../devops/008-common-targets.md).
 
 ## Considered Options
 

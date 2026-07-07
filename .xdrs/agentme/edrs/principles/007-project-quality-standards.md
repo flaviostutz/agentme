@@ -17,7 +17,7 @@ What minimum quality standards must every project in the organization meet to en
 
 Every project MUST meet the minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run. Integration tests are advised but not required. Projects with statistical models MUST have evaluation targets with performance thresholds.
 
-These standards form a non-negotiable baseline. Individual projects may raise the bar but MUST NEVER fall below it.
+These standards form a non-negotiable baseline. Individual projects may raise the bar but MUST NOT fall below it.
 
 ### Details
 
@@ -59,7 +59,7 @@ A unit test suite MUST run automatically before every release. Failing tests MUS
 - CI/CD MUST invoke it before publish/deploy
 - Test failures block the release
 
-**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NEVER be deployed to production.
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NOT be deployed to production.
 
 **Reference:** [agentme-edr-004](004-unit-test-requirements.md) for detailed unit test requirements.
 
@@ -85,7 +85,7 @@ Projects larger than 10 files or 200 lines of code MUST have a linter configured
 - Linter config is checked in (e.g., `.eslintrc.js`, `pyproject.toml`, `.golangci.yml`)
 - CI runs `make lint` before merging or releasing
 
-**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NEVER be deployed to production.
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NOT be deployed to production.
 
 **Reference:** [agentme-edr-003](../application/003-javascript-project-tooling.md) for JavaScript-specific tooling.
 

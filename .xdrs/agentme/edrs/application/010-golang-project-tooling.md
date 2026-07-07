@@ -30,7 +30,7 @@ A predictable layout and minimal external tooling keep Go projects approachable,
 | **golangci-lint** | Linting — aggregates many linters in one fast run; configured via `.golangci.yml` |
 | **monotag** | Version tagging from git history for the `publish` target |
 
-All commands are run exclusively through the Makefile, never ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md).
+All commands MUST be run exclusively through the Makefile and MUST NOT be called ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md).
 Direct installation of project-required Go CLIs with `go install ...@latest` as a repair step is **NOT** allowed unless an XDR for that repository explicitly permits it.
 
 #### Project structure
@@ -80,7 +80,7 @@ Direct installation of project-required Go CLIs with `go install ...@latest` as 
 - Business logic lives in named feature packages under `app/` (e.g., `app/ownership/`, `app/changes/`). These packages are importable and testable without any CLI or adapter concerns.
 - `adapters/cli/` packages own flag parsing, output formatting, and the wiring between flags and `app/` functions. No business logic lives in adapter packages.
 - Outbound adapters live under `adapters/connectors/` with one subfolder per external resource, named descriptively (e.g., `postgres/`, `stripe-api/`, `redis-cache/`).
-- `shared/` must contain only infrastructure-agnostic utilities — not business rules or domain logic.
+- `shared/` MUST contain only infrastructure-agnostic utilities — not business rules or domain logic.
 - Packages are flat by default; sub-packages are only introduced when a feature package itself exceeds ~400 lines or has clearly separable sub-concerns.
 - Application MAY import from Adapters when it simplifies the design (pragmatic coupling per edr-022 rule 05).
 - Consumer examples for reusable libraries belong in a sibling `examples/` folder and MUST import the public module path rather than reaching into internal source paths. Because Go libraries are not typically consumed from a local packaged artifact, local example validation may use a temporary module replacement for resolution, but the import path MUST remain the public module path.
@@ -120,7 +120,7 @@ make test
 make lint
 ```
 
-The Makefile recipes themselves must use `mise exec --` for the underlying tool commands.
+The Makefile recipes themselves MUST use `mise exec --` for the underlying tool commands.
 
 #### Cross-platform binary distribution
 
@@ -148,7 +148,7 @@ All tool caches, incremental state files, and build outputs MUST be written unde
 | **golangci-lint cache** | `GOLANGCI_LINT_CACHE` env var | `export GOLANGCI_LINT_CACHE := $(CURDIR)/.cache/golangci-lint` |
 | **Test coverage output** | `-coverprofile` flag in `test` target | `.cache/coverage.out` |
 
-No tool MUST write cache or state files to the project root or any directory outside `.cache/`. Passing cache paths as per-recipe environment overrides instead of top-level Makefile exports is not allowed.
+Tools MUST NOT write cache or state files to the project root or any directory outside `.cache/`. Passing cache paths as per-recipe environment overrides instead of top-level Makefile exports is not allowed.
 
 #### Linting
 

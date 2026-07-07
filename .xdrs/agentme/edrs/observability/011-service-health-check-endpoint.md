@@ -45,7 +45,7 @@ All services **MUST** expose a `GET /health` endpoint that validates external de
 
 - `health` (required): overall state — `OK`, `WARNING`, or `ERROR`
 - `latencyMs` (required): total milliseconds to run all checks
-- `message` (required): human-readable summary; **MUST NEVER** expose credentials, internal IPs, or stack traces
+- `message` (required): human-readable summary; MUST NOT expose credentials, internal IPs, or stack traces
 
 **Dependency validation rules:**
 

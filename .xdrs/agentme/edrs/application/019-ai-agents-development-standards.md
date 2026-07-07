@@ -50,7 +50,7 @@ Use deepagents sandbox whenever ANY of the following is true:
 
 **Integration requirements:**
 
-- The sandbox MUST always be initialized with `virtual_mode=True` to prevent the agent from reading or writing files outside the mounted workspace. Omitting this flag allows the agent unrestricted host filesystem access, which is a security violation.
+- The sandbox MUST be initialized with `virtual_mode=True` to prevent the agent from reading or writing files outside the mounted workspace. Omitting this flag allows the agent unrestricted host filesystem access, which is a security violation.
 - Initialize the sandbox at the start of the agent run and shut it down in the same `try/finally` block.
 - Pass the sandbox handle into the agent's state so all tool calls share the same sandbox instance.
 - If the host-side code needs to pass files into the sandbox (e.g. generated config or input data), create a temporary directory with `tempfile.mkdtemp()`, write the files there, and mount it into the sandbox. Clean it up in the `finally` block.
@@ -120,11 +120,11 @@ When multiple agents are needed, one of these composition patterns MUST be chose
 |---|---|
 | Single agent + tools | All tools serve the same goal; agent completes in one session |
 | Multiple workflow-orchestrated agents | Each agent has a distinct goal; outputs flow between agents; deterministic sequencing needed |
-| Nested agents (FORBIDDEN) | Never — always use workflow orchestration instead |
+| Nested agents (FORBIDDEN) | MUST NOT use nested agents; MUST use workflow orchestration instead |
 
 #### 06-agent-system-prompt-structure
 
-Every agent system prompt MUST follow this XML-section template. Sections must appear in this order. Required sections must always be present; optional sections may be omitted when they genuinely do not apply; never reorder them.
+Every agent system prompt MUST follow this XML-section template. Sections MUST appear in this order. Required sections MUST be present; optional sections may be omitted when they genuinely do not apply; MUST NOT be reordered.
 
 ```xml
 [specific task description to the agent. if not defined use the default prompt "Execute your objective taking into consideration the inputs provided and all the sections described below"]
@@ -200,7 +200,7 @@ The current OS is: [operating system name].
 **Formatting rules:**
 
 - MUST use XML tags to delimit every section.
-- The content of each section MUST start on the line immediately after the opening tag — never inline with it.
+- The content of each section MUST start on the line immediately after the opening tag — MUST NOT be inline with it.
 - Each closing tag MUST be followed by a blank line before the next opening tag, so sections are visually separated.
 
 ```xml

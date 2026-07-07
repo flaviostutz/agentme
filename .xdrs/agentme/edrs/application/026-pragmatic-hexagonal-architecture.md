@@ -139,7 +139,7 @@ When a mock implementation needs to be **reused across multiple tests or importe
 - Single-test use → define the mock inline inside the test file (per rule `09` example; no file needed)
 - Reusable across multiple tests OR used from `eval.py` → define in a separate `_mock` file
 
-**Scope:** applies to any source file in `adapters/connectors/`, `app/`, or `shared/`. MUST NOT be used for inbound adapters (`cli/`, `http/`, `grpc/`) — those are entry points and are never mocked (rule `09`).
+**Scope:** applies to any source file in `adapters/connectors/`, `app/`, or `shared/`. MUST NOT be used for inbound adapters (`cli/`, `http/`, `grpc/`) — those are entry points and MUST NOT be mocked (rule `09`).
 
 **Naming:** insert `_mock` immediately before the file extension:
 
@@ -155,7 +155,7 @@ When a mock implementation needs to be **reused across multiple tests or importe
 
 **Mock contract:**
 - MUST accept a `fixtures` parameter (constructor argument or factory function argument); the value is whatever `mock_fixtures[key]` contains from the dataset entry — its internal structure is opaque and interpreted by the mock implementation
-- MUST NOT fall back to real external calls under any circumstance — if a call cannot be satisfied from the provided fixtures, MUST raise an explicit error (never silently return `null`, `undefined`, or an empty value)
+- MUST NOT fall back to real external calls under any circumstance — if a call cannot be satisfied from the provided fixtures, MUST raise an explicit error (MUST NOT silently return `null`, `undefined`, or an empty value)
 
 ## References
 

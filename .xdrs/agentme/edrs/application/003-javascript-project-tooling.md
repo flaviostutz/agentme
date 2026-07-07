@@ -61,7 +61,7 @@ coverageProvider: 'v8',
 coverageDirectory: '.cache/coverage',
 ```
 
-Builds that miss the threshold must not be merged.
+Builds that miss the threshold MUST NOT be merged.
 
 #### Project structure
 
@@ -105,7 +105,7 @@ Internal source code MUST be organized following [agentme-edr-026](026-pragmatic
 
 When a repository contains multiple JavaScript/TypeScript packages, each package MUST live in its own module folder such as `lib/my-package/` or `services/my-service/`, each with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
 
-All tool caches, incremental state files, and workspace-local config outputs MUST be written under `.cache/`. This applies to every tool without exception. Cache and state paths MUST be declared in the tool's own configuration file — never on the command line — so that the location is enforced regardless of how the tool is invoked:
+All tool caches, incremental state files, and workspace-local config outputs MUST be written under `.cache/`. This applies to every tool without exception. Cache and state paths MUST be declared in the tool's own configuration file — MUST NOT be on the command line — so that the location is enforced regardless of how the tool is invoked:
 
 | Tool | Config file | Setting | Value |
 |------|------------|---------|-------|
@@ -114,7 +114,7 @@ All tool caches, incremental state files, and workspace-local config outputs MUS
 | **TypeScript** | `tsconfig.json` | `tsBuildInfoFile` | `.cache/tsbuildinfo` |
 | **Jest coverage** | `jest.config.js` | `coverageDirectory` | `.cache/coverage` |
 
-No tool MUST write cache or state files to the project root, `src/`, or any other directory outside `.cache/`. Passing cache paths as Makefile or CLI flags instead of config-file settings is not allowed.
+Tools MUST NOT write cache or state files to the project root, `src/`, or any other directory outside `.cache/`. Passing cache paths as Makefile or CLI flags instead of config-file settings is not allowed.
 
 Contributors and CI MUST invoke the commands below as `make <target>`. The Makefile recipes themselves MUST call the underlying tools through `mise exec -- <tool> ...`.
 
@@ -144,7 +144,7 @@ Contributors and CI MUST invoke the commands below as `make <target>`. The Makef
 
 Each sub-folder under `examples/` is an independent package. The Makefile installs the locally built `.tgz` pack from `lib/dist/` so examples simulate real external usage.
 
-Examples MUST remain outside the module root and MUST consume the package through the packed artifact in `dist/`, never through `../src` imports or other direct source links.
+Examples MUST remain outside the module root and MUST consume the package through the packed artifact in `dist/`. MUST NOT use `../src` imports or other direct source links.
 
 Module-specific integration tests that are not just runnable examples belong in `lib/tests_integration/` or a sibling `tests_integration/` when they cover multiple modules.
 

@@ -39,7 +39,7 @@ Teams SHOULD aim to keep at least 80% of big coding decisions covered by accepte
 
 #### 05-leaders-must-review-xdr-proposals
 
-Leaders responsible for the affected scope are accountable for reviewing XDR proposals, adjusting them, and publishing the accepted decision.
+Leaders responsible for the affected scope MUST review XDR proposals, adjust them as needed, and publish the accepted decision.
 
 #### 06-query-agents-for-missing-xdrs
 

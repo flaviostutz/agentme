@@ -23,13 +23,13 @@ All implementation practices derive from three guiding principles:
 
 1. **Least exposure** — minimize the means, timespan, and surface of contact with the secret.
 2. **Easiness in secret rotation** — design so rotating a secret requires no code change or redeployment.
-3. **Support for local and cloud deployment runs** — the same application code must work transparently in both environments.
+3. **Support for local and cloud deployment runs** — the same application code MUST work transparently in both environments.
 
 ### Details
 
 #### 01-no-secrets-on-disk
 
-Secrets MUST NEVER be stored on the disk of a developer machine or server. This includes `.env` files (even when gitignored), plaintext config files, embedded in source code, or any other file-based storage.
+Secrets MUST NOT be stored on the disk of a developer machine or server. This includes `.env` files (even when gitignored), plaintext config files, embedded in source code, or any other file-based storage.
 
 The only acceptable local persistence is through the operating system's native secret manager (e.g., macOS Keychain, Windows Credential Manager, Linux Secret Service).
 
@@ -96,31 +96,11 @@ $ make run
 # Application starts successfully
 ```
 
-#### 10-makefile-uses-security-utility
-
-Makefile targets (e.g., `setup-secrets`) MUST use the macOS native `security` CLI to store and retrieve secrets from the keychain. This restricts Makefile-based secret management to macOS developer machines, which is acceptable since all contributors are expected to use macOS.
-
-Do not use `keyring` or other cross-platform libraries in Makefiles — `security` is simpler to invoke from shell and requires no additional dependencies.
-
-Storing a secret:
-```makefile
-security add-generic-password -a "$(USER)" -s "mymodule/api-key" -w "$(SECRET_VALUE)" -U
-```
-
-Retrieving a secret (e.g., to pass to a command):
-```makefile
-SECRET_VALUE := $(shell security find-generic-password -a "$(USER)" -s "mymodule/api-key" -w 2>/dev/null)
-```
-
-The `-U` flag updates the entry if it already exists. Use the format `<group>/<secret-id>` as the service name (`-s`) to mirror the module name and cloud secret manager ID convention defined in rule 02 and 05.
-
-In library code (Python, JS/TS, Go), continue using the cross-platform libraries defined in rule 02 (`keyring`, `cross-keychain`, `go-keyring`). The `security` utility is only for Makefile scripts.
-
 ---
 
 #### 06-never-log-or-leak-secrets
 
-Secrets MUST NEVER be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages MUST reference the secret name or identifier, never its value.
+Secrets MUST NOT be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages MUST reference the secret name or identifier, MUST NOT include its value.
 
 ---
 
@@ -132,7 +112,7 @@ Wherever possible, secrets SHOULD be fetched dynamically from the secret manager
 - Immediate propagation of rotated secrets.
 - Reduced window of exposure if memory is compromised.
 
-Short-lived caching (e.g., a few minutes) is acceptable when performance requires it, but must have an explicit TTL.
+Short-lived caching (e.g., a few minutes) is acceptable when performance requires it, but MUST have an explicit TTL.
 
 ---
 
@@ -159,6 +139,28 @@ def test_service_uses_api_key():
 ```
 
 Integration tests MAY use the real keychain on developer machines or CI after `make setup-secrets` has been run.
+
+---
+
+#### 10-makefile-uses-security-utility
+
+Makefile targets (e.g., `setup-secrets`) MUST use the macOS native `security` CLI to store and retrieve secrets from the keychain. This restricts Makefile-based secret management to macOS developer machines, which is acceptable since all contributors are expected to use macOS.
+
+Do not use `keyring` or other cross-platform libraries in Makefiles — `security` is simpler to invoke from shell and requires no additional dependencies.
+
+Storing a secret:
+```makefile
+security add-generic-password -a "$(USER)" -s "mymodule/api-key" -w "$(SECRET_VALUE)" -U
+```
+
+Retrieving a secret (e.g., to pass to a command):
+```makefile
+SECRET_VALUE := $(shell security find-generic-password -a "$(USER)" -s "mymodule/api-key" -w 2>/dev/null)
+```
+
+The `-U` flag updates the entry if it already exists. Use the format `<group>/<secret-id>` as the service name (`-s`) to mirror the module name and cloud secret manager ID convention defined in rule 02 and 05.
+
+In library code (Python, JS/TS, Go), continue using the cross-platform libraries defined in rule 02 (`keyring`, `cross-keychain`, `go-keyring`). The `security` utility is only for Makefile scripts.
 
 ## References
 
