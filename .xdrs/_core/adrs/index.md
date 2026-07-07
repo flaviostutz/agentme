@@ -13,7 +13,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-005](principles/005-semantic-versioning-for-xdrs-packages.md) - **Semantic versioning for XDRS packages** — How to version XDRS packages to communicate upgrade impact
 - [_core-adr-policy-006](principles/006-research-standards.md) - **Research standards** — How to structure research documents backing Policy decisions
 - [_core-adr-policy-007](principles/007-plan-standards.md) - **Plan standards** — How to structure ephemeral execution plans that implement decisions
-- [_core-adr-policy-008](principles/008-xdr-standards-structured.md) - **Policy standards - structured** — How to expose individually referenceable numbered rules inside a Policy when external citation by identifier is required
+- [_core-adr-policy-008](principles/008-policy-structured-standards.md) - **Policy structured standards** — How to expose individually referenceable numbered rules inside a Policy when external citation by identifier is required
 - [_core-adr-policy-009](principles/009-presentation-standards.md) - **Presentation standards** — How to structure Marp slide presentations that support XDRS documents
 - [_core-adr-policy-010](principles/010-scope-governance.md) - **Scope governance** — How to define custom scope types, scope-local standards, and how all governance mechanisms apply with their precedence chain
 - [_core-adr-policy-011](principles/011-core-scope-type.md) - **core scope type** — Defines the `core` scope type: meta-governance scopes that hold writing standards, templates, and process guidance for a domain
