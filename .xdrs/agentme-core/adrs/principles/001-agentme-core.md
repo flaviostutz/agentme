@@ -31,7 +31,7 @@ The primary consumers of `agentme` content are:
 2. **PR review bots** — automated reviewers that check whether submitted code follows established standards.
 3. **Human developers** — engineers who adopt agentme standards as their own project baseline.
 
-All three consumers operate during the **development phase** of a codebase — from design and initial implementation through testing and code review. They work across multiple languages (JavaScript/TypeScript, Go, Python) without deep project-specific context.
+All three consumers operate during the **development phase** of a codebase — from design and initial implementation through testing and code review. They work across multiple languages (JavaScript/TypeScript, Go, Python) without deep project-specific context. All content MUST be tailored to be actionable by at least one of these consumer types.
 
 #### 03-content-scope
 
@@ -81,7 +81,7 @@ No policy in `agentme` MAY contradict another policy in `agentme` or `_core` wit
 
 #### 09-distribution-model
 
-The `agentme` scope is published as a preset. Changes to which files are included in a preset are breaking changes. Before adding a new file to a preset, verify it is self-contained, conflict-free, and meets all writing standards in this policy.
+The `agentme` scope is published as a preset. Changes to which files are included in a preset are breaking changes. Before adding a new file to a preset, contributors MUST verify it is self-contained, conflict-free, and meets all writing standards in this policy.
 
 ## References
 

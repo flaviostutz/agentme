@@ -37,7 +37,7 @@ Use **MLflow** for all workflow observability and evaluation:
 
 #### 04-dataset-driven-accuracy-measurement
 
-Eval dataset and implementation requirements are defined in [agentme-edr-028](028-ai-eval-standards.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
+Projects MUST follow the eval dataset and implementation requirements defined in [agentme-edr-028](028-ai-eval-standards.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
 
 #### 05-flow-documentation
 
@@ -101,11 +101,11 @@ lib/src/<package_name>/
 
 #### 08-workflow-evals
 
-Eval folder structure and script requirements are defined in [agentme-edr-028](028-ai-eval-standards.md).
+Projects MUST follow the eval folder structure and script requirements defined in [agentme-edr-028](028-ai-eval-standards.md).
 
 #### 09-node-naming-conventions
 
-See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `01-node-naming-conventions`.
+Nodes MUST follow the naming conventions defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `01-node-naming-conventions`.
 
 #### 10-workflow-unit-testing
 
@@ -159,15 +159,15 @@ Workflows MUST accept the LLM instance as a constructor parameter so that unit t
 
 #### 11-state-type-conventions
 
-See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `02-state-type-conventions`.
+State types MUST follow the conventions defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `02-state-type-conventions`.
 
 #### 12-workflow-naming-conventions
 
-See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `04-workflow-naming-conventions`.
+Workflows MUST be named following the conventions in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `04-workflow-naming-conventions`.
 
 #### 13-judge-node-output-format
 
-See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `03-judge-node-output-format`.
+Judge nodes MUST use the output format defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `03-judge-node-output-format`.
 
 #### 15-workflow-state-persistence
 
@@ -200,7 +200,7 @@ result = graph.invoke(input_state, config={"thread_id": "session-123"})
 
 #### 16-cross-element-naming-coherence
 
-See [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `05-cross-element-naming-coherence`.
+All workflow elements MUST maintain naming coherence as defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `05-cross-element-naming-coherence`.
 
 ## References
 

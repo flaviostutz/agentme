@@ -23,7 +23,7 @@ These standards form a non-negotiable baseline. Individual projects may raise th
 
 #### 01-readme-must-have-getting-started
 
-`README.md` must include a **Getting Started** section in the first 20 lines with the minimal steps to install and use the project.
+`README.md` MUST include a **Getting Started** section in the first 20 lines with the minimal steps to install and use the project.
 
 **Required content:**
 - Installation or setup command(s)
@@ -52,7 +52,7 @@ myFunction({ input: "value" });
 
 #### 02-unit-tests-must-run-on-every-release
 
-A unit test suite must run automatically before every release. Failing tests must block the release — no silent skips or overrides.
+A unit test suite MUST run automatically before every release. Failing tests must block the release — no silent skips or overrides.
 
 **Requirements:**
 - A `make test` target must exist and run the full suite
@@ -67,7 +67,7 @@ A unit test suite must run automatically before every release. Failing tests mus
 
 #### 03-project-must-comply-with-xdrs
 
-All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](../../../index.md)) must be followed. A deviation requires a project-local XDR documenting the override.
+All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](../../../index.md)) MUST be followed. A deviation requires a project-local XDR documenting the override.
 
 **Requirements:**
 - Review applicable XDRs before any significant implementation
@@ -77,7 +77,7 @@ All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](../../
 
 #### 04-project-must-have-linting
 
-Projects larger than 10 files or 200 lines of code must have a linter configured and actively enforced. Lint failures block CI builds.
+Projects larger than 10 files or 200 lines of code MUST have a linter configured and actively enforced. Lint failures block CI builds.
 
 **Requirements:**
 - `make lint` runs the linter with zero-warning tolerance
@@ -93,7 +93,7 @@ Projects larger than 10 files or 200 lines of code must have a linter configured
 
 #### 05-project-structure-must-be-clear
 
-Directory and file layout must be self-explanatory: source code, tests, configuration, and examples must be clearly separated and named.
+Directory and file layout MUST be self-explanatory: source code, tests, configuration, and examples must be clearly separated and named.
 
 **Requirements:**
 - Directory names must reflect their purpose (`src/`, `lib/`, `tests/`, `examples/`, `docs/`)
@@ -118,7 +118,7 @@ Directory and file layout must be self-explanatory: source code, tests, configur
 
 #### 06-libraries-must-have-runnable-examples
 
-Projects that are libraries or shared utilities must include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) must be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
+Projects that are libraries or shared utilities MUST include an `examples/` directory. Each subdirectory represents a usage scenario and must be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) must be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
 
 **Requirements:**
 - `examples/` must contain at least one subdirectory per major usage scenario
@@ -170,7 +170,7 @@ all:
 
 #### 07-statistical-models-must-have-eval-targets
 
-Projects that contain statistical models (e.g., ML models, LLM-based evaluators, classifiers, ranking systems, or any component whose output quality is measured probabilistically) must define measurable performance thresholds and verify them automatically.
+Projects that contain statistical models (e.g., ML models, LLM-based evaluators, classifiers, ranking systems, or any component whose output quality is measured probabilistically) MUST define measurable performance thresholds and verify them automatically.
 
 **Requirements:**
 - A `make eval` target must exist and execute all performance evaluations

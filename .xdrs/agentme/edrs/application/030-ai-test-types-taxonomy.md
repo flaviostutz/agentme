@@ -21,7 +21,7 @@ Each test type is named with its group, objective, mocking constraint, applicabi
 
 #### 01-golden-dataset-concept
 
-A **golden dataset** comprises all eval case entries used to test an AI component (LLM, Agent, or Workflow tier); each entry is labeled with the `test_types` (rule `04`) it applies to. It is the dataset consumed by [agentme-edr-028](028-ai-eval-standards.md) evals and stored as one JSON file per entry per [agentme-edr-024](024-ml-dataset-structure.md) rule `04`, at `evals/<component>/eval-<name>/golden_dataset/`.
+Projects MUST use a golden dataset to test AI components. A **golden dataset** comprises all eval case entries used to test an AI component (LLM, Agent, or Workflow tier); each entry is labeled with the `test_types` (rule `04`) it applies to. It is the dataset consumed by [agentme-edr-028](028-ai-eval-standards.md) evals and stored as one JSON file per entry per [agentme-edr-024](024-ml-dataset-structure.md) rule `04`, at `evals/<component>/eval-<name>/golden_dataset/`.
 
 #### 02-golden-dataset-entry-envelope
 
@@ -61,6 +61,8 @@ A golden dataset entry's `test_types` array MUST only use these values: `safety`
 
 #### 05-test-type-taxonomy
 
+Test types MUST be selected from this taxonomy. Each test type is named with its group, objective, mocking constraint, applicability, and relevance:
+
 | Test Type Name | Group | Test Objective | Mocks Allowed | When to Apply | Relevance – Business | Relevance – Development Team | Priority (1-5) |
 |---|---|---|---|---|---|---|---|
 | Safety/content eval | Safety & adversarial | Detect harmful, biased, or policy-violating output | mocks disallowed for LLM calls | Any user-facing release | Avoids reputational harm; acceptable-use compliance | Automated content gate before merge/release | 5 |
@@ -79,11 +81,11 @@ A golden dataset entry's `test_types` array MUST only use these values: `safety`
 
 #### 06-priority-and-relevance-are-descriptive-only
 
-Priority, Relevance, and When to Apply in rule `05` are guidance for prioritization conversations — they do NOT mandate which test types a project must implement, nor their thresholds. [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09` remains the only tier-level testing requirement in force (Workflow unit tests + functional evals). Once a project chooses to implement and threshold a test type, [agentme-edr-028](028-ai-eval-standards.md) rule `02`'s failing-threshold behavior applies uniformly, regardless of this table's priority rating — a project may enforce fairness at 70% and functional at 90%, or skip fairness entirely; that choice is a project/business decision, not one this Policy makes.
+Priority, Relevance, and When to Apply in rule `05` are guidance for prioritization conversations — they MUST NOT be treated as mandating which test types a project must implement, nor their thresholds. [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09` remains the only tier-level testing requirement in force (Workflow unit tests + functional evals). Once a project chooses to implement and threshold a test type, [agentme-edr-028](028-ai-eval-standards.md) rule `02`'s failing-threshold behavior applies uniformly, regardless of this table's priority rating — a project may enforce fairness at 70% and functional at 90%, or skip fairness entirely; that choice is a project/business decision, not one this Policy makes.
 
 #### 07-smoke-is-distinct-from-test-smoke
 
-The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subset of the golden-dataset functional eval) is a different concept from [agentme-edr-008](../devops/008-common-targets.md)'s existing `test-smoke` target (a fast subset of code-level tests). Both may exist in the same project; do not conflate them.
+The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subset of the golden-dataset functional eval) is a different concept from [agentme-edr-008](../devops/008-common-targets.md)'s existing `test-smoke` target (a fast subset of code-level tests). Both MAY exist in the same project; teams MUST NOT conflate them.
 
 ## References
 

@@ -21,7 +21,7 @@ What unit testing practices should be followed to ensure tests are meaningful, r
 
 #### 01-must-have-at-least-one-assertion-per-test
 
-```typescript
+Every test MUST have at least one assertion that validates the expected behavior.
 // bad — no assertion; passes even when code is broken
 it("processes the order", () => { processOrder(mockOrder); });
 
@@ -36,7 +36,7 @@ it("processes the order and returns a confirmation id", () => {
 
 #### 02-must-run-offline
 
-Unit tests must not depend on any external resources: no network calls, no running databases, no external APIs, no file system paths outside the repo. Tests must pass with only static code available.
+Unit tests MUST NOT depend on any external resources: no network calls, no running databases, no external APIs, no file system paths outside the repo. Tests must pass with only static code available.
 
 ```typescript
 // bad — hits a real HTTP endpoint
@@ -64,13 +64,13 @@ export default defineConfig({
 });
 ```
 
-Builds that miss the threshold must not be merged.
+Builds that miss the threshold MUST NOT be merged.
 
 ---
 
 #### 04-must-place-test-files-alongside-source
 
-Test files must live next to the source file they test, in the same directory, following the convention of the language/framework:
+Test files MUST live next to the source file they test, in the same directory, following the convention of the language/framework:
 
 | Language | Pattern | Example |
 |----------|---------|-------|
@@ -96,7 +96,7 @@ Do not flatten or reorganize paths when using a separate test folder.
 
 #### 05-should-extract-shared-setup
 
-When setup logic is repeated across two or more test files, centralize it (`src/test-utils/`, `internal/testutil/`, `tests/conftest.py`).
+When setup logic is repeated across two or more test files, it SHOULD be centralized (`src/test-utils/`, `internal/testutil/`, `tests/conftest.py`).
 
 ```typescript
 // src/test-utils/order-factory.ts
@@ -109,7 +109,7 @@ export function makeOrder(overrides: Partial<Order> = {}): Order {
 
 #### 06-should-avoid-mocks
 
-Use the lowest-cost alternative that exercises real behavior:
+Tests SHOULD use the lowest-cost alternative that exercises real behavior:
 
 1. **Real implementation** — always prefer this
 2. **In-memory / lightweight fake** — e.g. in-memory DB, stub HTTP server
