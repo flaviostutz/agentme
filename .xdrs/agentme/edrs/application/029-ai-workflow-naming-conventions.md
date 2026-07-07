@@ -46,7 +46,7 @@ def code_reviewer_agent(state): ...
 graph.add_node("code_reviewer_agent", code_reviewer_agent)
 ```
 
-Names MUST NOT use generic labels such as `node1`, `process`, or `run`. Each name must clearly express what action the node performs.
+Names MUST NOT use generic labels such as `node1`, `process`, or `run`. Each name MUST clearly express what action the node performs.
 
 Judge nodes use a **prefix** convention instead of a suffix: the name MUST start with `evaluate_` followed by the subject being judged (e.g. `evaluate_progress`, `evaluate_quality`, `evaluate_completeness`, `evaluate_relevance`). This makes judge nodes immediately distinguishable from all other node types at a glance.
 

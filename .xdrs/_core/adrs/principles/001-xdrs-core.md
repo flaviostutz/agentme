@@ -144,8 +144,8 @@ Policies can be of different kinds, depending on the nature of the decision:
   - Canonical index requirements:
     - Organize XDRS documents by subject for easier navigation
     - Add a short description of what this scope is about (responsibilities, general worries, teams involved, link to discussion process, etc)
-    - Add a list of other scope indexes that this scope might be related to (only add scopes that might be overridden). E.g: "business-x-mobileapp" scope could refer to "business-x" and "sensitive-data" scopes in its index list. XDRS in scopes listed last override XDRS in scopes listed first when addressing the same topic.
-    - Each XDRS element entry in the index MUST include a short description of its content. The description SHOULD use an imperative statement or the question it answers when possible (<15 words). Example: "Use this while planning a new feature", "What communication tone we use with our customers?", "PNPM vs Yarn comparison study"
+    - Add links to related scope indexes that this scope might override or be overridden by (scopes listed last override earlier ones on the same topic).
+    - Each XDRS element entry MUST include a short description. SHOULD use an imperative statement or the question it answers (<15 words). Example: "Use this while planning a new feature", "What communication tone we use with our customers?"
   - Outside the scopes, keep a root index in `[xdrs-root]/index.md` that links to each scope index (`[xdrs-root]/[scope]/index.md`). Add the text "XDRS scopes listed last override the ones listed first". The root index MUST NOT link directly to type indexes; readers navigate from the scope index to the type indexes. Use the link text pattern `View scope [scope_name]` for each scope link (e.g. `[View scope myteam] linking to (myteam/index.md)`).
   - MUST verify if indexes are up to date after making changes
 - **Scope index**

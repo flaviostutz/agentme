@@ -69,7 +69,7 @@ File: `.github/workflows/release.yml`
 
 Projects MUST use this manually dispatched (`workflow_dispatch`) workflow. It calculates the next semantic version tag using **monotag** and pushes that tag to the repository. Pushing the tag then automatically triggers the publish workflow.
 
-The checkout step **must** use `fetch-depth: 0` so monotag can traverse the full commit history to determine the correct next version.
+The checkout step MUST use `fetch-depth: 0` so monotag can traverse the full commit history to determine the correct next version.
 
 ```yaml
 name: release

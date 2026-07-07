@@ -28,7 +28,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 | `name` | Yes | 1-64 characters. Lowercase letters, numbers, hyphens, and leading underscores only. MUST NOT end with a hyphen. MUST NOT contain consecutive hyphens. MUST match the document identifier from the heading: `[scope]-[type]-policy-[number]-[short-title]`. |
 | `description` | Yes | 1-1024 characters. Describes what this decision is about and when to use it. SHOULD include keywords that help agents identify when to apply it. |
 | `apply-to` | Yes | Short description of contexts this decision is applicable to. Keep it under 40 words. Use `All scopes` when the decision applies broadly. Examples: `Only frontend code`, `JavaScript projects`, `All scopes`. |
-| `valid-from` | Yes | ISO date (`YYYY-MM-DD`) indicating from when this decision MUST be enforced. Before this date it SHOULD be used everywhere possible, but compliance is not enforced during reviews until after this date. Defaults to the date the Policy was created. When updating an existing Policy whose `valid-from` date has already passed, preserve the original date—do not update it to the current date. The historical date shows when the policy was originally enabled and is important for understanding policy evolution. |
+| `valid-from` | Yes | ISO date (`YYYY-MM-DD`) indicating from when this decision MUST be enforced. Before this date it SHOULD be used everywhere possible, but compliance is not enforced during reviews until after this date. Defaults to the date the Policy was created. When updating an existing Policy whose `valid-from` date has already passed, preserve the original date—it MUST NOT be updated to the current date. The historical date shows when the policy was originally enabled and is important for understanding policy evolution. |
 | `license` | No | SPDX license expression (e.g. `MIT`, `Apache-2.0`, `CC-BY-4.0`). Indicates the license under which the document content is shared. If omitted, the license is governed by the repository or package defaults. |
 | `metadata` | No | Arbitrary key-value map for additional properties not defined by this spec. |
 
@@ -62,6 +62,8 @@ Policy documents are the authoritative source of truth for their scope, type, an
   - Types in IDs: `adr-policy`, `bdr-policy`, `edr-policy`
   - Define the next number of a Policy by checking what is the highest number present in the type+scope. Don't fill numbering gaps, as they might be old deleted Policies and we MUST NOT reuse numbers of different documents/decisions. Numbering gaps are expected.
 - Policies MUST be concise and reference other Policies to avoid duplication.
+- Policies MUST NOT contain duplicated content: the same rule or information MUST NOT appear more than once in the document, whether stated identically or rephrased. Consolidate into a single authoritative statement and reference it where needed.
+- Policies MUST NOT contain conflicting content: all rules and statements within the same document MUST be consistent with each other.
 - The `### Details` section SHOULD state relevant boundaries or exceptions and what a reader SHOULD do or avoid in common cases. Use the frontmatter fields `apply-to` and `valid-from` as the first-pass filter for applicability, then keep nuanced boundaries in the decision text.
 - Use concise rules, examples, `Allowed` / `Disallowed` lists or checklists with required items to help the reader apply the decision correctly. Keep them short and decision-specific.
 - Policies MUST NOT include historical change notes or descriptions of what changed from a previous version. State only the current rule that MUST be followed. Historical context is available via git history or versioned packages.
@@ -69,6 +71,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - When a policy covers elements that could be confused with each other, include explicit disambiguation statements clarifying the distinction before stating the rules for each.
 - A "why" explanation for a policy rule MAY only be included if it is brief, non-obvious, relevant to the reader, and not longer than the rule itself.
 - Rules MUST focus on what is required or forbidden. Explanations of why a rule exists belong in a Research document, not in the Policy itself. Link to the relevant research when the rationale is important for adoption.
+- Each policy rule and rule block MUST be unambiguous: it MUST be possible to clearly follow, check, and discuss it without requiring additional interpretation.
 - When the decision defines strong policies or rules that SHOULD be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the Policy MUST follow the extension [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) instead of using plain bullet lists for those rules.
 - Conflict handling applies to Policy documents:
   - For cross-scope overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope.

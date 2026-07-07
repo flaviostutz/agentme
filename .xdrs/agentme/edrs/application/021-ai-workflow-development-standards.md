@@ -41,7 +41,7 @@ Projects MUST follow the eval dataset and implementation requirements defined in
 
 #### 05-flow-documentation
 
-Each workflow MUST be documented as a **Mermaid graph** in a `README.md`. The diagram must match the LangGraph `StateGraph` definition:
+Each workflow MUST be documented as a **Mermaid graph** in a `README.md`. The diagram MUST match the LangGraph `StateGraph` definition:
 
 - Use `graph TD` or `graph LR` direction.
 - Label each node with its Python function name.

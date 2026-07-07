@@ -46,7 +46,7 @@ When an agent requires a **local sandbox** — an isolated environment where the
 Use deepagents sandbox whenever ANY of the following is true:
 - The agent needs to execute shell commands or scripts in a controlled environment.
 - The agent needs to list, read, or search files across multiple directories at runtime.
-- The agent operates on user-supplied or generated file trees that must not escape a sandboxed boundary.
+- The agent operates on user-supplied or generated file trees that MUST NOT escape a sandboxed boundary.
 
 **Integration requirements:**
 
@@ -189,7 +189,7 @@ The current OS is: [operating system name].
 |---|---|---|
 | `<SYSTEM_CONTEXT>` | Optional | Runtime environment context injected at invocation time (e.g., current date in YYYY-MM-DD, OS). Include whenever the agent may need temporal or environment awareness. Time MUST NOT be included — it changes every second and breaks prompt caching. |
 | `<OBJECTIVE>` | Required | One or two sentences summarising the agent's main deliverable. |
-| `<ROLE>` | Required | Agent persona and expertise. When inside a workflow, MUST reference its node name from `<WORKFLOW_CONTEXT>`. |
+| `<AGENT_ROLE>` | Required | Agent persona and expertise. When inside a workflow, MUST reference its node name from `<WORKFLOW_CONTEXT>`. |
 | `<INPUT>` | Required | List ALL inputs. For workflow agents: workflow-level inputs first, then agent-specific inputs. |
 | `<STEPS>` | Optional | Include when the agent follows a non-trivial numbered sequence of steps. |
 | `<TOOL_GUIDANCE>` | Optional | Include when tool use order or conditions need explicit direction. |
@@ -208,9 +208,9 @@ The current OS is: [operating system name].
 Produce a plan for the current batch of files.
 </OBJECTIVE>
 
-<ROLE>
+<AGENT_ROLE>
 You are the batch_plan_agent.
-</ROLE>
+</AGENT_ROLE>
 ```
 
 #### 07-agent-output-format

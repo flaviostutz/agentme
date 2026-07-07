@@ -15,7 +15,7 @@ What unit testing practices should be followed to ensure tests are meaningful, r
 
 ## Decision Outcome
 
-**Every test must assert behavior, run offline without external dependencies, enforce 80% coverage, centralize shared setup, and prefer real code over mocks.**
+**Every test MUST assert behavior, run offline without external dependencies, enforce 80% coverage, centralize shared setup, and prefer real code over mocks.**
 
 ### Details
 
@@ -36,7 +36,7 @@ it("processes the order and returns a confirmation id", () => {
 
 #### 02-must-run-offline
 
-Unit tests MUST NOT depend on any external resources: no network calls, no running databases, no external APIs, no file system paths outside the repo. Tests must pass with only static code available.
+Unit tests MUST NOT depend on any external resources: no network calls, no running databases, no external APIs, no file system paths outside the repo. Tests MUST pass with only static code available.
 
 ```typescript
 // bad — hits a real HTTP endpoint
@@ -83,7 +83,7 @@ src/mymodule/group1/file1.ts        ← source
 src/mymodule/group1/file1.test.ts   ← test (same directory)
 ```
 
-**Exception — separate test folder:** When the framework makes co-location impractical (e.g. Python's common `tests/` convention), or when the community strongly favors a separate folder, a dedicated test root (e.g. `tests/`) is allowed. In that case the test folder **must mirror** the source folder structure exactly:
+**Exception — separate test folder:** When the framework makes co-location impractical (e.g. Python's common `tests/` convention), or when the community strongly favors a separate folder, a dedicated test root (e.g. `tests/`) is allowed. In that case the test folder MUST mirror the source folder structure exactly:
 
 ```
 src/mymodule/group1/file1.py          ← source

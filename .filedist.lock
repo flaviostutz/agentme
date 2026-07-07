@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 2ffac37dcd8d
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 683f928d9a0c
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -21,20 +21,20 @@ files:
     - .xdrs/_core/adrs/principles/007-plan-standards.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|35a5617fee1f|0
     - .xdrs/_core/adrs/principles/009-presentation-standards.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|51baf074b777|0
     - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|ce490955bb3f|0
-    - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|b055822c0831|0
     - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|923d638c9f01|0
     - .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|122304c9dab2|0
     - .xdrs/_core/adrs/principles/010-scope-governance.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|53388e671fd6|0
-    - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|459607bd47b0|0
     - .xdrs/_core/adrs/principles/013-platform-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|8acc355177c7|0
     - .xdrs/_core/adrs/principles/014-standard-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|4d350c74e7d4|0
     - .xdrs/_core/adrs/principles/015-local-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d48a4585c0b1|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|346ac011e9b5|0
     - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|fc77e1f9be36|file|daae7fa6f1f8|0
     - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|ad350449ce09|0
-    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|fda654816f85|0
     - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|2368a70c5bc5|0
     - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|45647b095bc9|0
     - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|https://github.com/flaviostutz/xdrs-core.git|2ffac37dcd8d|file|f05b6d4421c7|0
-checksum: 654660fe8374
+    - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|1480aef75d6f|0
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|abf2a37dbd72|0
+    - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|825f286e85a6|0
+checksum: cd59086cab3f
 

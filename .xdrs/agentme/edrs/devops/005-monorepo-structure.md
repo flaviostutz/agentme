@@ -53,60 +53,60 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 #### 02-application-folders
 
 - Represent a cohesive unit with its own lifecycle (e.g., `mymobileapp`, `graph-visualizer`).
-- **MUST** depend only on resources in `/shared/`. Direct cross-application dependencies are forbidden; use published artifacts (container images, published libraries) instead.
-- **MUST** contain a `README.md` with: purpose, architecture overview, how to build, and how to run.
-- **MAY** contain `examples/`, `tests_integration/`, and `tests_benchmark/` when those artifacts apply to multiple modules inside the application.
+- MUST depend only on resources in `/shared/`. Direct cross-application dependencies are forbidden; use published artifacts (container images, published libraries) instead.
+- MUST contain a `README.md` with: purpose, architecture overview, how to build, and how to run.
+- MAY contain `examples/`, `tests_integration/`, and `tests_benchmark/` when those artifacts apply to multiple modules inside the application.
 
 #### 03-module-folders
 
 - A module is a subfolder inside an application that is independently compilable and produces a build artifact.
 - May depend on sibling modules within the same application or on `/shared/` resources.
-- **MUST NOT** depend on modules from other applications.
-- **MUST** contain its own `Makefile`, `README.md`, and language/tooling configuration.
-- **MUST** keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](../principles/016-cross-language-module-structure.md).
-- **MUST NOT** keep consumer examples inside the module folder; those belong in a sibling `examples/` folder at the nearest parent aggregation root.
+- MUST NOT depend on modules from other applications.
+- MUST contain its own `Makefile`, `README.md`, and language/tooling configuration.
+- MUST keep build outputs under `dist/` and persistent caches under `.cache/`, following [agentme-edr-016](../principles/016-cross-language-module-structure.md).
+- MUST NOT keep consumer examples inside the module folder; those belong in a sibling `examples/` folder at the nearest parent aggregation root.
 
 #### 04-naming-conventions
 
-- All folder and file names **MUST** be **lowercase**.
+- All folder and file names MUST be lowercase.
 - Use hyphens (`-`) to separate words (e.g., `data-loader`, `graph-visualizer`).
 - Avoid abbreviations unless universally understood in the domain (e.g., `cli`, `api`).
 
 #### 05-makefiles-at-every-level
 
-A `Makefile` **MUST** be present at the repository root, in every application folder, and in every module folder.
+A `Makefile` MUST be present at the repository root, in every application folder, and in every module folder.
 
-All Makefiles **MUST** use the shared target vocabulary from [agentme-edr-008](008-common-targets.md).
+All Makefiles MUST use the shared target vocabulary from [agentme-edr-008](008-common-targets.md).
 
-Repository, application, and module Makefiles **MUST** define at minimum: `all`, `build`, `lint`, `test`, and `clean`.
+Repository, application, and module Makefiles MUST define at minimum: `all`, `build`, `lint`, `test`, and `clean`.
 
-Module Makefiles **SHOULD** also provide `lint-fix` and `install` when the underlying tooling supports them.
+Module Makefiles SHOULD also provide `lint-fix` and `install` when the underlying tooling supports them.
 
-The root `Makefile` **MUST** also define a `setup` target that guides a new contributor to prepare their machine.
-The root `setup` target **MUST** run `mise install` and any small repository bootstrap required before routine targets work.
+The root `Makefile` MUST also define a `setup` target that guides a new contributor to prepare their machine.
+The root `setup` target MUST run `mise install` and any small repository bootstrap required before routine targets work.
 
 #### 06-mise-for-tooling-management
 
-- [Mise](https://mise.jdx.dev/) **MUST** be used to pin all tool versions (compilers, runtimes, CLI tools).
-- A `.mise.toml` **MUST** exist at the repository root.
-- Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command **MUST** be pinned in `.mise.toml`.
-- Contributors and CI run `make setup` after cloning or checkout; this target must call `mise install`.
-- Agents and contributors **MUST** check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
-- When `.mise.toml` exists, all build, test, lint, and code-generation commands **MUST** run through `make <target>`, and the Makefile recipes **MUST** execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
-- If a required tool is missing, the first remediation step **MUST** be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
-- Root and module `Makefile` targets **MUST** work when invoked as plain `make <target>` after `make setup`.
+- [Mise](https://mise.jdx.dev/) MUST be used to pin all tool versions (compilers, runtimes, CLI tools).
+- A `.mise.toml` MUST exist at the repository root.
+- Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command MUST be pinned in `.mise.toml`.
+- Contributors and CI run `make setup` after cloning or checkout; this target MUST call `mise install`.
+- Agents and contributors MUST check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
+- When `.mise.toml` exists, all build, test, lint, and code-generation commands MUST run through `make <target>`, and the Makefile recipes MUST execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
+- If a required tool is missing, the first remediation step MUST be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
+- Root and module `Makefile` targets MUST work when invoked as plain `make <target>` after `make setup`.
 
 #### 07-root-readme
 
-The root `README.md` **MUST** include: overview, machine setup, quickstart, and a repository map.
+The root `README.md` MUST include: overview, machine setup, quickstart, and a repository map.
 
 #### 08-root-gitignore
 
-The repository root **MUST** ignore `dist/` and `.cache/` so module artifacts and tool caches are never committed accidentally.
+The repository root MUST ignore `dist/` and `.cache/` so module artifacts and tool caches are never committed accidentally.
 
 #### 09-git-tagging-and-artifact-versioning
 
-All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g., `graphvisualizer/renderer/1.0.0`, `shared/libs/mylib/2.1.0`).
+All releases MUST be tagged using the format `<module-name>/<semver>` (e.g., `graphvisualizer/renderer/1.0.0`, `shared/libs/mylib/2.1.0`).
 
 `<module-name>` is preferably the path-like identifier of the module being released. A custom name is allowed but the folder name is strongly preferred.
 

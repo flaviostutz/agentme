@@ -35,7 +35,7 @@ Use `scope-type: reference` when the scope contains:
 - Business area procedure standards: how sales processes SHOULD be conducted, how customer data MUST be handled, how marketing communications MUST comply with applicable regulations.
 - Operational compliance guidelines: finance controls, accounting procedures, public communication standards, customer data management rules.
 
-Do not use `scope-type: reference` for scopes that represent a live service, an active team, or a production system. Use `scope-type: platform` for those.
+`scope-type: reference` MUST NOT be used for scopes that represent a live service, an active team, or a production system. Use `scope-type: platform` for those.
 
 #### 03-naming-convention
 

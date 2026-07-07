@@ -19,7 +19,7 @@ How should projects manage environment variable configuration and CLI invocation
 
 **Use YAML config files for CLI invocation configuration with multiple attributes; use `.env` files to supply environment variables to spawned processes and to hold uncommitted values referenced by config files. Load `.env` exclusively at process launch time — never inside application code.**
 
-Secrets (API keys, passwords, tokens) must never be placed in `.env` files. Those are handled by [agentme-edr-022](../principles/022-secrets-management.md).
+Secrets (API keys, passwords, tokens) MUST NOT be placed in `.env` files. Those are handled by [agentme-edr-022](../principles/022-secrets-management.md).
 
 ### Details
 

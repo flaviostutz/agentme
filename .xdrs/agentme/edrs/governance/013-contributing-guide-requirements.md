@@ -21,15 +21,41 @@ Projects MUST keep a `CONTRIBUTING.md` file at the repository root. The file MUS
 
 ### Details
 
-- Every project **MUST** have a root `CONTRIBUTING.md`.
-- The guide **MUST** direct bug reports to issues.
-- The guide **MUST** direct feature ideas and feature discussions to issues before implementation starts.
-- The guide **MUST** state that fixes and features are contributed through pull requests.
-- The guide **MUST** state that pull requests come from feature branches targeting `main`.
-- The guide **MUST** ask reviewers and contributors to use [Conventional Comments](https://conventionalcomments.org/) for review feedback.
-- The guide **MUST** ask contributors to keep pull requests small enough to keep review and discussion focused.
-- Project scaffolding skills **SHOULD** create the file by default when they initialize a repository.
-- The content **SHOULD** stay concise and practical; do not turn `CONTRIBUTING.md` into a duplicate of `README.md`.
+#### 01-contributing-md-is-required
+
+Every project MUST have a root `CONTRIBUTING.md` file at the repository root. The file MUST explain where bugs, feature discussions, and code changes belong so contributors follow a predictable workflow before opening pull requests.
+
+#### 02-guide-must-direct-bug-reports-to-issues
+
+The guide MUST direct bug reports to issues.
+
+#### 03-guide-must-route-feature-discussions-to-issues
+
+The guide MUST direct feature ideas and feature discussions to issues before implementation starts.
+
+#### 04-guide-must-require-pull-requests
+
+The guide MUST state that fixes and features are contributed through pull requests.
+
+#### 05-guide-must-require-feature-branches
+
+The guide MUST state that pull requests come from feature branches targeting `main`.
+
+#### 06-guide-must-require-conventional-comments
+
+The guide MUST ask reviewers and contributors to use [Conventional Comments](https://conventionalcomments.org/) for review feedback.
+
+#### 07-guide-must-ask-for-small-pull-requests
+
+The guide MUST ask contributors to keep pull requests small enough to keep review and discussion focused.
+
+#### 08-scaffolding-should-create-contributing-md
+
+Project scaffolding skills SHOULD create the file by default when they initialize a repository.
+
+#### 09-content-should-be-concise
+
+The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` into a duplicate of `README.md`.
 
 ## Considered Options
 
