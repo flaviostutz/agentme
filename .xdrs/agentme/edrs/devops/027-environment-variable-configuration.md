@@ -17,7 +17,7 @@ How should projects manage environment variable configuration and CLI invocation
 
 ## Decision Outcome
 
-**Use YAML config files for CLI invocation configuration with multiple attributes; use `.env` files to supply environment variables to spawned processes and to hold uncommitted values referenced by config files. Load `.env` exclusively at process launch time — never inside application code.**
+**Use YAML config files for CLI invocation configuration with multiple attributes; use `.env` files to supply environment variables to spawned processes and to hold uncommitted values referenced by config files. Load `.env` exclusively at process launch time — MUST NOT be loaded inside application code.**
 
 Secrets (API keys, passwords, tokens) MUST NOT be placed in `.env` files. Those are handled by [agentme-edr-022](../principles/022-secrets-management.md).
 
@@ -43,7 +43,7 @@ FEATURE_FLAG_NEW_UI=false
 
 #### 02-dotenv-not-committed
 
-`.env` MUST be listed in `.gitignore` and must never be committed to the repository. It is intended for local use in standalone projects and libraries that do not have a formal deployment pipeline.
+`.env` MUST be listed in `.gitignore` and MUST NOT be committed to the repository. It is intended for local use in standalone projects and libraries that do not have a formal deployment pipeline.
 
 ---
 

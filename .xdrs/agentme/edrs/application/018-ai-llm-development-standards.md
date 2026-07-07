@@ -51,7 +51,7 @@ Every component that interacts with an LLM MUST be classified as exactly one of 
 All direct LLM calls MUST use **LangChain** via the `langchain` packages.
 
 - Use `langchain-openai` as the provider integration layer. It supports both OpenAI and Azure OpenAI.
-- **Always configure LLM providers using explicit library attributes** such as `api_key`, `base_url`, `model`, `api_version`, etc. Never rely on environment variables for LLM configuration.
+- LLM providers MUST be configured using explicit library attributes such as `api_key`, `base_url`, `model`, `api_version`, etc. MUST NOT rely on environment variables for LLM configuration.
 - Configuration MUST be passed via constructor parameters or configuration objects, making dependencies explicit and testable.
 
 **Example of explicit configuration:**

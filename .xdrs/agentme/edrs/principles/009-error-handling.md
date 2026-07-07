@@ -211,7 +211,7 @@ Every system boundary MUST signal failure explicitly:
 
 - **OS processes** MUST exit with a **non-zero exit code** when something went wrong. Exit code `0` means success.
 - **HTTP services** MUST return a **non-2xx/3xx status code** on error, accompanied by a response body that describes the problem without exposing internal system details (stack traces, SQL queries, internal paths, etc.).
-- **All error responses** SHOULD be logged to the console/structured logger, especially system-level or unexpected errors. Operational teams must be able to find the cause from logs alone.
+- **All error responses** SHOULD be logged to the console/structured logger, especially system-level or unexpected errors. Operational teams MUST be able to find the cause from logs alone.
 
 **Examples:**
 

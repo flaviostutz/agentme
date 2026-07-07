@@ -79,7 +79,7 @@ Follow [agentme-edr-019 rule 02-local-sandbox](019-ai-agents-development-standar
 | `lib/data/.xdrs/` | XDRS Policy and Skill documents | `/.xdrs/` (read-only) |
 | Generated at startup | `AGENTS.md` instructing the agent to consult XDRS | `/AGENTS.md` (read-only) |
 
-XDRS documents MUST always be mounted at `/.xdrs/`. `AGENTS.md` MUST always be placed at the sandbox root (`/AGENTS.md`).
+XDRS documents MUST be mounted at `/.xdrs/`. `AGENTS.md` MUST be placed at the sandbox root (`/AGENTS.md`).
 
 Example XDRS mount additions:
 

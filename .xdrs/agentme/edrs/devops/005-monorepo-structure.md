@@ -102,7 +102,7 @@ The root `README.md` MUST include: overview, machine setup, quickstart, and a re
 
 #### 08-root-gitignore
 
-The repository root MUST ignore `dist/` and `.cache/` so module artifacts and tool caches are never committed accidentally.
+The repository root MUST ignore `dist/` and `.cache/` so module artifacts and tool caches MUST NOT be committed accidentally.
 
 #### 09-git-tagging-and-artifact-versioning
 

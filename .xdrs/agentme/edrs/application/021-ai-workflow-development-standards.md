@@ -109,12 +109,9 @@ Nodes MUST follow the naming conventions defined in [agentme-edr-029](029-ai-wor
 
 #### 10-workflow-unit-testing
 
-All LLM calls within workflow nodes are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. Workflow unit tests must run fully offline with no real LLM provider calls.
+All LLM calls within workflow nodes are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. Workflow unit tests MUST run fully offline with no real LLM provider calls.
 
-Choose the mock utility based on what the node under test expects from the model:
-
-- Use **`FakeListChatModel`** when nodes only read `AIMessage.content` (e.g. a routing node that checks a text label).
-- Use **`GenericFakeChatModel`** when any node in the workflow expects tool calls, structured outputs, or when the workflow contains `_agent` nodes that drive a tool-invocation loop.
+Choose the mock utility per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. For workflows containing `_agent` nodes that drive a tool-invocation loop, MUST use `GenericFakeChatModel`.
 
 **Example — workflow with plain-text LLM nodes:**
 

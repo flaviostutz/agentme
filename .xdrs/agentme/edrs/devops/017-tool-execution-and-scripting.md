@@ -24,7 +24,7 @@ This keeps local development and CI aligned, reduces indirection, and lets contr
 - Every project MUST use a root `Makefile` as the authoritative entry point for developer and pipeline commands.
 - The target names in that `Makefile` MUST follow [agentme-edr-008](008-common-targets.md).
 - CI pipelines MUST run `make <target>` from the relevant root instead of calling language-specific scripts such as `npm run`, `pnpm run`, shell wrappers, or secondary task runners.
-- A Makefile target MUST execute the real operation through `mise exec --` before invoking the tool itself, so it always uses the version pinned in `.mise.toml`. Avoid intermediate script layers that hide the actual command.
+- A Makefile target MUST execute the real operation through `mise exec --` before invoking the tool itself, so it MUST use the version pinned in `.mise.toml`. Avoid intermediate script layers that hide the actual command.
 - Every Makefile target MUST start by echoing a concise summary of the target and folder or context, using fewer than 10 words. When delegating to another Makefile, echo the child path and delegated target before invoking it.
 - Direct delegation to another Makefile is allowed when traversing repo, app, or module boundaries, for example `$(MAKE) -C lib build`.
 - Calling the actual tool binary through its native executable launcher is allowed when that is the direct command under `mise exec --`, for example `mise exec -- pnpm exec eslint ./src`, `mise exec -- uv run ty check`, `mise exec -- go test`, or `mise exec -- npx -y monotag`.
