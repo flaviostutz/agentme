@@ -350,10 +350,55 @@ Output exactly "1" if the actual decision matches the expected decision and reas
 Output:
 ```
 
+#### 06-repeatability-eval-loop-exception
+
+Entries whose `test_types` includes `repeatability` are exempt from rule `02`'s "invoke exactly once per entry" constraint. The following constants MUST be declared in `eval.py` and MUST NOT be exposed as Makefile variables, CLI flags, or stored as per-entry dataset fields:
+
+- `REPEAT_COUNT` — number of times each repeatability entry is invoked. SHOULD default to 3-5 for routine CI runs and 10-20 for focused passes on decision-critical or previously-flagged components. Projects SHOULD calibrate the value once per component by plotting cumulative pass rate against repeat count for a few representative entries and picking the point where it plateaus, rather than guessing.
+- `MIN_REPEATABILITY_SCORE` — minimum fraction of repeatability entries that must PASS for the eval to exit 0.
+- `MIN_SIMILARITY` — minimum average pairwise cosine similarity for a single entry to PASS; declared only when using semantic-similarity scoring.
+
+`eval.py` MUST invoke the component `REPEAT_COUNT` times for every repeatability entry and score the resulting outputs by comparing them to each other. `expected_output` is unused for repeatability entries and SHOULD be omitted or set to `null` in the dataset.
+
+**Choosing the scoring method:** Two approaches are supported, declared as a constant in `eval.py`:
+
+- **Semantic-similarity:** Embed all `REPEAT_COUNT` outputs for an entry into vectors and compute the average pairwise cosine similarity. The entry passes (score = 1) if the average similarity ≥ `MIN_SIMILARITY`; otherwise it fails (score = 0). Use for classification or short structured outputs.
+- **LLM-as-judge:** Provide all `REPEAT_COUNT` outputs for an entry to an LLM judge (kept at low/zero temperature) that returns 0 (fail) or 1 (pass) directly, based on whether the outputs are sufficiently consistent. No `MIN_SIMILARITY` constant is needed. Use for free-text or complex structured outputs where vector distance is an unreliable proxy for agreement.
+
+**`repeatability_score`:** the fraction of repeatability entries that received PASS (score = 1). The eval exits non-zero if `repeatability_score` < `MIN_REPEATABILITY_SCORE`. Both `repeatability_score` and `REPEAT_COUNT` MUST be logged to MLflow and included in `report-repeatability.md` (rule `07`).
+
+```python
+REPEAT_COUNT = 5
+MIN_REPEATABILITY_SCORE = 0.8
+MIN_SIMILARITY = 0.9  # only when using semantic-similarity scoring
+
+for entry in repeatability_entries:
+    outputs = [invoke_component(entry, graph) for _ in range(REPEAT_COUNT)]
+    entry_pass = score_agreement(outputs)  # returns 0 or 1; expected_output is not used
+    results["repeatability"].append(entry_pass)
+
+repeatability_score = sum(results["repeatability"]) / len(results["repeatability"])
+mlflow.log_metric("repeatability_score", repeatability_score)
+mlflow.log_metric("repeat_count", REPEAT_COUNT)
+
+if repeatability_score < MIN_REPEATABILITY_SCORE:
+    raise SystemExit(f"Eval failed: repeatability_score {repeatability_score:.2f} < {MIN_REPEATABILITY_SCORE}")
+```
+
+`mock_fixtures` configuration per rule `02` applies to each of the `REPEAT_COUNT` invocations. Any prompt or response caching (provider-side or gateway-side) MUST be bypassed for these invocations — a cache hit would return an identical cached response and falsely report perfect stability instead of measuring the model's actual variance.
+
+**Scoping:** this test type MUST NOT be applied to components whose intended behavior is diverse or creative output (e.g. brainstorming, creative writing) — low agreement there is correct behavior, not a defect.
+
+#### 07-repeatability-report-and-cadence
+
+`--type=repeatability` MUST produce `report-repeatability.md` with a shape adapted from rule `03`'s template: the header MUST include a **Repeat count:** line stating the `REPEAT_COUNT` value used for the run, alongside the usual Date/Dataset/Script/Thresholds lines. The body MUST have an aggregate row reporting `repeatability_score` (the fraction of entries that PASS — see rule `06`) with a Wilson score interval computed over the number of `repeatability` entries, plus a per-item table listing each entry's individual pass/fail result and, when using semantic-similarity, its average pairwise cosine similarity — instead of the `Expected | Actual | Correct` columns used by other types.
+
+Because `repeatability` entries multiply real LLM-provider calls by `REPEAT_COUNT`, projects SHOULD schedule `make eval-repeatability` at release cadence rather than on every commit, aligned with the Workflow eval cadence in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09`, rather than treating it as a mandatory per-commit gate.
+
 ## References
 
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09-ai-project-testing-requirements`) and statistical model eval targets (rule `07-statistical-models-must-have-eval-targets`)
-- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), and mocking constraints per type
+- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), mocking constraints per type, and rule `09` for the repeatability vs reproducibility disambiguation
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters used in `mock_fixtures`
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework and observability
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards

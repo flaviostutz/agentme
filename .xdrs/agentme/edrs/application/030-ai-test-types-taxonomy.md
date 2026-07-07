@@ -57,7 +57,7 @@ The taxonomy in rule `05` rates each test type using one of three values:
 
 #### 04-test-types-enum
 
-A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `human`. These correspond to the dataset-driven rows of rule `05`. **Unit test** and **Integration test** (the two Code-level rows) are NOT part of this enum — they have no golden dataset entries and remain governed entirely by [agentme-edr-004](../principles/004-unit-test-requirements.md) and [agentme-edr-007](../principles/007-project-quality-standards.md) rule `08`.
+A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `human`, `repeatability`. These correspond to the dataset-driven rows of rule `05`. **Unit test** and **Integration test** (the two Code-level rows) are NOT part of this enum — they have no golden dataset entries and remain governed entirely by [agentme-edr-004](../principles/004-unit-test-requirements.md) and [agentme-edr-007](../principles/007-project-quality-standards.md) rule `08`.
 
 #### 05-test-type-taxonomy
 
@@ -72,6 +72,7 @@ Test types MUST be selected from this taxonomy. Each test type is named with its
 | Robustness test | Responsible AI | Verify stable behavior under noisy/out-of-distribution input | mocks disallowed for LLM calls | Inputs come from untrusted/variable sources | Protects reliability/SLAs | Confirms graceful degradation, guides input validation | 3 |
 | Explainability test | Responsible AI | Verify output is justifiable with a faithful rationale | mocks disallowed for LLM calls | Output must be justified to users/auditors/regulators | Required for auditability; builds user trust | Gives rationale trace for debugging wrong answers | 2 |
 | Groundedness (RAG) eval | Quality eval | Verify the answer is supported by retrieved context | mocks disallowed for LLM calls | System uses retrieval-augmented generation | Avoids confidently-wrong answers reaching customers | Pinpoints retrieval/prompt bugs | 4 |
+| Repeatability test | Quality eval | Verify output stability/variance across N repeated invocations of the same input under fixed configuration | mocks disallowed for LLM calls | Non-deterministic components (temperature > 0, agentic tool-selection loops, sampling-based decoding) used in decision-critical or user-facing flows | Protects against silently flaky behavior reaching production; supports consistency SLAs | Detects prompt/agent designs too sensitive to sampling noise; informs temperature/seed tuning | 3 |
 | Human evaluation | Quality eval | Manually verify aspects automated scoring can't (ethics, side effects, external state) | mocks disallowed for LLM calls | Before major releases; periodic spot-check | Defensible, human-reviewed sign-off | Catches what automated metrics miss | 3 |
 | Functional eval (golden-dataset accuracy / LLM-as-judge) | Quality eval | Measure output correctness against the golden dataset | mocks disallowed for LLM calls | Required before every Workflow release ([agentme-edr-007](../principles/007-project-quality-standards.md) rule `09`); advised elsewhere | Auditable evidence of business correctness before release | Detects regressions from model/provider/prompt changes | 5 |
 | Smoke test | Quality eval | Fast pass/fail check on a small, critical subset before running fuller suites | mocks disallowed for LLM calls | Every commit/PR, before functional/responsible-AI evals run | Cheap early warning before slower evals run | Fast, cheap feedback loop | 4 |
@@ -87,12 +88,17 @@ Priority, Relevance, and When to Apply in rule `05` are guidance for prioritizat
 
 The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subset of the golden-dataset functional eval) is a different concept from [agentme-edr-008](../devops/008-common-targets.md)'s existing `test-smoke` target (a fast subset of code-level tests). Both MAY exist in the same project; teams MUST NOT conflate them.
 
+#### 09-repeatability-is-distinct-from-reproducibility
+
+`repeatability` (this test type: output stability across repeated invocations of the same input, same configuration, same short time window) is a different concept from build/environment reproducibility (e.g. pinned dependencies, reproducible builds, [agentme-edr-027](../devops/027-environment-variable-configuration.md)'s environment-configuration conventions). Teams MUST NOT conflate the two when discussing or documenting this test type.
+
 ## References
 
 - [agentme-edr-024](024-ml-dataset-structure.md) — Golden dataset file layout, per-entry JSON format, `$schema` pointer, and schema-lint validation
-- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy
+- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy; rule `06` defines the repeatability eval loop, scoring constants (`REPEAT_COUNT`, `MIN_REPEATABILITY_SCORE`, `MIN_SIMILARITY`), scoring methods, and `repeatability_score`; rule `07` defines the repeatability report format and run cadence
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters referenced by `mock_fixtures`
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Rule `09` tier-level testing requirements (the only mandated AI testing baseline)
 - [agentme-edr-008](../devops/008-common-targets.md) — Rule `03` `eval-<qualifier>` Makefile convention; rule `03`'s `test-smoke` (distinguished in rule `07`)
+- [agentme-edr-027](../devops/027-environment-variable-configuration.md) — Environment-configuration conventions referenced in rule `09`'s reproducibility disambiguation
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM tier definition and mocking utilities referenced by the `mocks allowed` value
 - [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements underlying the Code-level rows
