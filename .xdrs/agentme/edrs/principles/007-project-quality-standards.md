@@ -175,23 +175,28 @@ Projects that contain statistical models (e.g., ML models, LLM-based evaluators,
 **Requirements:**
 - A `make eval` target MUST exist and execute all performance evaluations
 - Each evaluation MUST have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
-- Thresholds MUST be declared explicitly in the project (e.g., in a config file, `Makefile` variable, or documented in `README.md`)
+- Thresholds and all scoring parameters MUST be declared as constants in `eval.py` — they are design decisions about acceptable quality for the component under test, not runtime configuration, and MUST NOT be passed as Makefile variables or CLI flags. See [agentme-edr-031](../application/031-ai-eval-script.md) rule `01`.
 - `make eval` MUST **exit with a non-zero status** (fail) if:
   - The evaluation cannot be executed (missing data, environment errors, model load failures)
   - Any metric falls below its defined minimum threshold
 - CI/CD MUST invoke `make eval` before releasing any version that changes model weights, prompts, or evaluation logic
 
-**Threshold declaration example (Makefile):**
+**Threshold declaration example (eval.py):**
+
+```python
+EVAL_MIN_ACCURACY = {"functional": 0.85, "smoke": 0.90}
+EVAL_MIN_F1 = {"functional": 0.80}
+
+# Thresholds are declared here and enforced by the script:
+if accuracy < EVAL_MIN_ACCURACY.get(test_type, 0):
+    raise SystemExit(f"Eval failed: {test_type} accuracy {accuracy:.2f} < {EVAL_MIN_ACCURACY[test_type]}")
+```
+
+**Makefile target (delegates to eval.py — no threshold variables here):**
 
 ```makefile
-EVAL_MIN_ACCURACY := 0.85
-EVAL_MIN_F1       := 0.80
-
 eval:
-	python eval.py \
-	  --min-accuracy $(EVAL_MIN_ACCURACY) \
-	  --min-f1 $(EVAL_MIN_F1) \
-	  || (echo "Evaluation failed: metrics below threshold"; exit 1)
+	mise exec -- uv run --project . python eval.py --type=all
 ```
 
 ---
@@ -261,5 +266,5 @@ AI projects are classified into three tiers — LLM, Agent, and Workflow — def
 - Evals MUST be executed before every release.
 - Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
 - Evals MUST run against real LLM providers (not mocks) to capture model drift.
-- For eval folder structure and script requirements, see [agentme-edr-028](../application/028-ai-eval-standards.md).
+- For eval folder structure and LLM-as-judge scoring, see [agentme-edr-028](../application/028-ai-eval-core-standards.md). For eval script requirements, see [agentme-edr-031](../application/031-ai-eval-script.md).
 - For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-030](../application/030-ai-test-types-taxonomy.md).
