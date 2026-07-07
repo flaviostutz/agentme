@@ -46,7 +46,7 @@ src/
 
 #### 02-apply-template-method-pattern
 
-When a function's main logic contains well-defined sections and **any individual section exceeds ~20 lines**, extract each section into its own named function. The outer function becomes an orchestrator that calls the extracted helpers in sequence.
+When a function's main logic contains well-defined sections and **any individual section exceeds ~20 lines**, each section MUST be extracted into its own named function. The outer function becomes an orchestrator that calls the extracted helpers in sequence.
 
 **Example (Python):**
 
@@ -110,13 +110,13 @@ Every change to a public interface, behavior, or configuration option MUST be re
 
 #### 05-declare-types-in-file-where-used
 
-If a type (struct, interface, class, typedef, etc.) is used in only **one** file, declare it in that same file. Move a type to a shared module only when it is referenced in two or more files.
+Types used in only **one** file MUST be declared in that same file. Move a type to a shared module only when it is referenced in two or more files.
 
 ---
 
 #### 06-keep-test-files-next-to-source
 
-Where the language ecosystem supports it (e.g. JavaScript/TypeScript, Go, Rust), place test files **beside** the source file they cover and use a consistent naming convention rather than mirroring the source tree in a separate `tests/` folder.
+Where the language ecosystem supports it (e.g. JavaScript/TypeScript, Go, Rust), test files MUST be placed **beside** the source file they cover and use a consistent naming convention rather than mirroring the source tree in a separate `tests/` folder.
 
 **Recommended naming conventions:**
 

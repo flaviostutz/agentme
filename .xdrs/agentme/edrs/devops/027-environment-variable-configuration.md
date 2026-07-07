@@ -25,7 +25,7 @@ Secrets (API keys, passwords, tokens) must never be placed in `.env` files. Thos
 
 #### 01-when-to-use-dotenv
 
-Use a `.env` file when either of the following is true:
+A `.env` file MUST be used when either of the following is true:
 
 1. **Spawned process needs env vars** — the project launches a process (a deployable service, background worker, or shell script) that reads configuration from OS environment variables such as port numbers or API endpoint URLs.
 2. **Value must not be committed** — a configuration value used in a YAML config file (see rule 07) is environment-specific or sensitive enough to exclude from version control. In that case, store the value in `.env` and reference it from the YAML file using env var substitution (see rule 08).
@@ -43,13 +43,13 @@ FEATURE_FLAG_NEW_UI=false
 
 #### 02-dotenv-not-committed
 
-`.env` must be listed in `.gitignore` and must never be committed to the repository. It is intended for local use in standalone projects and libraries that do not have a formal deployment pipeline.
+`.env` MUST be listed in `.gitignore` and must never be committed to the repository. It is intended for local use in standalone projects and libraries that do not have a formal deployment pipeline.
 
 ---
 
 #### 03-dotenv-example-committed
 
-A `.env.example` file must be committed alongside `.env`. It contains all the same variable names with placeholder or illustrative values — no real URLs, credentials, or server names. This file documents what configuration is expected without exposing real values.
+A `.env.example` file MUST be committed alongside `.env`. It contains all the same variable names with placeholder or illustrative values — no real URLs, credentials, or server names. This file documents what configuration is expected without exposing real values.
 
 Example `.env.example`:
 ```
@@ -62,7 +62,7 @@ FEATURE_FLAG_NEW_UI=false
 
 #### 04-stage-specific-dotenv-committed
 
-Stage-specific overrides must use the naming convention `.env.[stage]` (e.g., `.env.production`, `.env.staging`, `.env.test`). These files may be committed to the repository because they carry deployment-stage configuration rather than local developer configuration. They are used during deployment pipelines where the stage is known and explicit.
+Stage-specific overrides MUST use the naming convention `.env.[stage]` (e.g., `.env.production`, `.env.staging`, `.env.test`). These files may be committed to the repository because they carry deployment-stage configuration rather than local developer configuration. They are used during deployment pipelines where the stage is known and explicit.
 
 The generic `.env` must still not be committed. The distinction is: `.env` is for local, ad-hoc, standalone use; `.env.[stage]` is for deployment pipelines with a defined environment identity.
 
@@ -70,7 +70,7 @@ The generic `.env` must still not be committed. The distinction is: `.env` is fo
 
 #### 05-load-in-makefile-before-processes
 
-When `.env` defines variables consumed by shell scripts or spawned processes, the Makefile must load and export them before invoking those processes. Use the following pattern at the top of the relevant Makefile or in a shared include:
+When `.env` defines variables consumed by shell scripts or spawned processes, the Makefile MUST load and export them before invoking those processes. Use the following pattern at the top of the relevant Makefile or in a shared include:
 
 ```makefile
 ifneq (,$(wildcard .env))
@@ -85,7 +85,7 @@ This ensures all variables in `.env` are available as environment variables to e
 
 #### 06-no-application-level-dotenv-loading
 
-Applications must not load `.env` files directly inside their own code using dotenv libraries or equivalent mechanisms. Configuration must enter the process exclusively as OS-level environment variables, set before the process is launched (by the Makefile, a shell script, CI, or a container runtime).
+Applications MUST NOT load `.env` files directly inside their own code using dotenv libraries or equivalent mechanisms. Configuration must enter the process exclusively as OS-level environment variables, set before the process is launched (by the Makefile, a shell script, CI, or a container runtime).
 
 Prohibited patterns:
 
@@ -114,7 +114,7 @@ This rule prevents two parallel loading paths — OS env and file-based env — 
 
 #### 07-cli-adapters-use-yaml-config
 
-CLI adapters with multiple configuration attributes must use a YAML config file rather than env vars or flags for those attributes. This applies whenever configuration is nested, repetitive, or too verbose for flags alone.
+CLI adapters with multiple configuration attributes MUST use a YAML config file rather than env vars or flags for those attributes. This applies whenever configuration is nested, repetitive, or too verbose for flags alone.
 
 The CLI layer is responsible for loading and parsing the YAML file and passing the resolved values to the application layer. The application layer must not read the config file directly.
 
@@ -131,7 +131,7 @@ max_retries: 3
 
 #### 08-env-var-substitution-in-config-files
 
-When a YAML config file contains a value that must not be committed (such as a real endpoint URL, a username, or any other environment-specific value), that value must be expressed as an environment variable reference using `${VAR_NAME}` syntax, and the actual value must be defined in `.env`.
+When a YAML config file contains a value that MUST NOT be committed (such as a real endpoint URL, a username, or any other environment-specific value), that value must be expressed as an environment variable reference using `${VAR_NAME}` syntax, and the actual value must be defined in `.env`.
 
 This keeps the YAML file committable while keeping the environment-specific value out of the repository.
 

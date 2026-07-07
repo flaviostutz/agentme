@@ -21,7 +21,7 @@ How should application source code be organized to separate business logic from 
 
 #### 01-three-layer-separation
 
-Every application is conceptually divided into three layers:
+Every application MUST be organized into these three conceptual layers:
 
 | Layer | Description |
 |-------|-------------|
@@ -30,6 +30,8 @@ Every application is conceptually divided into three layers:
 | **Application** | Business logic that delegates I/O to adapters |
 
 #### 02-adapter-naming-conventions
+
+Adapters MUST follow these naming conventions:
 
 **Inbound adapters** receive external requests or events and trigger application logic. Each gets a flat folder under `adapters/`:
 
@@ -50,7 +52,7 @@ Every application is conceptually divided into three layers:
 #### 03-application-layer-rules
 
 - Expose functionality as typed library interfaces
-- All inputs must be explicitly passed as typed parameters
+- All inputs MUST be explicitly passed as typed parameters
 - No global variables, no direct environment variable access in `app/` or `shared/`
 - Business logic with well-defined input/output behavior
 - Group related logic into subfolders (aggregation roots)
@@ -65,6 +67,8 @@ Kafka message →  adapters/kafka/    →  app/process-event   →  adapters/con
 ```
 
 #### 04-mandatory-folder-structure
+
+All projects MUST follow this folder structure:
 
 ```text
 mysystem/
@@ -97,7 +101,7 @@ mysystem/
 
 #### 06-bootstrap-and-entry-points
 
-- Each inbound adapter folder (`cli/`, `http/`, `grpc/`, etc.) contains the bootstrap and entry point for that interface
+- Each inbound adapter folder (`cli/`, `http/`, `grpc/`, etc.) MUST contain the bootstrap and entry point for that interface
 - The project root Makefile must have targets to run the different inbound interfaces following [agentme-edr-008](../devops/008-common-targets.md) extension conventions (e.g. `run-http`, `run-grpc`)
 - Bootstrap code lives in the adapter that receives inbound requests, not in a separate wiring layer
 

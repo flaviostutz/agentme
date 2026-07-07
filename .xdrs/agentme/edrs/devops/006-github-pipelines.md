@@ -37,7 +37,7 @@ All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via 
 
 File: `.github/workflows/ci.yml`
 
-Triggered on every PR targeting `main` and every push to `main`. Runs the standard `build`, `lint`, and `test` targets from the root Makefile and fails the workflow if any step exits non-zero.
+Projects MUST configure this workflow, triggered on every PR targeting `main` and every push to `main`. It runs the standard `build`, `lint`, and `test` targets from the root Makefile and fails the workflow if any step exits non-zero.
 
 ```yaml
 name: ci
@@ -67,7 +67,7 @@ jobs:
 
 File: `.github/workflows/release.yml`
 
-Manually dispatched (`workflow_dispatch`). Calculates the next semantic version tag using **monotag** and pushes that tag to the repository. Pushing the tag then automatically triggers the publish workflow.
+Projects MUST use this manually dispatched (`workflow_dispatch`) workflow. It calculates the next semantic version tag using **monotag** and pushes that tag to the repository. Pushing the tag then automatically triggers the publish workflow.
 
 The checkout step **must** use `fetch-depth: 0` so monotag can traverse the full commit history to determine the correct next version.
 
@@ -112,7 +112,7 @@ jobs:
 
 File: `.github/workflows/publish.yml`
 
-Triggered exclusively when a tag matching `v*.*.*` is pushed to the repository. This ensures only explicitly tagged commits produce published artifacts. Runs `make publish` against the tagged commit.
+Projects MUST configure this workflow, triggered exclusively when a tag matching `v*.*.*` is pushed to the repository. This ensures only explicitly tagged commits produce published artifacts. Runs `make publish` against the tagged commit.
 
 ```yaml
 name: publish

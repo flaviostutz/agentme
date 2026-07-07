@@ -195,7 +195,7 @@ A developer can run `make test` at the repo root to test everything, or `cd modu
 
 #### 07-quick-reference
 
-Any project following this EDR supports the following actions through the root `Makefile`.
+Any project following this EDR MUST support the following actions through the root `Makefile`.
 
 ```sh
 # install the pinned toolchain and project bootstrap

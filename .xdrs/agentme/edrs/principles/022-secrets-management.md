@@ -29,7 +29,7 @@ All implementation practices derive from three guiding principles:
 
 #### 01-no-secrets-on-disk
 
-Secrets must never be stored on the disk of a developer machine or server. This includes `.env` files (even when gitignored), plaintext config files, embedded in source code, or any other file-based storage.
+Secrets MUST NEVER be stored on the disk of a developer machine or server. This includes `.env` files (even when gitignored), plaintext config files, embedded in source code, or any other file-based storage.
 
 The only acceptable local persistence is through the operating system's native secret manager (e.g., macOS Keychain, Windows Credential Manager, Linux Secret Service).
 
@@ -37,7 +37,7 @@ The only acceptable local persistence is through the operating system's native s
 
 #### 02-local-dev-uses-native-keychain
 
-During local development, secrets must be stored and retrieved using the native OS secret manager. Use cross-platform libraries to keep the code OS-agnostic:
+During local development, secrets MUST be stored and retrieved using the native OS secret manager. Use cross-platform libraries to keep the code OS-agnostic:
 
 | Language | Library |
 |----------|---------|
@@ -51,7 +51,7 @@ The "group" (service name) defaults to the module name. The secret identifier sh
 
 #### 03-fallback-lookup-order
 
-Secret fetching must implement a fallback chain in the following order:
+Secret fetching MUST implement a fallback chain in the following order:
 
 1. **Native OS keychain** — attempt to retrieve the secret using the local keychain library (used during local development).
 2. **Cloud secret manager** — if not found locally, fetch from the configured cloud secret manager (AWS Secrets Manager, Azure Key Vault, etc.) (used in cloud environments).
@@ -66,13 +66,13 @@ Secret 'db-password' could not be found in keychain under group 'mymodule' or in
 
 #### 04-secret-fetching-in-connector
 
-The secret fetching logic (including the fallback chain from rule 03) must live in a dedicated "connector" module or function. This isolates secret-access concerns from business logic and provides a single point to configure secret sources, caching policy, and error handling.
+The secret fetching logic (including the fallback chain from rule 03) MUST live in a dedicated "connector" module or function. This isolates secret-access concerns from business logic and provides a single point to configure secret sources, caching policy, and error handling.
 
 ---
 
 #### 05-setup-secrets-makefile-target
 
-Every module that requires secrets must expose a `setup-secrets` Makefile target. This target:
+Every module that requires secrets MUST expose a `setup-secrets` Makefile target. This target:
 
 - Prompts the user for each required secret value interactively.
 - If the user provides an empty value, the existing secret is not updated.
@@ -120,13 +120,13 @@ In library code (Python, JS/TS, Go), continue using the cross-platform libraries
 
 #### 06-never-log-or-leak-secrets
 
-Secrets must never be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages must reference the secret name or identifier, never its value.
+Secrets MUST NEVER be logged under any circumstance or sent to any service that is not clearly the intended consumer of that secret (authentication, encryption, etc.). This applies to all log levels including debug and trace. Error messages must reference the secret name or identifier, never its value.
 
 ---
 
 #### 07-prefer-dynamic-fetching
 
-Wherever possible, fetch secrets dynamically from the secret manager at the time of use. Avoid storing secrets in global variables or caching them indefinitely. Dynamic fetching through a specialized service enables:
+Wherever possible, secrets SHOULD be fetched dynamically from the secret manager at the time of use. Avoid storing secrets in global variables or caching them indefinitely. Dynamic fetching through a specialized service enables:
 
 - Automatic password rotation without redeployment.
 - Immediate propagation of rotated secrets.
@@ -138,7 +138,7 @@ Short-lived caching (e.g., a few minutes) is acceptable when performance require
 
 #### 08-prefer-fetching-at-point-of-use
 
-Prefer fetching the secret inside the function that directly needs it rather than passing it through multiple layers as a function argument. This minimizes the exposure surface by reducing the number of code paths that handle the raw secret value.
+Developers SHOULD prefer fetching the secret inside the function that directly needs it rather than passing it through multiple layers as a function argument. This minimizes the exposure surface by reducing the number of code paths that handle the raw secret value.
 
 Passing secrets via function arguments is acceptable when the consuming function cannot access the connector directly, but the default design should fetch at the point of use.
 

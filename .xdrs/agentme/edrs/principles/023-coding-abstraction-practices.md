@@ -27,7 +27,7 @@ Prefer functional programming: pure functions with clear input → processing �
 
 #### 02-prefer-explicit-calls-over-indirections
 
-A sequence of direct calls to libraries and resources makes logic straightforward. Avoid:
+Developers SHOULD prefer a sequence of direct calls to libraries and resources to keep logic straightforward. Avoid:
 
 - Aspect-oriented programming (AOP)
 - Implicit context injection / dependency injection containers
@@ -103,7 +103,7 @@ function createServerConfig(opts: Partial<ServerOpts>): ServerConfig {
 
 #### 05-abstractions-for-business-logic-are-encouraged
 
-Extracting domain logic into a named function is **encouraged** when it:
+Developers SHOULD extract domain logic into a named function when it:
 
 - Encapsulates a business rule so the reader does not need to parse low-level conditions to understand domain intent.
 - Communicates intent at a glance, making compound conditions or multi-step checks self-describing.
@@ -122,6 +122,6 @@ if (event.status === 'active' && event.role !== 'guest' && event.quota > 0) { ..
 
 #### 06-idiomatic-framework-patterns-are-exempt
 
-React hooks, higher-order components, middleware chains, and similar patterns established by the framework in use are **not** considered unnecessary abstraction. The reader already expects them, and fighting the framework's idioms creates more confusion than it removes.
+React hooks, higher-order components, middleware chains, and similar patterns established by the framework in use MUST NOT be treated as unnecessary abstraction. The reader already expects them, and fighting the framework's idioms creates more confusion than it removes.
 
 This exemption does not override other rules — a trivial wrapper inside a hook is still prohibited.

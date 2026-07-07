@@ -108,11 +108,11 @@ When agents are used as nodes in workflows, the node name MUST use the `_agent` 
 
 #### 05-agent-composition
 
-When multiple agents are needed:
+When multiple agents are needed, one of these composition patterns MUST be chosen:
 
 - **Single agent with multiple tools:** Use when tools share a common goal and context (e.g., a code analysis agent with `read_file`, `search_code`, and `analyze_pattern` tools).
 - **Multiple agents as workflow nodes:** Use when agents have distinct responsibilities and outputs that feed into each other. Orchestrate them using LangGraph per [agentme-edr-021](021-ai-workflow-development-standards.md).
-- Do NOT create nested agent loops (agent calling agent autonomously). Use workflows for multi-agent orchestration.
+- Nested agent loops (agent calling agent autonomously) MUST NOT be created. Use workflows for multi-agent orchestration.
 
 **Decision criteria:**
 

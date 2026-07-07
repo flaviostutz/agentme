@@ -114,6 +114,8 @@ All releases **MUST** be tagged using the format `<module-name>/<semver>` (e.g.,
 
 #### 11-summary-of-requirements
 
+All requirements marked 'Yes' MUST be met. The table below summarizes the mandatory requirements:
+
 | Requirement | Scope | Mandatory |
 |---|---|---|
 | Lowercase folder/file names | All | Yes |
