@@ -247,27 +247,28 @@ The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-nam
 
 #### 05-repeatability-eval-loop-exception
 
-`repeat_count` is a global eval-scenario setting — a Makefile variable or `eval.py` CLI flag (e.g. `--repeat-count=5`) — MUST NOT be read from the dataset entry ([agentme-edr-030](030-ai-test-types-taxonomy.md) rule `08`). Entries whose `test_types` includes `repeatability` are exempt from rule `02`'s "invoke exactly once per entry" constraint: `eval.py` MUST invoke the component `repeat_count` times for every such entry in the current run, and MUST score the resulting outputs by comparing them to each other per the agreement metric declared in the entry's `expected_output` ([agentme-edr-030](030-ai-test-types-taxonomy.md) rule `08`) — NOT by comparing each output to a fixed `expected_output` value as other types do.
+`REPEAT_COUNT` is a design decision of the eval script, not a runtime knob: it MUST be declared as a constant in `eval.py` ([agentme-edr-030](030-ai-test-types-taxonomy.md) rule `08`), and MUST NOT be exposed as a Makefile variable, CLI flag, or dataset entry field — how many times a repeatability check re-invokes the component is part of the test's design, the same way `EVAL_MIN_ACCURACY` in rule `02`'s example is a script-level constant rather than an operator-tunable parameter. Entries whose `test_types` includes `repeatability` are exempt from rule `02`'s "invoke exactly once per entry" constraint: `eval.py` MUST invoke the component `REPEAT_COUNT` times for every such entry, and MUST score the resulting outputs by comparing them to each other per the agreement metric declared in the entry's `expected_output` ([agentme-edr-030](030-ai-test-types-taxonomy.md) rule `08`) — NOT by comparing each output to a fixed `expected_output` value as other types do.
 
-```makefile
-REPEAT_COUNT := 5
+```python
+REPEAT_COUNT = 5  # design decision: how many times each repeatability entry is invoked
 
-eval-repeatability: lint
-	mise exec -- uv run --project . python eval.py --type=repeatability --repeat-count=$(REPEAT_COUNT)
+for entry in repeatability_entries:
+    outputs = [invoke_component(entry, graph) for _ in range(REPEAT_COUNT)]
+    agreement = score_agreement(outputs, entry["expected_output"])
 ```
 
-`mock_fixtures` MUST still be configured before each of the `repeat_count` invocations, exactly as for a single-invocation entry, so that non-LLM side effects (writes, emails, paid third-party calls) are not multiplied by the repeat count; only the LLM call itself MUST be real. Any prompt or response caching (provider-side or gateway-side) MUST be bypassed for these invocations — a cache hit would return an identical cached response and falsely report perfect stability instead of measuring the model's actual variance.
+`mock_fixtures` MUST still be configured before each of the `REPEAT_COUNT` invocations, exactly as for a single-invocation entry, so that non-LLM side effects (writes, emails, paid third-party calls) are not multiplied by the repeat count; only the LLM call itself MUST be real. Any prompt or response caching (provider-side or gateway-side) MUST be bypassed for these invocations — a cache hit would return an identical cached response and falsely report perfect stability instead of measuring the model's actual variance.
 
 #### 06-repeatability-report-and-cadence
 
-`--type=repeatability` MUST produce `report-repeatability.md` with a shape adapted from rule `03`'s template: an aggregate row reporting the percentage of entries meeting their agreement threshold (with a Wilson score interval computed over the number of `repeatability` entries), plus a per-item table listing each entry's own agreement rate computed from its `repeat_count` outputs, instead of the `Expected | Actual | Correct` columns used by other types.
+`--type=repeatability` MUST produce `report-repeatability.md` with a shape adapted from rule `03`'s template: the header MUST include a **Repeat count:** line stating the `REPEAT_COUNT` value used for the run, alongside the usual Date/Dataset/Script/Thresholds lines. The body MUST have an aggregate row reporting the percentage of entries meeting their agreement threshold (with a Wilson score interval computed over the number of `repeatability` entries), plus a per-item table listing each entry's own agreement rate computed from its `REPEAT_COUNT` outputs, instead of the `Expected | Actual | Correct` columns used by other types.
 
-Because `repeatability` entries multiply real LLM-provider calls by `repeat_count`, projects SHOULD schedule `make eval-repeatability` at release cadence rather than on every commit, aligned with the Workflow eval cadence in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09`, rather than treating it as a mandatory per-commit gate.
+Because `repeatability` entries multiply real LLM-provider calls by `REPEAT_COUNT`, projects SHOULD schedule `make eval-repeatability` at release cadence rather than on every commit, aligned with the Workflow eval cadence in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09`, rather than treating it as a mandatory per-commit gate.
 
 ## References
 
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09-ai-project-testing-requirements`) and statistical model eval targets (rule `07-statistical-models-must-have-eval-targets`)
-- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), mocking constraints per type, and rules `08`-`09` for the global `repeat_count` setting, agreement scoring approach, and reproducibility disambiguation
+- [agentme-edr-030](030-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), mocking constraints per type, and rules `08`-`09` for the `REPEAT_COUNT` eval-script constant, agreement scoring approach, and reproducibility disambiguation
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters used in `mock_fixtures`
 - [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework and observability
 - [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards

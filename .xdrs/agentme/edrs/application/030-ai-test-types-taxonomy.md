@@ -90,9 +90,9 @@ The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subs
 
 #### 08-repeatability-repeat-count-and-scoring
 
-`repeat_count` is a global eval-scenario setting defined in [agentme-edr-028](028-ai-eval-standards.md) rule `05` (a Makefile variable or `eval.py` CLI flag) — it MUST NOT be stored as a per-entry dataset field. Every entry carrying `repeatability` in a given run is invoked the same number of times.
+`REPEAT_COUNT` is a design decision of the eval script, declared as a constant in `eval.py` ([agentme-edr-028](028-ai-eval-standards.md) rule `05`) — it MUST NOT be exposed as a Makefile variable, CLI flag, or stored as a per-entry dataset field. Every entry carrying `repeatability` in a given run is invoked the same number of times.
 
-**Choosing `repeat_count`:** SHOULD default to 3-5 for routine CI runs; SHOULD use 10-20 for a focused pass on decision-critical or previously-flagged components. Projects MAY run `eval-repeatability` twice with a different `repeat_count` override each time (a cheap low-N pass, then a higher-N pass) as an advisory cost-control technique. Projects SHOULD calibrate the value once per component by plotting cumulative agreement rate against repeat count for a few representative entries and picking the point where it plateaus, rather than guessing.
+**Choosing `REPEAT_COUNT`:** SHOULD default to 3-5 for routine CI runs; SHOULD use 10-20 for a focused pass on decision-critical or previously-flagged components. Projects MAY perform a two-phase check by deliberately raising `REPEAT_COUNT` in `eval.py` for a focused re-run once a component is flagged, rather than tuning it per invocation. Projects SHOULD calibrate the value once per component by plotting cumulative agreement rate against repeat count for a few representative entries and picking the point where it plateaus, rather than guessing.
 
 **Scoring:** each entry's repeated outputs MUST be compared to each other, not to `expected_output` — `expected_output` for a `repeatability` entry instead declares the agreement metric and its threshold (e.g. `{"metric": "exact_match_rate", "threshold": 0.8}`). Use exact-match or structured-field agreement for classification/structured outputs; use semantic-similarity or LLM-as-judge agreement (kept at low/zero temperature to avoid measuring the judge's own variance) for free text.
 
@@ -105,7 +105,7 @@ The `smoke` test type (surfaced as the `eval-smoke` Makefile target, a fast subs
 ## References
 
 - [agentme-edr-024](024-ml-dataset-structure.md) — Golden dataset file layout, per-entry JSON format, `$schema` pointer, and schema-lint validation
-- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy; rule `05` defines the invoke-`repeat_count`-times exception and rule `06` the repeatability report/cadence
+- [agentme-edr-028](028-ai-eval-standards.md) — Eval folder structure, `--type` filtering, per-type Makefile targets, and per-type reports that consume this taxonomy; rule `05` defines the invoke-`REPEAT_COUNT`-times exception and rule `06` the repeatability report/cadence
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters referenced by `mock_fixtures`
 - [agentme-edr-007](../principles/007-project-quality-standards.md) — Rule `09` tier-level testing requirements (the only mandated AI testing baseline)
 - [agentme-edr-008](../devops/008-common-targets.md) — Rule `03` `eval-<qualifier>` Makefile convention; rule `03`'s `test-smoke` (distinguished in rule `07`)
