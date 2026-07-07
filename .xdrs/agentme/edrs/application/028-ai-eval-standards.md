@@ -118,9 +118,10 @@ with mlflow.start_run():
     mlflow.set_tag("test_types", ",".join(sorted(resolved_types)))
 
     results = defaultdict(list)
+    cumulative_metrics = defaultdict(lambda: {"accuracy": [], "f1": []})  # Track cumulative metrics
 
     # Entry-first loop: invoke each entry exactly once
-    for entry in entries:
+    for idx, entry in enumerate(entries, start=1):
         # Configure mock adapters from mock_fixtures before invocation
         # (implementation left to the project — see agentme-edr-026 rule 10)
         if entry.get("mock_fixtures"):
@@ -132,7 +133,15 @@ with mlflow.start_run():
             if test_type == "human":
                 export_human_review(entry, actual_output)
                 continue
-            results[test_type].append(score(test_type, actual_output, entry["expected_output"]))
+            
+            score_val = score(test_type, actual_output, entry["expected_output"])
+            results[test_type].append(score_val)
+            
+            # Track cumulative metrics for convergence analysis
+            cumulative_accuracy = sum(results[test_type]) / len(results[test_type])
+            cumulative_f1 = compute_f1(results[test_type])  # project-defined
+            cumulative_metrics[test_type]["accuracy"].append(cumulative_accuracy)
+            cumulative_metrics[test_type]["f1"].append(cumulative_f1)
 
     # Aggregate, report, and enforce thresholds per test type
     for test_type in resolved_types:
@@ -141,7 +150,21 @@ with mlflow.start_run():
 
         accuracy = sum(results[test_type]) / len(results[test_type])
         mlflow.log_metric(f"{test_type}_accuracy", accuracy)
-        write_eval_report(test_type, results[test_type], thresholds={"accuracy": EVAL_MIN_ACCURACY[test_type]})
+        
+        # Generate convergence analysis
+        stability_window = min(10, len(results[test_type]))
+        acc_change = abs(cumulative_metrics[test_type]["accuracy"][-1] - 
+                        cumulative_metrics[test_type]["accuracy"][-stability_window])
+        f1_change = abs(cumulative_metrics[test_type]["f1"][-1] - 
+                       cumulative_metrics[test_type]["f1"][-stability_window])
+        
+        write_eval_report(
+            test_type, 
+            results[test_type], 
+            cumulative_metrics=cumulative_metrics[test_type],
+            stability_window=stability_window,
+            thresholds={"accuracy": EVAL_MIN_ACCURACY[test_type]}
+        )
 
         if accuracy < EVAL_MIN_ACCURACY[test_type]:
             raise SystemExit(f"Eval failed: {test_type} accuracy {accuracy:.2f} < {EVAL_MIN_ACCURACY[test_type]}")
@@ -151,7 +174,7 @@ with mlflow.start_run():
 
 Each eval script MUST produce one `report-<type>.md` per evaluated test type in the same `evals/<component>/eval-<name>/` folder and overwrite each on every run — only the types included in the current `--type` invocation are (re)written; report files for other types are left untouched. The `human` type does not produce a metrics report (see below).
 
-**Generation constraint:** The report MUST be produced programmatically, reading raw metric values directly from MLflow. No LLM or generative model may write, summarize, or paraphrase any section of the report, to prevent hallucinated metric values.
+**Generation constraint:** The report MUST be produced programmatically, reading raw metric values directly from MLflow. No LLM or generative model may write, summarize, or paraphrase any section of the report, to prevent hallucinated metric values. This constraint applies to all report sections including Overall Results, Convergence Analysis, and Per-item Results — all metric values and convergence chart data points MUST be computed from actual evaluation results.
 
 The report MUST follow this template:
 
@@ -175,10 +198,27 @@ The report MUST follow this template:
 
 **Overall: PASS / FAIL**
 
+## Convergence Analysis
+
+```mermaid
+xychart-beta
+  title "Metric Evolution vs Sample Count"
+  x-axis "Samples" [<sample_points>]
+  y-axis "Score" 0.0 --> 1.0
+  line "Accuracy" [<accuracy_values>]
+  line "F1 Score" [<f1_values>]
+```
+
+**Stability Analysis:**
+- Accuracy change over last <window> samples: <change> percentage points
+- F1 change over last <window> samples: <change> percentage points
+
+**Recommendation:** <"Dataset appears sufficient for confident evaluation" | "Add more samples — metrics have not yet stabilized">
+
 ## Per-item Results
 
 | ID  | Input Summary | Expected | Actual | Correct |
-|-----|---------------|----------|--------|---------|
+|-----|---------------|----------|--------|---------|  
 | 001 | <summary>     | <label>  | <label>| ✓       |
 | 002 | <summary>     | <label>  | <label>| ✗       |
 
@@ -194,6 +234,24 @@ The Wilson score bounds at 95% confidence ($z = 1.96$) are:
 $$\frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$$
 
 Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 are required; precision and recall are recommended.
+
+**Convergence analysis:** The Convergence Analysis section shows whether adding more samples would likely change measured metrics. The section MUST include:
+
+1. **Mermaid xychart-beta** showing cumulative Accuracy and F1 evolution:
+   - X-axis: absolute cumulative sample count; Y-axis: metric value (0.0 to 1.0)
+   - Two lines: Accuracy and F1
+   - For datasets > 50 samples: sample at `floor(dataset_size / 10)` intervals (minimum 5), always include first and last points
+   - For datasets ≤ 50 samples: show all points
+
+2. **Stability analysis**: compute absolute change (percentage points) for both Accuracy and F1 over last `min(10, dataset_size)` samples. Example: Accuracy from 0.85 to 0.87 = 0.02 = 2 percentage points.
+
+3. **Recommendation**:
+   - Default threshold: both Accuracy AND F1 change ≤ 2 percentage points
+   - If both meet threshold: "Dataset appears sufficient for confident evaluation"
+   - If either exceeds: "Add more samples — metrics have not yet stabilized"
+   - Projects MAY customize threshold (document in Makefile/README)
+
+Exclude from `report-human.md` (no automated metrics).
 
 **Filled-in example** (`evals/workflow-document-review/eval-basic/report-functional.md` for a document review workflow):
 
@@ -219,6 +277,25 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
 
 > Note: CI [0.69, 0.97] is wide — 25 samples may be insufficient for high confidence. Consider expanding the dataset.
 
+## Convergence Analysis
+
+```mermaid
+xychart-beta
+  title "Metric Evolution vs Sample Count"
+  x-axis "Samples" [1, 5, 10, 15, 20, 25]
+  y-axis "Score" 0.0 --> 1.0
+  line "Accuracy" [0.60, 0.80, 0.85, 0.87, 0.88, 0.88]
+  line "F1 Score" [0.55, 0.78, 0.83, 0.85, 0.86, 0.86]
+```
+
+**Stability Analysis:**
+- Accuracy change over last 10 samples: 0.01 percentage points
+- F1 change over last 10 samples: 0.01 percentage points
+
+**Recommendation:** Dataset appears sufficient for confident evaluation
+
+> Metrics stabilized after ~15 samples. Changes over last 10 samples are well below the 2 percentage point threshold.
+
 ## Per-item Results
 
 | ID  | Input Summary                       | Expected | Actual   | Correct |
@@ -234,6 +311,7 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
 - Sample 005 misclassified: redlined IP clause not flagged as escalation trigger. Possible model drift.
 - MLflow run: experiment `workflow-document-review/eval-basic`, tag `test_types=functional` — view with `mlflow ui`
 ```
+```
 
 **`human` type artifact:** instead of `report-human.md` with metrics, `--type=human` produces a checklist artifact (still named `report-human.md`) listing, per entry, its `input`, `expected_output.human_test` instructions, and the captured `actual_output` — with no Overall Results table, threshold, or PASS/FAIL section, since this type MUST NOT be auto-scored.
 
@@ -244,6 +322,33 @@ Each `evals/<component>/eval-<name>/Makefile` MUST start its MLflow tracking ser
 Ports MUST be statically assigned per eval scenario (not per test type) and MUST NOT reuse the default `5000` port (reserved for `dev-mlflow` per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`). Assign ports starting at `5100` and incrementing by 1 for each additional eval scenario across the entire project.
 
 The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-name>` (e.g. `document-review/eval-basic`). Each `mlflow.start_run()` call MUST set a `test_types` tag listing the test types evaluated in that invocation (comma-separated, e.g. `"functional,smoke"` for `--type=all`, `"smoke"` for `--type=smoke`). A remote MLflow server MUST NOT be required — all tracking is local.
+
+#### 05-llm-as-judge-binary-output
+
+LLM judges scoring component outputs (functional evals, quality evaluations) MUST produce binary output: `0` (fail) or `1` (success).
+
+**Requirements:**
+
+- Judge prompts MUST instruct the model to output exactly `0` or `1`
+- Scoring logic MUST parse the response and map to binary. Ambiguous/invalid responses: score as `0` or raise error
+- Reports using LLM judges MUST use classification metrics (Accuracy, F1, Precision, Recall), not regression metrics (RMSE, R2, MAE)
+- Multi-class classification not supported. For multiple quality levels, use multiple binary judges (e.g., one for "factually correct", another for "tone appropriate")
+
+**Rationale:** Binary output makes LLM judges compatible with classification metrics infrastructure (Accuracy, F1, Wilson CI, convergence analysis).
+
+**Example LLM judge prompt:**
+
+```
+Evaluate whether the document review decision is correct.
+
+Input: {input_summary}
+Expected: {expected_decision}
+Actual: {actual_decision}
+
+Output exactly "1" if the actual decision matches the expected decision and reasoning, or "0" if it does not.
+
+Output:
+```
 
 ## References
 
