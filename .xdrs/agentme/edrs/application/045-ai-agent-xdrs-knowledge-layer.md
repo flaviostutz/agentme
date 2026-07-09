@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-025-ai-agent-xdrs-knowledge-layer
+name: agentme-edr-policy-045-ai-agent-xdrs-knowledge-layer
 description: Defines how to integrate XDRS as the runtime knowledge source of truth for AI agents — covering document placement, AGENTS.md setup, file tools, and local sandbox configuration. Apply only when the project explicitly uses XDRS to govern agent behavior.
 apply-to: AI agent projects that use XDRS as the source of truth for policies and skills
 valid-from: 2026-05-27
 ---
 
-# agentme-edr-policy-025: AI agent XDRS knowledge layer
+# agentme-edr-policy-045: AI agent XDRS knowledge layer
 
 ## Context and Problem Statement
 
@@ -17,7 +17,7 @@ How should an AI agent project integrate XDRS as its runtime source of truth for
 
 **Embed XDRS documents in `lib/data/.xdrs/`, instruct the agent to consult them via `AGENTS.md`, equip the agent with sandboxed file tools, and use the deepagents framework when a local sandbox is required.**
 
-This policy MUST only be applied when the project explicitly chooses XDRS as its knowledge governance layer. It is not required by [agentme-edr-019](019-ai-agents-development-standards.md) or [agentme-edr-021](021-ai-workflow-development-standards.md) in general.
+This policy MUST only be applied when the project explicitly chooses XDRS as its knowledge governance layer. It is not required by [agentme-edr-041](041-ai-agents-development-standards.md) or [agentme-edr-043](043-ai-workflow-development-standards.md) in general.
 
 ### Details
 
@@ -59,7 +59,7 @@ Read /AGENTS.md and follow all instructions in it before proceeding.
 
 #### 02-agent-file-tools
 
-Every agent that uses the XDRS knowledge layer MUST use the file tools provided by the deepagents framework. Do not implement hand-rolled alternatives — see [agentme-edr-019 rule 02-local-sandbox](019-ai-agents-development-standards.md) for the full sandbox and tool requirements.
+Every agent that uses the XDRS knowledge layer MUST use the file tools provided by the deepagents framework. Do not implement hand-rolled alternatives — see [agentme-edr-041 rule 02-local-sandbox](041-ai-agents-development-standards.md) for the full sandbox and tool requirements.
 
 These tools operate over two sandboxed roots (configured in rule `03-local-sandbox`):
 
@@ -72,7 +72,7 @@ These tools operate over two sandboxed roots (configured in rule `03-local-sandb
 
 #### 03-local-sandbox
 
-Follow [agentme-edr-019 rule 02-local-sandbox](019-ai-agents-development-standards.md) for the general deepagents sandbox setup. When XDRS is in use, add the following mounts to the sandbox configuration:
+Follow [agentme-edr-041 rule 02-local-sandbox](041-ai-agents-development-standards.md) for the general deepagents sandbox setup. When XDRS is in use, add the following mounts to the sandbox configuration:
 
 | Source | Content | Deepagents sandbox path |
 |---|---|---|
@@ -91,8 +91,8 @@ data_root = str(files("myagent").joinpath("data"))
 agents_md = Path(temp_root) / "AGENTS.md"
 agents_md.write_text(_AGENTS_MD)  # content from xdrs-core AGENTS.md template; see rule 01-xdrs-knowledge-layer
 
-# Add these mounts alongside the base mounts from agentme-edr-019 rule 02-local-sandbox:
-# (mount_paths uses {src: dst} dict format per agentme-edr-019)
+# Add these mounts alongside the base mounts from agentme-edr-041 rule 02-local-sandbox:
+# (mount_paths uses {src: dst} dict format per agentme-edr-041)
 sandbox = Sandbox(
     mount_paths={
         tmp_dir: "/workspace",

@@ -24,6 +24,8 @@ Module folder responsibilities, artifact locations, and test-folder conventions 
 
 #### 01-top-level-directory-layout
 
+Every monorepo MUST follow this top-level directory layout:
+
 ```
 /
 ├── .cache/               # Optional shared cache for repo-level tooling

@@ -37,10 +37,7 @@ Consult `001-xdrs-core` while making each choice in this phase. The summaries be
 **Scope** — use `_local` unless the user explicitly names another scope.
 - If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
 
-**Subject** — pick one from the allowed list for the chosen type (from `001-xdrs-core`):
-- ADR: `principles`, `application`, `data`, `integration`, `platform`, `controls`, `operations`
-- BDR: `principles`, `marketing`, `product`, `controls`, `operations`, `organization`, `finance`, `sustainability`
-- EDR: `principles`, `application`, `infra`, `observability`, `devops`, `governance`
+**Subject** — MUST read `_core-adr-policy-016` ([016-policy-subjects.md](../../016-policy-subjects.md)) in full before choosing. That document defines all allowed subjects per type with full descriptions, examples, and disambiguation tiebreakers. Do not rely on summaries or prior knowledge of the subject list — always read the policy and select the subject that best matches the decision topic according to its definitions.
 
 When type, scope, or subject cannot be confidently inferred, ask the user a clarifying question before proceeding. Ask one question at a time and wait for the answer; follow up if the response introduces new ambiguity.
 

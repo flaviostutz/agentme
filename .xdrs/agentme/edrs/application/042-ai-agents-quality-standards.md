@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-020-ai-agents-quality-standards
-description: Defines implementation quality standards for AI agents: tool definition patterns, error handling and recovery, observability, and unit testing. Apply alongside agentme-edr-019 when implementing or reviewing agent code. For agent architecture and structural decisions (framework, sandbox, naming, composition, system prompts) see agentme-edr-019.
+name: agentme-edr-policy-042-ai-agents-quality-standards
+description: Defines implementation quality standards for AI agents: tool definition patterns, error handling and recovery, observability, and unit testing. Apply alongside agentme-edr-041 when implementing or reviewing agent code. For agent architecture and structural decisions (framework, sandbox, naming, composition, system prompts) see agentme-edr-041.
 apply-to: AI agent implementation code — apply when writing tools, error handlers, logging, and unit tests for agents
 valid-from: 2026-06-09
 ---
 
-# agentme-edr-policy-020: AI agents quality standards
+# agentme-edr-policy-042: AI agents quality standards
 
 ## Context and Problem Statement
 
@@ -15,7 +15,7 @@ How should agent tools be defined, what error handling must agents implement, ho
 
 ## Decision Outcome
 
-**Agent implementations MUST follow the tool definition, error handling, observability, and unit testing standards defined here, alongside the structural decisions in [agentme-edr-019](019-ai-agents-development-standards.md).**
+**Agent implementations MUST follow the tool definition, error handling, observability, and unit testing standards defined here, alongside the structural decisions in [agentme-edr-041](041-ai-agents-development-standards.md).**
 
 ### Details
 
@@ -100,9 +100,9 @@ Agent execution MUST be observable through logging and tracing:
 
 - Log each iteration of the perceive → plan → act → observe cycle with iteration number and tool selection.
 - Use structured logging (JSON) with fields: `iteration`, `tool_selected`, `tool_result_status`, `decision`.
-- For LLM calls within agents, follow [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability`.
+- For LLM calls within agents, follow [agentme-edr-040](040-ai-llm-development-standards.md) rule `03-llm-observability`.
 - When agents run as workflow nodes, MLflow tracking from the parent workflow automatically captures agent-level traces.
-- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../platform/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 **Example structured log entry:**
 
@@ -120,7 +120,7 @@ Agent execution MUST be observable through logging and tracing:
 
 #### 04-agent-unit-testing
 
-Agent LLM calls are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`.
+Agent LLM calls are external API calls and MUST be mocked in unit tests per [agentme-edr-040](040-ai-llm-development-standards.md) rule `04-unit-test-mocking`.
 
 Because agents drive a tool-invocation loop — where the LLM decides which tools to call — the fake model must return **tool-call messages** followed by a final answer. Use **`GenericFakeChatModel`** for this:
 
@@ -150,7 +150,7 @@ def test_file_analyzer_agent_calls_search_then_stops():
     assert "3 Python files" in result.summary
 ```
 
-Agents MUST be designed so that the LLM instance is injectable (constructor parameter) to allow test doubles. See [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the injectable LLM pattern.
+Agents MUST be designed so that the LLM instance is injectable (constructor parameter) to allow test doubles. See [agentme-edr-040](040-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the injectable LLM pattern.
 
 **`mock_deep_agent`**
 
@@ -175,10 +175,10 @@ def test_workflow_calls_subagent(mocker):
 
 ## References
 
-- [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards (framework, sandbox, naming, composition, system prompts)
-- [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards (LangChain configuration, mocking patterns)
+- [agentme-edr-041](041-ai-agents-development-standards.md) — Agent development standards (framework, sandbox, naming, composition, system prompts)
+- [agentme-edr-040](040-ai-llm-development-standards.md) — LLM development standards (LangChain configuration, mocking patterns)
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Hexagonal architecture (tool placement in adapters/connectors)
-- [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
-- [agentme-edr-028](028-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
-- [agentme-edr-031](031-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
-- [agentme-edr-032](032-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
+- [agentme-edr-007](../governance/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
+- [agentme-edr-051](051-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
+- [agentme-edr-053](053-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
+- [agentme-edr-054](054-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis

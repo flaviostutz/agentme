@@ -61,7 +61,7 @@ A unit test suite MUST run automatically before every release. Failing tests MUS
 
 **Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NOT be deployed to production.
 
-**Reference:** [agentme-edr-004](004-unit-test-requirements.md) for detailed unit test requirements.
+**Reference:** [agentme-edr-004](../application/004-unit-test-requirements.md) for detailed unit test requirements.
 
 ---
 
@@ -156,7 +156,7 @@ test-examples:
 	$(MAKE) -C examples
 ```
 
-If examples require live services or credentials, remove `test-examples` from the `test` dependency list and keep it as a standalone named target only. See [agentme-edr-008](../devops/008-common-targets.md) rule 08 for the full offline/online decision table.
+If examples require live services or credentials, remove `test-examples` from the `test` dependency list and keep it as a standalone named target only. See [agentme-edr-008](../platform/008-common-targets.md) rule 08 for the full offline/online decision table.
 
 **Examples Makefile:**
 
@@ -175,7 +175,7 @@ Projects that contain statistical models (e.g., ML models, LLM-based evaluators,
 **Requirements:**
 - A `make eval` target MUST exist and execute all performance evaluations
 - Each evaluation MUST have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
-- Thresholds and all scoring parameters MUST be declared as constants in `eval.py` — they are design decisions about acceptable quality for the component under test, not runtime configuration, and MUST NOT be passed as Makefile variables or CLI flags. See [agentme-edr-031](../application/031-ai-eval-script.md) rule `01`.
+- Thresholds and all scoring parameters MUST be declared as constants in `eval.py` — they are design decisions about acceptable quality for the component under test, not runtime configuration, and MUST NOT be passed as Makefile variables or CLI flags. See [agentme-edr-053](../application/053-ai-eval-script.md) rule `01`.
 - `make eval` MUST **exit with a non-zero status** (fail) if:
   - The evaluation cannot be executed (missing data, environment errors, model load failures)
   - Any metric falls below its defined minimum threshold
@@ -244,27 +244,27 @@ Projects are not required to implement integration tests, but when present, they
 
 #### 09-ai-project-testing-requirements
 
-AI projects are classified into three tiers — LLM, Agent, and Workflow — defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md). Testing requirements differ per tier:
+AI projects are classified into three tiers — LLM, Agent, and Workflow — defined in [agentme-edr-040](../application/040-ai-llm-development-standards.md). Testing requirements differ per tier:
 
 | Tier | Unit tests | Evals | Integration tests |
 |---|---|---|---|
-| **LLM** ([agentme-edr-018](../application/018-ai-llm-development-standards.md)) | Not required | Not required; SHOULD be used when critical prompts are in use to measure accuracy and detect model drift | Not required |
-| **Agent** ([agentme-edr-019](../application/019-ai-agents-development-standards.md)) | Not required | Not required; MAY be used | Not required |
-| **Workflow** ([agentme-edr-021](../application/021-ai-workflow-development-standards.md)) | **Required** — see below | **Required** before every release; failed evals block release | Advised |
+| **LLM** ([agentme-edr-040](../application/040-ai-llm-development-standards.md)) | Not required | Not required; SHOULD be used when critical prompts are in use to measure accuracy and detect model drift | Not required |
+| **Agent** ([agentme-edr-041](../application/041-ai-agents-development-standards.md)) | Not required | Not required; MAY be used | Not required |
+| **Workflow** ([agentme-edr-043](../application/043-ai-workflow-development-standards.md)) | Required — see below | Required before every release; failed evals block release | Advised |
 
 **Workflow unit test requirements:**
 
-- MUST use mocked LLM providers. See [agentme-edr-018](../application/018-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the mocking pattern.
-- MUST run offline with no external dependencies per [agentme-edr-004](004-unit-test-requirements.md) rule `02-must-run-offline`.
-- MUST achieve 80% code coverage per [agentme-edr-004](004-unit-test-requirements.md) rule `03-must-maintain-80-percent-coverage`.
+- MUST use mocked LLM providers. See [agentme-edr-040](../application/040-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the mocking pattern.
+- MUST run offline with no external dependencies per [agentme-edr-004](../application/004-unit-test-requirements.md) rule `02-must-run-offline`.
+- MUST achieve 80% code coverage per [agentme-edr-004](../application/004-unit-test-requirements.md) rule `03-must-maintain-80-percent-coverage`.
 - MUST test workflow routing logic, conditional edges, state transformations, and error handling.
 - MUST achieve **80% coverage of LangGraph graph edges and branches**: every conditional edge MUST have test cases covering each possible branch, and every node→node transition MUST be exercised by at least one test.
-- Files MUST be named `<name>_test.py` and placed alongside the source file per [agentme-edr-004](004-unit-test-requirements.md) rule `04-must-place-test-files-alongside-source`.
+- Files MUST be named `<name>_test.py` and placed alongside the source file per [agentme-edr-004](../application/004-unit-test-requirements.md) rule `04-must-place-test-files-alongside-source`.
 
 **Workflow eval requirements:**
 
 - Evals MUST be executed before every release.
 - Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
 - Evals MUST run against real LLM providers (not mocks) to capture model drift.
-- For eval folder structure and LLM-as-judge scoring, see [agentme-edr-028](../application/028-ai-eval-core-standards.md). For eval script requirements, see [agentme-edr-031](../application/031-ai-eval-script.md).
-- For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-030](../application/030-ai-test-types-taxonomy.md).
+- For eval folder structure and LLM-as-judge scoring, see [agentme-edr-051](../application/051-ai-eval-core-standards.md). For eval script requirements, see [agentme-edr-053](../application/053-ai-eval-script.md).
+- For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-052](../application/052-ai-test-types-taxonomy.md).

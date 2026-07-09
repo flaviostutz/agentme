@@ -36,7 +36,7 @@ A single dependency manager, isolated package internals under `lib/`, and a stan
 
 All routine commands MUST run through the project `Makefile`. MUST NOT call `uv`, `ruff`, `pytest`, or `ty` directly in docs, CI, or daily development workflows.
 
-The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Using routine project CLI commands directly outside the Makefile contract is not allowed.
+The repository root MUST define a `.mise.toml` that pins Python and uv. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../platform/017-tool-execution-and-scripting.md). Using routine project CLI commands directly outside the Makefile contract is not allowed.
 
 The root `.venv/` is the canonical environment location for both the library and all examples. Subdirectory commands MUST set `UV_PROJECT_ENVIRONMENT` to the workspace root `.venv/` instead of creating nested virtual environments.
 
@@ -98,7 +98,7 @@ Use the `lib/src/` layout for import safety and packaging clarity. Keep tests un
 
 Internal source code MUST be organized following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities).
 
-Libraries and shared utilities MUST include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../principles/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples MUST import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification MUST install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
+Libraries and shared utilities MUST include an `examples/` folder and wire example execution into the root `test` flow, following [agentme-edr-007](../governance/007-project-quality-standards.md). Each example directory is its own Python project with its own `pyproject.toml`, and examples MUST import the library as a consumer would rather than reaching back into `lib/src/` with relative imports. Local example verification MUST install the wheel built into `lib/dist/`; do not use editable or path-based dependencies back to `lib/`.
 
 Python keeps unit tests under `lib/tests/` by default because that remains the more common and maintainable convention for typed/package-based projects than co-locating tests beside every source file. Integration tests belong in `lib/tests_integration/`, and benchmark harnesses belong in `lib/tests_benchmark/` when they are more than a single micro-benchmark helper.
 
@@ -159,7 +159,7 @@ Adjust `target-version` to match the project's minimum supported Python version.
 
 ty MUST run on every lint pass. The default rule set is the minimum baseline; projects may enable stricter rules as the codebase matures.
 
-Pytest coverage MUST fail below 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md).
+Pytest coverage MUST fail below 80% line and branch coverage, following [agentme-edr-004](004-unit-test-requirements.md).
 
 #### Makefile targets
 
@@ -198,7 +198,7 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 | `dev` | Same as `run`, optionally with repository-specific dev defaults |
 | `publish` | `mise exec -- uv publish --project .` after versioning and packaging are complete |
 
-The root `Makefile` MUST remain the only contract for CI and contributors, in line with [agentme-edr-008](../devops/008-common-targets.md).
+The root `Makefile` MUST remain the only contract for CI and contributors, in line with [agentme-edr-008](../platform/008-common-targets.md).
 
 ## Considered Options
 
@@ -209,7 +209,7 @@ The root `Makefile` MUST remain the only contract for CI and contributors, in li
 
 ## References
 
-- [agentme-edr-004](../principles/004-unit-test-requirements.md) - Coverage and unit-test baseline
-- [agentme-edr-007](../principles/007-project-quality-standards.md) - Examples and quality requirements
-- [agentme-edr-008](../devops/008-common-targets.md) - Standard Makefile target names
+- [agentme-edr-004](004-unit-test-requirements.md) - Coverage and unit-test baseline
+- [agentme-edr-007](../governance/007-project-quality-standards.md) - Examples and quality requirements
+- [agentme-edr-008](../platform/008-common-targets.md) - Standard Makefile target names
 - [005-create-python-project](skills/005-create-python-project/SKILL.md) - Scaffold a project following this EDR

@@ -116,13 +116,4 @@ Types used in only **one** file MUST be declared in that same file. Move a type 
 
 #### 06-keep-test-files-next-to-source
 
-Where the language ecosystem supports it (e.g. JavaScript/TypeScript, Go, Rust), test files MUST be placed **beside** the source file they cover and use a consistent naming convention rather than mirroring the source tree in a separate `tests/` folder.
-
-**Recommended naming conventions:**
-
-| Language / ecosystem | Source file      | Test file              |
-|----------------------|------------------|------------------------|
-| TypeScript / JS      | `app.ts`         | `app.test.ts`          |
-| Go                   | `handler.go`     | `handler_test.go`      |
-| Rust                 | `parser.rs`      | inline `#[cfg(test)]`  |
-| Python               | `service.py`     | `service_test.py` (same directory, or `tests/` when the ecosystem convention dictates otherwise) |
+Test files MUST be placed beside the source file they cover, following the co-location and naming conventions defined in [agentme-edr-004 rule 04](004-unit-test-requirements.md). For Rust, use inline `#[cfg(test)]` modules instead of a separate test file.

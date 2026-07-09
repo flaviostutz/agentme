@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 683f928d9a0c
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 933b5bf72ac2
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -10,11 +10,8 @@ files:
     - .agents/skills/001-review|https://github.com/flaviostutz/xdrs-core.git|646c0bd51d1a|symlink|18c5f3a037d4|0
     - .agents/skills/008-write-xdrs-doc|https://github.com/flaviostutz/xdrs-core.git|646c0bd51d1a|symlink|c3a23ff52f24|0
     - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dc8d115acde4|file|9ce759499c1a|0
-    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|dc8d115acde4|file|58d5e4175583|0
-    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|26cf82727373|file|c1c76ab913c7|0
     - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|26cf82727373|file|033b0d2a25d4|0
     - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|26cf82727373|file|664212bf95c3|0
-    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|26cf82727373|file|666248f46938|0
     - AGENTS.md|https://github.com/flaviostutz/xdrs-core.git|a2ad3c3fe37c|file|4957a7502eef|0
     - .xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|7716fe005402|0
     - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|57c9bbb2af53|0
@@ -29,12 +26,16 @@ files:
     - .xdrs/_core/adrs/principles/015-local-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d48a4585c0b1|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|346ac011e9b5|0
     - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|fc77e1f9be36|file|daae7fa6f1f8|0
-    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|ad350449ce09|0
-    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|2368a70c5bc5|0
     - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|45647b095bc9|0
     - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|https://github.com/flaviostutz/xdrs-core.git|2ffac37dcd8d|file|f05b6d4421c7|0
-    - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|1480aef75d6f|0
     - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|abf2a37dbd72|0
     - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|825f286e85a6|0
-checksum: cd59086cab3f
+    - .xdrs/_core/adrs/principles/016-policy-subjects.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|adfd5df4650c|0
+    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|d606d322eec1|0
+    - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|350167429a4e|0
+    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|a22808b19041|0
+    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|91b4b729b46f|0
+    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|43baa25cadcb|0
+    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|933b5bf72ac2|file|7f219a5dd487|0
+checksum: 04085861f6ed
 

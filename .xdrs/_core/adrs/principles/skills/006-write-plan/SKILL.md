@@ -142,7 +142,7 @@ Rules to apply while drafting:
 **Expected actions:**
 1. Read `007-plan-standards.md`.
 2. Topic: API v2 migration. Scope: `_local`.
-3. Type: `adrs` (architectural). Subject: `integration` or `application`.
+3. Type: `adrs` (architectural). Subject: `application`.
 4. Research related Policies about API design and integration patterns.
 5. Draft the plan with clear problem, solution, milestones, and expected end date.
 6. Save, register in canonical index, and lint.

@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-018-ai-llm-development-standards
-description: Defines the standard framework, provider configuration, observability approach, and LLM mocking patterns for simple LLM calls in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls using LangChain, manages prompt context, or handles conversation history. For agentic patterns see agentme-edr-019, for workflow patterns see agentme-edr-021.
+name: agentme-edr-policy-040-ai-llm-development-standards
+description: Defines the standard framework, provider configuration, observability approach, and LLM mocking patterns for simple LLM calls in Python. Use when building, reviewing, or scaffolding any code that makes direct LLM calls using LangChain, manages prompt context, or handles conversation history. For agentic patterns see agentme-edr-041, for workflow patterns see agentme-edr-043.
 apply-to: Python projects that make direct LLM calls, manage prompt context, or handle conversation threads
 valid-from: 2026-06-05
 ---
 
-# agentme-edr-policy-018: AI LLM development standards
+# agentme-edr-policy-040: AI LLM development standards
 
 ## Context and Problem Statement
 
@@ -29,7 +29,7 @@ Three distinct tiers of LLM-based computation are recognized in this policy. Eve
 
 These tiers nest: in general, a Workflow may contain Agent nodes; an Agent uses LLM calls internally. The tier of a component is determined by its outermost controlling structure.
 
-See [agentme-edr-019](019-ai-agents-development-standards.md) for Agent implementation standards and [agentme-edr-021](021-ai-workflow-development-standards.md) for Workflow implementation standards.
+See [agentme-edr-041](041-ai-agents-development-standards.md) for Agent implementation standards and [agentme-edr-043](043-ai-workflow-development-standards.md) for Workflow implementation standards.
 
 ### Details
 
@@ -44,7 +44,7 @@ Every component that interacts with an LLM MUST be classified as exactly one of 
 **Function calling boundary:**
 
 - A **single** function call decided by the LLM (e.g., "call get_weather(location)") is still an LLM-tier interaction if the function is called once and the result is returned to the user.
-- An **iterative** function-calling loop where the LLM observes results and decides next actions autonomously is an Agent (see [agentme-edr-019](019-ai-agents-development-standards.md)).
+- An **iterative** function-calling loop where the LLM observes results and decides next actions autonomously is an Agent (see [agentme-edr-041](041-ai-agents-development-standards.md)).
 
 #### 02-llm-framework
 
@@ -71,7 +71,7 @@ llm = ChatOpenAI(
 Enable LangChain auto-tracing at every application entry point by calling `mlflow.langchain.autolog()` during startup, before any LLM call is made.
 
 - This captures inputs, outputs, token counts, and latency for every LangChain chain or runnable automatically.
-- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start a local MLflow tracking server for development inspection, per [agentme-edr-008](../platform/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 #### 04-unit-test-mocking
 
@@ -213,11 +213,11 @@ Return a JSON object with:
 
 ## References
 
-- [agentme-edr-019](019-ai-agents-development-standards.md) — Agent implementation standards (deepagents, tool-invocation loops)
-- [agentme-edr-021](021-ai-workflow-development-standards.md) — Workflow implementation standards (LangGraph, MLflow run-level tracking)
-- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Unit test requirements including external API mocking guidance
+- [agentme-edr-041](041-ai-agents-development-standards.md) — Agent implementation standards (deepagents, tool-invocation loops)
+- [agentme-edr-043](043-ai-workflow-development-standards.md) — Workflow implementation standards (LangGraph, MLflow run-level tracking)
+- [agentme-edr-004](004-unit-test-requirements.md) — Unit test requirements including external API mocking guidance
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
-- [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
-- [agentme-edr-028](028-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
-- [agentme-edr-031](031-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
-- [agentme-edr-032](032-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
+- [agentme-edr-007](../governance/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
+- [agentme-edr-051](051-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
+- [agentme-edr-053](053-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
+- [agentme-edr-054](054-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis

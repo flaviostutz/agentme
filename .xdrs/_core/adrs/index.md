@@ -21,6 +21,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-013](principles/013-platform-scope-type.md) - **platform scope type** — Defines the `platform` scope type: live services or operational areas consumable directly
 - [_core-adr-policy-014](principles/014-standard-scope-type.md) - **standard scope type** — Defines the `standard` scope type: the default for business areas, products, and teams
 - [_core-adr-policy-015](principles/015-local-scope-type.md) - **_local scope type** — Defines the `_local` scope type: reserved for workspace-local decisions that must never be distributed
+- [_core-adr-policy-016](principles/016-policy-subjects.md) - **Policy Subjects** — Allowed subjects per type (ADR/BDR/EDR), descriptions, examples, and disambiguation tiebreakers
 
 ## Skills
 
