@@ -30,7 +30,7 @@ A predictable layout and minimal external tooling keep Go projects approachable,
 | **golangci-lint** | Linting — aggregates many linters in one fast run; configured via `.golangci.yml` |
 | **monotag** | Version tagging from git history for the `publish` target |
 
-All commands MUST be run exclusively through the Makefile and MUST NOT be called ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md).
+All commands MUST be run exclusively through the Makefile and MUST NOT be called ad-hoc. The project root **MUST** define a `.mise.toml` that pins `go`, `golangci-lint`, and any other Go-related CLIs used by the project. Contributors and CI **MUST** bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe **MUST** execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../platform/017-tool-execution-and-scripting.md).
 Direct installation of project-required Go CLIs with `go install ...@latest` as a repair step is **NOT** allowed unless an XDR for that repository explicitly permits it.
 
 #### Project structure

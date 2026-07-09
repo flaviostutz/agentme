@@ -73,10 +73,10 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 | Target | Purpose |
 |--------|---------|
 | `setup` | Run `mise install` and any small project bootstrap needed before normal targets work. This is the first command after checkout. |
-| `all` | Alias that runs `build`, `lint`, and `test` in sequence. **MUST** be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. **MUST** only invoke targets that run **offline** — no external credentials, running servers, paid APIs, or environment-specific configuration outside the repository. |
+| `all` | Alias that runs `build`, `lint`, and `test` in sequence. MUST be the default target (i.e., running `make` or the runner with no arguments invokes `all`). Used by developers as a fast pre-push check to verify the software meets minimum quality standards in one command. MUST only invoke targets that run **offline** — no external credentials, running servers, paid APIs, or environment-specific configuration outside the repository. |
 | `clean` | Remove all temporary or generated files created during build, lint, or test (e.g., `node_modules`, virtual environments, compiled binaries, generated files). Used both locally and in CI for a clean slate. |
 | `dev` | Run the software locally for development (e.g., start a Node.js API server, open a Jupyter notebook, launch a React dev server). May have debugging tools, verbose logging, or hot reloading features enabled. |
-| `run` | Run the software in production mode (e.g., start a compiled binary, launch a production server). Debugging or development-only features **SHOULD NOT** be enabled. |
+| `run` | Run the software in production mode (e.g., start a compiled binary, launch a production server). Debugging or development-only features SHOULD NOT be enabled. |
 | `update-lockfile` | Update the dependency lockfile to reflect the latest resolved versions of all dependencies. |
 
 ##### Build group
@@ -93,17 +93,17 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 
 | Target | Purpose |
 |--------|---------|
-| `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks **MUST** be non-destructive (read-only); fixes are handled by `lint-fix`. **MUST** only invoke subtargets that run **offline** (no external credentials or services). |
+| `lint` | Run **all static quality checks** outside of tests. This MUST include: code formatting validation, code style enforcement, code smell detection, static analysis, dependency audits for known CVEs, security vulnerability scans (e.g., SAST), and project/configuration structure checks. All checks MUST be non-destructive (read-only); fixes are handled by `lint-fix`. MUST only invoke subtargets that run **offline** (no external credentials or services). |
 | `lint-fix` | Automatically fix linting and formatting issues where possible. || `lint-format` | *(Optional)* Check code formatting only (e.g., Prettier, gofmt, Black). |
 ##### Test group
 
 | Target | Purpose |
 |--------|---------|
-| `test` | Run **all offline tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and any integration or end-to-end tests that run **offline** (no external servers, credentials, or paid APIs). Normally delegates to `test-unit` and, when offline, `test-integration` in sequence. Suffixed targets that require external dependencies **MUST NOT** be invoked automatically — see rule 08. |
+| `test` | Run **all offline tests** required for the project. This MUST include unit tests (with coverage enforcement — the build MUST fail if coverage thresholds are not met) and any integration or end-to-end tests that run **offline** (no external servers, credentials, or paid APIs). Normally delegates to `test-unit` and, when offline, `test-integration` in sequence. Suffixed targets that require external dependencies MUST NOT be invoked automatically — see rule 08. |
 | `test-unit` | Run unit tests only, including coverage report generation and coverage threshold enforcement. |
 | `test-integration` | *(Optional)* Run integration and end-to-end tests only. Projects without integration tests MAY omit this target. |
 | `test-smoke` | *(Optional)* Run a fast, minimal subset of tests to verify the software is basically functional. Useful as a post-deploy health check. |
-| `eval` | *(Optional)* Run **all evaluations** for the module. Used alongside `test` to measure the accuracy and performance of statistical systems such as ML models, AI agents, or noisy systems. Typically runs against a live or near-live system (similar to an integration test) and produces a performance analysis report (e.g., F1 score, Accuracy, Precision, Recall). **MUST NOT** be included in `test` or `all` — evals are opt-in because they require live dependencies and MAY be slow or costly to run. Individual evaluations **MUST** follow the prefix convention: `eval-<qualifier>` (e.g., `eval-simple`, `eval-complex`). |
+| `eval` | *(Optional)* Run **all evaluations** for the module. Used alongside `test` to measure the accuracy and performance of statistical systems such as ML models, AI agents, or noisy systems. Typically runs against a live or near-live system (similar to an integration test) and produces a performance analysis report (e.g., F1 score, Accuracy, Precision, Recall). MUST NOT be included in `test` or `all` — evals are opt-in because they require live dependencies and MAY be slow or costly to run. Individual evaluations MUST follow the prefix convention: `eval-<qualifier>` (e.g., `eval-simple`, `eval-complex`). |
 
 ##### Release group
 
@@ -119,18 +119,18 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 
 #### 04-standard-environment-variables
 
-Two environment variables have defined semantics and **MUST** be used consistently.
+Two environment variables have defined semantics and MUST be used consistently.
 
 | Variable | Purpose |
 |----------|---------|
-| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. Common prefixes: `dev`, `tst`, `acc`, `prd`. Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. **MAY** be required by any target that is environment-aware (build, lint, deploy, etc.). |
+| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. Common prefixes: `dev`, `tst`, `acc`, `prd`. Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. MAY be required by any target that is environment-aware (build, lint, deploy, etc.). |
 | `VERSION` | Sets the explicit version used during packaging and deployment. Used when there is no automatic version-tagging utility, or to override it. |
 
 ---
 
 #### 05-extending-targets-with-prefixes
 
-Projects **MAY** add custom targets beyond the standard set. Custom targets **MUST** be named by prefixing a standard target name with a descriptive qualifier, keeping the naming intuitive and consistent with the group it belongs to.
+Projects MAY add custom targets beyond the standard set. Custom targets MUST be named by prefixing a standard target name with a descriptive qualifier, keeping the naming intuitive and consistent with the group it belongs to.
 
 **Examples:**
 
@@ -152,7 +152,7 @@ The prefix convention ensures developers can infer the purpose of any target wit
 
 #### 06-monorepo-usage
 
-In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to child Makefiles in sequence. The parent Makefile **SHOULD** call `$(MAKE) -C <child> <target>` directly, while each child `Makefile` runs its actual tool commands through `mise exec --`.
+In a monorepo, each module has its own `Makefile` with its own `build`, `lint`, `test`, and `deploy` targets scoped to that module. Parent-level Makefiles (at the application or repo root) delegate to child Makefiles in sequence. The parent Makefile SHOULD call `$(MAKE) -C <child> <target>` directly, while each child `Makefile` runs its actual tool commands through `mise exec --`.
 
 ```makefile
 # root Makefile — delegates to all modules
@@ -165,7 +165,7 @@ test:
 	$(MAKE) -C module-b test
 ```
 
-A developer can run `make test` at the repo root to test everything, or `cd module-a && make test` to test a single module. Both **MUST** work.
+A developer can run `make test` at the repo root to test everything, or `cd module-a && make test` to test a single module. Both MUST work.
 
 **Reference:** See [agentme-edr-005](005-monorepo-structure.md) for the full monorepo layout convention.
 
@@ -220,15 +220,15 @@ make all
 
 #### 08-default-targets-must-only-include-offline-subtargets
 
-`make all`, `make test`, and `make lint` **MUST** include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
+`make all`, `make test`, and `make lint` MUST include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
 
-Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) **MUST** exist as named targets so developers can invoke them explicitly, but **MUST NOT** be invoked from `all`, `test`, or `lint`.
+Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) MUST exist as named targets so developers can invoke them explicitly, but MUST NOT be invoked from `all`, `test`, or `lint`.
 
 ---
 
 #### 09-ai-project-dev-targets
 
-AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-018](../application/018-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
+AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-040](../application/040-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
 
 **Example implementation:**
 

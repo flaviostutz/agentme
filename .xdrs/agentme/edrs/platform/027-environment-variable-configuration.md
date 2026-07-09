@@ -19,7 +19,7 @@ How should projects manage environment variable configuration and CLI invocation
 
 **Use YAML config files for CLI invocation configuration with multiple attributes; use `.env` files to supply environment variables to spawned processes and to hold uncommitted values referenced by config files. Load `.env` exclusively at process launch time — MUST NOT be loaded inside application code.**
 
-Secrets (API keys, passwords, tokens) MUST NOT be placed in `.env` files. Those are handled by [agentme-edr-022](../principles/022-secrets-management.md).
+Secrets (API keys, passwords, tokens) MUST NOT be placed in `.env` files. Those are handled by [agentme-edr-022](../application/022-secrets-management.md).
 
 ### Details
 
@@ -152,7 +152,7 @@ The `.env` file must be loaded in the Makefile before launching the process (see
 
 ## References
 
-- [agentme-edr-022](../principles/022-secrets-management.md) - Secrets must use OS keychains or cloud secret managers, not `.env` files
+- [agentme-edr-022](../application/022-secrets-management.md) - Secrets must use OS keychains or cloud secret managers, not `.env` files
 - [agentme-edr-017](017-tool-execution-and-scripting.md) - Makefiles are the authoritative command entry point; rule 05 above integrates with that standard
 - [agentme-edr-008](008-common-targets.md) - Standard Makefile target names
 - [agentme-edr-015](../application/015-cli-tool-standards.md) - CLI config file discovery and CLI-to-application separation

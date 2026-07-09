@@ -61,8 +61,8 @@ extraction.
 2. Reduce that set only by excluding the XDRs that clearly do not fit the repository. Use
    path-stable identifiers so the extraction command is auditable, for example:
    - `.xdrs/agentme/edrs/application/010-golang-project-tooling.md` for non-Go projects
-   - `.xdrs/agentme/edrs/devops/005-monorepo-structure.md` for non-monorepos
-   - `.xdrs/agentme/edrs/observability/011-service-health-check-endpoint.md` for projects without
+   - `.xdrs/agentme/edrs/platform/005-monorepo-structure.md` for non-monorepos
+   - `.xdrs/agentme/edrs/operations/011-service-health-check-endpoint.md` for projects without
      a long-running service surface
 3. If the repository does not want agentme XDRs, stop and explain why instead of forcing an
    installation.
@@ -109,8 +109,8 @@ extraction.
 Input: "Install the right agentme XDR presets for this Node.js library"
 - Inventory the shipped agentme XDR files
 - Analyze the repository and detect a JavaScript library with Makefiles
-- Exclude `.xdrs/agentme/edrs/application/010-golang-project-tooling.md` and `.xdrs/agentme/edrs/observability/011-service-health-check-endpoint.md`
-- Run `npx -y agentme extract --output . --all --exclude .xdrs/agentme/edrs/application/010-golang-project-tooling.md --exclude .xdrs/agentme/edrs/observability/011-service-health-check-endpoint.md`
+- Exclude `.xdrs/agentme/edrs/application/010-golang-project-tooling.md` and `.xdrs/agentme/edrs/operations/011-service-health-check-endpoint.md`
+- Run `npx -y agentme extract --output . --all --exclude .xdrs/agentme/edrs/application/010-golang-project-tooling.md --exclude .xdrs/agentme/edrs/operations/011-service-health-check-endpoint.md`
 
 Input: "Set up agentme for this repo"
 - Inventory the shipped agentme XDR files
@@ -135,7 +135,7 @@ Input: "Set up agentme for this repo"
 
 - [agentme README](../../../../../../README.md)
 - [agentme-edr-003 - JavaScript project tooling and structure](../../003-javascript-project-tooling.md)
-- [agentme-edr-005 - Monorepo structure](../../../devops/005-monorepo-structure.md)
-- [agentme-edr-007 - Project quality standards](../../../principles/007-project-quality-standards.md)
-- [agentme-edr-008 - Common development script names](../../../devops/008-common-targets.md)
+- [agentme-edr-005 - Monorepo structure](../../../platform/005-monorepo-structure.md)
+- [agentme-edr-007 - Project quality standards](../../../governance/007-project-quality-standards.md)
+- [agentme-edr-008 - Common development script names](../../../platform/008-common-targets.md)
 - [_core-adr-003 - Skill standards](../../../../../_core/adrs/principles/003-skill-standards.md)

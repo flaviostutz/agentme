@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-021-ai-workflow-development-standards
-description: Defines the standard toolchain, framework, observability, and workflow patterns for building LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI workflow projects that orchestrate LLM calls, agents, and algorithmic nodes. For simple LLM calls see agentme-edr-018, for agentic patterns see agentme-edr-019. For naming conventions (nodes, states, routes, judge output schema) see agentme-edr-029.
+name: agentme-edr-policy-043-ai-workflow-development-standards
+description: Defines the standard toolchain, framework, observability, and workflow patterns for building LangGraph workflows in Python. Use when scaffolding, reviewing, or extending AI workflow projects that orchestrate LLM calls, agents, and algorithmic nodes. For simple LLM calls see agentme-edr-040, for agentic patterns see agentme-edr-041. For naming conventions (nodes, states, routes, judge output schema) see agentme-edr-044.
 apply-to: AI workflow projects using LangGraph StateGraph built with Python
 valid-from: 2026-06-05
 ---
 
-# agentme-edr-policy-021: AI workflow development standards
+# agentme-edr-policy-043: AI workflow development standards
 
 ## Context and Problem Statement
 
@@ -23,21 +23,21 @@ Which tools, frameworks, and design patterns should AI workflow projects follow 
 
 Workflows MUST be built with **LangGraph**. Use LangGraph `StateGraph` to model each distinct workflow as an explicit directed graph with typed state.
 
-For all direct LLM calls within workflow nodes, use LangChain per [agentme-edr-018](018-ai-llm-development-standards.md). For agent nodes with tool-invocation loops, use deepagents per [agentme-edr-019](019-ai-agents-development-standards.md).
+For all direct LLM calls within workflow nodes, use LangChain per [agentme-edr-040](040-ai-llm-development-standards.md). For agent nodes with tool-invocation loops, use deepagents per [agentme-edr-041](041-ai-agents-development-standards.md).
 
 #### 03-observability-and-experiment-tracking
 
 Use **MLflow** for all workflow observability and evaluation:
 
 - **Workflow-level tracking:** Wrap each workflow run with `mlflow.start_run()` to capture traces, parameters, and metrics locally.
-- **LLM-level auto-tracing:** Enable LangChain auto-tracing per [agentme-edr-018](018-ai-llm-development-standards.md) rule `03-llm-observability` by calling `mlflow.langchain.autolog()` during application startup. This captures inputs, outputs, token counts, and latency for every LangChain call within workflow nodes.
+- **LLM-level auto-tracing:** Enable LangChain auto-tracing per [agentme-edr-040](040-ai-llm-development-standards.md) rule `03-llm-observability` by calling `mlflow.langchain.autolog()` during application startup. This captures inputs, outputs, token counts, and latency for every LangChain call within workflow nodes.
 - Log run parameters (model name, temperature, prompt version) and output metrics (accuracy, latency, token counts) using `mlflow.log_param` / `mlflow.log_metric`.
 - Run a local MLflow tracking server with `mlflow ui` to inspect runs during development. Do not require a remote MLflow server for local development.
-- The project Makefile MUST expose a `dev-mlflow` target to start the local MLflow tracking server, per [agentme-edr-008](../devops/008-common-targets.md) rule `09-ai-project-dev-targets`.
+- The project Makefile MUST expose a `dev-mlflow` target to start the local MLflow tracking server, per [agentme-edr-008](../platform/008-common-targets.md) rule `09-ai-project-dev-targets`.
 
 #### 04-dataset-driven-accuracy-measurement
 
-Projects MUST follow the eval dataset and implementation requirements defined in [agentme-edr-028](028-ai-eval-core-standards.md) and [agentme-edr-031](031-ai-eval-script.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../principles/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
+Projects MUST follow the eval dataset and implementation requirements defined in [agentme-edr-051](051-ai-eval-core-standards.md) and [agentme-edr-053](053-ai-eval-script.md). Testing requirements (when evals are required, release gates) are defined in [agentme-edr-007](../governance/007-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
 
 #### 05-flow-documentation
 
@@ -101,17 +101,17 @@ lib/src/<package_name>/
 
 #### 08-workflow-evals
 
-Projects MUST follow the eval folder structure defined in [agentme-edr-028](028-ai-eval-core-standards.md) rule `01` and the eval script requirements defined in [agentme-edr-031](031-ai-eval-script.md). For LLM-as-judge scoring used in workflow verification nodes and evals, see [agentme-edr-028](028-ai-eval-core-standards.md) rule `02`.
+Projects MUST follow the eval folder structure defined in [agentme-edr-051](051-ai-eval-core-standards.md) rule `01` and the eval script requirements defined in [agentme-edr-053](053-ai-eval-script.md). For LLM-as-judge scoring used in workflow verification nodes and evals, see [agentme-edr-051](051-ai-eval-core-standards.md) rule `02`.
 
 #### 09-node-naming-conventions
 
-Nodes MUST follow the naming conventions defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `01-node-naming-conventions`.
+Nodes MUST follow the naming conventions defined in [agentme-edr-044](044-ai-workflow-naming-conventions.md) rule `01-node-naming-conventions`.
 
 #### 10-workflow-unit-testing
 
-All LLM calls within workflow nodes are external API calls and MUST be mocked in unit tests per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. Workflow unit tests MUST run fully offline with no real LLM provider calls.
+All LLM calls within workflow nodes are external API calls and MUST be mocked in unit tests per [agentme-edr-040](040-ai-llm-development-standards.md) rule `04-unit-test-mocking`. Workflow unit tests MUST run fully offline with no real LLM provider calls.
 
-Choose the mock utility per [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`. For workflows containing `_agent` nodes that drive a tool-invocation loop, MUST use `GenericFakeChatModel`.
+Choose the mock utility per [agentme-edr-040](040-ai-llm-development-standards.md) rule `04-unit-test-mocking`. For workflows containing `_agent` nodes that drive a tool-invocation loop, MUST use `GenericFakeChatModel`.
 
 **Example — workflow with plain-text LLM nodes:**
 
@@ -152,19 +152,19 @@ def test_document_workflow_with_agent_node():
     assert result.status == "approved"
 ```
 
-Workflows MUST accept the LLM instance as a constructor parameter so that unit tests can inject a fake. See the injectable LLM pattern in [agentme-edr-018](018-ai-llm-development-standards.md) rule `04-unit-test-mocking`.
+Workflows MUST accept the LLM instance as a constructor parameter so that unit tests can inject a fake. See the injectable LLM pattern in [agentme-edr-040](040-ai-llm-development-standards.md) rule `04-unit-test-mocking`.
 
 #### 11-state-type-conventions
 
-State types MUST follow the conventions defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `02-state-type-conventions`.
+State types MUST follow the conventions defined in [agentme-edr-044](044-ai-workflow-naming-conventions.md) rule `02-state-type-conventions`.
 
 #### 12-workflow-naming-conventions
 
-Workflows MUST be named following the conventions in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `04-workflow-naming-conventions`.
+Workflows MUST be named following the conventions in [agentme-edr-044](044-ai-workflow-naming-conventions.md) rule `04-workflow-naming-conventions`.
 
 #### 13-judge-node-output-format
 
-Judge nodes MUST use the output format defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `03-judge-node-output-format`.
+Judge nodes MUST use the output format defined in [agentme-edr-044](044-ai-workflow-naming-conventions.md) rule `03-judge-node-output-format`.
 
 #### 15-workflow-state-persistence
 
@@ -197,18 +197,18 @@ result = graph.invoke(input_state, config={"thread_id": "session-123"})
 
 #### 16-cross-element-naming-coherence
 
-All workflow elements MUST maintain naming coherence as defined in [agentme-edr-029](029-ai-workflow-naming-conventions.md) rule `05-cross-element-naming-coherence`.
+All workflow elements MUST maintain naming coherence as defined in [agentme-edr-044](044-ai-workflow-naming-conventions.md) rule `05-cross-element-naming-coherence`.
 
 ## References
 
-- [agentme-edr-029](029-ai-workflow-naming-conventions.md) — AI workflow naming conventions: node suffixes/prefixes, state types, judge output schema, workflow names, and cross-element coherence
-- [agentme-edr-018](018-ai-llm-development-standards.md) — LLM development standards: LangChain framework, provider configuration, LLM observability, and unit test mocking
-- [agentme-edr-019](019-ai-agents-development-standards.md) — Agent development standards: deepagents framework, tool-invocation loops, and agent patterns
+- [agentme-edr-044](044-ai-workflow-naming-conventions.md) — AI workflow naming conventions: node suffixes/prefixes, state types, judge output schema, workflow names, and cross-element coherence
+- [agentme-edr-040](040-ai-llm-development-standards.md) — LLM development standards: LangChain framework, provider configuration, LLM observability, and unit test mocking
+- [agentme-edr-041](041-ai-agents-development-standards.md) — Agent development standards: deepagents framework, tool-invocation loops, and agent patterns
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Adapter/application layer separation that defines the project layout
 - [agentme-edr-014](014-python-project-tooling.md) — Python project tooling and structure
-- [agentme-edr-024](024-ml-dataset-structure.md) — ML dataset structure for eval datasets
-- [agentme-edr-028](028-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract for all tiers (rule `02`)
-- [agentme-edr-031](031-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
-- [agentme-edr-032](032-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
-- [agentme-edr-033](033-ai-eval-repeatability.md) — AI eval repeatability: REPEAT_COUNT loop, scoring methods, and release cadence
-- [agentme-edr-007](../principles/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)
+- [agentme-edr-050](../data/050-ml-dataset-structure.md) — ML dataset structure for eval datasets
+- [agentme-edr-051](051-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract for all tiers (rule `02`)
+- [agentme-edr-053](053-ai-eval-script.md) — AI eval script: entry-first loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
+- [agentme-edr-054](054-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
+- [agentme-edr-055](055-ai-eval-repeatability.md) — AI eval repeatability: REPEAT_COUNT loop, scoring methods, and release cadence
+- [agentme-edr-007](../governance/007-project-quality-standards.md) — Project quality standards including AI-tier testing requirements (rule `09-ai-project-testing-requirements`)

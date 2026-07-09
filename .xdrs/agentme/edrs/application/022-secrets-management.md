@@ -164,5 +164,5 @@ In library code (Python, JS/TS, Go), continue using the cross-platform libraries
 
 ## References
 
-- [agentme-edr-008](../devops/008-common-targets.md) - Common development script names (defines Makefile target conventions)
+- [agentme-edr-008](../platform/008-common-targets.md) - Common development script names (defines Makefile target conventions)
 - [agentme-edr-009](009-error-handling.md) - Error handling (governs how the fallback exception should be raised)

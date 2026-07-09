@@ -53,7 +53,7 @@ Examples SHOULD be used when they make a complex rule significantly clearer. Whe
 - Be short and focused on the core idea of the rule — omit boilerplate that does not illustrate the point.
 - Use the language or tool most applicable to the rule (pseudo-code is allowed only when the pattern is genuinely language-agnostic).
 
-Do not add examples for rules that are already self-explanatory from their prose alone.
+Examples MUST NOT be added for rules that are already self-explanatory from their prose alone.
 
 #### 05-cover-design-implementation-and-testing-coherently
 

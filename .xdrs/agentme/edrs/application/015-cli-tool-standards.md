@@ -53,7 +53,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 #### Configuration
 
 - Prefer flags and positional arguments for simple inputs.
-- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-027](../devops/027-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
+- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-027](../platform/027-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
 - By default, config-file discovery and loading MUST happen in the CLI layer, not in the application layer.
 - When a config file is supported, the CLI MUST try to load a YAML file from `[cwd]/[tool-name].yml` by default.
 - The CLI MUST also support an explicit config path flag such as `--config`.
@@ -100,9 +100,9 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
 - [agentme-edr-003](003-javascript-project-tooling.md) - JavaScript project packaging and structure
-- [agentme-edr-007](../principles/007-project-quality-standards.md) - README and examples baseline
-- [agentme-edr-008](../devops/008-common-targets.md) - Standard command names for project entry points
-- [agentme-edr-009](../principles/009-error-handling.md) - Process error signaling and error handling expectations
+- [agentme-edr-007](../governance/007-project-quality-standards.md) - README and examples baseline
+- [agentme-edr-008](../platform/008-common-targets.md) - Standard command names for project entry points
+- [agentme-edr-009](009-error-handling.md) - Process error signaling and error handling expectations
 - [agentme-edr-010](010-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
 - [agentme-edr-014](014-python-project-tooling.md) - Python packaging and CLI entry-point guidance
-- [agentme-edr-027](../devops/027-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files
+- [agentme-edr-027](../platform/027-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files

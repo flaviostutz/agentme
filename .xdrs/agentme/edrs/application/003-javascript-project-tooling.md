@@ -32,7 +32,7 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../devops/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../platform/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
 
 #### ESLint
 
@@ -48,7 +48,7 @@ When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `modu
 
 #### Coverage
 
-Jest must enforce 80% line and branch coverage, following [agentme-edr-004](../principles/004-unit-test-requirements.md). Configure thresholds in `lib/jest.config.js`:
+Jest must enforce 80% line and branch coverage, following [agentme-edr-004](004-unit-test-requirements.md). Configure thresholds in `lib/jest.config.js`:
 
 ```js
 coverageThreshold: {
@@ -154,7 +154,7 @@ The examples folder MUST exist for any libraries and utilities that are publishe
 
 ## References
 
-- [agentme-edr-004](../principles/004-unit-test-requirements.md) — Coverage and unit-test baseline
+- [agentme-edr-004](004-unit-test-requirements.md) — Coverage and unit-test baseline
 - [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 

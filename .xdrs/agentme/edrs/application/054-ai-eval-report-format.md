@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-032-ai-eval-report-format
-description: Defines the eval report format for AI projects — report-<type>.md template, Wilson score confidence interval, convergence analysis, and the human-type checklist artifact. Use when generating eval reports from eval scripts. For the eval script that produces these reports see agentme-edr-031. For repeatability report shape see agentme-edr-033 rule 02.
+name: agentme-edr-policy-054-ai-eval-report-format
+description: Defines the eval report format for AI projects — report-<type>.md template, Wilson score confidence interval, convergence analysis, and the human-type checklist artifact. Use when generating eval reports from eval scripts. For the eval script that produces these reports see agentme-edr-053. For repeatability report shape see agentme-edr-055 rule 02.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-07-07
 ---
 
-# agentme-edr-policy-032: AI eval report format
+# agentme-edr-policy-054: AI eval report format
 
 ## Context and Problem Statement
 
@@ -166,6 +166,6 @@ xychart-beta
 
 ## References
 
-- [agentme-edr-031](031-ai-eval-script.md) — AI eval script: the script that produces these reports (rule `01`)
-- [agentme-edr-033](033-ai-eval-repeatability.md) — AI eval repeatability: rule `02` defines the adapted report shape for `report-repeatability.md`
-- [agentme-edr-028](028-ai-eval-core-standards.md) — AI eval core standards: folder structure (rule `01`) and LLM-as-judge binary scoring (rule `02`)
+- [agentme-edr-053](053-ai-eval-script.md) — AI eval script: the script that produces these reports (rule `01`)
+- [agentme-edr-055](055-ai-eval-repeatability.md) — AI eval repeatability: rule `02` defines the adapted report shape for `report-repeatability.md`
+- [agentme-edr-051](051-ai-eval-core-standards.md) — AI eval core standards: folder structure (rule `01`) and LLM-as-judge binary scoring (rule `02`)
