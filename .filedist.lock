@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 875b3570138a
+  git:https://github.com/flaviostutz/xdrs-core.git@main: b5613c744e7b
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -22,11 +22,9 @@ files:
     - .xdrs/_core/adrs/principles/015-local-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|d48a4585c0b1|0
     - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|b6752be0341c|file|346ac011e9b5|0
     - .xdrs/_core/adrs/principles/011-core-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|fc77e1f9be36|file|daae7fa6f1f8|0
-    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|13b928c4167d|file|45647b095bc9|0
     - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|https://github.com/flaviostutz/xdrs-core.git|2ffac37dcd8d|file|f05b6d4421c7|0
     - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|683f928d9a0c|file|825f286e85a6|0
     - .xdrs/_core/adrs/principles/017-policy-numbering-ranges.md|https://github.com/flaviostutz/xdrs-core.git|fde4f16c0fff|file|5c6febe306e6|0
-    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|fde4f16c0fff|file|c5913b5dbe28|0
     - .xdrs/_core/adrs/principles/001-xdrs-core.md|https://github.com/flaviostutz/xdrs-core.git|fde4f16c0fff|file|2296e5b1254b|0
     - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|fde4f16c0fff|file|da9e67cd368e|0
     - .xdrs/_core/adrs/principles/016-policy-subjects.md|https://github.com/flaviostutz/xdrs-core.git|fde4f16c0fff|file|59f33367821c|0
@@ -38,5 +36,8 @@ files:
     - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|875b3570138a|file|95d3eeb77921|0
     - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|875b3570138a|file|502cffaf38bc|0
     - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|875b3570138a|file|5fd25f668a47|0
-checksum: b9d6bb69e1cb
+    - .xdrs/_core/adrs/principles/018-external-path-symlinks.md|https://github.com/flaviostutz/xdrs-core.git|b5613c744e7b|file|27bd55bed09f|0
+    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|b5613c744e7b|file|d8d2708f8c1d|0
+    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|b5613c744e7b|file|16994d1e7d93|0
+checksum: 5c41a02db7d4
 

@@ -23,6 +23,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-015](principles/015-local-scope-type.md) - **_local scope type** — Defines the `_local` scope type: reserved for workspace-local decisions that must never be distributed
 - [_core-adr-policy-016](principles/016-policy-subjects.md) - **Policy Subjects** — Allowed subjects per type (ADR/BDR/EDR), descriptions, examples, and disambiguation tiebreakers
 - [_core-adr-policy-017](principles/017-policy-numbering-ranges.md) - **Policy numbering ranges** — Subject-based 100-number block ranges for policy numbering and the freeze-reference exemption
+- [_core-adr-policy-018](principles/018-external-path-symlinks.md) - **External path symlinks** — How to make XDRS files accessible from paths outside the .xdrs/ root using symlinks
 
 ## Skills
 
