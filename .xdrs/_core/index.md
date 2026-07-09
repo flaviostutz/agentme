@@ -24,6 +24,8 @@ If you are evaluating whether to adopt XDRS, setting up a new XDRS project, or e
 
 The core architectural decision [_core-adr-policy-001](adrs/principles/001-xdrs-core.md) defines the fundamental building blocks: three decision types (ADR for architecture, BDR for business, EDR for engineering), scopes as grouping boundaries, subjects as topic categories within each type, and a folder layout that keeps everything discoverable. It also defines the index system (canonical type indexes, scope indexes, and the root index) that ties the collection together.
 
+When external tools or conventions require XDRS files to be accessible from paths outside the `.xdrs/` root (for example, AI agent runtimes that expect skills in `.agents/skills/`), [_core-adr-policy-018](adrs/principles/018-external-path-symlinks.md) governs how to do this safely using symlinks.
+
 ### Document writing standards
 
 Each artifact type has its own writing standard:
