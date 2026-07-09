@@ -93,6 +93,7 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
     - `follows` (optional): Core scope names whose Policies apply as mandatory conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: myarea-core, shared-standards`).
     - `related-scopes` (optional): Scope names of parent, sibling, or child scopes. Use when structural links help verify policy correctness across related scopes.
 - **Subjects:** The subject folder MUST be chosen per [`_core-adr-policy-016`](016-policy-subjects.md), which defines allowed subjects, full descriptions, examples, and disambiguation tiebreakers.
+- **Policy numbering:** Numbers MUST be assigned within the subject-based block ranges defined in [`_core-adr-policy-017`](017-policy-numbering-ranges.md). Use the lowest available number within the block for the chosen subject. See [`_core-adr-policy-002-policy-standards.01-freeze-reference-exemption`](002-policy-standards.md) for exemptions.
 - MUST NOT use emojis
 - **Links:** Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
 - **Indexes**

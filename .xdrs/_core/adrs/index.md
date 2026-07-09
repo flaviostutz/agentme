@@ -22,6 +22,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-014](principles/014-standard-scope-type.md) - **standard scope type** — Defines the `standard` scope type: the default for business areas, products, and teams
 - [_core-adr-policy-015](principles/015-local-scope-type.md) - **_local scope type** — Defines the `_local` scope type: reserved for workspace-local decisions that must never be distributed
 - [_core-adr-policy-016](principles/016-policy-subjects.md) - **Policy Subjects** — Allowed subjects per type (ADR/BDR/EDR), descriptions, examples, and disambiguation tiebreakers
+- [_core-adr-policy-017](principles/017-policy-numbering-ranges.md) - **Policy numbering ranges** — Subject-based 100-number block ranges for policy numbering and the freeze-reference exemption
 
 ## Skills
 

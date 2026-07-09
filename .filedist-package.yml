@@ -1,5 +1,5 @@
 sets:
-  - package: xdrs-core@0.39.0
+  - package: xdrs-core@0.41.0
   # - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector:
       files:

@@ -31,6 +31,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 | `valid-from` | Yes | ISO date (`YYYY-MM-DD`) indicating from when this decision MUST be enforced. Before this date it SHOULD be used everywhere possible, but compliance is not enforced during reviews until after this date. Defaults to the date the Policy was created. When updating an existing Policy whose `valid-from` date has already passed, preserve the original date—it MUST NOT be updated to the current date. The historical date shows when the policy was originally enabled and is important for understanding policy evolution. |
 | `license` | No | SPDX license expression (e.g. `MIT`, `Apache-2.0`, `CC-BY-4.0`). Indicates the license under which the document content is shared. If omitted, the license is governed by the repository or package defaults. |
 | `metadata` | No | Arbitrary key-value map for additional properties not defined by this spec. |
+| `freeze-reference` | No | Boolean (`true` or `false`, defaults to `false`). When `true`, the policy MUST NOT be renamed, renumbered, or moved because external parties reference it by its current identity (path, number, name, heading). Reference-identity issues are intentionally exempt. See rule [`01-freeze-reference-exemption`](#01-freeze-reference-exemption). |
 
   - Minimal example:
     ```yaml
@@ -60,7 +61,8 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - Research documents MAY be added under the same subject to capture the exploration, findings, and proposals that backed a decision. Research is useful during elaboration, discussion, and updates of Policies, but the Policy document remains the source of truth.
 - **Policy Id:** [scope]-[type]-policy-[number] (numbers are scoped per type+scope combination and MUST NOT be reused within that combination; MUST be lowercase)
   - Types in IDs: `adr-policy`, `bdr-policy`, `edr-policy`
-  - Define the next number of a Policy by checking what is the highest number present in the type+scope. Don't fill numbering gaps, as they might be old deleted Policies and we MUST NOT reuse numbers of different documents/decisions. Numbering gaps are expected.
+  - Policy numbers MUST follow the subject-based block ranges defined in [`_core-adr-policy-017`](017-policy-numbering-ranges.md). Each subject has a reserved 100-number block; use the lowest available number within the block for the chosen subject. Use the overflow range (901–999) only when the subject's block is exhausted.
+  - Numbering gaps are expected and MUST NOT be filled, as gaps may represent deleted policies whose numbers MUST NOT be reused.
 - Policies MUST be concise and reference other Policies to avoid duplication.
 - Policies MUST NOT contain duplicated content: the same rule or information MUST NOT appear more than once in the document, whether stated identically or rephrased. Consolidate into a single authoritative statement and reference it where needed.
 - Policies MUST NOT contain conflicting content: all rules and statements within the same document MUST be consistent with each other.
@@ -85,6 +87,17 @@ Policy documents are the authoritative source of truth for their scope, type, an
   - This is important to make them focused on a clear decision
   - Exceptions can reach under 2600 words (templates, more elaborate decision implementations etc)
 - MUST use `_local` scope if the user doesn't explicitly indicate a specific scope while creating a policy or skill.
+
+#### 01-freeze-reference-exemption
+
+When a policy's frontmatter includes `freeze-reference: true`, the policy MUST NOT be renamed, renumbered, or moved because external parties reference it by its current identity. The policy's reference identity is its full addressable path and canonical identifier: scope location, type folder, subject folder, number, filename, frontmatter `name` field, and document heading identifier. All checks and reviews that would require changing the reference identity MUST be ignored unless the owner explicitly requests them to be fixed. Specifically, the following checks are exempt:
+
+- Invalid subject folder (scope, subject, or type placement does not match allowed values)
+- Numbering range mismatch (number outside the reserved block for the subject per [`_core-adr-policy-017`](017-policy-numbering-ranges.md))
+- Document heading format mismatch (heading does not start with the expected `# scope-type-policy-number:` prefix)
+- Frontmatter `name` field mismatch (name does not match the expected identifier derived from the file path)
+
+Content-level checks that do not affect the policy's reference (required sections, word count, emojis, broken outgoing links, structured rule block format, normative language) remain enforced. The `valid-from` date is not taken into consideration when evaluating whether `freeze-reference` applies.
 
 **Policy template**
 

@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-006-github-ci-cd-pipelines
+name: agentme-edr-policy-302-github-ci-cd-pipelines
 description: Defines the standard GitHub Actions workflow split for CI, release tagging, and publishing. Use when configuring project automation.
 apply-to: Projects using GitHub Actions
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-006: GitHub CI/CD pipelines
+# agentme-edr-policy-302: GitHub CI/CD pipelines
 
 ## Context and Problem Statement
 
@@ -142,7 +142,7 @@ jobs:
 
 *Why rebuild on publish:* The checkout is done from the exact tag commit. Rebuilding ensures the published artifact matches exactly what is tagged, rather than relying on a prior CI artifact.
 
-*Why `id-token: write`:* Required for npm provenance attestation via `npm publish --provenance`, as specified in [agentme-edr-003](../application/003-javascript-project-tooling.md).
+*Why `id-token: write`:* Required for npm provenance attestation via `npm publish --provenance`, as specified in [agentme-edr-101](../application/101-javascript-project-tooling.md).
 
 ---
 

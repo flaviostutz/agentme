@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-008-common-development-script-names
+name: agentme-edr-policy-303-common-development-script-names
 description: Defines standard Makefile target names and the mandatory tool-execution flow using Mise. Use when designing build, lint, test, and release entry points.
 apply-to: All projects with Makefiles
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-008: Common development script names
+# agentme-edr-policy-303: Common development script names
 
 ## Context and Problem Statement
 
@@ -15,7 +15,7 @@ What standard set of Makefile target names and execution rules should projects a
 
 ## Decision Outcome
 
-**Every project MUST expose its development actions through a root `Makefile` using a defined set of standardized target names. Target implementation and tool-execution rules follow [agentme-edr-017](017-tool-execution-and-scripting.md), which requires `mise exec --` before routine tool commands.**
+**Every project MUST expose its development actions through a root `Makefile` using a defined set of standardized target names. Target implementation and tool-execution rules follow [agentme-edr-304](304-tool-execution-and-scripting.md), which requires `mise exec --` before routine tool commands.**
 
 Standardizing both the target names and the execution chain removes per-project guesswork, makes CI pipelines reusable, and keeps tooling behavior visible in one place.
 
@@ -49,7 +49,7 @@ make <target>
 
 - The `setup` target MUST run `mise install` and any small project-specific bootstrap needed before normal targets work.
 - Routine targets such as `build`, `lint`, `test`, `run`, and `publish` MUST be invoked as `make <target>` by both contributors and CI.
-- Each Makefile recipe MUST call the real underlying command through `mise exec --`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
+- Each Makefile recipe MUST call the real underlying command through `mise exec --`, following [agentme-edr-304](304-tool-execution-and-scripting.md).
 - Makefile recipes MUST NOT add extra script layers such as `npm run`, `pnpm run`, `yarn run`, `mise run`, `mise tasks`, or shell aliases when those layers only forward to another command.
 - Calling the actual tool is allowed even when that tool itself launches another program as part of its normal interface.
 	- Allowed: `mise exec -- pnpm exec eslint ./src`
@@ -167,7 +167,7 @@ test:
 
 A developer can run `make test` at the repo root to test everything, or `cd module-a && make test` to test a single module. Both MUST work.
 
-**Reference:** See [agentme-edr-005](005-monorepo-structure.md) for the full monorepo layout convention.
+**Reference:** See [agentme-edr-301](301-monorepo-structure.md) for the full monorepo layout convention.
 
 ---
 
@@ -228,7 +228,7 @@ Subtargets that require external dependencies (e.g., `test-integration` against 
 
 #### 09-ai-project-dev-targets
 
-AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-040](../application/040-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
+AI-based projects (LLM, Agent, and Workflow tiers as defined in [agentme-edr-141](../application/141-ai-llm-development-standards.md)) MUST expose a `dev-mlflow` target that starts a local MLflow tracking server for development inspection.
 
 **Example implementation:**
 
@@ -251,5 +251,5 @@ dev-mlflow:
 
 ## References
 
-- [agentme-edr-005](005-monorepo-structure.md) - Monorepo layout and delegation structure
-- [agentme-edr-017](017-tool-execution-and-scripting.md) - Tool-execution rules for Makefile targets and CI
+- [agentme-edr-301](301-monorepo-structure.md) - Monorepo layout and delegation structure
+- [agentme-edr-304](304-tool-execution-and-scripting.md) - Tool-execution rules for Makefile targets and CI

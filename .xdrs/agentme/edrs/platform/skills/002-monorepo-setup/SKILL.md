@@ -3,7 +3,7 @@ name: 002-monorepo-setup
 description: >
   Step-by-step instructions for setting up and scaffolding a new monorepo following the standard
   layout, naming conventions, Makefiles, Mise tooling, and README requirements defined in
-  agentme-edr-005. Activate this skill when the user asks to create, initialize, or set up a
+  agentme-edr-301. Activate this skill when the user asks to create, initialize, or set up a
   monorepo, add a new application or module to an existing monorepo, or verify that a monorepo
   complies with the standard structure.
 metadata:
@@ -13,12 +13,12 @@ metadata:
 
 ## Overview
 
-Creates or extends a monorepo that follows the standard layout from [agentme-edr-005](../../005-monorepo-structure.md):
+Creates or extends a monorepo that follows the standard layout from [agentme-edr-301](../../301-monorepo-structure.md):
 top-level application folders, independent module roots, sibling example and multi-module test
 areas, Mise-managed tooling, and Makefiles at every level so any contributor can build, lint, and
 test any part of the monorepo with a single, predictable command.
 
-Related EDRs: [agentme-edr-005](../../005-monorepo-structure.md), [agentme-edr-013](../../../governance/013-contributing-guide-requirements.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+Related EDRs: [agentme-edr-301](../../301-monorepo-structure.md), [agentme-edr-502](../../../governance/502-contributing-guide-requirements.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
 
 ## Instructions
 

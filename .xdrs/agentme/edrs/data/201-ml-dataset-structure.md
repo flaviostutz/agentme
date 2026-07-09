@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-050-ml-dataset-structure
+name: agentme-edr-policy-201-ml-dataset-structure
 description: Defines the standard folder layout and file conventions for ML datasets used in AI/ML projects. Use when creating, organizing, or consuming datasets for machine learning tasks such as image labeling, document extraction, tabular data, LLM evaluation, and Q&A sets.
 apply-to: ML and AI projects that produce or consume datasets
 valid-from: 2026-05-27
 ---
 
-# agentme-edr-policy-050: ML dataset structure
+# agentme-edr-policy-201: ML dataset structure
 
 ## Context and Problem Statement
 
@@ -102,10 +102,10 @@ Every dataset MUST expose a `make lint` target (in the Makefile of the project/c
 - Per-entry JSON files (rule `04`) and annotation-pair `.json` siblings (rule `02`) MUST each be validated against `dataset.schema.json`, and their `$schema` property MUST be present and resolve to the dataset's actual schema file.
 - CSV rows (rule `03`) MUST each be converted to a JSON object (column header → value) and validated against the same `dataset.schema.json`.
 - `make lint` MUST list every violation found across all files/rows before exiting with a non-zero status (not fail-fast on the first violation).
-- `jsonschema` MUST be declared as a normal project dependency per [agentme-edr-014](../application/014-python-project-tooling.md); no special-casing.
+- `jsonschema` MUST be declared as a normal project dependency per [agentme-edr-103](../application/103-python-project-tooling.md); no special-casing.
 
 ## References
 
 - [JSON Schema specification](https://json-schema.org/)
 - [jsonschema (Python library)](https://pypi.org/project/jsonschema/)
-- [agentme-edr-014](../application/014-python-project-tooling.md) — Python project tooling and dependency conventions
+- [agentme-edr-103](../application/103-python-project-tooling.md) — Python project tooling and dependency conventions

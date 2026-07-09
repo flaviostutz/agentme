@@ -35,7 +35,7 @@ When developers or coding agents need too much detailed steering to complete a t
 
 #### 04-coverage-target-should-be-80-percent
 
-Teams SHOULD aim to keep at least 80% of big coding decisions covered by accepted XDRs. Big decisions include framework or tool selection, overall code organization, monorepo structure, complex business flows, and coding standards. If a big decision is not yet covered, developers SHOULD either propose a new XDR or document why the decision is intentionally local and should not be shared.
+Teams SHOULD aim to keep at least 80% of big coding decisions covered by accepted XDRs. Big decisions include framework or tool selection, overall code organization, monorepo structure, complex business flows, and coding standards. If a big decision is not yet covered, developers SHOULD either propose a new XDR or document why the decision is intentionally local and SHOULD NOT be shared.
 
 #### 05-leaders-must-review-xdr-proposals
 

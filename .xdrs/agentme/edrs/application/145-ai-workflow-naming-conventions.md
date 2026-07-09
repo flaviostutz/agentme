@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-044-ai-workflow-naming-conventions
-description: Defines the naming vocabulary for LangGraph workflow elements: node suffixes/prefixes, state type names, state attribute grouping, workflow class/variable names, judge node output schema, route function names, and cross-element coherence rules. Use when naming any part of a LangGraph workflow — nodes, states, routes, or the workflow itself. For workflow structure and toolchain see agentme-edr-043.
+name: agentme-edr-policy-145-ai-workflow-naming-conventions
+description: Defines the naming vocabulary for LangGraph workflow elements: node suffixes/prefixes, state type names, state attribute grouping, workflow class/variable names, judge node output schema, route function names, and cross-element coherence rules. Use when naming any part of a LangGraph workflow — nodes, states, routes, or the workflow itself. For workflow structure and toolchain see agentme-edr-144.
 apply-to: AI workflow projects using LangGraph StateGraph built with Python
 valid-from: 2026-06-21
 ---
 
-# agentme-edr-policy-044: AI workflow naming conventions
+# agentme-edr-policy-145: AI workflow naming conventions
 
 ## Context and Problem Statement
 
@@ -25,10 +25,10 @@ LangGraph node names MUST follow a suffix convention that communicates the node'
 
 | Convention | Node type | When to use |
 |---|---|---|
-| suffix `_llm` | LLM call | Any node whose primary action is a direct LLM inference call (see [agentme-edr-040](040-ai-llm-development-standards.md)) |
+| suffix `_llm` | LLM call | Any node whose primary action is a direct LLM inference call (see [agentme-edr-141](141-ai-llm-development-standards.md)) |
 | suffix `_step` | Algorithmic step | Deterministic logic with no LLM involvement (transformation, validation, routing) |
 | suffix `_tool` | Tool/API call | A node that wraps a single external tool or API (e.g. a REST endpoint, DB query) |
-| suffix `_agent` | Subgraph agent | A node that invokes a nested subgraph containing its own tool-invocation cycle and LLM calls; use the **deepagents** library for these nodes (see [agentme-edr-041](041-ai-agents-development-standards.md)) |
+| suffix `_agent` | Subgraph agent | A node that invokes a nested subgraph containing its own tool-invocation cycle and LLM calls; use the **deepagents** library for these nodes (see [agentme-edr-142](142-ai-agents-development-standards.md)) |
 | prefix `evaluate_` | Judge node | A node that evaluates the quality, correctness, completeness, or progress of prior outputs and returns a structured verdict; MUST follow rule `03-judge-node-output-format` |
 
 The Python function implementing the node SHOULD share the same name as the node alias passed to `add_node`, so that graph definitions and stack traces remain unambiguous:
@@ -193,7 +193,7 @@ def route_after_evaluate_quality(state) -> str:
     return "publish_step"
 ```
 
-**Logging:** Log `verdict` and the count of each level as MLflow metrics on the current run per [agentme-edr-043](043-ai-workflow-development-standards.md) rule `03-observability-and-experiment-tracking`.
+**Logging:** Log `verdict` and the count of each level as MLflow metrics on the current run per [agentme-edr-144](144-ai-workflow-development-standards.md) rule `03-observability-and-experiment-tracking`.
 
 #### 04-workflow-naming-conventions
 
@@ -276,6 +276,6 @@ def after_quality_check(state): ... # FORBIDDEN: not named "route_after_<node>"
 
 ## References
 
-- [agentme-edr-043](043-ai-workflow-development-standards.md) — Workflow structure, LangGraph toolchain, observability, and testing patterns
-- [agentme-edr-040](040-ai-llm-development-standards.md) — LLM development standards (drives `_llm` node suffix and mocking patterns)
-- [agentme-edr-041](041-ai-agents-development-standards.md) — Agent development standards (drives `_agent` node suffix and state conventions)
+- [agentme-edr-144](144-ai-workflow-development-standards.md) — Workflow structure, LangGraph toolchain, observability, and testing patterns
+- [agentme-edr-141](141-ai-llm-development-standards.md) — LLM development standards (drives `_llm` node suffix and mocking patterns)
+- [agentme-edr-142](142-ai-agents-development-standards.md) — Agent development standards (drives `_agent` node suffix and state conventions)

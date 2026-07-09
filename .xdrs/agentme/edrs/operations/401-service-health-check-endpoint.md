@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-011-service-health-check-endpoint
+name: agentme-edr-policy-401-service-health-check-endpoint
 description: Defines the required health endpoint contract for service availability and dependency readiness checks. Use when implementing or reviewing service health endpoints.
 apply-to: Service projects with health endpoints
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-011: Service health check endpoint
+# agentme-edr-policy-401: Service health check endpoint
 
 ## Context and Problem Statement
 

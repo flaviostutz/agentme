@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-026-pragmatic-hexagonal-architecture
+name: agentme-edr-policy-126-pragmatic-hexagonal-architecture
 description: Defines a pragmatic variant of Hexagonal Architecture for organizing application source code into Adapters (inbound/outbound I/O boundaries) and Application (business logic) layers, with explicit naming conventions and folder structure. Use when designing or reviewing the internal layout of application modules.
 apply-to: All application projects
 valid-from: 2026-05-28
 ---
 
-# agentme-edr-policy-026: Pragmatic hexagonal architecture
+# agentme-edr-policy-126: Pragmatic hexagonal architecture
 
 ## Context and Problem Statement
 
@@ -56,7 +56,7 @@ Adapters MUST follow these naming conventions:
 - No global variables, no direct environment variable access in `app/` or `shared/`
 - Business logic with well-defined input/output behavior
 - Group related logic into subfolders (aggregation roots)
-- Environment variables must be read only in the bootstrap/entry-point layer of inbound adapters, converted into typed configuration objects, and passed explicitly to all other components
+- Environment variables MUST be read only in the bootstrap/entry-point layer of inbound adapters, converted into typed configuration objects, and passed explicitly to all other components
 
 - Data flow examples
 
@@ -102,7 +102,7 @@ mysystem/
 #### 06-bootstrap-and-entry-points
 
 - Each inbound adapter folder (`cli/`, `http/`, `grpc/`, etc.) MUST contain the bootstrap and entry point for that interface
-- The project root Makefile must have targets to run the different inbound interfaces following [agentme-edr-008](../platform/008-common-targets.md) extension conventions (e.g. `run-http`, `run-grpc`)
+- The project root Makefile MUST have targets to run the different inbound interfaces following [agentme-edr-303](../platform/303-common-targets.md) extension conventions (e.g. `run-http`, `run-grpc`)
 - Bootstrap code lives in the adapter that receives inbound requests, not in a separate wiring layer
 
 #### 07-minimum-complexity-threshold
@@ -133,7 +133,7 @@ Inbound adapters (`cli/`, `http/`, `grpc/`) are entry points and do not need to 
 
 #### 10-mock-file-strategy
 
-When a mock implementation needs to be **reused across multiple tests or imported by an eval script** (e.g. `eval.py` using `mock_fixtures` from [agentme-edr-052](052-ai-test-types-taxonomy.md) rule `02`), define it in a dedicated `_mock` file rather than inline.
+When a mock implementation needs to be **reused across multiple tests or imported by an eval script** (e.g. `eval.py` using `mock_fixtures` from [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02`), define it in a dedicated `_mock` file rather than inline.
 
 **When to use a `_mock` file vs inline:**
 - Single-test use → define the mock inline inside the test file (per rule `09` example; no file needed)
@@ -149,7 +149,7 @@ When a mock implementation needs to be **reused across multiple tests or importe
 | `order_service.ts` | `order_service_mock.ts` |
 | `user_store.go` | `user_store_mock_test.go` |
 
-**Placement:** follows the project's test file placement convention per [agentme-edr-004](004-unit-test-requirements.md) rule `04`:
+**Placement:** follows the project's test file placement convention per [agentme-edr-122](122-unit-test-requirements.md) rule `04`:
 - Co-located test convention (TypeScript, Go) → mock file in the same directory as the source file
 - Separate test folder convention (Python) → mock file mirrors the source path under the test folder (e.g. `lib/src/<pkg>/adapters/connectors/user-db/client.py` → `lib/tests/<pkg>/adapters/connectors/user-db/client_mock.py`)
 
@@ -160,6 +160,6 @@ When a mock implementation needs to be **reused across multiple tests or importe
 ## References
 
 - [agentme-edr-016](../principles/016-cross-language-module-structure.md) — Defines the module-root structure (Makefile, dist/, .cache/) that wraps this internal layout
-- [agentme-edr-002](002-coding-best-practices.md) — File size limits and code organization practices that complement this architecture
-- [agentme-edr-004](004-unit-test-requirements.md) — Rule `04`: test file placement convention per language (governs `_mock` file placement in rule `10`)
-- [agentme-edr-052](052-ai-test-types-taxonomy.md) — Rule `02`: `mock_fixtures` golden dataset envelope that drives `_mock` usage in eval scripts
+- [agentme-edr-121](121-coding-best-practices.md) — File size limits and code organization practices that complement this architecture
+- [agentme-edr-122](122-unit-test-requirements.md) — Rule `04`: test file placement convention per language (governs `_mock` file placement in rule `10`)
+- [agentme-edr-152](152-ai-test-types-taxonomy.md) — Rule `02`: `mock_fixtures` golden dataset envelope that drives `_mock` usage in eval scripts
