@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-013-contributing-guide-requirements
+name: agentme-edr-policy-502-contributing-guide-requirements
 description: Defines the minimum contributor workflow guidance required in root CONTRIBUTING.md files. Use when scaffolding or reviewing contribution processes.
 apply-to: Projects with open-source contributions
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-013: Contributing guide requirements
+# agentme-edr-policy-502: Contributing guide requirements
 
 ## Context and Problem Statement
 
@@ -66,5 +66,5 @@ The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` int
 
 ## References
 
-- [agentme-edr-005 - Monorepo structure](../platform/005-monorepo-structure.md)
+- [agentme-edr-301 - Monorepo structure](../platform/301-monorepo-structure.md)
 - [002-monorepo-setup skill](../platform/skills/002-monorepo-setup/SKILL.md)

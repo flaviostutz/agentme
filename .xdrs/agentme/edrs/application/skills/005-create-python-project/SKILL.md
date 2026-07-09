@@ -2,7 +2,7 @@
 name: 005-create-python-project
 description: >
   Scaffolds the initial boilerplate structure for a Python project following the standard tooling
-  and layout defined in agentme-edr-014. Activate this skill when the user asks to create,
+  and layout defined in agentme-edr-103. Activate this skill when the user asks to create,
   scaffold, or initialize a new Python package, CLI, or similar project structure.
 metadata:
   author: flaviostutz
@@ -14,11 +14,11 @@ compatibility: Python 3.12+
 
 Creates a complete Python project from scratch using Mise, `uv`, `pyproject.toml`, Ruff,
 ty, Pytest, and Makefiles. The layout keeps the package self-contained under `lib/`,
-organizes internal code following [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md)
+organizes internal code following [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
 (`adapters/`, `app/`, `shared/`), uses a shared root `.venv/`, redirects persistent caches into
 `.cache/`, and places runnable consumer projects under the sibling `examples/` folder.
 
-Related EDRs: [agentme-edr-014](../../014-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md)
+Related EDRs: [agentme-edr-103](../../103-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 
@@ -282,7 +282,7 @@ make test
 
 ### Phase 4: Create the package and tests inside `lib/`
 
-Create this baseline structure following [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md).
+Create this baseline structure following [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md).
 
 **`lib/src/[package_name]/__init__.py`**
 
@@ -406,5 +406,5 @@ After creating the files:
 
 ## References
 
-- [agentme-edr-014](../../014-python-project-tooling.md)
+- [agentme-edr-103](../../103-python-project-tooling.md)
 - [_core-adr-003 - Skill standards](../../../../../_core/adrs/principles/003-skill-standards.md)

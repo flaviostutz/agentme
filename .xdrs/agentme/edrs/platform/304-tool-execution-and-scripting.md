@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-017-tool-execution-and-scripting
+name: agentme-edr-policy-304-tool-execution-and-scripting
 description: Defines how Makefiles, CI pipelines, and optional wrapper scripts execute project commands. Use when designing project automation or command entry points.
 apply-to: All projects with Makefiles and CI pipelines
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-017: Tool execution and scripting
+# agentme-edr-policy-304: Tool execution and scripting
 
 ## Context and Problem Statement
 
@@ -15,14 +15,14 @@ How should projects execute development commands so the command surface stays pr
 
 ## Decision Outcome
 
-**Use Makefiles as the only authoritative command entry point, with targets named by [agentme-edr-008](008-common-targets.md) and implemented with `mise exec --` before the real tool command.**
+**Use Makefiles as the only authoritative command entry point, with targets named by [agentme-edr-303](303-common-targets.md) and implemented with `mise exec --` before the real tool command.**
 
 This keeps local development and CI aligned, reduces indirection, and lets contributors understand project behavior by reading one command surface.
 
 ### Details
 
 - Every project MUST use a root `Makefile` as the authoritative entry point for developer and pipeline commands.
-- The target names in that `Makefile` MUST follow [agentme-edr-008](008-common-targets.md).
+- The target names in that `Makefile` MUST follow [agentme-edr-303](303-common-targets.md).
 - CI pipelines MUST run `make <target>` from the relevant root instead of calling language-specific scripts such as `npm run`, `pnpm run`, shell wrappers, or secondary task runners.
 - A Makefile target MUST execute the real operation through `mise exec --` before invoking the tool itself, so it MUST use the version pinned in `.mise.toml`. Avoid intermediate script layers that hide the actual command.
 - Every Makefile target MUST start by echoing a concise summary of the target and folder or context, using fewer than 10 words. When delegating to another Makefile, echo the child path and delegated target before invoking it.
@@ -58,9 +58,9 @@ Disallowed:
 
 ## References
 
-- [agentme-edr-005](005-monorepo-structure.md) - Monorepo layout and Makefile hierarchy
-- [agentme-edr-006](006-github-pipelines.md) - CI/CD workflows should call Make targets
-- [agentme-edr-008](008-common-targets.md) - Standard target names
-- [agentme-edr-003](../application/003-javascript-project-tooling.md) - JavaScript tooling commands inside Makefiles
-- [agentme-edr-010](../application/010-golang-project-tooling.md) - Go tooling commands inside Makefiles
-- [agentme-edr-014](../application/014-python-project-tooling.md) - Python tooling commands inside Makefiles
+- [agentme-edr-301](301-monorepo-structure.md) - Monorepo layout and Makefile hierarchy
+- [agentme-edr-302](302-github-pipelines.md) - CI/CD workflows should call Make targets
+- [agentme-edr-303](303-common-targets.md) - Standard target names
+- [agentme-edr-101](../application/101-javascript-project-tooling.md) - JavaScript tooling commands inside Makefiles
+- [agentme-edr-102](../application/102-golang-project-tooling.md) - Go tooling commands inside Makefiles
+- [agentme-edr-103](../application/103-python-project-tooling.md) - Python tooling commands inside Makefiles

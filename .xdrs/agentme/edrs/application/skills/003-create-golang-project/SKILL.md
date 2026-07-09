@@ -2,7 +2,7 @@
 name: 003-create-golang-project
 description: >
   Scaffolds the initial boilerplate structure for a Go (Golang) CLI or library project following
-  the standard tooling and layout defined in agentme-edr-010. Activate this skill when the user
+  the standard tooling and layout defined in agentme-edr-102. Activate this skill when the user
   asks to create, scaffold, or initialize a new Go project, CLI binary, or Go module.
 metadata:
   author: flaviostutz
@@ -12,9 +12,9 @@ compatibility: Go 1.21+
 
 ## Overview
 
-Creates a complete Go project from scratch, following the layout from [agentme-edr-010](../../010-golang-project-tooling.md) and [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md). Business logic lives in `app/<feature>/` packages; CLI wiring lives in `adapters/cli/`; outbound integrations live in `adapters/connectors/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
+Creates a complete Go project from scratch, following the layout from [agentme-edr-102](../../102-golang-project-tooling.md) and [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md). Business logic lives in `app/<feature>/` packages; CLI wiring lives in `adapters/cli/`; outbound integrations live in `adapters/connectors/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
 
-Related EDRs: [agentme-edr-010](../../010-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md)
+Related EDRs: [agentme-edr-102](../../102-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 

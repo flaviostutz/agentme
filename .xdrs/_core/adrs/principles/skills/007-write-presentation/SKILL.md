@@ -14,6 +14,14 @@ Guides the creation of a Marp Markdown slide presentation that supports an exist
 
 ## Instructions
 
+### Phase 0: Prerequisites Gate — MUST complete before writing
+
+Identify the target scope from the parent document's path or the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
+
+- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
+- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
+- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+
 ### Phase 1: Identify the Parent Document
 
 1. Read `.xdrs/_core/adrs/principles/009-presentation-standards.md` in full to internalize all presentation rules.

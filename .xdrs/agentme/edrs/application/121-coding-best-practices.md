@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-002-coding-best-practices
+name: agentme-edr-policy-121-coding-best-practices
 description: Defines cross-language coding practices for keeping code readable, modular, and synchronized with tests and documentation. Apply across projects adopting agentme engineering standards.
 apply-to: All software projects
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-002: Coding best practices
+# agentme-edr-policy-121: Coding best practices
 
 ## Context and Problem Statement
 
@@ -116,4 +116,4 @@ Types used in only **one** file MUST be declared in that same file. Move a type 
 
 #### 06-keep-test-files-next-to-source
 
-Test files MUST be placed beside the source file they cover, following the co-location and naming conventions defined in [agentme-edr-004 rule 04](004-unit-test-requirements.md). For Rust, use inline `#[cfg(test)]` modules instead of a separate test file.
+Test files MUST be placed beside the source file they cover, following the co-location and naming conventions defined in [agentme-edr-122 rule 04](122-unit-test-requirements.md). For Rust, use inline `#[cfg(test)]` modules instead of a separate test file.

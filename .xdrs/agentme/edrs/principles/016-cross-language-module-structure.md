@@ -25,7 +25,7 @@ Language-specific EDRs MAY add ecosystem details, but they MUST NOT redefine the
 
 A module is the smallest independently buildable, testable, or publishable unit. It MUST live in its own folder and that folder MUST contain:
 
-- a `Makefile` following [agentme-edr-008](../platform/008-common-targets.md)
+- a `Makefile` following [agentme-edr-303](../platform/303-common-targets.md)
 - a `README.md` for the module itself
 - all configuration files needed to build, lint, test, package, or publish that module
 - its generated `dist/` directory when the module produces distributable artifacts
@@ -127,9 +127,9 @@ Benchmark tests MUST live in one of these locations:
 
 #### 08-module-makefiles-must-expose-shared-targets
 
-Every module `Makefile` MUST expose the common target names from [agentme-edr-008](../platform/008-common-targets.md). At minimum, modules MUST provide `build`, `lint`, and `test`, and SHOULD also provide `all`, `clean`, and `lint-fix` when meaningful.
+Every module `Makefile` MUST expose the common target names from [agentme-edr-303](../platform/303-common-targets.md). At minimum, modules MUST provide `build`, `lint`, and `test`, and SHOULD also provide `all`, `clean`, and `lint-fix` when meaningful.
 
 ## References
 
-- [agentme-edr-005](../platform/005-monorepo-structure.md) - Monorepo aggregation and delegation rules
-- [agentme-edr-008](../platform/008-common-targets.md) - Shared Makefile target names
+- [agentme-edr-301](../platform/301-monorepo-structure.md) - Monorepo aggregation and delegation rules
+- [agentme-edr-303](../platform/303-common-targets.md) - Shared Makefile target names

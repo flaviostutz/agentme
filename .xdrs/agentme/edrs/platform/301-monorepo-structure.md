@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-005-monorepo-structure
+name: agentme-edr-policy-301-monorepo-structure
 description: Defines the standard monorepo layout, naming, and build conventions using shared areas, Mise, and Makefiles. Use when creating or reviewing monorepos.
 apply-to: Monorepo projects
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-005: Monorepo structure
+# agentme-edr-policy-301: Monorepo structure
 
 ## Context and Problem Statement
 
@@ -78,7 +78,7 @@ Every monorepo MUST follow this top-level directory layout:
 
 A `Makefile` MUST be present at the repository root, in every application folder, and in every module folder.
 
-All Makefiles MUST use the shared target vocabulary from [agentme-edr-008](008-common-targets.md).
+All Makefiles MUST use the shared target vocabulary from [agentme-edr-303](303-common-targets.md).
 
 Repository, application, and module Makefiles MUST define at minimum: `all`, `build`, `lint`, `test`, and `clean`.
 
@@ -94,7 +94,7 @@ The root `setup` target MUST run `mise install` and any small repository bootstr
 - Every language runtime or CLI referenced by any module `Makefile`, CI workflow, or README command MUST be pinned in `.mise.toml`.
 - Contributors and CI run `make setup` after cloning or checkout; this target MUST call `mise install`.
 - Agents and contributors MUST check `.mise.toml` before using a system-installed compiler, runtime, or CLI.
-- When `.mise.toml` exists, all build, test, lint, and code-generation commands MUST run through `make <target>`, and the Makefile recipes MUST execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-017](017-tool-execution-and-scripting.md).
+- When `.mise.toml` exists, all build, test, lint, and code-generation commands MUST run through `make <target>`, and the Makefile recipes MUST execute the underlying tools via `mise exec -- <command>`, following [agentme-edr-304](304-tool-execution-and-scripting.md).
 - If a required tool is missing, the first remediation step MUST be to update `.mise.toml` or run `mise install`, not to install ad-hoc global tools with language-specific installers such as `go install`, `npm install -g`, `pip install --user`, or `cargo install`.
 - Root and module `Makefile` targets MUST work when invoked as plain `make <target>` after `make setup`.
 

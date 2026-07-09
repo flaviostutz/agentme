@@ -2,7 +2,7 @@
 name: 001-create-javascript-project
 description: >
   Scaffolds the initial boilerplate structure for a JavaScript/TypeScript project following
-  the standard tooling and layout defined in agentme-edr-003. Activate this skill when the user
+  the standard tooling and layout defined in agentme-edr-101. Activate this skill when the user
   asks to create, scaffold, or initialize a new JavaScript or TypeScript project, npm
   package, or similar project structure.
 metadata:
@@ -15,12 +15,12 @@ compatibility: JavaScript/TypeScript, Node.js 18+
 
 Creates a complete JavaScript/TypeScript project from scratch. The layout keeps the
 package self-contained in its module root (`lib/`), organizes internal code following
-[agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md) (`adapters/`, `app/`, `shared/`),
+[agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md) (`adapters/`, `app/`, `shared/`),
 places runnable consumer examples in the sibling `examples/` folder, redirects persistent caches
 into `.cache/`, and uses Makefiles as the only entry points. Boilerplate is derived from the
 [filedist](https://github.com/flaviostutz/filedist) project.
 
-Related EDRs: [agentme-edr-003](../../003-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-026](../../026-pragmatic-hexagonal-architecture.md)
+Related EDRs: [agentme-edr-101](../../101-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
 
 ## Instructions
 
@@ -433,7 +433,7 @@ Review all created files and confirm:
 - [ ] `lib/eslint.config.mjs` points `parserOptions.project` to `tsconfig.json`
 - [ ] `lib/README.md` starts with Quick Start and ends with module development commands
 - [ ] All `[package-name]` placeholders are replaced with the actual name
-- [ ] Structure matches the layout in [agentme-edr-003](../../003-javascript-project-tooling.md)
+- [ ] Structure matches the layout in [agentme-edr-101](../../101-javascript-project-tooling.md)
 
 ## Examples
 

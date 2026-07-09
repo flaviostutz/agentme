@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-022-secrets-management
+name: agentme-edr-policy-124-secrets-management
 description: Defines how secrets (API keys, passwords, tokens, credentials, private certificates) must be stored, fetched, and provisioned. Use when implementing secret handling in any language or deployment target.
 apply-to: All software projects handling secrets
 valid-from: 2026-05-28
 ---
 
-# agentme-edr-policy-022: Secrets management
+# agentme-edr-policy-124: Secrets management
 
 ## Context and Problem Statement
 
@@ -45,7 +45,7 @@ During local development, secrets MUST be stored and retrieved using the native 
 | JavaScript/TypeScript | `cross-keychain` |
 | Go | `go-keyring` |
 
-The "group" (service name) defaults to the module name. The secret identifier should match the ID used in the cloud secret manager for consistency.
+The "group" (service name) defaults to the module name. The secret identifier SHOULD match the ID used in the cloud secret manager for consistency.
 
 ---
 
@@ -164,5 +164,5 @@ In library code (Python, JS/TS, Go), continue using the cross-platform libraries
 
 ## References
 
-- [agentme-edr-008](../platform/008-common-targets.md) - Common development script names (defines Makefile target conventions)
-- [agentme-edr-009](009-error-handling.md) - Error handling (governs how the fallback exception should be raised)
+- [agentme-edr-303](../platform/303-common-targets.md) - Common development script names (defines Makefile target conventions)
+- [agentme-edr-123](123-error-handling.md) - Error handling (governs how the fallback exception should be raised)

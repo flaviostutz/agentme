@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-023-coding-abstraction-practices
-description: Defines when abstractions (functions, classes, wrappers, factories) are justified and when they must be avoided. Tightly related to agentme-edr-policy-002-coding-best-practices.
+name: agentme-edr-policy-125-coding-abstraction-practices
+description: Defines when abstractions (functions, classes, wrappers, factories) are justified and when they must be avoided. Tightly related to agentme-edr-policy-121-coding-best-practices.
 apply-to: All software projects
 valid-from: 2026-05-29
 ---
 
-# agentme-edr-policy-023: Coding abstraction practices
+# agentme-edr-policy-125: Coding abstraction practices
 
 ## Context and Problem Statement
 

@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-003-javascript-project-tooling-and-structure
+name: agentme-edr-policy-101-javascript-project-tooling-and-structure
 description: Defines the standard JavaScript and TypeScript project toolchain and layout using Mise, pnpm, TypeScript, ESLint, Jest, and Makefiles. Use when scaffolding or reviewing JavaScript projects.
 apply-to: JavaScript and TypeScript projects
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-003: JavaScript project tooling and structure
+# agentme-edr-policy-101: JavaScript project tooling and structure
 
 ## Context and Problem Statement
 
@@ -32,7 +32,7 @@ Clear, consistent tooling and layout enable fast onboarding, reliable CI pipelin
 | **eslint** | Linting — code style and quality enforcement |
 | **jest** | Testing — unit and integration test runner |
 
-All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-017](../platform/017-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
+All commands are run exclusively through Makefiles, not through `package.json` scripts. The repository root MUST define a `.mise.toml` that pins at least Node.js and pnpm. Contributors and CI MUST bootstrap with `make setup` or `mise install`, then invoke routine work with `make <target>`. Each Makefile recipe MUST execute the underlying tool through `mise exec -- <tool> ...`, following [agentme-edr-304](../platform/304-tool-execution-and-scripting.md). Calling project tools directly in docs, CI, or daily workflows instead of `make <target>` is not allowed.
 
 #### ESLint
 
@@ -48,7 +48,7 @@ When `tsconfig.json` extends `@tsconfig/node24/tsconfig.json`, the default `modu
 
 #### Coverage
 
-Jest must enforce 80% line and branch coverage, following [agentme-edr-004](004-unit-test-requirements.md). Configure thresholds in `lib/jest.config.js`:
+Jest must enforce 80% line and branch coverage, following [agentme-edr-122](122-unit-test-requirements.md). Configure thresholds in `lib/jest.config.js`:
 
 ```js
 coverageThreshold: {
@@ -82,7 +82,7 @@ Builds that miss the threshold MUST NOT be merged.
 │   ├── dist/              # compiled files and packed .tgz artifacts
 │   └── src/               # all TypeScript source files
 │       ├── index.ts       # public API re-exports from app/
-│       ├── adapters/      # I/O boundary layer (following agentme-edr-026)
+│       ├── adapters/      # I/O boundary layer (following agentme-edr-126)
 │       │   ├── cli/       # inbound: CLI bootstrap and entry point
 │       │   ├── http/      # inbound: HTTP server bootstrap and handlers
 │       │   └── connectors/ # outbound: one folder per external resource
@@ -101,7 +101,7 @@ Builds that miss the threshold MUST NOT be merged.
 
 The root `Makefile` delegates every target to `/lib` then `/examples` in sequence. Parent Makefiles should call child Makefiles directly, and each module Makefile is responsible for running its actual tool commands through `mise exec --`.
 
-Internal source code MUST be organized following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities). The public API entry point (`index.ts`) re-exports from `app/`.
+Internal source code MUST be organized following [agentme-edr-126](126-pragmatic-hexagonal-architecture.md): `adapters/` (inbound and outbound I/O boundaries), `app/` (business logic), and `shared/` (infrastructure-agnostic utilities). The public API entry point (`index.ts`) re-exports from `app/`.
 
 When a repository contains multiple JavaScript/TypeScript packages, each package MUST live in its own module folder such as `lib/my-package/` or `services/my-service/`, each with its own `Makefile`, `README.md`, `dist/`, and `.cache/`.
 
@@ -154,7 +154,7 @@ The examples folder MUST exist for any libraries and utilities that are publishe
 
 ## References
 
-- [agentme-edr-004](004-unit-test-requirements.md) — Coverage and unit-test baseline
-- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
+- [agentme-edr-122](122-unit-test-requirements.md) — Coverage and unit-test baseline
+- [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
 - [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 

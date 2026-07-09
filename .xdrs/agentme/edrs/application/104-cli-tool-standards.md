@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-015-cli-tool-standards
+name: agentme-edr-policy-104-cli-tool-standards
 description: Defines how distributable CLI tools should separate command handling from library logic and expose consistent command behavior. Use when designing or reviewing CLI interfaces.
 apply-to: Projects with distributable CLI tools
 valid-from: 2026-05-25
 ---
 
-# agentme-edr-policy-015: CLI tool standards
+# agentme-edr-policy-104: CLI tool standards
 
 ## Context and Problem Statement
 
@@ -34,7 +34,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 #### CLI to application separation
 
-- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-026](026-pragmatic-hexagonal-architecture.md).
+- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-126](126-pragmatic-hexagonal-architecture.md). For unit testing the application layer and mocking outbound connectors, follow [agentme-edr-126 rule `09`](126-pragmatic-hexagonal-architecture.md#09-unit-testing-and-mocking-strategy).
 - The CLI layer MUST only parse arguments, load config, call the application layer, and format output.
 - Domain logic MUST live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
 - Every feature available through the CLI MUST also be available through the application API.
@@ -53,7 +53,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 #### Configuration
 
 - Prefer flags and positional arguments for simple inputs.
-- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-027](../platform/027-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
+- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-305](../platform/305-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
 - By default, config-file discovery and loading MUST happen in the CLI layer, not in the application layer.
 - When a config file is supported, the CLI MUST try to load a YAML file from `[cwd]/[tool-name].yml` by default.
 - The CLI MUST also support an explicit config path flag such as `--config`.
@@ -87,7 +87,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 - Choose language tooling that stays compatible with ecosystem launchers such as `npx`, `pnpm dlx`, `uvx`, or equivalent distribution commands for that ecosystem.
 - `--version` MUST print the same version declared in the published package or release artifact metadata.
 - Do not hard-code a second version string that can drift from the published package version.
-- Language-specific project structure and packaging rules still apply and SHOULD be combined with this XDR, especially [agentme-edr-003](003-javascript-project-tooling.md), [agentme-edr-010](010-golang-project-tooling.md), and [agentme-edr-014](014-python-project-tooling.md).
+- Language-specific project structure and packaging rules still apply and SHOULD be combined with this XDR, especially [agentme-edr-101](101-javascript-project-tooling.md), [agentme-edr-102](102-golang-project-tooling.md), and [agentme-edr-103](103-python-project-tooling.md).
 
 ## Considered Options
 
@@ -98,11 +98,11 @@ This keeps the user-facing command predictable while preserving a clean library 
 
 ## References
 
-- [agentme-edr-026](026-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
-- [agentme-edr-003](003-javascript-project-tooling.md) - JavaScript project packaging and structure
-- [agentme-edr-007](../governance/007-project-quality-standards.md) - README and examples baseline
-- [agentme-edr-008](../platform/008-common-targets.md) - Standard command names for project entry points
-- [agentme-edr-009](009-error-handling.md) - Process error signaling and error handling expectations
-- [agentme-edr-010](010-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
-- [agentme-edr-014](014-python-project-tooling.md) - Python packaging and CLI entry-point guidance
-- [agentme-edr-027](../platform/027-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files
+- [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
+- [agentme-edr-101](101-javascript-project-tooling.md) - JavaScript project packaging and structure
+- [agentme-edr-501](../governance/501-project-quality-standards.md) - README and examples baseline
+- [agentme-edr-303](../platform/303-common-targets.md) - Standard command names for project entry points
+- [agentme-edr-123](123-error-handling.md) - Process error signaling and error handling expectations
+- [agentme-edr-102](102-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
+- [agentme-edr-103](103-python-project-tooling.md) - Python packaging and CLI entry-point guidance
+- [agentme-edr-305](../platform/305-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files
