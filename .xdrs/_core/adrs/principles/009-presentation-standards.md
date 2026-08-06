@@ -36,7 +36,7 @@ Presentations are Markdown files in Marp format, stored in the `.assets/` folder
 - Slide file names MUST NOT exceed 64 characters (including the `.md` extension).
 - Slide file names MUST be lowercase.
 - When slides refer to content from multiple decisions, plans, or research documents, an article explaining the combined view MUST be written first. The slides then support that article, not the individual documents directly.
-- Slides SHOULD contain minimal text. Prefer Mermaid diagrams, short bullet points, ASCII art, key short statements, and tables. Use longer text only when the exact wording MUST be evaluated by the audience (policies, texts under discussion, controls).
+- Slides SHOULD contain minimal text. For diagrams, prefer ASCII art for very simple cases, Mermaid for flows and relationships, and draw.io when Mermaid is insufficient (see [`_core-adr-policy-020`](020-media-and-asset-standards.md)); for other slide content, prefer short bullet points, key short statements, and tables. Use longer text only when the exact wording MUST be evaluated by the audience (policies, texts under discussion, controls).
 - Slides SHOULD follow a clean, linear storytelling structure (context, problem, solution, actions). Follow the structure of the underlying document, extracting the most important points and stressing central questions, answers, doubts, decisions, and risks.
 - Define the central message or objective of the presentation before creating the slides. If the objective is unclear or there are multiple possible paths, ask the user before proceeding.
 - The target audience MUST be identified (executives, engineers, specialists, control). If the audience is not clear from the underlying document, ask before creating the slides. Include audience info in the file name when multiple audiences exist (e.g. `005-rail-standards-slides-executive.md`).
@@ -51,4 +51,5 @@ Presentations are Markdown files in Marp format, stored in the `.assets/` folder
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md) - Policy document writing rules
 - [_core-adr-policy-004 - Article standards](004-article-standards.md) - Article standards for multi-document views
 - [007-write-presentation skill](skills/007-write-presentation/SKILL.md) - Skill for creating slide presentations
+- [_core-adr-policy-020 - Media and asset standards](020-media-and-asset-standards.md) - Diagram format preferences and non-Markdown asset rules
 - [Marp](https://marp.app/) - Markdown Presentation Ecosystem

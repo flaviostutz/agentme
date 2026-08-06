@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- hand-coded SVG; to make editable in draw.io, import and re-export as Editable Vector -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="1650" height="980" viewBox="0 0 1650 980"
+     style="background-color:#ffffff;">
+  <defs>
+    <marker id="arr-p" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c4dff"/>
+    </marker>
+    <marker id="arr-o" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e67e22"/>
+    </marker>
+  </defs>
+
+  <!-- ===== TITLE ===== -->
+  <text x="825" y="42" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="24" font-weight="bold" fill="#1a1a2e">XDRS — eXtensible Decision Record System</text>
+  <text x="825" y="66" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="13" fill="#555">A framework to structure, compile and distribute decision records so that AI agents and humans can reliably find and use them</text>
+
+  <!-- ===== SECTION A: DECISION TYPES ===== -->
+  <rect x="20" y="88" width="260" height="422" rx="8" fill="#f0f4ff" stroke="#4a6cf7" stroke-width="2"/>
+  <text x="150" y="112" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#4a6cf7">Decision Types</text>
+
+  <!-- ADR -->
+  <rect x="34" y="124" width="232" height="72" rx="6" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+  <text x="150" y="146" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">ADR</text>
+  <text x="150" y="163" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#333">Architectural Decision Records</text>
+  <text x="150" y="179" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#666">app · data · integration · platform · operations</text>
+
+  <!-- BDR -->
+  <rect x="34" y="208" width="232" height="72" rx="6" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <text x="150" y="230" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">BDR</text>
+  <text x="150" y="247" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#333">Business Decision Records</text>
+  <text x="150" y="263" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#666">product · marketing · finance · organization</text>
+
+  <!-- EDR -->
+  <rect x="34" y="292" width="232" height="72" rx="6" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+  <text x="150" y="314" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">EDR</text>
+  <text x="150" y="331" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#333">Engineering Decision Records</text>
+  <text x="150" y="347" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#666">infra · devops · observability · governance</text>
+
+  <!-- Policy ID note inside A -->
+  <rect x="34" y="382" width="232" height="114" rx="6" fill="#fafafa" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="150" y="401" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="bold" fill="#555">Policy ID Format</text>
+  <text x="44" y="420" font-family="Courier New,monospace" font-size="11" fill="#333">[scope]-[type]-policy-[number]</text>
+  <text x="44" y="440" font-family="Courier New,monospace" font-size="10" fill="#666">checkout-adr-policy-001</text>
+  <text x="44" y="456" font-family="Courier New,monospace" font-size="10" fill="#666">myorg-edr-policy-042</text>
+  <text x="44" y="472" font-family="Courier New,monospace" font-size="10" fill="#666">_core-adr-policy-016</text>
+  <text x="44" y="488" font-family="Courier New,monospace" font-size="10" fill="#666">        (sequential, never reused)</text>
+
+  <!-- Arrow A → B -->
+  <line x1="281" y1="299" x2="317" y2="299" stroke="#7c4dff" stroke-width="2" marker-end="url(#arr-p)"/>
+  <text x="299" y="291" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#7c4dff">decompose</text>
+  <text x="299" y="313" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#7c4dff">into</text>
+
+  <!-- ===== SECTION B: XDRS ELEMENTS ===== -->
+  <rect x="320" y="88" width="440" height="422" rx="8" fill="#f9f0ff" stroke="#7c4dff" stroke-width="2"/>
+  <text x="540" y="112" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#7c4dff">XDRS Document Elements</text>
+  <text x="540" y="129" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="11" fill="#888">Each decision record decomposes into specialized document types</text>
+
+  <!-- Policy element -->
+  <rect x="334" y="141" width="412" height="64" rx="6" fill="#e1d5f7" stroke="#7c4dff" stroke-width="1.5"/>
+  <text x="354" y="161" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Policy — What must be followed</text>
+  <text x="354" y="178" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Rules, guardrails, core decisions. The source of truth.</text>
+  <text x="354" y="195" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Captured as ADR / BDR / EDR policy documents.</text>
+
+  <!-- Research element -->
+  <rect x="334" y="215" width="412" height="64" rx="6" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+  <text x="354" y="235" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Research — Why the decision was made</text>
+  <text x="354" y="252" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Problem context, constraints, findings, option tradeoffs.</text>
+  <text x="354" y="269" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">One research may inform multiple downstream policies.</text>
+
+  <!-- Skills element -->
+  <rect x="334" y="289" width="412" height="64" rx="6" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <text x="354" y="309" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Skills — How to implement</text>
+  <text x="354" y="326" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Step-by-step procedural guides for humans or AI agents.</text>
+  <text x="354" y="343" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Executable with verifiable outcomes.</text>
+
+  <!-- Articles element -->
+  <rect x="334" y="363" width="412" height="64" rx="6" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+  <text x="354" y="383" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Articles — Overview / Views</text>
+  <text x="354" y="400" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Synthetic texts combining multiple policies and skills.</text>
+  <text x="354" y="417" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Never replace policies as source of truth.</text>
+
+  <!-- Plans element -->
+  <rect x="334" y="437" width="412" height="64" rx="6" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="354" y="457" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Plans — When / How to roll out</text>
+  <text x="354" y="474" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Ephemeral execution docs. Deleted after implementation.</text>
+  <text x="354" y="491" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Lasting outputs become Policies, Skills, or Articles.</text>
+
+  <!-- Arrow B → C -->
+  <line x1="761" y1="299" x2="797" y2="299" stroke="#e67e22" stroke-width="2" marker-end="url(#arr-o)"/>
+  <text x="779" y="291" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#e67e22">organized</text>
+  <text x="779" y="313" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#e67e22">in</text>
+
+  <!-- ===== SECTION C: SCOPE SYSTEM ===== -->
+  <rect x="800" y="88" width="830" height="422" rx="8" fill="#fff8f0" stroke="#e67e22" stroke-width="2"/>
+  <text x="1215" y="112" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#e67e22">Scope System — Hierarchical Namespaces</text>
+  <text x="1215" y="129" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="11" fill="#888">Scopes organize decision ownership. Scopes listed later in root index.md override earlier ones.</text>
+
+  <!-- Precedence arrow (right side) -->
+  <line x1="1598" y1="480" x2="1598" y2="148" stroke="#e67e22" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr-o)"/>
+  <text x="1598" y="314" text-anchor="middle" transform="rotate(-90,1598,314)"
+        font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="bold" fill="#e67e22">Precedence: later overrides earlier</text>
+
+  <!-- core -->
+  <rect x="814" y="141" width="770" height="58" rx="6" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="834" y="162" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">core   (e.g. _core, myorg-core)</text>
+  <text x="834" y="179" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Meta-governance: authoring standards, scope-type definitions. No consumable policies.</text>
+
+  <!-- reference -->
+  <rect x="814" y="209" width="770" height="58" rx="6" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+  <text x="834" y="230" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">reference   (e.g. security-ref-baseline)</text>
+  <text x="834" y="247" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Standards, regulations, reference models. Read-only adoptable material.</text>
+
+  <!-- platform -->
+  <rect x="814" y="277" width="770" height="58" rx="6" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <text x="834" y="298" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">platform   (e.g. cloud-plat-infra)</text>
+  <text x="834" y="315" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Live services and infrastructure teams can consume. Documents operational capabilities.</text>
+
+  <!-- standard -->
+  <rect x="814" y="345" width="770" height="58" rx="6" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+  <text x="834" y="366" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">standard   (e.g. checkout, mobile-app)</text>
+  <text x="834" y="383" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Business areas, products, teams. General-purpose scopes. Default type.</text>
+
+  <!-- _local -->
+  <rect x="814" y="413" width="770" height="58" rx="6" fill="#e1d5f7" stroke="#7c4dff" stroke-width="1.5"/>
+  <text x="834" y="434" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">_local   (reserved)</text>
+  <text x="834" y="451" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Workspace-local overrides. Never distributed. Highest precedence within workspace.</text>
+
+  <!-- ===== SECTION: FILE STRUCTURE ===== -->
+  <rect x="20" y="530" width="390" height="290" rx="8" fill="#f0fff4" stroke="#27ae60" stroke-width="2"/>
+  <text x="215" y="554" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#27ae60">Folder Structure</text>
+  <text x="38" y="578" font-family="Courier New,monospace" font-size="11" fill="#333">.xdrs/</text>
+  <text x="38" y="596" font-family="Courier New,monospace" font-size="11" fill="#333">  index.md              ← root index (lists all scopes)</text>
+  <text x="38" y="614" font-family="Courier New,monospace" font-size="11" fill="#333">  [scope]/</text>
+  <text x="38" y="632" font-family="Courier New,monospace" font-size="11" fill="#333">    index.md            ← scope overview + frontmatter</text>
+  <text x="38" y="650" font-family="Courier New,monospace" font-size="11" fill="#333">    [adrs|bdrs|edrs]/</text>
+  <text x="38" y="668" font-family="Courier New,monospace" font-size="11" fill="#333">      index.md          ← type index</text>
+  <text x="38" y="686" font-family="Courier New,monospace" font-size="11" fill="#333">      [subject]/</text>
+  <text x="38" y="704" font-family="Courier New,monospace" font-size="11" fill="#333">        NNN-title.md    ← Policy</text>
+  <text x="38" y="722" font-family="Courier New,monospace" font-size="11" fill="#333">        researches/     ← Research docs</text>
+  <text x="38" y="740" font-family="Courier New,monospace" font-size="11" fill="#333">        skills/         ← Skill packages</text>
+  <text x="38" y="758" font-family="Courier New,monospace" font-size="11" fill="#333">        articles/       ← Article docs</text>
+  <text x="38" y="776" font-family="Courier New,monospace" font-size="11" fill="#333">        plans/          ← Plan docs</text>
+  <text x="38" y="794" font-family="Courier New,monospace" font-size="11" fill="#333">        .assets/        ← Binary assets</text>
+
+  <!-- ===== SECTION: GOVERNANCE MECHANISMS ===== -->
+  <rect x="430" y="530" width="1200" height="290" rx="8" fill="#fffbf0" stroke="#f39c12" stroke-width="2"/>
+  <text x="1030" y="554" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#f39c12">Governance Mechanisms</text>
+
+  <!-- Gov 1 -->
+  <rect x="446" y="568" width="270" height="232" rx="6" fill="#fdebd0" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="581" y="589" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">1. Scope-type standards</text>
+  <text x="461" y="609" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Policies in core-type scopes that</text>
+  <text x="461" y="625" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">define rules for ALL scopes of a</text>
+  <text x="461" y="641" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">given type.</text>
+  <text x="461" y="669" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">e.g. business-area-scope-type.md</text>
+  <text x="461" y="685" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">in ecomm-core applies to all</text>
+  <text x="461" y="701" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">business-area scopes</text>
+
+  <!-- Gov 2 -->
+  <rect x="732" y="568" width="270" height="232" rx="6" fill="#fdebd0" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="867" y="589" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">2. follows: declaration</text>
+  <text x="747" y="609" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Scope explicitly declares which</text>
+  <text x="747" y="625" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">core-type scope standards apply.</text>
+  <text x="747" y="641" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Creates a mandatory governance</text>
+  <text x="747" y="657" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">relationship to that scope.</text>
+  <text x="747" y="685" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">e.g. checkout/index.md:</text>
+  <text x="747" y="701" font-family="Courier New,monospace" font-size="10" fill="#888">follows: ecomm-core</text>
+
+  <!-- Gov 3 -->
+  <rect x="1018" y="568" width="270" height="232" rx="6" fill="#fdebd0" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="1153" y="589" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">3. Local meta-policies</text>
+  <text x="1033" y="609" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Files named NNN-core.md inside</text>
+  <text x="1033" y="625" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">a scope's principles/ directory.</text>
+  <text x="1033" y="641" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Govern authoring within that</text>
+  <text x="1033" y="657" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">scope only.</text>
+  <text x="1033" y="685" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">Applied implicitly — no index</text>
+  <text x="1033" y="701" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">declaration needed.</text>
+
+  <!-- Gov 4 -->
+  <rect x="1304" y="568" width="310" height="232" rx="6" fill="#fdebd0" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="1459" y="589" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">4. -core sibling scope</text>
+  <text x="1319" y="609" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">A separate scope directory of</text>
+  <text x="1319" y="625" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">scope-type: core for shared</text>
+  <text x="1319" y="641" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">meta-governance across a family</text>
+  <text x="1319" y="657" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">of governed scopes.</text>
+  <text x="1319" y="685" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">e.g. ecomm-core/ governs all</text>
+  <text x="1319" y="701" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">ecomm business-area scopes.</text>
+  <text x="1319" y="717" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#888">Distinct from local meta-policy.</text>
+
+  <!-- Precedence chain label -->
+  <text x="1030" y="742" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="11" font-weight="bold" fill="#f39c12">Precedence chain (lowest → highest):</text>
+  <text x="1030" y="760" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="11" fill="#555">1. Scope-type standards  →  2. follows: standards  →  3. Local meta-policies  (all subordinate to _core structural rules)</text>
+  <text x="1030" y="778" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="11" fill="#555">When absent from workspace: companion scope is READ-ONLY. Governed scope declares follows: in its index.md.</text>
+
+  <!-- ===== DISTRIBUTION SECTION ===== -->
+  <rect x="20" y="840" width="1610" height="130" rx="8" fill="#f0f8ff" stroke="#2980b9" stroke-width="2"/>
+  <text x="825" y="864" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+        font-size="14" font-weight="bold" fill="#2980b9">Distribution &amp; Usage — Versioned Packages</text>
+
+  <!-- Package -->
+  <rect x="36" y="876" width="240" height="80" rx="6" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+  <text x="156" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">Package</text>
+  <text x="156" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">Scopes are versioned npm</text>
+  <text x="156" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">distributions. Consumers install</text>
+  <text x="156" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">and extract them into workspace.</text>
+
+  <!-- Scope Composition -->
+  <rect x="296" y="876" width="240" height="80" rx="6" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <text x="416" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">Scope Composition</text>
+  <text x="416" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">Multiple scopes compose together.</text>
+  <text x="416" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">External scopes tracked in</text>
+  <text x="416" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">.filedist.lock as read-only.</text>
+
+  <!-- Linting -->
+  <rect x="556" y="876" width="240" height="80" rx="6" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+  <text x="676" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">Linting / Validation</text>
+  <text x="676" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">xdrs-core CLI validates structure,</text>
+  <text x="676" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">frontmatter, naming, index links,</text>
+  <text x="676" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">and scope governance compliance.</text>
+
+  <!-- AI Agents -->
+  <rect x="816" y="876" width="240" height="80" rx="6" fill="#e1d5f7" stroke="#7c4dff" stroke-width="1.5"/>
+  <text x="936" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">AI Agent Context</text>
+  <text x="936" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">AGENTS.md + XDRS structure gives</text>
+  <text x="936" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">AI agents reliable, scoped access</text>
+  <text x="936" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">to all decisions and skills.</text>
+
+  <!-- RAG -->
+  <rect x="1076" y="876" width="240" height="80" rx="6" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="1196" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">RAG / Web Publishing</text>
+  <text x="1196" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">Compiled corpus feeds RAG apps,</text>
+  <text x="1196" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">documentation sites, or knowledge</text>
+  <text x="1196" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">base systems.</text>
+
+  <!-- Extension Packages -->
+  <rect x="1336" y="876" width="280" height="80" rx="6" fill="#fdebd0" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="1476" y="896" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="bold" fill="#1a1a2e">Extension Packages</text>
+  <text x="1476" y="912" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">Teams build their own XDRS packages</text>
+  <text x="1476" y="926" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">extending xdrs-core with custom</text>
+  <text x="1476" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#444">scopes and governance rules.</text>
+
+</svg>

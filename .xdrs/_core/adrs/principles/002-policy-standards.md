@@ -81,7 +81,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - When research exists for a decision, the Policy SHOULD mention the related research documents after the `## Considered Options` list.
 - MUST NOT use emojis in contents.
 - File names MUST be lowercase.
-- Any non-Markdown files referenced by a Policy (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary and MUST live in `[xdrs-root]/[scope]/[type]/[subject]/.assets/`.
+- For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
 - Avoid using lengthy instructions on the Policy. If there are long and detailed instructions related to the Policy, or instructions that are outside the decision, create another file with a guide. If the guide is small, keep it in the Policy itself.
 - Policies SHOULD be under 1300 words long as a rule of thumb.
   - This is important to make them focused on a clear decision

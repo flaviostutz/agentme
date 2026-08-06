@@ -139,7 +139,7 @@ Rules:
 - Keep traceability to related Policies, skills, articles, discussions, and external sources primarily in `## References`.
 - Use good-enough evidence. Experienced professional judgment is allowed, but the conclusions still need support that other colleagues can inspect and learn from.
 - Ensure the methods and test conditions are reproducible enough for an experienced professional to rerun or evolve the critical parts later.
-- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), bullet points, or ASCII art for simple explanations and comparisons, especially in the introduction and results.
+- For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists and bullet points first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the research genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/researches/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - Keep section word limits within the standard and keep the document under 5000 words total unless the introduction explicitly states that a very detailed analysis is required.

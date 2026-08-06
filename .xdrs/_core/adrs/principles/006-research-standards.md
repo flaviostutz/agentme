@@ -37,9 +37,9 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - Research documents MUST describe the methods, tools, sources, and conditions with enough detail that an experienced professional could at least minimally reproduce the important parts of the study, especially the aspects that materially affected the conclusion.
 - The short title portion after the research id MUST stay under 20 words.
 - `## Abstract` MUST be a single paragraph under 200 words summarizing the goal, methods, results, and conclusion. It SHOULD let a quick technical reader understand the question, method, main result, and takeaway.
-- `## Introduction` MUST define the problem, context, constraints, known facts, experiences, gaps, assumptions, and objectives. It SHOULD prefer plain Markdown, bullet points, tables, or ASCII art for simple explanations, and SHOULD use external visuals only when they are materially necessary to improve understanding. It MUST stay under 700 words and MUST end with `Question: [central question]?`.
+- `## Introduction` MUST define the problem, context, constraints, known facts, experiences, gaps, assumptions, and objectives. It SHOULD prefer plain Markdown, bullet points, and tables for simple explanations, and SHOULD use diagrams to illustrate concepts and relationships when they improve clarity over plain text (see [`_core-adr-policy-020`](020-media-and-asset-standards.md) for format preference; draw.io SHOULD be used for conceptual and relationship diagrams such as context maps, component relationships, and architecture overviews). It MUST stay under 700 words and MUST end with `Question: [central question]?`.
 - `## Methods` MUST explain how the study was conducted, including design, tools, data sources, and test conditions, with a reproducibility goal. It MUST stay under 1200 words.
-- `## Results` MUST present findings, data, trends, quantitative results, produced code, and option comparisons when relevant. It SHOULD prefer tables, bullet lists, or ASCII art for simple comparisons, and SHOULD use external figures only when they are materially necessary. Keep interpretation to a minimum. It MUST stay under 1800 words.
+- `## Results` MUST present findings, data, trends, quantitative results, produced code, and option comparisons when relevant. It SHOULD prefer tables and bullet lists for simple comparisons, and SHOULD use diagrams to illustrate concepts and relationships when they improve clarity over plain text (see [`_core-adr-policy-020`](020-media-and-asset-standards.md) for format preference; draw.io SHOULD be used for conceptual and relationship diagrams). Keep interpretation to a minimum. It MUST stay under 1800 words.
 - When different options for the same problem are being analyzed, `## Results` SHOULD include comparison tables and explicit pros and cons for each option so the trade-offs are directly inspectable.
 - `## Discussion` MUST interpret the results, explain significance, trade-offs, performance considerations, limitations, and implications for technical readers. It MUST stay under 1000 words.
 - `## Conclusion` MUST summarize the main findings, practical takeaway, applicability boundaries, and important open questions. It MUST stay under 400 words.
@@ -50,7 +50,7 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - Research documents SHOULD link in `## References` to the Policies, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
 - A 1:1 relationship between one research document and one decision will likely be common in practice, but it is not REQUIRED.
 - One research document MAY also be referenced by multiple Policies, including a mix of ADRs, BDRs, and EDRs, when the same investigation remains relevant across several decisions.
-- Any non-Markdown files referenced by a research document SHOULD be used only when they are materially necessary and MUST live in `researches/.assets/` next to the research files. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
+- For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md). Research documents SHOULD use diagrams to illustrate concepts and relationships; draw.io SHOULD be used for conceptual and relationship diagrams (e.g., context maps, component relationships, architecture overviews) when Mermaid cannot adequately express them.
 - Research file names MUST be lowercase. MUST NOT use emojis.
 - A research document MAY exist before the related Policy is written, or remain after the Policy changes, as long as its status and references stay clear.
 
@@ -91,7 +91,7 @@ All research documents MUST follow this template:
 ## Introduction
 
 [Describe the problem, context, constraints, known facts, experiences, gaps, assumptions, and objectives.
-Prefer bullets, tables, or ASCII art for simple explanations. Use external visuals only when they are materially necessary. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. Under 700 words.]
+Prefer markdown structures (bullets, tables, headings) first; for diagrams see _core-adr-policy-020. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. Under 700 words.]
 
 Question: [Central question of the research]?
 
@@ -103,7 +103,7 @@ Include enough detail for an experienced professional to reproduce the relevant 
 ## Results
 
 [Report findings, data, trends, quantitative results, code artifacts, and option comparisons.
-Prefer tables, bullets, or ASCII art for simple comparisons. Use external figures only when they are materially necessary. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. Under 1800 words.]
+Prefer tables and bullet lists for simple comparisons; for diagrams see _core-adr-policy-020. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. Under 1800 words.]
 
 ## Discussion
 
@@ -135,4 +135,5 @@ Prefer tables, bullets, or ASCII art for simple comparisons. Use external figure
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md)
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
+- [_core-adr-policy-020 - Media and asset standards](020-media-and-asset-standards.md) - Diagram format preferences and non-Markdown asset rules
 - [005-write-research skill](skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document

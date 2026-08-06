@@ -99,7 +99,7 @@ Rules:
 - Do not duplicate content from referenced Policies — link instead.
 - Do not present the skill itself as policy; mandatory behavior must come from referenced Policies or other policy artifacts.
 - When the skill depends on Policies, make the activation logic and instructions consistent with the Policy metadata so the skill does not operationalize inactive or out-of-scope decisions.
-- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
+- For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - No emojis. Lowercase filenames. Target under 6500 words.
@@ -117,18 +117,10 @@ Before writing files, verify:
 
 If any check fails, revise before continuing.
 
-### Phase 5.5: Write SKILL.test.md
-
-Write `SKILL.test.md` in the same directory as `SKILL.md` following that policy exactly:
-- Use the mandatory frontmatter (`skill:`, `skill-version:`).
-- Write at least two scenarios: one happy path and one edge or failure case.
-- Each scenario MUST have a `**Trigger / Input**`, `**Expected Behaviour**`, and `**Assertions**` sub-section with at least two falsifiable assertions.
-
 ### Phase 6: Write Files
 
 1. Create the skill file at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`.
-2. If `SKILL.test.md` was produced in Phase 5.5, create it at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.test.md`.
-3. Create a symlink at `.agents/skills/[number]-[skill-name]` so VS Code picks it up immediately:
+2. Create a symlink at `.agents/skills/[number]-[skill-name]` so VS Code picks it up immediately:
    ```
    mkdir -p .agents/skills
    ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .agents/skills/[number]-[skill-name]
@@ -173,4 +165,3 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
 - [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [002-write-policy skill](../002-write-policy/SKILL.md)
-- [agentme-edr-policy-017 - Skill testing](../../../../../agentme/edrs/principles/017-skill-testing.md)

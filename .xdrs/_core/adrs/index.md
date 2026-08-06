@@ -25,6 +25,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-017](principles/017-policy-numbering-ranges.md) - **Policy numbering ranges** — Subject-based 100-number block ranges for policy numbering and the freeze-reference exemption
 - [_core-adr-policy-018](principles/018-external-path-symlinks.md) - **External path symlinks** — How to make XDRS files accessible from paths outside the .xdrs/ root using symlinks
 - [_core-adr-policy-019](principles/019-compiled-scope-type.md) - **compiled scope type** — Defines the `compiled` scope type: scopes whose policies are compiled from external authoritative sources with strict source traceability and no invented content
+- [_core-adr-policy-020](principles/020-media-and-asset-standards.md) - **Media and asset standards** — Canonical diagram format preference order and non-Markdown asset rules for all XDRS document types
 
 ## Skills
 
