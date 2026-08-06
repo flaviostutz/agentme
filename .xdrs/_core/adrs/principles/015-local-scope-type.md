@@ -38,4 +38,4 @@ Content in the `_local` scope MUST NOT be shared with or propagated to any other
 ## References
 
 - [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — scope-type definition convention and governance application model
-- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md) — `_local` structural rules (placement, linking restrictions, root index behaviour)
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) — `_local` structural rules (placement, linking restrictions, root index behaviour)

@@ -1,5 +1,5 @@
 ---
-name: 005-create-python-project
+name: 052-create-python-project
 description: >
   Scaffolds the initial boilerplate structure for a Python project following the standard tooling
   and layout defined in agentme-edr-103. Activate this skill when the user asks to create,

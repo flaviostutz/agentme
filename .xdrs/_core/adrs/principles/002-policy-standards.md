@@ -76,7 +76,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - Each policy rule and rule block MUST be unambiguous: it MUST be possible to clearly follow, check, and discuss it without requiring additional interpretation.
 - When the decision defines strong policies or rules that SHOULD be stated explicitly as stable rule blocks, or when other documents, skills, or agents need to cite those rules individually by identifier, the Policy MUST follow the extension [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) instead of using plain bullet lists for those rules.
 - Conflict handling applies to Policy documents:
-  - For cross-scope overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope.
+  - For cross-scope and cross-scope-type overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope or scope-type policy. Local meta-policies (`NNN-core.md` and companion files) and scope-type definition policies MAY include a `## Conflicts` section for this purpose. See `_core-adr-policy-010` rule 26-conflict-declarations for the required structure.
   - **Within-scope conflicts:** Policies within the same type+scope MUST NOT conflict. If two Policies appear to conflict, one SHOULD be updated, removed, or the conflict resolved through a new Policy.
 - When research exists for a decision, the Policy SHOULD mention the related research documents after the `## Considered Options` list.
 - MUST NOT use emojis in contents.
@@ -168,7 +168,7 @@ Question: In the end, state explicitly the question that needs to be answered. E
 
 ## References
 
-- [_core-adr-policy-001 - Policies core](001-xdrs-core.md) - Framework elements: types, scopes, subjects, folder structure
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) - Framework elements: types, scopes, subjects, folder structure
 - [001-review skill](skills/001-review/SKILL.md) - Skill for reviewing code changes against Policies
 - [002-write-policy skill](skills/002-write-policy/SKILL.md) - Skill for creating a new Policy following this standard
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)

@@ -14,20 +14,17 @@ Guides the creation of a well-structured Policy by following the standards in `_
 
 ## Instructions
 
-### Phase 0: Prerequisites Gate — MUST complete before writing
+### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
-Identify the target scope from the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
-
-- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
-- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
-- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+1. Run the scope placement analysis from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/scope-placement.md` to determine and confirm the target scope.
+2. Once the scope is confirmed, run the prerequisites gate from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md`. Substitute `[DOCUMENT TYPE]` with `policy`.
 
 ### Phase 1: Understand the Decision
 
 1. Read the XDRS root `index.md` (default: `.xdrs/index.md`) to discover all active scopes and their canonical indexes.
-2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full to internalize structure rules, mandatory language, and the XDRS framework elements.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full to internalize structure rules, mandatory language, and the XDRS framework elements.
 3. Read `.xdrs/_core/adrs/principles/002-policy-standards.md` in full to internalize the Policy template and document writing rules.
-4. Treat `001-xdrs-core` as the canonical source for all core XDRS element definitions (type, scope, subject, numbering, placement). Treat `002-policy-standards` as the canonical source for how to write and structure the document itself.
+4. Treat `001-xdrs-standards` as the canonical source for all core XDRS element definitions (type, scope, subject, numbering, placement). Treat `002-policy-standards` as the canonical source for how to write and structure the document itself.
 5. Ask the user (or infer from context) the topic of the decision. Do NOT proceed to Phase 2 without a clear topic.
    - Ask one focused clarifying question at a time. Wait for the answer before asking the next question.
    - Each answer may reveal new ambiguities; ask follow-up questions as needed until the topic, intent, and scope are unambiguous.
@@ -35,17 +32,14 @@ Identify the target scope from the user's request; use `_local` if none is speci
 
 ### Phase 2: Select Type, Scope, and Subject
 
-Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail matters, the standard decides.
+Consult `001-xdrs-standards` while making each choice in this phase. The summaries below are orientation only; when any detail matters, the standard decides.
 
 **Type** — choose exactly one based on the nature of the decision:
 - **BDR**: business process, product policy, strategic rule, operational procedure
 - **ADR**: system context, integration pattern, overarching architectural choice
 - **EDR**: specific tool/library, coding practice, testing strategy, project structure
 
-**Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
-
-**Subject** — MUST read `_core-adr-policy-016` ([016-policy-subjects.md](../../016-policy-subjects.md)) in full before choosing. That document defines all allowed subjects per type with full descriptions, examples, and disambiguation tiebreakers. Do not rely on summaries or prior knowledge of the subject list — always read the policy and select the subject that best matches the decision topic according to its definitions.
+**Scope** — confirmed in Phase 0. Follow the external-scope validation and subject selection guidance in `.xdrs/_core/adrs/principles/skills/.assets/scope-selection.md`.
 
 When type, scope, or subject cannot be confidently inferred, ask the user a clarifying question before proceeding. Ask one question at a time and wait for the answer; follow up if the response introduces new ambiguity.
 
@@ -64,7 +58,7 @@ Choose a title that clearly states the question this Policy answers, not the ans
 
 ### Phase 4: Research Related Policies
 
-1. Read all existing Policies relevant to the topic across all scopes listed in the Policy root `index.md`.
+1. Read all existing Policies relevant to the topic across all scopes listed in the Policy root `index.md`. **Additionally**, if the target scope declares an `extends:` field in its `index.md`, resolve its full `extends:` chain depth-first (see `_core-adr-policy-010` rule 33) and treat all policy documents from those extended scopes as if they were authored in the target scope — they MUST be included in the research and conflict check just like policies written directly in the scope.
 2. Evaluate Policy metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope Policies as background only when assessing overlaps and conflicts.
 3. Identify decisions that already address the topic (full or partial overlap).
 4. Note decisions that might conflict with the intended outcome.
@@ -166,9 +160,7 @@ Check every item before finalizing:
 5. **Redundancy**: Is the Policy the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?
 6. **Conflicts section**: Is it present and filled if Phase 3 found any conflicts?
 7. **Index entries**: Will the new Policy be added to `[scope]/[type]/index.md` and the Policy root `index.md`?
-8. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names (e.g., `follows: [myarea-core]`), verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the document satisfies all requirements from those Policies. Scopes are applied in order; last-listed scope in `follows` takes precedence when the same topic is covered by multiple scopes.
-   - **Scope-type standards:** Read the target scope's `scope-type`. Search the `[type]/principles/` directories of all `core`-type scopes for a file ending in `{scope-type}-scope-type.md`. Apply its rules as requirements for the new Policy. Resolve any `NN-parent-scope-type` rule transitively. See `_core-adr-policy-010` rules 15 and 17.
-   - **Scope-local standards:** Search the target scope's own `[type]/principles/` for a file ending in `{scope-name}-core.md`. If found, apply its rules as requirements; they override scope-type standards on conflict. See `_core-adr-policy-010` rules 16 and 17.
+8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `policy`.
 
 If any check fails, revise and re-run this phase before proceeding.
 
@@ -183,17 +175,12 @@ If any check fails, revise and re-run this phase before proceeding.
 
 ### Phase 9: Verify Package structure with Lint
 
-1. Run the CLI lint utility from the repository root:
-   ```
-   npx -y xdrs-core@latest lint
-   ```
-2. Fix all reported errors before considering the task complete.
-3. Review warnings; fix straightforward ones and note intentional deviations explicitly.
+Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.assets/lint-verification.md`.
 
 ### Constraints
 
 - MUST follow the Policy template from `002-policy-standards` exactly.
-- MUST consult `001-xdrs-core` as the canonical source for element definitions (type, scope, subject, ID, numbering, naming, placement) and `002-policy-standards` for document writing rules and template.
+- MUST consult `001-xdrs-standards` as the canonical source for element definitions (type, scope, subject, ID, numbering, naming, placement) and `002-policy-standards` for document writing rules and template.
 - MUST NOT add personal opinions or general best-practice content not tied to a decision.
 - MUST NOT create a Policy that duplicates a decision already captured in another Policy — extend or reference instead.
 - MUST prefer links and short references over repeating the same decision content across related documents.
@@ -202,6 +189,6 @@ If any check fails, revise and re-run this phase before proceeding.
 
 ## References
 
-- [_core-adr-policy-001 - XDRS core](../../001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-002 - Policy standards](../../002-policy-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)

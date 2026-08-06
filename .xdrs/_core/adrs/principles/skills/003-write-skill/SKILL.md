@@ -15,23 +15,20 @@ Guides the creation of a well-structured skill package by following `_core-adr-p
 
 ## Instructions
 
-### Phase 0: Prerequisites Gate — MUST complete before writing
+### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
-Identify the target scope from the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
-
-- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
-- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
-- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+1. Run the scope placement analysis from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/scope-placement.md` to determine and confirm the target scope.
+2. Once the scope is confirmed, run the prerequisites gate from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md`. Substitute `[DOCUMENT TYPE]` with `skill`.
 
 ### Phase 1: Understand the Skill Goal
 
 1. Read `.xdrs/_core/adrs/principles/003-skill-standards.md` in full to internalize the SKILL.md format, folder layout, and numbering rules.
-2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full before defining any core element for the skill package. Treat it as the canonical source for type, scope, subject, numbering expectations, naming constraints, and folder placement rules.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full before defining any core element for the skill package. Treat it as the canonical source for type, scope, subject, numbering expectations, naming constraints, and folder placement rules.
 3. Identify what the skill must do, the concrete outcome it should produce, and the exact conditions under which an agent should activate it. Do NOT proceed without a clear goal, outcome, and activation trigger.
 
 ### Phase 2: Select Type, Scope, Subject, and Number
 
-Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when there is any ambiguity or edge case, the standard decides.
+Consult `001-xdrs-standards` while making each choice in this phase. The summaries below are orientation only; when there is any ambiguity or edge case, the standard decides.
 
 **Type** — choose one based on the skill's activity:
 - **EDR skill**: engineering workflows, tool usage, coding procedures, implementation how-tos
@@ -43,10 +40,9 @@ Quick test:
 - "How to evaluate or decide on architecture?" → ADR
 - "How to execute a business process or policy?" → BDR
 
-**Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+**Scope** — confirmed in Phase 0. Follow the external-scope validation in `.xdrs/_core/adrs/principles/skills/.assets/scope-selection.md`.
 
-**Subject** — MUST read `_core-adr-policy-016` ([016-policy-subjects.md](../../016-policy-subjects.md)) in full before choosing. That document defines all allowed subjects per type with full descriptions, examples, and disambiguation tiebreakers. Do not rely on summaries or prior knowledge of the subject list — always read the policy and select the most specific subject that matches the skill's activity domain.
+**Subject** — follow the subject selection guidance in `.xdrs/_core/adrs/principles/skills/.assets/scope-selection.md`.
 
 **Skill number** — scan `.xdrs/[scope]/[type]/[subject]/skills/` for the highest existing number and increment by 1. Never reuse numbers from deleted skills.
 
@@ -117,14 +113,22 @@ Before writing files, verify:
 3. **Length**: Under 6500 words? Trim verbose explanations.
 4. **Duplication**: Does this overlap an existing skill? If yes, revise.
 5. **References**: Are all related XDRs and skills linked, including the cases where the skill operationalizes multiple XDRs?
-6. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names, verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the skill's activation criteria, phase structure, and content satisfy any requirements from those Policies. Last-listed scope in `follows` takes precedence.
+6. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `skill`.
 
 If any check fails, revise before continuing.
+
+### Phase 5.5: Write SKILL.test.md
+
+Write `SKILL.test.md` in the same directory as `SKILL.md` following that policy exactly:
+- Use the mandatory frontmatter (`skill:`, `skill-version:`).
+- Write at least two scenarios: one happy path and one edge or failure case.
+- Each scenario MUST have a `**Trigger / Input**`, `**Expected Behaviour**`, and `**Assertions**` sub-section with at least two falsifiable assertions.
 
 ### Phase 6: Write Files
 
 1. Create the skill file at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`.
-2. Create a symlink at `.agents/skills/[number]-[skill-name]` so VS Code picks it up immediately:
+2. If `SKILL.test.md` was produced in Phase 5.5, create it at `.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.test.md`.
+3. Create a symlink at `.agents/skills/[number]-[skill-name]` so VS Code picks it up immediately:
    ```
    mkdir -p .agents/skills
    ln -s ../../.xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name] .agents/skills/[number]-[skill-name]
@@ -133,16 +137,12 @@ If any check fails, revise before continuing.
 
 ### Phase 7: Verify with Lint
 
-1. Run the CLI lint utility from the repository root:
-   ```
-   npx -y xdrs-core@latest lint
-   ```
-2. Fix all reported errors before considering the task complete.
+Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.assets/lint-verification.md`.
 
 ### Constraints
 
 - MUST follow the agentskills SKILL.md format from `003-skill-standards` exactly.
-- MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
+- MUST consult `001-xdrs-standards` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST NOT create a skill that duplicates an existing one — extend or reference it instead.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
@@ -171,5 +171,6 @@ If any check fails, revise before continuing.
 ## References
 
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
-- [_core-adr-policy-001 - XDRs core](../../001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [002-write-policy skill](../002-write-policy/SKILL.md)
+- [agentme-edr-policy-017 - Skill testing](../../../../../agentme/edrs/principles/017-skill-testing.md)

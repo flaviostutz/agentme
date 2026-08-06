@@ -65,7 +65,7 @@ A `core`-type scope MAY be distributed to consumers alongside the companion cons
 
 #### 08-unavailable-core-read-only
 
-A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent, the companion scope MUST be treated as READ-ONLY: no content in it MUST be added, changed, or removed. The scope lacks the meta governance that defines how its content must be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
+A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent, the companion scope MUST be treated as READ-ONLY: content in it MUST NOT be added, changed, or removed. The scope lacks the meta governance that defines how its content MUST be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
 
 #### 09-distribution-advisable
 
@@ -73,5 +73,5 @@ Distributing `-core` scopes alongside their companion consumable scope to downst
 
 ## References
 
-- [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — full scope governance model including when to prefer a `{scope-name}-core` policy (scope-local) vs. this pattern
-- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md) — scope structure, `follows:` field, scope index frontmatter
+- [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — full scope governance model including when to prefer a local meta-policy (`NNN-core.md` in `principles/`) vs. this pattern
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) — scope structure, `follows:` field, scope index frontmatter

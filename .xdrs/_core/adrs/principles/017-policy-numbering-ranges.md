@@ -60,6 +60,6 @@ When `freeze-reference: true` is set in a policy's frontmatter, numbering range 
 
 ## References
 
-- [`_core-adr-policy-001`](001-xdrs-core.md) — XDRS core framework: numbering and folder structure
+- [`_core-adr-policy-001`](001-xdrs-standards.md) — XDRS standards framework: numbering and folder structure
 - [`_core-adr-policy-002`](002-policy-standards.md) — Policy standards: freeze-reference exemption semantics
 - [`_core-adr-policy-016`](016-policy-subjects.md) — Policy subjects: allowed subjects and taxonomy per type

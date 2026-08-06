@@ -212,4 +212,4 @@ The root `Makefile` MUST remain the only contract for CI and contributors, in li
 - [agentme-edr-122](122-unit-test-requirements.md) - Coverage and unit-test baseline
 - [agentme-edr-501](../governance/501-project-quality-standards.md) - Examples and quality requirements
 - [agentme-edr-303](../platform/303-common-targets.md) - Standard Makefile target names
-- [005-create-python-project](skills/005-create-python-project/SKILL.md) - Scaffold a project following this EDR
+- [052-create-python-project](skills/052-create-python-project/SKILL.md) - Scaffold a project following this EDR

@@ -1,5 +1,5 @@
 ---
-name: 001-create-javascript-project
+name: 050-create-javascript-project
 description: >
   Scaffolds the initial boilerplate structure for a JavaScript/TypeScript project following
   the standard tooling and layout defined in agentme-edr-101. Activate this skill when the user

@@ -179,4 +179,4 @@ Use the standard library `flag` package for CLI flags. Each `adapters/cli/<featu
 ## References
 
 - [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) — Defines the adapter/application separation that this layout follows
-- [003-create-golang-project](skills/003-create-golang-project/SKILL.md) — scaffolds a new Go project following this structure
+- [051-create-golang-project](skills/051-create-golang-project/SKILL.md) — scaffolds a new Go project following this structure

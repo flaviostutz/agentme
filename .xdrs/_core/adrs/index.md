@@ -6,7 +6,7 @@ Decisions about how the XDRS framework itself works: structure, standards, docum
 
 Foundational standards, principles, and guidelines.
 
-- [_core-adr-policy-001](principles/001-xdrs-core.md) - **XDRS core** — Types, scopes, subjects, folder structure, and indexes for the XDRS framework
+- [_core-adr-policy-001](principles/001-xdrs-standards.md) - **XDRS standards** — Types, scopes, subjects, folder structure, and indexes for the XDRS framework
 - [_core-adr-policy-002](principles/002-policy-standards.md) - **Policy standards** — How to write individual Policy documents: template, metadata, ID, lifecycle rules
 - [_core-adr-policy-003](principles/003-skill-standards.md) - **Skill standards** — How to author and organize reusable skill packages within XDRS projects
 - [_core-adr-policy-004](principles/004-article-standards.md) - **Article standards** — How to write synthetic views combining Policies, research, and skills
@@ -24,6 +24,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-016](principles/016-policy-subjects.md) - **Policy Subjects** — Allowed subjects per type (ADR/BDR/EDR), descriptions, examples, and disambiguation tiebreakers
 - [_core-adr-policy-017](principles/017-policy-numbering-ranges.md) - **Policy numbering ranges** — Subject-based 100-number block ranges for policy numbering and the freeze-reference exemption
 - [_core-adr-policy-018](principles/018-external-path-symlinks.md) - **External path symlinks** — How to make XDRS files accessible from paths outside the .xdrs/ root using symlinks
+- [_core-adr-policy-019](principles/019-compiled-scope-type.md) - **compiled scope type** — Defines the `compiled` scope type: scopes whose policies are compiled from external authoritative sources with strict source traceability and no invented content
 
 ## Skills
 
@@ -37,6 +38,7 @@ Step-by-step procedural guides for humans and AI agents.
 - [006-write-plan](principles/skills/006-write-plan/SKILL.md) - **Write Plan** — create a new plan document
 - [007-write-presentation](principles/skills/007-write-presentation/SKILL.md) - **Write Presentation** — create Marp slide presentations for XDRS documents
 - [008-write-xdrs-doc](principles/skills/008-write-xdrs-doc/SKILL.md) - **Write XDRS Doc** — router skill; infers document type and delegates to the appropriate authoring skill
+- [009-compile-scope](principles/skills/009-compile-scope/SKILL.md) - **Compile Scope** — compiles or updates a `compiled`-type scope from its configured external sources
 
 ## Articles
 

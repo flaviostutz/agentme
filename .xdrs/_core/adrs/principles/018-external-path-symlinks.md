@@ -11,7 +11,7 @@ valid-from: 2026-07-10
 
 Some external tools and runtime environments require files at specific paths outside the `.xdrs/` folder. Examples include AI agent runtimes that expect skills in `.agents/skills/`, documentation generators that read from `docs/`, or CI tooling that references scripts from a fixed project-root path. Without a rule, contributors may duplicate files, breaking the single-source-of-truth guarantee that the `.xdrs/` root provides.
 
-This policy extends [`_core-adr-policy-001`](001-xdrs-core.md), which already prohibits creating or modifying XDRS documents via symlinked paths.
+This policy extends [`_core-adr-policy-001`](001-xdrs-standards.md), which already prohibits creating or modifying XDRS documents via symlinked paths.
 
 How should XDRS files be made accessible from paths outside the `.xdrs/` root without duplicating their content?
 
@@ -19,7 +19,7 @@ How should XDRS files be made accessible from paths outside the `.xdrs/` root wi
 
 **Symlinks from external paths to the canonical `.xdrs/` location**
 
-When a file or directory inside `.xdrs/` needs to be reachable from an external path, a symlink MUST be created at the external path pointing to the canonical `.xdrs/` location. The canonical file always lives inside `.xdrs/`. Copying is never acceptable.
+When a file or directory inside `.xdrs/` needs to be reachable from an external path, a symlink MUST be created at the external path pointing to the canonical `.xdrs/` location. The canonical file MUST remain inside `.xdrs/`. Files MUST NOT be copied to external paths.
 
 **Example:** `.agents/skills/001-review` (symlink) → `.xdrs/_core/adrs/principles/skills/001-review/`
 
@@ -45,5 +45,5 @@ The parent directory of the external symlink path MUST exist before the symlink 
 
 ## References
 
-- [`_core-adr-policy-001`](001-xdrs-core.md) — XDRS core framework: folder structure and the rule prohibiting modifications via symlinked paths
+- [`_core-adr-policy-001`](001-xdrs-standards.md) — XDRS standards framework: folder structure and the rule prohibiting modifications via symlinked paths
 - [`_core-adr-policy-008`](008-policy-structured-standards.md) — Policy structured standards: numbered rule block format used in this document

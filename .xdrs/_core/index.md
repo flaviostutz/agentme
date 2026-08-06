@@ -22,7 +22,7 @@ If you are evaluating whether to adopt XDRS, setting up a new XDRS project, or e
 
 ### Framework structure and organization
 
-The core architectural decision [_core-adr-policy-001](adrs/principles/001-xdrs-core.md) defines the fundamental building blocks: three decision types (ADR for architecture, BDR for business, EDR for engineering), scopes as grouping boundaries, subjects as topic categories within each type, and a folder layout that keeps everything discoverable. It also defines the index system (canonical type indexes, scope indexes, and the root index) that ties the collection together.
+The core architectural decision [_core-adr-policy-001](adrs/principles/001-xdrs-standards.md) defines the fundamental building blocks: three decision types (ADR for architecture, BDR for business, EDR for engineering), scopes as grouping boundaries, subjects as topic categories within each type, and a folder layout that keeps everything discoverable. It also defines the index system (canonical type indexes, scope indexes, and the root index) that ties the collection together.
 
 When external tools or conventions require XDRS files to be accessible from paths outside the `.xdrs/` root (for example, AI agent runtimes that expect skills in `.agents/skills/`), [_core-adr-policy-018](adrs/principles/018-external-path-symlinks.md) governs how to do this safely using symlinks.
 
@@ -47,13 +47,13 @@ Slide presentations that support XDRS documents follow [_core-adr-policy-009](ad
 
 ### Standard scope meta governance
 
-[_core-adr-policy-010](adrs/principles/010-scope-governance.md) defines the full scope governance model: how to define a custom scope type using `{scope-type}-scope-type` policies, how to define scope-local content standards using a `{scope-name}-core` policy, and how all governance mechanisms (`follows:`, scope-type standards, scope-local standards) apply with their precedence chain.
+[_core-adr-policy-010](adrs/principles/010-scope-governance.md) defines the full scope governance model: how to define a custom scope type using `{scope-type}-scope-type` policies, how to define scope-local content standards using local meta-policies (`NNN-core.md` or `NNN-core-{qualifier}.md` in `principles/`), and how all governance mechanisms (`follows:`, scope-type standards, local meta-policies) apply with their precedence chain.
 
 [_core-adr-policy-011](adrs/principles/011-core-scope-type.md) defines the `core` scope type — meta-governance scopes named with the `-core` suffix (e.g., `security-core`) that hold writing standards, templates, ownership, and process guidance for a group of related scopes. They must not contain consumable policies, and all contributors to governed scopes must follow their standards via an explicit `follows:` declaration.
 
 ### Scope types
 
-Every XDRS scope declares a `scope-type` in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. The five built-in scope types are defined by [_core-adr-policy-011](adrs/principles/011-core-scope-type.md) (`core`), [_core-adr-policy-012](adrs/principles/012-reference-scope-type.md) (`reference`), [_core-adr-policy-013](adrs/principles/013-platform-scope-type.md) (`platform`), [_core-adr-policy-014](adrs/principles/014-standard-scope-type.md) (`standard`), and [_core-adr-policy-015](adrs/principles/015-local-scope-type.md) (`_local`). Custom scope types can be defined following [_core-adr-policy-010](adrs/principles/010-scope-governance.md). The recommended root index ordering is `core → reference → platform → standard → _local`.
+Every XDRS scope declares a `scope-type` in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. Multiple types MAY be declared using a comma-separated list (e.g., `scope-type: compiled, internal-docs`); each element is validated independently — see [_core-adr-policy-010](adrs/principles/010-scope-governance.md) rules 06 and 07. The five built-in scope types are defined by [_core-adr-policy-011](adrs/principles/011-core-scope-type.md) (`core`), [_core-adr-policy-012](adrs/principles/012-reference-scope-type.md) (`reference`), [_core-adr-policy-013](adrs/principles/013-platform-scope-type.md) (`platform`), [_core-adr-policy-014](adrs/principles/014-standard-scope-type.md) (`standard`), and [_core-adr-policy-015](adrs/principles/015-local-scope-type.md) (`_local`). Custom scope types can be defined following [_core-adr-policy-010](adrs/principles/010-scope-governance.md). The recommended root index ordering is `core → reference → platform → standard → _local`.
 
 ### Available skills
 

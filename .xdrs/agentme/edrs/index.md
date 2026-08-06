@@ -10,6 +10,7 @@ Foundational standards, principles, and guidelines.
 
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
+- [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [200-run-skill-tests](application/skills/200-run-skill-tests/SKILL.md))*
 
 ## Articles
 
@@ -26,15 +27,16 @@ Language and framework-specific tooling and project structure.
 - [agentme-edr-123](application/123-error-handling.md) - **Error handling** - Standardize explicit errors, logging, and propagation rules
 - [agentme-edr-124](application/124-secrets-management.md) - **Secrets management** - Handle secrets securely using native keychains and cloud secret managers
 - [agentme-edr-125](application/125-coding-abstraction-practices.md) - **Coding abstraction practices** - Define when abstractions are justified and when they must be inlined
+- [agentme-edr-127](application/127-external-system-adapter-skills.md) - **External system adapter skills** - Priority-ordered approach and adapter skill authoring standards for automating interactions with external systems
 
 ### Language and framework tooling
 
-- [agentme-edr-101](application/101-javascript-project-tooling.md) - **JavaScript project tooling and structure** - Scaffold JavaScript libraries with the standard toolchain *(includes skill: [001-create-javascript-project](application/skills/001-create-javascript-project/SKILL.md))*
-- [agentme-edr-102](application/102-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [003-create-golang-project](application/skills/003-create-golang-project/SKILL.md))*
-- [agentme-edr-103](application/103-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [005-create-python-project](application/skills/005-create-python-project/SKILL.md))*
+- [agentme-edr-101](application/101-javascript-project-tooling.md) - **JavaScript project tooling and structure** - Scaffold JavaScript libraries with the standard toolchain *(includes skill: [050-create-javascript-project](application/skills/050-create-javascript-project/SKILL.md))*
+- [agentme-edr-102](application/102-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [051-create-golang-project](application/skills/051-create-golang-project/SKILL.md))*
+- [agentme-edr-103](application/103-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [052-create-python-project](application/skills/052-create-python-project/SKILL.md))*
 - [agentme-edr-104](application/104-cli-tool-standards.md) - **CLI tool standards** - Define command UX and behavior for CLI tools
 - [agentme-edr-126](application/126-pragmatic-hexagonal-architecture.md) - **Pragmatic hexagonal architecture** - Organize application layers as External/Adapters/Application with practical coupling rules
-- [004-select-relevant-xdrs](application/skills/004-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
+- [010-select-relevant-xdrs](application/skills/010-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
 
 ### AI development
 
@@ -67,7 +69,7 @@ Data layer implementation and data management decisions.
 
 Infrastructure implementation, delivery pipeline, and developer environment decisions.
 
-- [agentme-edr-301](platform/301-monorepo-structure.md) - **Monorepo structure** - Standardize monorepo layout, tooling, and package boundaries *(includes skill: [002-monorepo-setup](platform/skills/002-monorepo-setup/SKILL.md))*
+- [agentme-edr-301](platform/301-monorepo-structure.md) - **Monorepo structure** - Standardize monorepo layout, tooling, and package boundaries *(includes skill: [053-monorepo-setup](platform/skills/053-monorepo-setup/SKILL.md))*
 - [agentme-edr-302](platform/302-github-pipelines.md) - **GitHub CI/CD pipelines** - Define required CI stages and workflow structure
 - [agentme-edr-303](platform/303-common-targets.md) - **Common development script names** - Reuse standard build, lint, and test target names
 - [agentme-edr-304](platform/304-tool-execution-and-scripting.md) - **Tool execution and scripting** - Run tools consistently across shells, Makefiles, and CI
