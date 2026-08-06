@@ -118,7 +118,7 @@ Rules to apply while drafting:
 - The Expected end date must be in ISO format (YYYY-MM-DD), placed inside the `## Proposed Solution` section, and should not be more than 2 years from the plan creation date.
 - If the plan scope is too large for 2 years, break it into multiple plans.
 - Remember that this plan must be deleted after full implementation. Write it with that ephemeral nature in mind.
-- Prefer plain Markdown, tables, or ASCII art for structure and flow.
+- For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js for complex diagrams, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the plan genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/plans/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - Use lowercase file names. Never use emojis.

@@ -45,10 +45,10 @@ Identify the target scope from the parent document's path or the user's request;
    - **Solution/Decision**: what was decided and why
    - **Actions/Next Steps**: what happens now, who is responsible
 3. For each slide, identify the best format:
-   - Mermaid diagrams for flows, relationships, architecture
+   - Mermaid diagrams for flows, relationships, architecture; draw.io `.svg` files saved as Editable Vector (File → Save As → Editable Vector, stored in `.assets/`) when Mermaid is not sufficient
+   - ASCII art for very simple spatial layouts where Markdown is insufficient (see `_core-adr-policy-020`)
    - Short bullet points for key decisions and trade-offs
    - Tables for comparisons, options, criteria
-   - ASCII art for simple layouts or structures
    - Key short statements for emphasis
    - Longer text only when exact wording must be evaluated (policies, controls)
 4. Keep the total under 30 slides. If more content is needed, plan separate slide sets.

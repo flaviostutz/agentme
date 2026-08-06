@@ -8,6 +8,8 @@ the framework and links out to the authoritative Policy documents for full detai
 
 ## Content
 
+![XDRS Overview Diagram](.assets/001-xdrs-overview.svg)
+
 ### What the central elements are
 
 The XDRS framework is built around a small set of artifact types that play different roles in the

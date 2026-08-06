@@ -116,8 +116,7 @@ Rules:
 - The directory name MUST follow the format `[number]-[skill-name]` (e.g., `001-code-review`), matching the `name:` field.
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
-- For simple structure, flow, layout, or relationship indications, `SKILL.md` SHOULD prefer plain Markdown, tables, or ASCII art instead of external assets.
-- Any non-Markdown files referenced from `SKILL.md` SHOULD be used only when they are materially necessary and MUST live in `.assets/` inside the same skill package. See `_core-adr-policy-001` for the canonical `.assets/` path conventions.
+- For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
 - Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
 - Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
 - File names MUST be lowercase.

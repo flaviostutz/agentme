@@ -142,7 +142,7 @@ Mandatory rules to apply while drafting:
 - Keep the decision itself authoritative in the Policy. Supporting artifacts may elaborate, but they should not restate the full decision when a short reference is enough.
 - Make clear when the decision applies and any important exception boundaries.
 - Keep exploratory option analysis in a related Research document when it would distract from the final decision text.
-- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
+- For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the Policy genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - No emojis. Lowercase filenames.

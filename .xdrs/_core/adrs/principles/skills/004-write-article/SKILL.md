@@ -98,7 +98,7 @@ Rules to apply while drafting:
 - Every factual claim must link back to the authoritative Policy or Skill.
 - If the article advises readers what to do, clearly separate active/applicable Policies from background, historical, or out-of-scope ones.
 - Never reproduce decision text verbatim; summarize and link.
-- Prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams), or ASCII art for simple structure, flow, layout, or relationship indications.
+- For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - Target under 1950 words for best reader engagement (SHOULD). If content grows beyond that, break it into separate chapter articles rather than expanding a single file. The hard limit is 8000 words.

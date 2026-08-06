@@ -62,11 +62,11 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
   - `_core-adr-policy-004` defines article standards
   - `_core-adr-policy-006` defines research standards
   - `_core-adr-policy-007` defines plan standards
-- For simple structures, flows, layout, or relationship indications, documents SHOULD prefer plain Markdown, tables, Mermaid.js (sequence, state, activity, entity diagrams) or ASCII art instead of external assets.
-- Any non-Markdown supporting files referenced by a document (schemas, JSON examples, images, diagrams, binaries, or any other data files) SHOULD be used only when they are materially necessary to preserve clarity, fidelity, or evidence. When used, they MUST live in a sibling `.assets/` folder next to the document.
+- For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md). **Per-document-type `.assets/` paths:**
   - Policies in the subject root use `[xdrs-root]/[scope]/[type]/[subject]/.assets/`
   - Articles use `[xdrs-root]/[scope]/[type]/[subject]/articles/.assets/`
   - Research uses `[xdrs-root]/[scope]/[type]/[subject]/researches/.assets/`
+  - Plans use `[xdrs-root]/[scope]/[type]/[subject]/plans/.assets/`
   - Skills use `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/`
 - **Scopes:** 
   - Short name that defines a group or a package of XDRS
@@ -152,3 +152,4 @@ subject/
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)
 - [_core-adr-policy-007 - Plan standards](007-plan-standards.md)
+- [_core-adr-policy-020 - Media and asset standards](020-media-and-asset-standards.md) - Diagram format preferences and non-Markdown asset rules
