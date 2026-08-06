@@ -168,4 +168,4 @@ xychart-beta
 
 - [agentme-edr-153](153-ai-eval-script.md) — AI eval script: the script that produces these reports (rule `01`)
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: rule `02` defines the adapted report shape for `report-repeatability.md`
-- [agentme-edr-151](151-ai-eval-core-standards.md) — AI eval core standards: folder structure (rule `01`) and LLM-as-judge binary scoring (rule `02`)
+- [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: folder structure (rule `01`) and LLM-as-judge binary scoring (rule `02`)

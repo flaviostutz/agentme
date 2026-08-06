@@ -77,7 +77,7 @@ A skill's number MUST reflect the operation type the skill performs, not how it 
 
 #### 05-boundary-tiebreakers
 
-When a skill sits on the boundary between two ranges, apply the following tiebreaker rules:
+When a skill sits on the boundary between two ranges, the assignee MUST apply the following tiebreaker rules to determine the correct range:
 
 **Template vs. procedure (1–49 vs. 150–199)**
 If the skill produces a blank artifact for a human to fill in (template, checklist form), assign it to 1–49 (framework & meta). If the skill walks through the steps to execute a process, assign it to 150–199 (operational & business procedures).
@@ -101,7 +101,7 @@ When assigning a number to a new skill:
 
 #### 07-core-exemption
 
-Skills in the `_core` scope (numbers 001–009) are exempt from this policy. They retain their existing sequential numbers and are not required to align with the range table in rule `01`.
+Skills in the `_core` scope (numbers 001–009) are exempt from this policy. They MUST retain their existing sequential numbers and MAY ignore the range table in rule `01`.
 
 ## References
 

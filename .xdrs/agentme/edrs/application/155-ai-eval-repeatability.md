@@ -34,7 +34,7 @@ Entries whose `test_types` includes `repeatability` are exempt from [agentme-edr
 **Choosing the scoring method:** Two approaches are supported, declared as a constant in `eval.py`:
 
 - **Semantic-similarity:** Embed all `REPEAT_COUNT` outputs for an entry into vectors and compute the average pairwise cosine similarity. The entry passes (score = 1) if the average similarity ≥ `REPEAT_SEMANTIC_SIMILARITY_SCORE`; otherwise it fails (score = 0). Use for classification or short structured outputs.
-- **LLM-as-judge:** Provide all `REPEAT_COUNT` outputs for an entry to an LLM judge (kept at low/zero temperature) that returns 0 (fail) or 1 (pass) directly, based on whether the outputs are sufficiently consistent. No `REPEAT_SEMANTIC_SIMILARITY_SCORE` constant is needed. Use for free-text or complex structured outputs where vector distance is an unreliable proxy for agreement. The judge MUST follow [agentme-edr-151](151-ai-eval-core-standards.md) rule `02`'s binary output contract.
+- **LLM-as-judge:** Provide all `REPEAT_COUNT` outputs for an entry to an LLM judge (kept at low/zero temperature) that returns 0 (fail) or 1 (pass) directly, based on whether the outputs are sufficiently consistent. No `REPEAT_SEMANTIC_SIMILARITY_SCORE` constant is needed. Use for free-text or complex structured outputs where vector distance is an unreliable proxy for agreement. The judge MUST follow [agentme-edr-151](151-ai-eval-standards.md) rule `02`'s binary output contract.
 
 **`repeatability_accuracy`:** the fraction of repeatability entries that received PASS (score = 1), logged to MLflow as `repeatability_accuracy`. The eval exits non-zero if `repeatability_accuracy` < `EVAL_MIN_ACCURACY_REPEATABILITY`. Both `repeatability_accuracy` and `repeat_count` MUST be logged to MLflow and included in `report-repeatability.md` (rule `02`).
 
@@ -69,7 +69,7 @@ Because `repeatability` entries multiply real LLM-provider calls by `REPEAT_COUN
 ## References
 
 - [agentme-edr-153](153-ai-eval-script.md) — AI eval script: rule `01` defines the entry-first constraint this policy exempts for repeatability entries
-- [agentme-edr-151](151-ai-eval-core-standards.md) — AI eval core standards: rule `02` defines the LLM-as-judge binary output contract used by the LLM-as-judge scoring method in rule `01`
+- [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: rule `02` defines the LLM-as-judge binary output contract used by the LLM-as-judge scoring method in rule `01`
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: rule `01` defines the base report template that `report-repeatability.md` adapts
 - [agentme-edr-152](152-ai-test-types-taxonomy.md) — AI test types taxonomy: `repeatability` test type definition and disambiguation from `reproducibility` (rule `09`)
 - [agentme-edr-501](../governance/501-project-quality-standards.md) — Project quality standards: Workflow eval cadence (rule `09`) that repeatability runs align with

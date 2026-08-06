@@ -1,11 +1,11 @@
 ---
-name: agentme-edr-policy-151-ai-eval-core-standards
+name: agentme-edr-policy-151-ai-eval-standards
 description: Defines the eval folder structure and Makefile interface for AI projects, and the LLM-as-judge binary scoring contract applicable to all AI tiers and test types. Use when scaffolding evals or implementing an LLM judge. For eval script requirements see agentme-edr-153. For report format see agentme-edr-154. For repeatability see agentme-edr-155. For when evals are required see agentme-edr-501 rule 09-ai-project-testing-requirements. For the test type taxonomy see agentme-edr-152.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-06-05
 ---
 
-# agentme-edr-policy-151: AI eval core standards
+# agentme-edr-policy-151: AI eval standards
 
 ## Context and Problem Statement
 
