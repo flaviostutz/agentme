@@ -109,5 +109,5 @@ A scenario passes only when every one of its assertions passes. The overall outc
 
 ## References
 
-- [`agentme-edr-policy-017`](../../017-skill-testing.md) — Skill testing mandate and SKILL.test.md format specification
+- [`agentme-edr-policy-017`](../../../principles/017-skill-testing.md) — Skill testing mandate and SKILL.test.md format specification
 - [`_core-adr-policy-003`](../../../../../_core/adrs/principles/003-skill-standards.md) — Skill package standards and folder layout

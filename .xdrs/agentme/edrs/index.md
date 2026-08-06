@@ -53,7 +53,7 @@ Standards for building LLM, Agent, and Workflow components.
 
 Standards for eval datasets, scripts, reports, and test type taxonomy.
 
-- [agentme-edr-151](application/151-ai-eval-core-standards.md) - **AI eval core standards** - Eval folder structure and Makefile interface; LLM-as-judge binary scoring contract applicable to all AI tiers and test types
+- [agentme-edr-151](application/151-ai-eval-standards.md) - **AI eval core standards** - Eval folder structure and Makefile interface; LLM-as-judge binary scoring contract applicable to all AI tiers and test types
 - [agentme-edr-152](application/152-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (`functional`, `safety`, `smoke`, `repeatability`, `adversarial`, `fairness`, `bias`, and 5 others) with group, objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope
 - [agentme-edr-153](application/153-ai-eval-script.md) - **AI eval script** - eval.py requirements: entry-first loop, --type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment conventions
 - [agentme-edr-154](application/154-ai-eval-report-format.md) - **AI eval report format** - report-<type>.md template, Wilson score confidence interval, convergence analysis, and human-type checklist artifact

@@ -126,7 +126,7 @@ The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-nam
 
 ## References
 
-- [agentme-edr-151](151-ai-eval-core-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
+- [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: loop exception to rule `01`'s entry-first constraint, scoring methods, and cadence
 - [agentme-edr-152](152-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), and mocking constraints per type

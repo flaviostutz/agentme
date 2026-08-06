@@ -104,7 +104,7 @@ A component may satisfy reproducibility (temperature = 0) yet still need repeata
 ## References
 
 - [agentme-edr-201](../data/201-ml-dataset-structure.md) — Golden dataset file layout, per-entry JSON format, `$schema` pointer, and schema-lint validation
-- [agentme-edr-151](151-ai-eval-core-standards.md) — AI eval core standards: eval folder structure and Makefile targets (rule `01`); LLM-as-judge binary scoring contract (rule `02`)
+- [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: eval folder structure and Makefile targets (rule `01`); LLM-as-judge binary scoring contract (rule `02`)
 - [agentme-edr-153](153-ai-eval-script.md) — AI eval script: `--type` filtering, entry-first loop, `mock_fixtures`, threshold enforcement, and MLflow conventions
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: per-type `report-<type>.md` that consumes this taxonomy's test types
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: `REPEAT_COUNT` loop exception, scoring constants (`EVAL_MIN_ACCURACY_REPEATABILITY`, `REPEAT_SEMANTIC_SIMILARITY_SCORE`), scoring methods, `repeatability_accuracy` MLflow metric, report shape, and run cadence

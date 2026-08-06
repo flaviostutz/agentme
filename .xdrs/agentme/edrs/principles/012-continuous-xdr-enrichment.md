@@ -58,7 +58,7 @@ In SDD, specifications describe the feature being built; XDRs describe reusable 
 
 ## References
 
-- [_core-adr-001](../../../_core/adrs/principles/001-xdrs-core.md)
+- [_core-adr-001](../../../_core/adrs/principles/001-xdrs-standards.md)
 - [_core-article-001](../../../_core/adrs/principles/articles/001-xdrs-overview.md)
 - [agentme-article-001](articles/001-continuous-xdr-improvement.md)
 - [002-write-policy skill](../../../_core/adrs/principles/skills/002-write-policy/SKILL.md)

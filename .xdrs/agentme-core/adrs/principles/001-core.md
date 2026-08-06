@@ -1,11 +1,11 @@
 ---
-name: agentme-core-adr-policy-001-agentme-core
+name: agentme-core-adr-policy-001-core
 description: Defines the agentme scope's identity, target audience, distribution model, and writing standards. Use when adding, updating, or reviewing any XDR or skill in the agentme scope.
 apply-to: agentme scope contributors, maintainers, and agents processing agentme content
 valid-from: 2026-07-05
 ---
 
-# agentme-core-adr-policy-001: agentme scope identity and content standards
+# agentme-core-adr-policy-001: Core
 
 ## Context and Problem Statement
 
