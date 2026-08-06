@@ -8,17 +8,17 @@ For guidance on turning recurring delivery friction into reusable decision recor
 
 ## Getting Started
 
-This will extract all the features of agentme (skills, github configurations, xdrs collection):
+To install all agentme artifacts (skills, XDRs, AGENTS.md) into the current folder:
 
 ```sh
-npx agentme
+npx agentme install --output . --presets basic
 ```
 
 If you want the version pinned in a project, add `agentme` to a repository that already has a `package.json` and run it through the local dependency:
 
 ```sh
 mise exec -- pnpm add -D agentme
-mise exec -- pnpm exec agentme extract --output . --presets basic
+mise exec -- pnpm exec agentme install --output . --presets basic
 mise exec -- pnpm exec agentme check --output . --presets basic
 ```
 
@@ -34,15 +34,16 @@ The package is intentionally static: consumers install it as a development depen
 
 | Preset | Contents |
 | --- | --- |
-| `basic` | `xdrs-core` baseline ADRs, `AGENTS.md`, and agentme XDRs |
+| `core` | `xdrs-core` baseline ADRs, `AGENTS.md`, and the skill for selecting relevant XDRs |
+| `basic` | everything in `core` plus all agentme XDRs and the XDRS index |
 | no preset | all shipped artifacts combined |
 
 Typical consumer workflow:
 
-1. For one-off use or a new empty folder, run `npx agentme --presets <preset>`.
+1. For one-off use or a new empty folder, run `npx agentme install --output . --presets <preset>`.
 2. For a pinned project version, add `agentme` to `package.json` and use `pnpm exec agentme ...`.
 3. Review and commit the extracted files.
-4. Re-run `extract` and `check` when upgrading the package.
+4. Re-run `install` and `check` when upgrading the package.
 
 ## Usage Scenarios
 
