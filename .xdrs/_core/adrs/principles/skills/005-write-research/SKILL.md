@@ -17,18 +17,15 @@ This skill is interactive by design. Ask clarifying questions to the user at eac
 
 ## Instructions
 
-### Phase 0: Prerequisites Gate — MUST complete before writing
+### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
-Identify the target scope from the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
-
-- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
-- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
-- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+1. Run the scope placement analysis from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/scope-placement.md` to determine and confirm the target scope.
+2. Once the scope is confirmed, run the prerequisites gate from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md`. Substitute `[DOCUMENT TYPE]` with `research`.
 
 ### Phase 1: Understand the Research Goal
 
 1. Read `.xdrs/_core/adrs/principles/006-research-standards.md` in full to internalize the folder layout, numbering rules, and mandatory template.
-2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full before defining the research document's core elements. Treat it as the canonical source for how to choose and write type, scope, subject, numbering expectations, naming constraints, and folder placement.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full before defining the research document's core elements. Treat it as the canonical source for how to choose and write type, scope, subject, numbering expectations, naming constraints, and folder placement.
 3. Ask the user to confirm the intended direction of the research before planning the document: what decision, question, or option space the study should support, what boundaries or exclusions apply, and what kind of outcome they expect. Wait for the answers before proceeding.
 4. Ask the user what evidence already exists and what evidence-gathering methods are acceptable if the current evidence is incomplete. Do not invent facts, sources, or confidence that the user did not provide. Wait for the answers before proceeding.
 5. Ask the user what the proposed next step is after the research, such as writing/updating an existing Policy, informing a discussion, or documenting trade-offs for later. Use that answer to shape the framing without turning the research into the final decision. Wait for the answers before proceeding.
@@ -41,10 +38,9 @@ Identify the target scope from the user's request; use `_local` if none is speci
 
 If the answers from Phase 1 leave scope, type, or subject ambiguous, use `vscode_askQuestions` to present the candidate options with a brief rationale for each and ask the user to confirm the selection before proceeding. If the user's answer raises a related uncertainty, ask a follow-up question to resolve it before locking the selection.
 
-Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail matters, the standard decides.
+Consult `001-xdrs-standards` while making each choice in this phase. The summaries below are orientation only; when any detail matters, the standard decides.
 
-**Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+**Scope** — confirmed in Phase 0. Follow the external-scope validation in `.xdrs/_core/adrs/principles/skills/.assets/scope-selection.md`.
 
 **Type** — match the type of decision this research supports (`adrs`, `bdrs`, or `edrs`). Use the same rules as `002-write-policy` Phase 2:
 - **BDR**: business process, product policy, strategic rule, operational procedure
@@ -245,7 +241,7 @@ Before writing files, verify:
 5. **Standalone focus**: Does the text read as a technical paper rather than commentary about future ADRs, repository process, or artifact management?
 6. **Ratio fit**: Does the document stay within section word limits and pass the Python ratio check, or does the introduction explicitly justify the deviation?
 7. **References**: Are all related Policies, research docs, skills, articles, and external sources linked when relevant?
-8. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names, verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the research satisfies any structural or content requirements from those Policies. Last-listed scope in `follows` takes precedence.
+8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `research`.
 
 If any check fails, revise before continuing.
 
@@ -258,11 +254,7 @@ If any check fails, revise before continuing.
 
 ### Phase 12: Verify with Lint
 
-1. Run the CLI lint utility from the repository root:
-   ```
-   npx -y xdrs-core@latest lint
-   ```
-2. Fix all reported errors before considering the task complete.
+Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.assets/lint-verification.md`.
 
 ## Examples
 
@@ -287,12 +279,12 @@ If any check fails, revise before continuing.
 ## References
 
 - [_core-adr-policy-006 - Research standards](../../006-research-standards.md)
-- [_core-adr-policy-001 - XDRS core](../../001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [002-write-policy skill](../002-write-policy/SKILL.md)
 
 ## Constraints
 
-- MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
+- MUST consult `001-xdrs-standards` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST follow the research template and section-goal rules from `006-research-standards`.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).

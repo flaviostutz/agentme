@@ -126,6 +126,6 @@ When a document could plausibly fit more than one subject, authors MUST apply th
 
 ## References
 
-- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md) — Framework structure, scopes, types, and subject folder placement
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) — Framework structure, scopes, types, and subject folder placement
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md) — How to write Policy documents
 - [_core-adr-policy-017 - Policy numbering ranges](017-policy-numbering-ranges.md) — Reserved number block per subject

@@ -1,11 +1,11 @@
 ---
-name: _core-adr-policy-001-xdrs-core
+name: _core-adr-policy-001-xdrs-standards
 description: Defines the core XDRS framework including types (ADR, BDR, EDR), folder structure, scopes, subjects, and index requirements. Use when structuring or navigating policies.
 apply-to: All XDRS scopes and document types
 valid-from: 2025-01-01
 ---
 
-# _core-adr-policy-001: XDRs core
+# _core-adr-policy-001: XDRS standards
 
 ## Context and Problem Statement
 
@@ -75,7 +75,7 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
   - **Types:** `adrs`, `bdrs`, `edrs`
   - there can exist sufixes to the standard scope names (e.g: `business-x-mobileapp`, `business-y-servicedesk`)
   - The `-core` suffix designates a scope as the meta governance layer for a domain. See `_core-adr-policy-011` for the `core` scope type definition.
-  - **Scope types:** Every scope MUST declare its type via a `scope-type` field in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. Custom scope-type names MUST NOT start with `_`. The five built-in scope types and their definitions are:
+  - **Scope types:** Every scope MUST declare its type via a `scope-type` field in its `index.md` YAML frontmatter. A `scope-type` value is valid when a `{scope-type}-scope-type` policy exists in the `principles` subject of any `core`-type scope in the workspace. Multiple types MAY be declared using a comma-separated list (e.g., `scope-type: compiled, internal-docs`); each element MUST be valid independently. See `_core-adr-policy-010` rules 06 and 07 for the full multi-type grammar. Custom scope-type names MUST NOT start with `_`. The five built-in scope types and their definitions are:
     - `core` — see [`_core-adr-policy-011`](011-core-scope-type.md)
     - `reference` — see [`_core-adr-policy-012`](012-reference-scope-type.md)
     - `platform` — see [`_core-adr-policy-013`](013-platform-scope-type.md)
@@ -86,12 +86,14 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
   - **Scope index frontmatter fields:** Every scope's `index.md` MUST include the following YAML frontmatter. Fields match the Policy frontmatter standard (`_core-adr-policy-002`) in purpose, adjusted for scope-level semantics:
     - `name` (required): The scope identifier, MUST exactly match the scope directory name (e.g., `myteam`, `cloud-platform-aws`). Used by tools to verify scope identity.
     - `description` (required): Short overview of what this scope covers and who the intended audience is. Used by AI agents for discovery and relevance matching. Max 40 words.
-    - `scope-type` (required): Scope classification type. MUST match a `{scope-type}-scope-type` policy in any `core`-type scope's `principles/` directory. See `_core-adr-policy-010` for the full governance convention and `_core-adr-policy-011`, `012`–`015` for built-in type definitions.
+    - `scope-type` (required): Scope classification type. MAY be a comma-separated list of types (e.g., `scope-type: compiled, internal-docs`). Each element MUST match a `{scope-type}-scope-type` policy in any `core`-type scope's `principles/` directory. See `_core-adr-policy-010` rules 06 and 07 for the full multi-type grammar and `_core-adr-policy-011`, `012`–`015` for built-in type definitions.
     - `apply-to` (required): Declares in which contexts — teams, systems, codebases, or environments — the decisions in this scope are relevant. Max 30 words.
     - `valid-from` (required): ISO date (YYYY-MM-DD) from which this scope became active.
     - `metadata` (optional): Arbitrary key-value map for additional scope metadata.
-    - `follows` (optional): Core scope names whose Policies apply as mandatory conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: myarea-core, shared-standards`).
-    - `related-scopes` (optional): Scope names of parent, sibling, or child scopes. Use when structural links help verify policy correctness across related scopes.
+    - `follows` (optional): Core scope names whose Policies apply as mandatory governance conventions to this scope, beyond `_core`. Last-listed takes precedence on conflicts (e.g., `follows: myarea-core, shared-standards`). All referenced scopes MUST exist in the workspace; if any is absent, READ/WRITE/REVIEW operations MUST fail.
+    - `extends` (optional): Scope names whose **policy documents** (decision records only — not skills, articles, research, or plans) are inherited by this scope as if they were authored here. Any scope type except `_local` and `_core` may be referenced. Last-listed extended scope takes precedence on conflicts; the extending scope's own policies always take highest precedence. Depth-first transitive resolution applies: if A extends [B, C] and B extends [D], the effective precedence order is D < B < C < A. `extends:` and `follows:` MUST reference disjoint scope sets. All referenced scopes MUST exist in the workspace; if any is absent, READ/WRITE/REVIEW operations MUST fail. When an extending scope's policy overrides an inherited policy on the same topic, a `## Conflicts` section MUST document the override. Scopes referenced only via `extends:` chains (not entry scopes in the root index) are exempt from the root index link requirement. See `_core-adr-policy-010` Section D (rules 27–35) for full normative rules.
+    - `license` (optional): SPDX identifier for the scope's content license.
+    - `metadata` (optional): Arbitrary key-value map for additional scope metadata.
 - **Subjects:** The subject folder MUST be chosen per [`_core-adr-policy-016`](016-policy-subjects.md), which defines allowed subjects, full descriptions, examples, and disambiguation tiebreakers.
 - **Policy numbering:** Numbers MUST be assigned within the subject-based block ranges defined in [`_core-adr-policy-017`](017-policy-numbering-ranges.md). Use the lowest available number within the block for the chosen subject. See [`_core-adr-policy-002-policy-standards.01-freeze-reference-exemption`](002-policy-standards.md) for exemptions.
 - MUST NOT use emojis

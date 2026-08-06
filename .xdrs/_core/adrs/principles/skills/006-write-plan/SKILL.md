@@ -15,18 +15,15 @@ Guides the creation of a well-structured plan document by following `_core-adr-p
 
 ## Instructions
 
-### Phase 0: Prerequisites Gate — MUST complete before writing
+### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
-Identify the target scope from the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
-
-- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
-- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
-- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+1. Run the scope placement analysis from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/scope-placement.md` to determine and confirm the target scope.
+2. Once the scope is confirmed, run the prerequisites gate from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md`. Substitute `[DOCUMENT TYPE]` with `plan`.
 
 ### Phase 1: Understand the Plan Goal
 
 1. Read `.xdrs/_core/adrs/principles/007-plan-standards.md` in full to internalize the template, placement rules, numbering rules, and the constraint that plans are ephemeral and must be deleted after implementation.
-2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` in full before defining the plan's core elements. Treat it as the canonical source for how to choose and write type, scope, subject, numbering, naming, and folder placement.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full before defining the plan's core elements. Treat it as the canonical source for how to choose and write type, scope, subject, numbering, naming, and folder placement.
 3. Identify the problem being solved, the proposed solution, and the expected timeline from user input or context. Do NOT proceed without a clear problem statement and proposed solution.
 4. Ask the user clarifying questions to fill any gaps before writing the plan. Use the following rules:
    - Ask all initial questions in a single batch so the user can answer them together.
@@ -38,10 +35,9 @@ Identify the target scope from the user's request; use `_local` if none is speci
 
 ### Phase 2: Select Scope, Type, and Subject
 
-Consult `001-xdrs-core` while making each choice in this phase. The summaries below are orientation only; when any detail is unclear, the standard decides.
+Consult `001-xdrs-standards` while making each choice in this phase. The summaries below are orientation only; when any detail is unclear, the standard decides.
 
-**Scope** — use `_local` unless the user explicitly names another scope.
-- If the user names a scope other than `_local`, check the workspace root `.filedist.lock` file. If any file under `.xdrs/[scope]/` appears in `.filedist.lock`, the scope is external and new documents MUST NOT be created there. Inform the user and ask them to choose a non-external scope.
+**Scope** — confirmed in Phase 0. Follow the external-scope validation in `.xdrs/_core/adrs/principles/skills/.assets/scope-selection.md`.
 
 **Type** — match the type of the Policies the plan primarily implements or relates to (`adrs`, `bdrs`, or `edrs`).
 - **BDR**: business process, product policy, strategic rule, operational procedure
@@ -133,15 +129,11 @@ Rules to apply while drafting:
 2. Add a link to the plan in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`).
 3. Add back-references in the Policies, Research documents, and Skills that the plan relates to, under their `## References` section.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new plan. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
-5. **Meta-policy compliance**: Check the target scope's `index.md` for a `follows` frontmatter field. `_core` Policies always apply to all scopes. If `follows` lists additional core scope names, verify that each listed scope directory exists in the workspace (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing, STOP immediately and tell the user: "Scope `[scope-name]` is listed in `follows` but not found in the workspace. Install it before proceeding." Once all `follows` scopes are confirmed present, verify the plan satisfies any structural or content requirements from those Policies. Last-listed scope in `follows` takes precedence.
+5. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `plan`.
 
 ### Phase 7: Verify with Lint
 
-1. Run the CLI lint utility from the repository root:
-   ```
-   npx -y xdrs-core@latest lint
-   ```
-2. Fix all reported errors before considering the task complete.
+Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.assets/lint-verification.md`.
 
 ## Examples
 
@@ -164,13 +156,13 @@ Rules to apply while drafting:
 
 ## References
 
-- [_core-adr-policy-001 - XDRS core](../../001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-007 - Plan standards](../../007-plan-standards.md)
 - [_core-adr-policy-002 - Policy standards](../../002-policy-standards.md)
 
 ## Constraints
 
 - MUST follow the plan template and section-goal rules from `007-plan-standards`.
-- MUST consult `001-xdrs-core` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
+- MUST consult `001-xdrs-standards` as the canonical source for every core element definition, especially type, scope, subject, numbering, naming, and placement.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).

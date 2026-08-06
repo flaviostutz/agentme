@@ -156,5 +156,5 @@ The examples folder MUST exist for any libraries and utilities that are publishe
 
 - [agentme-edr-122](122-unit-test-requirements.md) — Coverage and unit-test baseline
 - [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) — Internal adapter/application layer separation for applications
-- [001-create-javascript-project](skills/001-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
+- [050-create-javascript-project](skills/050-create-javascript-project/SKILL.md) — scaffolds a new project following this structure
 

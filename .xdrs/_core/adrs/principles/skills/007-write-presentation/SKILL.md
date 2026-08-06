@@ -16,16 +16,12 @@ Guides the creation of a Marp Markdown slide presentation that supports an exist
 
 ### Phase 0: Prerequisites Gate — MUST complete before writing
 
-Identify the target scope from the parent document's path or the user's request; use `_local` if none is specified. Read the scope's `index.md` frontmatter and perform ALL of the following checks. If ANY check fails, output a FAIL result immediately and do not proceed:
-
-- **Follows scopes:** If the scope declares `follows:` entries (e.g., `follows: myarea-core, shared-standards`), verify that each listed scope directory exists in the workspace AND contains an accessible `index.md` (e.g., `.xdrs/[scope-name]/index.md`). If any listed scope is missing or unreadable, output: `FAIL — Cannot proceed: scope \`[scope-name]\` is listed in \`follows\` but its policies are not present in the workspace. Install it before authoring documents in this scope, as the governance constraints cannot be verified.`
-- **Scope-local core policy:** Check whether a `-core` policy file exists for the target scope (i.e., a file ending in `{scope-name}-core.md` inside the scope's `[type]/principles/` directory). If the scope's `index.md` references or implies a local core standard and that file is absent or unreadable, output: `FAIL — Cannot proceed: the local core policy \`{scope-name}-core.md\` is referenced for scope \`[scope-name]\` but could not be found. Without it, the document cannot be authored in full compliance with the scope's governance.`
-- **Rationale:** Authoring a document without all mandatory governance layers loaded risks producing content that silently violates scope policies. Every governance layer declared by the scope MUST be present before writing begins.
+Identify the target scope from the parent document's path or the user's request; use `_local` if none is specified. Then run the prerequisites gate from the shared module at `.xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md`. Substitute `[DOCUMENT TYPE]` with `presentation`.
 
 ### Phase 1: Identify the Parent Document
 
 1. Read `.xdrs/_core/adrs/principles/009-presentation-standards.md` in full to internalize all presentation rules.
-2. Read `.xdrs/_core/adrs/principles/001-xdrs-core.md` for `.assets/` placement rules and general framework structure.
+2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` for `.assets/` placement rules and general framework structure.
 3. Identify the parent document (policy, research, article, or plan) that the slides will support. The parent document must already exist. If no parent document exists, inform the user that slides cannot be standalone and suggest creating the parent document first.
 4. If the user wants slides covering content from multiple documents, check whether an article already exists that synthesizes those documents. If not, suggest creating an article first (using the 004-write-article skill) and then creating slides for that article.
 
@@ -132,11 +128,7 @@ Rules:
 
 ### Phase 8: Verify with Lint
 
-1. Run the CLI lint utility from the repository root:
-   ```
-   npx -y xdrs-core@latest lint
-   ```
-2. Fix all reported errors before considering the task complete.
+Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.assets/lint-verification.md`.
 
 ### Constraints
 
@@ -172,6 +164,6 @@ Rules:
 ## References
 
 - [_core-adr-policy-009 - Presentation standards](../../009-presentation-standards.md)
-- [_core-adr-policy-001 - XDRS core](../../001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-004 - Article standards](../../004-article-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)

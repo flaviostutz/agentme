@@ -99,7 +99,7 @@ when referencing an information from those documents.]
 
 ## References
 
-- [_core-adr-policy-001 - Policies core](001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md)
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)
 - [004-write-article skill](skills/004-write-article/SKILL.md) - Step-by-step instructions for creating a new article

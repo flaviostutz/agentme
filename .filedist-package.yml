@@ -14,7 +14,7 @@ sets:
 
   - selector:
       files:
-        - .xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/**
+        - .xdrs/agentme/edrs/application/skills/010-select-relevant-xdrs/**
     output:
       path: .
       gitignore: false

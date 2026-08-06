@@ -12,7 +12,7 @@ test: build
 	$(MISE) pnpm exec agentme install --output ./output --presets core
 	test -e output/AGENTS.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
-	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
+	test -e output/.xdrs/agentme/edrs/application/skills/010-select-relevant-xdrs/SKILL.md
 	test ! -e output/.xdrs/agentme/edrs/application/002-coding-best-practices.md
 	$(MISE) pnpm exec agentme check --output ./output --presets core
 
@@ -43,7 +43,7 @@ test: build
 	$(MISE) pnpm exec agentme install --output ./output --presets core
 	test -e output/AGENTS.md
 	test -e output/.xdrs/_core/adrs/principles/002-policy-standards.md
-	test -e output/.xdrs/agentme/edrs/application/skills/004-select-relevant-xdrs/SKILL.md
+	test -e output/.xdrs/agentme/edrs/application/skills/010-select-relevant-xdrs/SKILL.md
 	test ! -e output/.xdrs/agentme/edrs/application/002-coding-best-practices.md
 	$(MISE) pnpm exec agentme check --output ./output --presets core
 

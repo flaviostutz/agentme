@@ -28,7 +28,7 @@ without starting from a raw Decision Record.
   record the adopted direction. They are the central policy artifact of the framework for the
   scope and topic they cover. Three policy types exist: **ADR** for architectural and
   technical decisions, **BDR** for business and operational decisions, and **EDR** for engineering
-  implementation decisions. See [_core-adr-policy-001](../001-xdrs-core.md).
+  implementation decisions. See [_core-adr-policy-001](../001-xdrs-standards.md).
 - **Research** captures exploration before or around a decision: constraints, findings, options,
   pros, and cons. Research supports elaboration, discussion, and updates,
   but it is not the final rule. A single Research document may inform multiple downstream ADRs,
@@ -150,7 +150,7 @@ guidance, and the explanatory overview close together without collapsing them in
 
 ### Guidelines
 
-Follow [_core-adr-policy-001](../001-xdrs-core.md) and [_core-adr-policy-002](../002-policy-standards.md) strictly. Key rules:
+Follow [_core-adr-policy-001](../001-xdrs-standards.md) and [_core-adr-policy-002](../002-policy-standards.md) strictly. Key rules:
 
 - Use uppercase BCP 14 keywords: MUST/MUST NOT for non-negotiable rules, SHOULD/SHOULD NOT for strong recommendations, MAY/OPTIONAL for optional choices.
 - Before citing a Policy as a requirement, check `Valid` first, then `Applied to`, and finally the decision text to confirm the decision is in scope for the current case.
@@ -192,7 +192,7 @@ Follow [_core-adr-policy-001](../001-xdrs-core.md) and [_core-adr-policy-002](..
 ## References
 
 - [Presentation slides](.assets/001-xdrs-overview-slides.md) - Marp slide deck overview of this article
-- [_core-adr-policy-001](../001-xdrs-core.md) - XDRS elements: types, scopes, subjects, folder structure
+- [_core-adr-policy-001](../001-xdrs-standards.md) - XDRS elements: types, scopes, subjects, folder structure
 - [_core-adr-policy-002](../002-policy-standards.md) - Policy document standards and mandatory template
 - [_core-adr-policy-003](../003-skill-standards.md) - Skill standards and co-location rules
 - [_core-adr-policy-004](../004-article-standards.md) - Article standards

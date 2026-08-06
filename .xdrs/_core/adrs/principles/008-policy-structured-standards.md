@@ -70,5 +70,5 @@ Examples:
 
 ## References
 
-- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md)
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md)
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md)

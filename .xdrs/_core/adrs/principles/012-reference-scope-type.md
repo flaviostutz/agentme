@@ -56,4 +56,4 @@ Policies, decisions, and standards here are to be read, adopted, adapted, or map
 ## References
 
 - [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — scope-type definition convention and governance application model
-- [_core-adr-policy-001 - XDRS core](001-xdrs-core.md) — scope structure and `scope-type` field definition
+- [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) — scope structure and `scope-type` field definition
