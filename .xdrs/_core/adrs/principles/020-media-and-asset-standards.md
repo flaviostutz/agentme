@@ -31,7 +31,7 @@ ASCII art MAY be used for very simple spatial layouts or shapes where plain Mark
 Mermaid.js SHOULD be used for diagrams that require explicit visual representation: flows, sequences, state machines, entity relationships, class diagrams, and activity diagrams. Mermaid is preferred over draw.io when it can adequately express the needed diagram.
 
 #### 04-drawio-when-mermaid-insufficient
-draw.io SHOULD be used when Mermaid cannot adequately express the needed diagram — for example, custom visual layouts, freehand annotations, or combined view types that Mermaid does not support natively. draw.io diagrams MUST be saved as `.drawio` files in the sibling `.assets/` folder and referenced directly from the Markdown document.
+draw.io SHOULD be used when Mermaid cannot adequately express the needed diagram — for example, custom visual layouts, freehand annotations, or combined view types that Mermaid does not support natively. draw.io SHOULD also be used when the diagram is expected to be edited directly by users in a graphical tool and its structure fits the draw.io editing model (e.g., boxes, connectors, swimlanes, layered layouts). draw.io diagrams MUST be saved as `.drawio` files in the sibling `.assets/` folder and referenced directly from the Markdown document.
 
 #### 05-svg-for-custom-vector
 Plain SVG MAY be used instead of draw.io when greater visual freedom is needed than draw.io provides, or when the diagram originates from tooling other than draw.io. SVG files MUST be stored in the sibling `.assets/` folder.
