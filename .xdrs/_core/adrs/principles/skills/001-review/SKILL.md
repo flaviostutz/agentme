@@ -107,4 +107,5 @@ Scope: [scope identifier]
 - [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-002 - Policy standards](../../002-policy-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-policy-020 - Media and asset standards](../../020-media-and-asset-standards.md)
 

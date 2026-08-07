@@ -15,7 +15,7 @@ Question: What is the canonical preference order for representing visual informa
 
 ## Decision Outcome
 
-**Markdown-first preference order, with centralized asset placement rules**
+**Markdown-first preference order: Markdown → ASCII → Mermaid → draw.io → SVG → PNG**
 
 All diagram format preferences and non-Markdown asset rules are defined here as individually citable rule blocks. Individual document-type policies and skills reference this policy instead of repeating these rules.
 
@@ -31,15 +31,21 @@ ASCII art MAY be used for very simple spatial layouts or shapes where plain Mark
 Mermaid.js SHOULD be used for diagrams that require explicit visual representation: flows, sequences, state machines, entity relationships, class diagrams, and activity diagrams. Mermaid is preferred over draw.io when it can adequately express the needed diagram.
 
 #### 04-drawio-when-mermaid-insufficient
-draw.io SHOULD be used when Mermaid cannot adequately express the needed diagram — for example, custom visual layouts, freehand annotations, or combined view types that Mermaid does not support natively.
+draw.io SHOULD be used when Mermaid cannot adequately express the needed diagram — for example, custom visual layouts, freehand annotations, or combined view types that Mermaid does not support natively. draw.io diagrams MUST be saved as `.drawio` files in the sibling `.assets/` folder and referenced directly from the Markdown document.
 
-#### 05-drawio-storage
-draw.io diagrams MUST be saved as editable vector: File → Save As → Editable Vector. The resulting `.svg` file MUST be stored in the sibling `.assets/` folder. This embeds the draw.io source in the SVG so the diagram remains editable without a separate `.drawio` file.
+#### 05-svg-for-custom-vector
+Plain SVG MAY be used instead of draw.io when greater visual freedom is needed than draw.io provides, or when the diagram originates from tooling other than draw.io. SVG files MUST be stored in the sibling `.assets/` folder.
 
-#### 06-assets-materially-necessary
+#### 06-png-as-last-resort
+PNG (or other raster formats) MAY be used only when no vector or text-based format can adequately represent the content — for example, screenshots or photographs. PNG files MUST be stored in the sibling `.assets/` folder.
+
+#### 07-assets-no-policy-content
+Asset files MUST NOT contain policy content. Diagrams and images do not carry mandatory or advisory language — they cannot express MUST, SHOULD, or MAY obligations with the precision that prose requires. Assets MAY be used only to support the understanding of policy already stated in Markdown text; a visual that merely illustrates what the prose already says is acceptable, but any rule or constraint that exists only inside an asset file is invisible to policy and has no normative force. When in doubt, keep the content in Markdown.
+
+#### 08-assets-materially-necessary
 Non-Markdown files (images, diagrams, schemas, JSON examples, binaries, or any other data files) SHOULD be referenced only when they are materially necessary to preserve clarity, fidelity, or evidence. Assets that duplicate information already expressible in Markdown SHOULD NOT be added.
 
-#### 07-assets-placement
+#### 09-assets-placement
 Non-Markdown files MUST live in the sibling `.assets/` folder next to the referencing document. The canonical per-document-type `.assets/` paths are defined in `_core-adr-policy-001`.
 
 ## References

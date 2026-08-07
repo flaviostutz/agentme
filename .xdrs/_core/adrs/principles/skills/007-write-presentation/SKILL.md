@@ -44,9 +44,7 @@ Identify the target scope from the parent document's path or the user's request;
    - **Problem**: what needs to be decided, addressed, or understood
    - **Solution/Decision**: what was decided and why
    - **Actions/Next Steps**: what happens now, who is responsible
-3. For each slide, identify the best format:
-   - Mermaid diagrams for flows, relationships, architecture; draw.io `.svg` files saved as Editable Vector (File → Save As → Editable Vector, stored in `.assets/`) when Mermaid is not sufficient
-   - ASCII art for very simple spatial layouts where Markdown is insufficient (see `_core-adr-policy-020`)
+3. For each slide, identify the best format. For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder. For slide content more broadly:
    - Short bullet points for key decisions and trade-offs
    - Tables for comparisons, options, criteria
    - Key short statements for emphasis
@@ -167,3 +165,4 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-004 - Article standards](../../004-article-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-policy-020 - Media and asset standards](../../020-media-and-asset-standards.md)
