@@ -45,6 +45,10 @@ Each artifact type has its own writing standard:
 
 Slide presentations that support XDRS documents follow [_core-adr-policy-009](adrs/principles/009-presentation-standards.md). Slides use the Marp Markdown format, live in `.assets/` next to the document they support, and must maintain bidirectional links with the parent document.
 
+### Media and asset standards
+
+[_core-adr-policy-020](adrs/principles/020-media-and-asset-standards.md) defines the canonical preference order for representing visual information across all XDRS document types: Markdown → ASCII → Mermaid → draw.io → SVG → PNG. It also defines where non-Markdown files must be stored (`.assets/` sibling folder) and prohibits policy content from living inside asset files. All document-type policies and write-* skills reference this policy instead of repeating these rules independently.
+
 ### Standard scope meta governance
 
 [_core-adr-policy-010](adrs/principles/010-scope-governance.md) defines the full scope governance model: how to define a custom scope type using `{scope-type}-scope-type` policies, how to define scope-local content standards using local meta-policies (`NNN-core.md` or `NNN-core-{qualifier}.md` in `principles/`), and how all governance mechanisms (`follows:`, scope-type standards, local meta-policies) apply with their precedence chain.

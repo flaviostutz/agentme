@@ -29,6 +29,8 @@ Every application MUST be organized into these three conceptual layers:
 | **Adapters** | Bridge between External and Application — translate external protocols into application calls and vice versa |
 | **Application** | Business logic that delegates I/O to adapters |
 
+![Overview](assets/126-overview.svg)
+
 #### 02-adapter-naming-conventions
 
 Adapters MUST follow these naming conventions:

@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: e893c76dceb1
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 0e98e55fc0da
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -29,10 +29,7 @@ files:
     - .xdrs/_core/adrs/principles/017-policy-numbering-ranges.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|818b91fe40cf|0
     - .xdrs/_core/adrs/principles/018-external-path-symlinks.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|d66697c2f3d0|0
     - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|4c553120885b|0
-    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|c620d6323ade|0
     - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|170fcdc01734|0
-    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|de629db50b6c|0
-    - .xdrs/_core/adrs/principles/020-media-and-asset-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|bd3314be2870|0
     - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview.svg|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|d46674c04b53|0
     - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|c28ae72d8039|0
     - .xdrs/_core/adrs/principles/001-xdrs-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|27dabd294e28|0
@@ -48,6 +45,9 @@ files:
     - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|6ddf0af7c0f6|0
     - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|71e9ee1ada40|0
     - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|6ad6a6ad1604|0
-    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|396076cbbc3d|0
-checksum: d7523c42d384
+    - .xdrs/_core/adrs/principles/020-media-and-asset-standards.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|a6d8da8e27e0|0
+    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|e1a223f47970|0
+    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|4b1a052e5f08|0
+    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|91e012a6b5ca|0
+checksum: 33990f04b3f2
 
