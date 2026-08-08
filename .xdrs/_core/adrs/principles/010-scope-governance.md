@@ -223,17 +223,25 @@ When loading the effective policy set for a scope, tools and agents MUST resolve
 
 Deduplication: if the same scope name appears more than once in the depth-first traversal, keep only the first occurrence. When a scope's policy overrides an inherited policy on the same topic, the overriding policy MUST include a `## Conflicts` section (see rule 34).
 
-Note: the `extends:` content-precedence chain is independent of Section C rule 24. `extends:` determines which policy documents are in scope; rule 24 determines which authoring rules apply.
-
 #### 34-extends-conflict-declaration
 
-When an extending scope's own policy addresses the same topic as a policy in an extended scope, or when two extended scopes address the same topic differently, the higher-precedence policy MUST include a `## Conflicts` section that:
+When an extending scope's policy overrides an inherited policy, or when extended scopes address the same topic differently, the higher-precedence policy MUST include a `## Conflicts` section that:
 
 - Names the conflicting policy (scope and policy ID) being overridden or superseded.
-- Explains why the override or difference exists.
+- Explains why the override exists.
 
-An undeclared semantic conflict between policies from the `extends:` chain MUST be surfaced as an error during review (see `_core-adr-policy-010.34-extends-conflict-declaration`).
+An undeclared conflict MUST be surfaced during review (see `_core-adr-policy-010.34-extends-conflict-declaration`).
 
 #### 35-extends-index
 
-Scopes referenced only via `extends:` chains and not linked in the root `index.md` are **exempt** from the "root index must link all scopes" requirement. These scopes form the building-block layer; the root index lists only entry scopes. If a scope is both referenced via `extends:` AND linked in the root index, tools SHOULD warn of ambiguous dual precedence (the root index ordering governs for consumers that do not interpret `extends:` declarations), using warning code `_core-adr-policy-010.35-extends-index`.
+Scopes referenced only via `extends:` chains and not linked in the root `index.md` are **exempt** from the "root index must link all scopes" requirement. If a scope is both referenced via `extends:` AND linked in the root index, tools SHOULD warn of ambiguous dual precedence using warning code `_core-adr-policy-010.35-extends-index`.
+
+---
+
+**Section E — Root index ordering and global conflict resolution**
+
+#### 36-root-index-ordering-fallback
+
+The root `index.md` ordering ("scopes listed last override the ones listed first") is the **default fallback** for policy document conflict resolution. `extends:` takes precedence: when a scope explicitly `extends:` another, the `extends:` chain (Section D, rule 33) governs; root index ordering MUST NOT be used to resolve conflicts between those scopes. For all other scope pairs, agents and tools MUST treat the later-listed scope in the root `index.md` as providing the overriding policy.
+
+`follows:` is independent of policy document conflict resolution. It governs authoring governance rules only (Section C, rule 24). Agents reading a single scope's `index.md` MUST also read the root `index.md` to determine conflict resolution order absent an `extends:` relationship.
