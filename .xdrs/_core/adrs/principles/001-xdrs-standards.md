@@ -100,6 +100,7 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
 - **Links:** Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
 - **Indexes**
   - Every document in the collection (Policies, skills, articles, research, and plans) MUST be reachable through the index chain: root index → scope index → type index → document. A document that exists on disk but is not linked from its canonical type index is considered an orphan and MUST be added to the index or removed.
+  - Index files MUST NOT contain policy rules or normative requirements. Those MUST be placed in dedicated Policy documents. Indexes are navigation artifacts only: links and short descriptions.
   - Keep a canonical type index with all documents of a certain type+scope in `[xdrs-root]/[scope]/[type]/index.md`. The type index MUST link to every Policy, skill, article, research, and plan under that type+scope.
   - Canonical index requirements:
     - Organize XDRS documents by subject for easier navigation

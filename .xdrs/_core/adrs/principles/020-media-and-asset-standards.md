@@ -1,6 +1,6 @@
 ---
 name: _core-adr-policy-020-media-and-asset-standards
-description: Defines the preferred order for representing visual information and the rules for non-Markdown assets across all XDRS document types. Use when choosing a diagram format or referencing any non-Markdown file in any XDRS document.
+description: Defines the preferred order for representing visual information and the rules for non-Markdown assets across all XDRS document types, including policy-document-specific restrictions on images and diagrams. Use when choosing a diagram format or referencing any non-Markdown file in any XDRS document.
 apply-to: All XDRS document types
 valid-from: 2026-08-06
 ---
@@ -34,10 +34,10 @@ Mermaid.js SHOULD be used for diagrams that require explicit visual representati
 draw.io SHOULD be used when Mermaid cannot adequately express the needed diagram — for example, custom visual layouts, freehand annotations, or combined view types that Mermaid does not support natively. draw.io SHOULD also be used when the diagram is expected to be edited directly by users in a graphical tool and its structure fits the draw.io editing model (e.g., boxes, connectors, swimlanes, layered layouts). draw.io diagrams MUST be saved as `.drawio` files in the sibling `.assets/` folder and referenced directly from the Markdown document.
 
 #### 05-svg-for-custom-vector
-Plain SVG MAY be used instead of draw.io when greater visual freedom is needed than draw.io provides, or when the diagram originates from tooling other than draw.io. SVG files MUST be stored in the sibling `.assets/` folder.
+Plain SVG MAY be used instead of draw.io when greater visual freedom is needed than draw.io provides, or when the diagram originates from tooling other than draw.io. SVG files MUST be stored in the sibling `.assets/` folder. SVG MUST NOT be used in Policy documents (see rule `10-no-images-in-policies`).
 
 #### 06-png-as-last-resort
-PNG (or other raster formats) MAY be used only when no vector or text-based format can adequately represent the content — for example, screenshots or photographs. PNG files MUST be stored in the sibling `.assets/` folder.
+PNG (or other raster formats) MAY be used only when no vector or text-based format can adequately represent the content — for example, screenshots or photographs. PNG files MUST be stored in the sibling `.assets/` folder. PNG MUST NOT be used in Policy documents (see rule `10-no-images-in-policies`).
 
 #### 07-assets-no-policy-content
 Asset files MUST NOT contain policy content. Diagrams and images do not carry mandatory or advisory language — they cannot express MUST, SHOULD, or MAY obligations with the precision that prose requires. Assets MAY be used only to support the understanding of policy already stated in Markdown text; a visual that merely illustrates what the prose already says is acceptable, but any rule or constraint that exists only inside an asset file is invisible to policy and has no normative force. When in doubt, keep the content in Markdown.
@@ -48,7 +48,23 @@ Non-Markdown files (images, diagrams, schemas, JSON examples, binaries, or any o
 #### 09-assets-placement
 Non-Markdown files MUST live in the sibling `.assets/` folder next to the referencing document. The canonical per-document-type `.assets/` paths are defined in `_core-adr-policy-001`.
 
+#### 10-no-images-in-policies
+Images — including raster formats (PNG, JPEG, GIF, TIFF, and similar) and SVG files — MUST NOT be used in Policy documents. These formats cannot express MUST, SHOULD, or MAY obligations with the precision that prose requires, and their content cannot be systematically enforced during review.
+
+#### 11-diagrams-rare-in-policies
+Mermaid and draw.io diagrams SHOULD be avoided in Policy documents. They MAY be included only in direct and punctual cases where the diagram illustrates the core structural pattern or architecture that the policy decision itself mandates. A diagram that introduces context, detail, or explanation not already present in the policy prose MUST NOT be included.
+
+#### 12-diagrams-connected-to-decision
+Any diagram included in a Policy document MUST be directly connected to the policy decision described in that document. A diagram MAY include a simple illustrative example. Diagrams showing multiple usage examples, edge cases, or supplementary context MUST be placed in an article instead.
+
+#### 13-diagrams-not-normative-in-policies
+Content within diagrams in Policy documents — labels, annotations, and depicted relationships — MUST NOT be used for policy enforcement. Mandatory and advisory language within a diagram has no normative force. During authoring, diagram content MUST be checked for consistency with the policy prose; any inconsistency MUST be resolved before the policy is published.
+
+#### 14-articles-for-visual-explanation
+When additional visual explanation is needed for a Policy — such as multiple usage examples, context breakdowns, detailed walkthroughs, or educational material — an article MUST be written instead of adding more diagrams to the policy. Articles are the appropriate place for visual education about a policy; the policy itself MUST remain focused on the decision declaration.
+
 ## References
 
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) - Per-document-type `.assets/` canonical paths
+- [_core-adr-policy-002 - Policy standards](002-policy-standards.md) - Summary rule `02-policy-diagram-restrictions` that points to rules 10–14 here
 - [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) - Structured rule block format used in this policy
