@@ -45,6 +45,11 @@ specific enough that two independent agents produce comparable outputs.]
 **Expected Behaviour**
 [Numbered list of steps the skill must perform, derived from its Instructions section.]
 
+**Simulated Human Responses** *(optional — include when the skill has human-in-the-loop pauses)*
+1. [Exact text to inject as the human's answer to the first pause point.]
+2. [Answer to the second pause point.]
+...
+
 **Assertions**
 - [ ] [Specific, falsifiable check on the output or behaviour. Start with a verb.]
 - [ ] ...
@@ -57,6 +62,7 @@ Rules:
 - Assertion text MUST start with a verb ("Output contains …", "Skill asks …", "Review reports …").
 - MUST NOT duplicate SKILL.md content; reference phases by name only when needed.
 - `skill-version` in frontmatter MUST be updated whenever `version` in SKILL.md changes.
+- **Simulated Human Responses** is optional. Include it when the skill has human-in-the-loop pause points and automated testing is needed. Responses are injected in order at each pause; if responses are exhausted before the skill finishes, the runner captures the remaining output as-is.
 
 #### 03-execution-requirement
 

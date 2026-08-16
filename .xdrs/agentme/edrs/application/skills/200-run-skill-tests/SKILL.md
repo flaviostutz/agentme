@@ -27,7 +27,7 @@ Loads `SKILL.test.md` from a skill directory, runs each scenario by invoking the
    ```
 
    Then halt — do not proceed.
-4. Read `SKILL.test.md` in full. Parse the frontmatter (`skill`, `skill-version`) and all `### Scenario N:` sections. Each scenario has three sub-sections: `**Trigger / Input**`, `**Expected Behaviour**`, and `**Assertions**`.
+4. Read `SKILL.test.md` in full. Parse the frontmatter (`skill`, `skill-version`) and all `### Scenario N:` sections. Each scenario has three required sub-sections — `**Trigger / Input**`, `**Expected Behaviour**`, and `**Assertions**` — and one optional sub-section: `**Simulated Human Responses**`.
 5. Read `SKILL.md` in full to understand what the skill does. Verify that the `skill-version` in `SKILL.test.md` matches the `version` field in `SKILL.md` metadata. If they differ, output a WARNING and continue.
 
 ### Phase 2: Execute Scenarios
@@ -35,9 +35,13 @@ Loads `SKILL.test.md` from a skill directory, runs each scenario by invoking the
 For each scenario in order:
 
 1. Record the scenario title and number.
-2. Present the trigger/input to a fresh agent context with the target skill loaded, exactly as written in `**Trigger / Input**`. Do not add context beyond what the trigger specifies.
-3. Capture the full output from the skill execution.
-4. Move to Phase 3 for this scenario before executing the next.
+2. Check whether the scenario has a `**Simulated Human Responses**` sub-section. If present, parse it as an ordered list of canned responses to be injected sequentially each time the skill pauses for human input during this scenario.
+3. Present the trigger/input to a fresh agent context with the target skill loaded, exactly as written in `**Trigger / Input**`. Do not add context beyond what the trigger specifies.
+4. Whenever the skill pauses and asks a question or requests human input, inject the next unused response from the `**Simulated Human Responses**` list (in order). Continue until the skill finishes or the response list is exhausted.
+   - If the response list is exhausted before the skill finishes, record the remaining output as-is and note "Simulated responses exhausted" in the scenario result.
+   - If the scenario has no `**Simulated Human Responses**` section, run the skill until its first natural pause point and capture the output at that point.
+5. Capture the full output from the skill execution.
+6. Move to Phase 3 for this scenario before executing the next.
 
 ### Phase 3: Evaluate Assertions
 

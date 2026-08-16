@@ -8,6 +8,7 @@ Propose changes via pull request. All changes must be verified for clarity and n
 
 Foundational standards, principles, and guidelines.
 
+- [150-vibe-coding-plan-mode](principles/skills/150-vibe-coding-plan-mode/SKILL.md) - **Vibe coding plan-mode workflow** - Structured pre-execution planning with iterative consistency checks, visual validation, and 11 challenge angles *(skill)*
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
 - [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [200-run-skill-tests](application/skills/200-run-skill-tests/SKILL.md))*

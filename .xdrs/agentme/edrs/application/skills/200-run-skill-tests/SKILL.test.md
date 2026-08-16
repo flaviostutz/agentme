@@ -45,3 +45,23 @@ You are an agent with the `200-run-skill-tests` skill loaded. The workspace has 
 - [ ] Output references the resolved path of the skill directory.
 - [ ] Output does NOT contain any `### Scenario` execution section.
 - [ ] Output does NOT contain a `## Summary` report block.
+
+### Scenario 3: Injects simulated human responses when present
+
+**Trigger / Input**
+You are an agent with the `200-run-skill-tests` skill loaded. The workspace has a skill at `.xdrs/agentme/edrs/principles/skills/150-vibe-coding-plan-mode` with both `SKILL.md` and `SKILL.test.md` present. Scenario 1 in that `SKILL.test.md` includes a `**Simulated Human Responses**` section with 17 ordered responses. The user says:
+
+"Test the skill at `.xdrs/agentme/edrs/principles/skills/150-vibe-coding-plan-mode`"
+
+**Expected Behaviour**
+1. Skill reads `SKILL.test.md` and detects the `**Simulated Human Responses**` section in Scenario 1.
+2. When executing Scenario 1, the skill injects each listed response in order each time the target skill pauses for human input.
+3. Execution continues through all HITL pause points using the injected responses rather than waiting for a real human.
+4. If the response list is exhausted before the skill finishes, the runner notes "Simulated responses exhausted" and captures remaining output as-is.
+5. Assertions are evaluated against the full captured output after all injected responses are consumed.
+
+**Assertions**
+- [ ] Runner parses the `**Simulated Human Responses**` section and does not ask the user for input during Scenario 1 execution.
+- [ ] Output contains the Scenario 1 result section with individual assertion PASS/FAIL results.
+- [ ] Output does NOT contain any prompt asking the real user to respond on behalf of the simulated skill interaction.
+- [ ] If responses are exhausted, output notes "Simulated responses exhausted" for that scenario.
