@@ -49,9 +49,9 @@ You are an agent with the `200-run-skill-tests` skill loaded. The workspace has 
 ### Scenario 3: Injects simulated human responses when present
 
 **Trigger / Input**
-You are an agent with the `200-run-skill-tests` skill loaded. The workspace has a skill at `.xdrs/agentme/edrs/principles/skills/150-vibe-coding-plan-mode` with both `SKILL.md` and `SKILL.test.md` present. Scenario 1 in that `SKILL.test.md` includes a `**Simulated Human Responses**` section with 17 ordered responses. The user says:
+You are an agent with the `200-run-skill-tests` skill loaded. The workspace has a skill at `.xdrs/agentme/edrs/principles/skills/150-plan-mode-consistency` with both `SKILL.md` and `SKILL.test.md` present. Scenario 1 in that `SKILL.test.md` includes a `**Simulated Human Responses**` section with 9 ordered responses. The user says:
 
-"Test the skill at `.xdrs/agentme/edrs/principles/skills/150-vibe-coding-plan-mode`"
+"Test the skill at `.xdrs/agentme/edrs/principles/skills/150-plan-mode-consistency`"
 
 **Expected Behaviour**
 1. Skill reads `SKILL.test.md` and detects the `**Simulated Human Responses**` section in Scenario 1.
