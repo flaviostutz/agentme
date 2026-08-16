@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 3ace30edb2dc
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 9111013f07f0
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -31,7 +31,6 @@ files:
     - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|170fcdc01734|0
     - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview.svg|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|d46674c04b53|0
     - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|c28ae72d8039|0
-    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|15c184a5437c|0
     - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|06ed54281344|0
     - .xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|7a64c263c614|0
     - .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|9b031be1bb23|0
@@ -46,8 +45,9 @@ files:
     - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|e1a223f47970|0
     - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|4b1a052e5f08|0
     - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|91e012a6b5ca|0
-    - .xdrs/_core/adrs/principles/020-media-and-asset-standards.md|https://github.com/flaviostutz/xdrs-core.git|fc8f291a9043|file|7a944e749db5|0
-    - .xdrs/_core/adrs/principles/001-xdrs-standards.md|https://github.com/flaviostutz/xdrs-core.git|3ace30edb2dc|file|f2524ace4152|0
     - .xdrs/_core/adrs/principles/010-scope-governance.md|https://github.com/flaviostutz/xdrs-core.git|3ace30edb2dc|file|9276e92c9076|0
-checksum: 680c3eaddf74
+    - .xdrs/_core/adrs/principles/001-xdrs-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|2c549d92e307|0
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|4e0b1cc4a3cc|0
+    - .xdrs/_core/adrs/principles/020-media-and-asset-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|a468a30588b5|0
+checksum: 52800d87278a
 

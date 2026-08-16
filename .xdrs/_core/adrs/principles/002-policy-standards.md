@@ -81,7 +81,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - When research exists for a decision, the Policy SHOULD mention the related research documents after the `## Considered Options` list.
 - MUST NOT use emojis in contents.
 - File names MUST be lowercase.
-- For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
+- For diagram and asset rules in Policy documents, see [`_core-adr-policy-020`](020-media-and-asset-standards.md). Rule `02-policy-diagram-restrictions` below summarises the overall stance; the detailed rules are in policy 020.
 - Avoid using lengthy instructions on the Policy. If there are long and detailed instructions related to the Policy, or instructions that are outside the decision, create another file with a guide. If the guide is small, keep it in the Policy itself.
 - Policies SHOULD be under 1300 words long as a rule of thumb.
   - This is important to make them focused on a clear decision
@@ -98,6 +98,10 @@ When a policy's frontmatter includes `freeze-reference: true`, the policy MUST N
 - Frontmatter `name` field mismatch (name does not match the expected identifier derived from the file path)
 
 Content-level checks that do not affect the policy's reference (required sections, word count, emojis, broken outgoing links, structured rule block format, normative language) remain enforced. The `valid-from` date is not taken into consideration when evaluating whether `freeze-reference` applies.
+
+#### 02-policy-diagram-restrictions
+
+Images and diagrams in Policy documents are subject to strict restrictions: images MUST NOT be used; diagrams SHOULD be avoided and are only allowed in direct and punctual cases where directly connected to the decision. Diagram content has no normative force and must not be used for enforcement. For full rules see [`_core-adr-policy-020`](020-media-and-asset-standards.md) rules `10` through `14`.
 
 **Policy template**
 
