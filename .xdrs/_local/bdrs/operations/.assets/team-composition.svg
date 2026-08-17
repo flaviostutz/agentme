@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="685" viewBox="0 0 920 685">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#9CA3AF"/>
+    </marker>
+    <marker id="arr-v" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7C3AED"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="685" fill="#F8FAFC"/>
+
+  <!-- ===== CROSS-TEAM ===== -->
+  <rect x="10" y="10" width="900" height="95" rx="8" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5"/>
+  <text x="22" y="30" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#6366F1" letter-spacing="1">CROSS-TEAM ROLES</text>
+
+  <rect x="65" y="38" width="165" height="52" rx="6" fill="#4F46E5"/>
+  <text x="147" y="59" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">PO Lead</text>
+  <text x="147" y="76" font-family="system-ui,sans-serif" font-size="10" fill="#C7D2FE" text-anchor="middle">What / When</text>
+
+  <rect x="378" y="38" width="165" height="52" rx="6" fill="#1D4ED8"/>
+  <text x="460" y="59" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Principal Engineer</text>
+  <text x="460" y="76" font-family="system-ui,sans-serif" font-size="10" fill="#BFDBFE" text-anchor="middle">How</text>
+
+  <rect x="692" y="38" width="165" height="52" rx="6" fill="#1D4ED8"/>
+  <text x="774" y="59" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Domain Architect</text>
+  <text x="774" y="76" font-family="system-ui,sans-serif" font-size="10" fill="#BFDBFE" text-anchor="middle">What</text>
+
+  <!-- Arrow: cross-team → team -->
+  <line x1="460" y1="105" x2="460" y2="122" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ===== TEAM ===== -->
+  <rect x="10" y="125" width="900" height="95" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="22" y="144" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#16A34A" letter-spacing="1">TEAM X</text>
+
+  <!-- PO — shared, dashed border -->
+  <rect x="22" y="150" width="138" height="55" rx="6" fill="#4F46E5" stroke="#A5B4FC" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="91" y="170" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Product Owner</text>
+  <text x="91" y="185" font-family="system-ui,sans-serif" font-size="9" fill="#C7D2FE" text-anchor="middle">What / When</text>
+  <text x="91" y="198" font-family="system-ui,sans-serif" font-size="9" fill="#E0E7FF" text-anchor="middle">↔ all squads</text>
+
+  <!-- PM -->
+  <rect x="178" y="150" width="138" height="55" rx="6" fill="#7C3AED"/>
+  <text x="247" y="170" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Project Manager</text>
+  <text x="247" y="185" font-family="system-ui,sans-serif" font-size="9" fill="#DDD6FE" text-anchor="middle">When / How</text>
+  <text x="247" y="198" font-family="system-ui,sans-serif" font-size="9" fill="#EDE9FE" text-anchor="middle">cross-squad deps</text>
+
+  <!-- Tech Lead — shared, dashed border -->
+  <rect x="567" y="150" width="138" height="55" rx="6" fill="#059669" stroke="#6EE7B7" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="636" y="170" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Tech Lead</text>
+  <text x="636" y="185" font-family="system-ui,sans-serif" font-size="9" fill="#A7F3D0" text-anchor="middle">How / When</text>
+  <text x="636" y="198" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">↔ all squads</text>
+
+  <!-- AI Lead — shared, dashed border -->
+  <rect x="723" y="150" width="138" height="55" rx="6" fill="#D97706" stroke="#FDE68A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="792" y="170" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Lead</text>
+  <text x="792" y="185" font-family="system-ui,sans-serif" font-size="9" fill="#FDE68A" text-anchor="middle">How / When</text>
+  <text x="792" y="198" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">↔ all squads</text>
+
+  <!-- Arrows: team → squads -->
+  <line x1="152" y1="220" x2="152" y2="237" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="460" y1="220" x2="460" y2="237" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="768" y1="220" x2="768" y2="237" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- BA fluidity labels and arrows (between BA row of adjacent squads) -->
+  <text x="305" y="287" font-family="system-ui,sans-serif" font-size="9" fill="#7C3AED" text-anchor="middle" font-style="italic">fluid</text>
+  <line x1="279" y1="293" x2="330" y2="293" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-v)"/>
+  <text x="613" y="287" font-family="system-ui,sans-serif" font-size="9" fill="#7C3AED" text-anchor="middle" font-style="italic">fluid</text>
+  <line x1="587" y1="293" x2="638" y2="293" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-v)"/>
+
+  <!-- ===== SQUAD 1 ===== -->
+  <rect x="10" y="240" width="283" height="365" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="152" y="262" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#92400E" text-anchor="middle">Squad 1</text>
+
+  <rect x="24" y="270" width="255" height="46" rx="5" fill="#7C3AED"/>
+  <text x="152" y="288" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Business Analyst</text>
+  <text x="152" y="304" font-family="system-ui,sans-serif" font-size="9" fill="#EDE9FE" text-anchor="middle">Requirements · Process Design</text>
+
+  <rect x="24" y="325" width="255" height="46" rx="5" fill="#D97706"/>
+  <text x="152" y="343" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer</text>
+  <text x="152" y="359" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <rect x="24" y="380" width="255" height="46" rx="5" fill="#D97706"/>
+  <text x="152" y="398" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer</text>
+  <text x="152" y="414" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <!-- FS Eng 1 = Squad Lead (thicker border) -->
+  <rect x="24" y="435" width="255" height="46" rx="5" fill="#059669" stroke="#34D399" stroke-width="2"/>
+  <text x="152" y="453" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer  ★</text>
+  <text x="152" y="469" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <rect x="24" y="490" width="255" height="46" rx="5" fill="#059669"/>
+  <text x="152" y="508" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer</text>
+  <text x="152" y="524" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <text x="152" y="556" font-family="system-ui,sans-serif" font-size="8" fill="#92400E" text-anchor="middle" font-style="italic">★ Squad Lead — ceremonies, shielding, prioritisation</text>
+
+  <!-- ===== SQUAD 2 ===== -->
+  <rect x="318" y="240" width="283" height="365" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="460" y="262" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#92400E" text-anchor="middle">Squad 2</text>
+
+  <rect x="332" y="270" width="255" height="46" rx="5" fill="#7C3AED"/>
+  <text x="460" y="288" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Business Analyst</text>
+  <text x="460" y="304" font-family="system-ui,sans-serif" font-size="9" fill="#EDE9FE" text-anchor="middle">AI Requirements · Agent Specs</text>
+
+  <!-- AI Eng 1 = Squad Lead -->
+  <rect x="332" y="325" width="255" height="46" rx="5" fill="#D97706" stroke="#FDE68A" stroke-width="2"/>
+  <text x="460" y="343" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer  ★</text>
+  <text x="460" y="359" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <rect x="332" y="380" width="255" height="46" rx="5" fill="#D97706"/>
+  <text x="460" y="398" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer</text>
+  <text x="460" y="414" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <rect x="332" y="435" width="255" height="46" rx="5" fill="#059669"/>
+  <text x="460" y="453" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer</text>
+  <text x="460" y="469" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <rect x="332" y="490" width="255" height="46" rx="5" fill="#059669"/>
+  <text x="460" y="508" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer</text>
+  <text x="460" y="524" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <text x="460" y="556" font-family="system-ui,sans-serif" font-size="8" fill="#92400E" text-anchor="middle" font-style="italic">★ Squad Lead — ceremonies, shielding, prioritisation</text>
+
+  <!-- ===== SQUAD 3 ===== -->
+  <rect x="626" y="240" width="283" height="365" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="768" y="262" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#92400E" text-anchor="middle">Squad 3</text>
+
+  <rect x="640" y="270" width="255" height="46" rx="5" fill="#7C3AED"/>
+  <text x="768" y="288" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Business Analyst</text>
+  <text x="768" y="304" font-family="system-ui,sans-serif" font-size="9" fill="#EDE9FE" text-anchor="middle">Requirements · Process Design</text>
+
+  <rect x="640" y="325" width="255" height="46" rx="5" fill="#D97706"/>
+  <text x="768" y="343" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer</text>
+  <text x="768" y="359" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <rect x="640" y="380" width="255" height="46" rx="5" fill="#D97706"/>
+  <text x="768" y="398" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">AI Engineer</text>
+  <text x="768" y="414" font-family="system-ui,sans-serif" font-size="9" fill="#FEF3C7" text-anchor="middle">Models · Agents · Evals</text>
+
+  <rect x="640" y="435" width="255" height="46" rx="5" fill="#059669"/>
+  <text x="768" y="453" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer</text>
+  <text x="768" y="469" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <!-- FS Eng 2 = Squad Lead -->
+  <rect x="640" y="490" width="255" height="46" rx="5" fill="#059669" stroke="#34D399" stroke-width="2"/>
+  <text x="768" y="508" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Full Stack Engineer  ★</text>
+  <text x="768" y="524" font-family="system-ui,sans-serif" font-size="9" fill="#D1FAE5" text-anchor="middle">APIs · Pipelines · Frontend</text>
+
+  <text x="768" y="556" font-family="system-ui,sans-serif" font-size="8" fill="#92400E" text-anchor="middle" font-style="italic">★ Squad Lead — ceremonies, shielding, prioritisation</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="10" y="622" width="900" height="52" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1"/>
+
+  <rect x="20" y="632" width="11" height="11" rx="2" fill="#4F46E5"/>
+  <text x="35" y="642" font-family="system-ui,sans-serif" font-size="10" fill="#374151">Vision / Product</text>
+
+  <rect x="160" y="632" width="11" height="11" rx="2" fill="#7C3AED"/>
+  <text x="175" y="642" font-family="system-ui,sans-serif" font-size="10" fill="#374151">Requirements / BA</text>
+
+  <rect x="315" y="632" width="11" height="11" rx="2" fill="#D97706"/>
+  <text x="330" y="642" font-family="system-ui,sans-serif" font-size="10" fill="#374151">AI Engineering</text>
+
+  <rect x="455" y="632" width="11" height="11" rx="2" fill="#059669"/>
+  <text x="470" y="642" font-family="system-ui,sans-serif" font-size="10" fill="#374151">Engineering</text>
+
+  <rect x="575" y="632" width="11" height="11" rx="2" fill="#1D4ED8"/>
+  <text x="590" y="642" font-family="system-ui,sans-serif" font-size="10" fill="#374151">Arch / Standards</text>
+
+  <text x="20" y="660" font-family="system-ui,sans-serif" font-size="9" fill="#6B7280" font-style="italic">★ = Squad Lead (formal role, selected at squad formation)     - - border = shared across all squads     ╌╌▶ = BA / AI BA moves between squads (self-organised, PO aware)</text>
+</svg>
