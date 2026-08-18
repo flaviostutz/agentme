@@ -123,7 +123,7 @@ The entry-first loop from [agentme-edr-153](153-ai-eval-script.md) rule `01` app
 
 1. During the entry-first loop: for entries whose `test_types` includes `bias`, buffer each entry's `actual_output` keyed by `(test_type, bias_group)`. Skip inline scoring for the `bias` test type on that entry. Other test types on the same entry (e.g. `functional` or `fairness`) are still scored inline normally.
 2. After the entry-first loop completes: iterate over each `(bias, bias_group)` bucket and score the group by comparing all buffered outputs (see rule `03`).
-3. When `--groups` filtering ([agentme-edr-153](153-ai-eval-script.md) rule `01`) reduces a `bias` group to fewer than 2 variants: emit a warning identifying the group, skip it, and exclude it from the `bias_accuracy` denominator. Do not exit with an error.
+3. When `--groups` filtering ([agentme-edr-153](153-ai-eval-script.md) rule `01`) reduces a `bias` group to fewer than 2 variants: emit a warning identifying the group, skip it, and exclude it from the `bias_accuracy` denominator. MUST NOT exit with an error.
 
 ```python
 from collections import defaultdict

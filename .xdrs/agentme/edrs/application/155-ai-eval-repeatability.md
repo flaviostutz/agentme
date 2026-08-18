@@ -29,7 +29,7 @@ Entries whose `test_types` includes `repeatability` are exempt from [agentme-edr
 - `EVAL_MIN_ACCURACY_REPEATABILITY` — minimum fraction of repeatability entries that must PASS for the eval to exit 0.
 - `REPEAT_SEMANTIC_SIMILARITY_SCORE` — minimum average pairwise cosine similarity for a single entry to PASS; declared only when using semantic-similarity scoring.
 
-`eval.py` MUST invoke the component `REPEAT_COUNT` times for every repeatability entry and score the resulting outputs by comparing them to each other. `expected_output` is unused for repeatability entries and SHOULD be omitted or set to `null` in the dataset.
+`eval.py` MUST invoke the component `REPEAT_COUNT` times for every repeatability entry and score the resulting outputs by comparing them to each other. `expected_output` MUST be `null` for repeatability entries (enforced by [agentme-edr-152](152-ai-test-types-taxonomy.md) Schema Rule C).
 
 **Choosing the scoring method:** Two approaches are supported, declared as a constant in `eval.py`:
 
