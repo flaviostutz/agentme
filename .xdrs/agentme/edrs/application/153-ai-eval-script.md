@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-153-ai-eval-script
-description: Defines eval.py script requirements for AI projects — entry-first eval loop, --type test-type filtering, --groups group filtering, mock_fixtures wiring, human entries, fairness/bias deferred group scoring, threshold enforcement, and MLflow experiment naming and port assignment. Use when implementing eval scripts. For eval folder structure see agentme-edr-151 rule 01. For the test type taxonomy and mock_fixtures envelope see agentme-edr-152. For mock file naming see agentme-edr-126 rule 10. For report format see agentme-edr-154. For repeatability loop exception see agentme-edr-155. For fairness/bias group scoring see agentme-edr-156.
+description: Defines eval.py script requirements for AI projects — entry-first eval loop, --type test-type filtering, --groups group filtering, --human-review flag for manual-review entries, mock_fixtures wiring, human_review entries, bias deferred group scoring, fairness inline per-entry scoring, threshold enforcement, and MLflow experiment naming and port assignment. Use when implementing eval scripts. For eval folder structure see agentme-edr-151 rule 01. For the test type taxonomy and mock_fixtures envelope see agentme-edr-152. For mock file naming see agentme-edr-126 rule 10. For report format see agentme-edr-154. For repeatability loop exception see agentme-edr-155. For fairness and bias eval methodology see agentme-edr-156.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-07-07
 ---
@@ -25,15 +25,16 @@ For when evals are required per AI tier, see [agentme-edr-501](../governance/501
 
 Each `eval.py` script MUST:
 
-- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-201](../data/201-ml-dataset-structure.md) and the entry envelope in [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`, optional `mock_fixtures`, optional `group`, optional `comparison_group`).
+- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-201](../data/201-ml-dataset-structure.md) and the entry envelope in [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`, optional `mock_fixtures`, optional `group`, optional `bias_group`).
 - Accept a required `--type=<test_type>|all` CLI argument and filter entries whose `test_types` array contains the requested value; `--type=all` includes every entry.
+- Accept an optional `--human-review` boolean CLI flag. When present, restrict the run to entries whose `human_review` field is `true` (regardless of `--type`). When omitted, entries with `human_review: true` are included in normal `--type` runs and their automated `test_types` are scored as usual — the human-review checklist is always exported for them.
 - Accept an optional `--groups=<name1>,<name2>,...` CLI argument. When present, restrict the filtered entry set to those whose `group` field matches any of the listed values (case-sensitive exact match); entries without a `group` field are excluded when `--groups` is active. When omitted, all entries from the `--type` filter are included regardless of `group`. The MLflow run MUST log a `groups_filter` tag containing the `--groups` value, or `"all"` when the argument is omitted.
-- **Fairness/bias deferred group scoring:** for entries whose `test_types` includes `fairness` or `bias`, the `fairness`/`bias` test_type MUST be skipped in the inline per-entry scoring step and the entry's `actual_output` buffered by `comparison_group`. Other test_types on the same entry (e.g. `functional`) are still scored inline normally. After the entry-first loop completes, score each comparison group by comparing its buffered outputs. See [agentme-edr-156](156-ai-eval-fairness-bias.md) for the full scoring loop, approach options, metrics, and report shape.
+- **Bias deferred group scoring:** for entries whose `test_types` includes `bias`, the `bias` test_type MUST be skipped in the inline per-entry scoring step and the entry's `actual_output` buffered by `bias_group`. Other test_types on the same entry (e.g. `functional` or `fairness`) are still scored inline normally. After the entry-first loop completes, score each `bias` group by comparing its buffered outputs. **Fairness entries are scored inline** per-entry via LLM-as-judge against `expected_output`, identically to functional entries — this applies to fairness-only entries and to the fairness test type on combined `["fairness","bias"]` entries. See [agentme-edr-156](156-ai-eval-fairness-bias.md) for the full bias group-scoring loop, fairness per-entry scoring, approach options, metrics, and report shapes.
 - Iterate **entry-first**: for each entry in the filtered set, invoke the real component exactly once; then score that single `actual_output` for every `test_types` value the entry carries that falls within the current `--type` scope — MUST NOT invoke the component more than once per entry per run.
-- When an entry contains `mock_fixtures` ([agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02`), configure each named mock adapter with its fixture data BEFORE invoking the component for that entry. Each entry MUST use fresh mock instances so fixture state does not bleed across entries. `mock_fixtures` applies to all test types including `human`. `mock_fixtures` MUST NOT configure LLM adapters — the LLM call MUST be real (see [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `03`). How mock adapters are discovered and instantiated is left to the project; see [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
+- When an entry contains `mock_fixtures` ([agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02`), configure each named mock adapter with its fixture data BEFORE invoking the component for that entry. Each entry MUST use fresh mock instances so fixture state does not bleed across entries. `mock_fixtures` applies to all entries including those with `human_review: true`. `mock_fixtures` MUST NOT configure LLM adapters — the LLM call MUST be real (see [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `03`). How mock adapters are discovered and instantiated is left to the project; see [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
 - Run every component invocation against **real LLM providers** (not mocked responses), to capture model drift.
-- For `human` entries: invoke the component to capture `actual_output`, export each entry's `input`, `expected_output.human_test` instructions, and `actual_output` into a manual-review checklist (`report-human.md`). MUST NOT invoke an automated scorer and MUST NOT enforce a pass/fail threshold for it. Other `test_types` on the same entry (e.g. `functional`) are still scored automatically.
-- After all entries are processed, compute aggregate metrics per test type, log them to a local MLflow experiment (see rule `02`), write one `report-<type>.md` per evaluated test type ([agentme-edr-154](154-ai-eval-report-format.md) rule `01`), and exit with a non-zero status when any metric falls below its defined threshold per [agentme-edr-501](../governance/501-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`. The `human` type has no threshold and does not trigger a non-zero exit.
+- For entries with `human_review: true`: invoke the component to capture `actual_output`, export each entry's `input`, `human_instructions`, and `actual_output` into a manual-review checklist (`report-human-review.md`). MUST NOT invoke an automated scorer and MUST NOT enforce a pass/fail threshold for the human-review step. Other `test_types` on the same entry (e.g. `functional`) are still scored automatically.
+- After all entries are processed, compute aggregate metrics per test type, log them to a local MLflow experiment (see rule `02`), write one `report-<type>.md` per evaluated test type ([agentme-edr-154](154-ai-eval-report-format.md) rule `01`), and exit with a non-zero status when any metric falls below its defined threshold per [agentme-edr-501](../governance/501-project-quality-standards.md) rule `07-statistical-models-must-have-eval-targets`. Entries with `human_review: true` have no threshold and do not trigger a non-zero exit.
 - Compare outputs to expected values using project-defined quality thresholds per test type. Thresholds and all other scoring parameters MUST be declared as constants in `eval.py` — they are design decisions about what constitutes acceptable quality for the component under test, not runtime configuration, and MUST NOT be passed via Makefile variables or CLI flags. Use one of two naming conventions, chosen consistently within an `eval.py`: (a) **per-type constants** — `EVAL_MIN_<METRIC>_<TYPE>` for each test type (e.g. `EVAL_MIN_ACCURACY_FUNCTIONAL = 0.85`, `EVAL_MIN_ACCURACY_REPEATABILITY = 0.8`); or (b) **dict constant** — `EVAL_MIN_<METRIC> = {<type>: <value>}` (e.g. `EVAL_MIN_ACCURACY = {"functional": 0.85, "smoke": 0.85}`). Per-type constants are preferred when each test type has a dedicated `eval.py`; the dict form is preferred when a single `eval.py` handles multiple types. In either convention, `EVAL_MIN_ACCURACY` (as a scalar) MAY be declared as a project-wide default and MUST be used as fallback when no per-type override is defined for the current test type. This Policy does not mandate which test types a project must threshold or what value to use (see [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `06`).
 
 **Example:**
@@ -82,11 +83,11 @@ with mlflow.start_run():
 
         actual_output = invoke_component(entry, graph)
 
+        # Export human-review checklist regardless of which --type is active
+        if entry.get("human_review"):
+            export_human_review(entry["human_instructions"], actual_output)
+
         for test_type in [t for t in entry["test_types"] if t in resolved_types]:
-            if test_type == "human":
-                export_human_review(entry, actual_output)
-                continue
-            
             score_val = score(test_type, actual_output, entry["expected_output"])
             results[test_type].append(score_val)
             
@@ -98,9 +99,6 @@ with mlflow.start_run():
 
     # Aggregate, report, and enforce thresholds per test type
     for test_type in resolved_types:
-        if test_type == "human":
-            continue
-
         accuracy = sum(results[test_type]) / len(results[test_type])
         mlflow.log_metric(f"{test_type}_accuracy", accuracy)
         
@@ -136,7 +134,7 @@ The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-nam
 - [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: loop exception to rule `01`'s entry-first constraint, scoring methods, and cadence
-- [agentme-edr-156](156-ai-eval-fairness-bias.md) — AI eval fairness/bias: deferred group-scoring loop, `comparison_group` buffering, scoring approaches, and `fairness_accuracy`/`bias_accuracy` metrics
+- [agentme-edr-156](156-ai-eval-fairness-bias.md) — AI eval fairness and bias: fairness per-entry inline scoring and `fairness_accuracy`; bias deferred `bias_group` group-scoring loop, approach options, and `bias_accuracy`
 - [agentme-edr-152](152-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), and mocking constraints per type
 - [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters used in `mock_fixtures`
 - [agentme-edr-201](../data/201-ml-dataset-structure.md) — ML dataset structure, per-entry JSON format, and schema-lint validation for golden datasets

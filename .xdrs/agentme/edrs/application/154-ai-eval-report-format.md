@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-154-ai-eval-report-format
-description: Defines the eval report format for AI projects — report-<type>.md template, Wilson score confidence interval, convergence analysis, and the human-type checklist artifact. Use when generating eval reports from eval scripts. For the eval script that produces these reports see agentme-edr-153. For repeatability report shape see agentme-edr-155 rule 02.
+description: Defines the eval report format for AI projects — report-<type>.md template, Wilson score confidence interval, convergence analysis, and the human-review checklist artifact (report-human-review.md for entries with human_review: true). Use when generating eval reports from eval scripts. For the eval script that produces these reports see agentme-edr-153. For repeatability report shape see agentme-edr-155 rule 02.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-07-07
 ---
@@ -21,7 +21,7 @@ What format should eval reports follow, and what constraints apply to how they a
 
 #### 01-eval-report-file
 
-Each eval script MUST produce one `report-<type>.md` per evaluated test type in the same `evals/<component>/eval-<name>/` folder and overwrite each on every run — only the types included in the current `--type` invocation are (re)written; report files for other types are left untouched. The `human` type does not produce a metrics report (see below).
+Each eval script MUST produce one `report-<type>.md` per evaluated test type in the same `evals/<component>/eval-<name>/` folder and overwrite each on every run — only the types included in the current `--type` invocation are (re)written; report files for other types are left untouched. Entries with `human_review: true` do not produce a metrics report (see below).
 
 **Generation constraint:** The report MUST be produced programmatically, reading raw metric values directly from MLflow. No LLM or generative model may write, summarize, or paraphrase any section of the report, to prevent hallucinated metric values. This constraint applies to all report sections including Overall Results, Convergence Analysis, and Per-item Results — all metric values and convergence chart data points MUST be computed from actual evaluation results.
 
@@ -100,7 +100,7 @@ Where $\hat{p}$ is observed accuracy and $n$ is sample count. Accuracy and F1 ar
    - If either exceeds: "Add more samples — metrics have not yet stabilized"
    - Projects MAY customize threshold (document in Makefile/README)
 
-Exclude from `report-human.md` (no automated metrics).
+Exclude from `report-human-review.md` (no automated metrics).
 
 **Filled-in example** (`evals/workflow-document-review/eval-basic/report-functional.md` for a document review workflow):
 
@@ -162,7 +162,7 @@ xychart-beta
 ```
 ```
 
-**`human` type artifact:** instead of `report-human.md` with metrics, `--type=human` produces a checklist artifact (still named `report-human.md`) listing, per entry, its `input`, `expected_output.human_test` instructions, and the captured `actual_output` — with no Overall Results table, threshold, or PASS/FAIL section, since this type MUST NOT be auto-scored.
+**Human-review checklist artifact:** entries with `human_review: true` do not produce a metrics report. Instead, the eval script produces `report-human-review.md` — a checklist artifact listing, per entry, its `input`, `human_instructions`, and the captured `actual_output` — with no Overall Results table, threshold, or PASS/FAIL section, since human-review entries MUST NOT be auto-scored. This file is generated whenever any eval run encounters entries with `human_review: true`, or when `--human-review` is passed as a standalone flag (see [agentme-edr-153](153-ai-eval-script.md) rule `01`).
 
 ## References
 

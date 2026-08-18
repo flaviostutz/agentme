@@ -55,11 +55,11 @@ Standards for building LLM, Agent, and Workflow components.
 Standards for eval datasets, scripts, reports, and test type taxonomy.
 
 - [agentme-edr-151](application/151-ai-eval-standards.md) - **AI eval core standards** - Eval folder structure and Makefile interface; LLM-as-judge binary scoring contract applicable to all AI tiers and test types
-- [agentme-edr-152](application/152-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (`functional`, `safety`, `smoke`, `repeatability`, `adversarial`, `fairness`, `bias`, and 5 others) with group, objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope
+- [agentme-edr-152](application/152-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (`functional`, `safety`, `smoke`, `repeatability`, `adversarial`, `fairness`, `bias`, and 5 others) with objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope
 - [agentme-edr-153](application/153-ai-eval-script.md) - **AI eval script** - eval.py requirements: entry-first loop, --type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment conventions
 - [agentme-edr-154](application/154-ai-eval-report-format.md) - **AI eval report format** - report-<type>.md template, Wilson score confidence interval, convergence analysis, and human-type checklist artifact
 - [agentme-edr-155](application/155-ai-eval-repeatability.md) - **AI eval repeatability** - Repeatability test type: REPEAT_COUNT loop exception, semantic-similarity and LLM-as-judge scoring, repeatability_accuracy metric, report shape, and run cadence
-- [agentme-edr-156](application/156-ai-eval-fairness-bias.md) - **AI eval fairness and bias** - Defines the fairness/bias group-comparison eval methodology: comparison_group dataset structure, deferred group-scoring loop, semantic-similarity and LLM-as-judge scoring approaches, fairness_accuracy/bias_accuracy metrics, and report shape
+- [agentme-edr-156](application/156-ai-eval-fairness-bias.md) - **AI eval fairness and bias** - Defines two distinct eval methodologies: fairness (per-entry policy stress-test, inline LLM-as-judge, fairness_accuracy); bias (EU Charter/GDPR protected-attribute group-comparison, deferred scoring, bias_accuracy); and six bias types as dataset-authoring guidance
 
 ## Data
 
