@@ -1,21 +1,21 @@
 ---
-name: _local-bdr-401-product-team-roles
-description: Defines roles, responsibilities, skills, team composition models, and known structural gaps for Product Teams. Use when staffing, onboarding, or structuring a new or existing product team.
+name: _local-bdr-policy-401-product-team-roles
+description: Defines roles, responsibilities, and skills for Product Teams, covering cross-team and team-level roles. Use when staffing, onboarding, or assigning responsibilities in a product team.
 apply-to: All product teams and cross-team roles in the organisation
 valid-from: 2026-08-18
 ---
 
-# _local-bdr-401: Product team roles and composition
+# _local-bdr-policy-401: Product team roles
 
 ## Context and Problem Statement
 
 Product teams operate across diverse domains — internal APIs, customer-facing business processes, and shared platforms. Without a clear definition of each role's responsibilities, boundaries, and expected skills, teams accumulate ambiguity about who owns what, leading to gaps in coverage, duplicated effort, and unclear escalation paths.
 
-What roles make up a product team, what does each role own, and how should teams be structured to operate effectively?
+What roles make up a product team, and what does each role own?
 
 ## Decision Outcome
 
-**A defined set of cross-team and team-level roles with explicit responsibilities, skill requirements, and composition models, including known structural gaps and their mitigations**
+**A defined set of cross-team and team-level roles with explicit responsibilities and skill requirements**
 
 ### Details
 
@@ -23,11 +23,11 @@ What roles make up a product team, what does each role own, and how should teams
 
 A product team is responsible for a product consumed by others: an API used by another team in the company, a business process used by customers, or a platform that other teams build on.
 
-Strategic objectives typically originate outside the team. However, the team must own a defined set of OKRs or KPIs and be fully autonomous within its domain to change processes and implement systems that affect those objectives. The team is accountable for results within its domain; it does not depend on other teams to execute changes within scope.
+Strategic objectives typically originate outside the team. However, the team MUST own a defined set of OKRs or KPIs and be fully autonomous within its domain to change processes and implement systems that affect those objectives. The team MUST be accountable for results within its domain; it MUST NOT depend on other teams to execute changes within scope.
 
 #### 02-product-team-scope-of-work
 
-The team owns the full lifecycle of its product:
+The team MUST own the full lifecycle of its product:
 
 - Model as-is business processes and define to-be target processes
 - Design architecture and system components
@@ -37,11 +37,11 @@ The team owns the full lifecycle of its product:
 - Fix incidents and manage production stability
 - Communicate outages and new feature rollouts to users
 
-The team must not hand off any of these responsibilities to a separate function. Ownership is end-to-end.
+The team MUST NOT hand off any of these responsibilities to a separate function. Ownership is end-to-end.
 
 #### 03-workforce-allocation
 
-Teams must allocate available capacity across three categories. These are targets, not rigid weekly quotas — they should balance over a rolling 4–6 week window:
+Teams MUST allocate available capacity across three categories. These are targets, not rigid weekly quotas — they SHOULD balance over a rolling 4–6 week window:
 
 | Category | Target | Scope |
 |---|---|---|
@@ -50,6 +50,8 @@ Teams must allocate available capacity across three categories. These are target
 | Operations and controls | 25% | Monitoring, incident response, compliance checks, access reviews, process audits |
 
 #### 04-roles-overview
+
+Teams MUST be staffed using the roles defined in this Policy. Each role MUST be filled by a person with the required hard skills.
 
 | Role | Scope | Focus |
 |---|---|---|
@@ -67,7 +69,7 @@ Teams must allocate available capacity across three categories. These are target
 
 #### 05-cross-team-roles
 
-The following roles operate across all product teams within a domain. They do not belong to a single team.
+The following roles MUST operate across all product teams within a domain. They MUST NOT belong to a single team.
 
 ---
 
@@ -128,7 +130,7 @@ The following roles operate across all product teams within a domain. They do no
 
 #### 06-team-roles
 
-The following roles belong to a product team. Some roles are shared across squads within the team; others are dedicated to a squad.
+The following roles MUST belong to a product team. Some roles are shared across squads within the team; others are dedicated to a squad.
 
 ---
 
@@ -305,78 +307,8 @@ The following roles belong to a product team. Some roles are shared across squad
 
 *Common activities*: Feature implementation, API and data layer development, CI/CD pipeline work, code review participation, pairing with AI Engineers, frontend development, incident support
 
-![Team composition diagram](.assets/team-composition.svg)
-
-#### 07-team-composition-simple
-
-A simple team handles a bounded product scope with limited AI surface. It requires no squads.
-
-| Role | Count |
-|---|---|
-| Product Owner | 1 |
-| Business Analyst or AI BA | 1 |
-| Tech Lead | 1 |
-| Full Stack Engineer | 1–2 |
-| AI Engineer (if AI work exists) | 0–1 |
-
-The Tech Lead may also contribute as an engineer in small teams. The BA works directly with the PO on requirements without squad separation.
-
-#### 08-team-composition-complex
-
-A complex team handles a broad product scope or significant AI surface and operates with internal squads to manage parallelism.
-
-| Role | Count | Notes |
-|---|---|---|
-| Product Owner | 1 | Shared across all squads |
-| Tech Lead | 1 | Shared across all squads |
-| AI Lead | 1 | Shared across all squads |
-| Squad | 3 | See squad composition below |
-
-**Squad composition** (per squad):
-
-| Role | Count | Notes |
-|---|---|---|
-| Business Analyst (BA or AI BA) | 1 | Ideally one per squad; may move |
-| AI Engineer | 2 | |
-| Full Stack Engineer | 2 | |
-| Squad Lead | 1 | One of the engineers above, designated by soft skills |
-
-Maximum of 4 engineers (AI + Full Stack combined) per squad to preserve team cohesion and limit coordination overhead.
-
-#### 09-squad-dynamics
-
-**Squad stability**: Engineers assigned to a squad must remain stable over time. Frequent reassignment prevents team bonding and reduces squad effectiveness. Squad membership changes should be deliberate and infrequent.
-
-**BA and AI BA fluidity**: One BA or AI BA should be assigned to each squad, ideally working one sprint ahead on upcoming features. When squad needs shift — for example, when a squad moves from a non-AI phase to an AI-heavy phase — the BA and AI BA may exchange positions. Movement is self-organised between the BAs with PO awareness. There is no restriction to sprint boundaries.
-
-**Squad Lead**: Each squad must have a designated Squad Lead — one of its engineers (AI Engineer or Full Stack Engineer) selected based on available soft skills. The Squad Lead is a formal role with the following responsibilities:
-- Run squad ceremonies (standups, retrospectives)
-- Shield the squad from unplanned external interruptions
-- Make within-squad prioritisation calls when the PO or Tech Lead / AI Lead are unavailable
-
-The Squad Lead must be identified at squad formation, not selected on-demand when a situation arises. The role does not change the engineer's technical responsibilities and does not carry a formal seniority change, but soft skills must be taken into account at the time of assignment.
-
-**Cross-squad coordination**: Cross-squad dependencies within the same team are the PM's explicit responsibility. The PM proactively identifies and resolves scheduling conflicts between squads.
-
-**Tech Lead and AI Lead interaction**: The PO, Tech Lead, and AI Lead connect to all squads. For integrated features that span AI and non-AI components, the Tech Lead and AI Lead co-own the technical design. The Tech Lead holds the tiebreaker on system boundaries and non-AI components; the AI Lead holds the tiebreaker on AI components.
-
-#### 10-known-gaps-and-mitigations
-
-This team model has known structural gaps. Teams must be aware of them and apply the recommended mitigations proactively.
-
-| Gap | Risk | Mitigation |
-|---|---|---|
-| PO, Tech Lead, AI Lead spanning 3 squads | Bandwidth overload; leads become bottlenecks for decisions and unblocking | Squad Lead absorbs daily unblocking and within-squad prioritisation; leads focus on design, mentoring, and cross-squad alignment |
-| Principal Engineer covering all teams | Single point of knowledge for engineering standards | Architecture documentation kept current; Principal Engineer actively pairs with Tech Leads and AI Leads to distribute knowledge |
-| No UX/Design role | UI and interaction design absorbed informally by BA or PO | Bring in a contract designer for user-facing features with significant interaction design needs |
-| No Data Engineering / MLOps role | Data pipelines, feature stores, and model serving infrastructure absorbed by Full Stack Engineers and AI Engineers | Plan a dedicated hire when the AI surface grows beyond what the squad can absorb without compromising feature delivery |
-| No dedicated QA role | Test quality depends on individual engineer discipline with no gate owner | Tech Lead and AI Lead own quality gates; acceptance criteria from BA and AI BA must include testable conditions |
-| No Security / SecOps role | Security design and review absorbed by Tech Lead on top of architecture load | Schedule an external security review cadence; Principal Engineer maintains security standards in the engineering blueprint |
-| BA squad fluidity | Knowledge transfer cost each time a BA moves; receiving squad may slow down mid-cycle | Moves are self-organised; BAs coordinate handoff timing to minimise disruption |
-| Squad Lead selection uncertainty | Squads without a clear lead default to ambiguity in ceremonies and prioritisation | Identify Squad Lead at squad formation; do not leave it to emerge organically after work has started |
-| Cross-squad dependency coordination | Without explicit ownership, cross-squad dependencies surface late and block delivery | PM owns cross-squad dependency tracking and resolution explicitly as part of their stakeholder and team-connecting mandate |
-
 ## References
 
 - [`_core-adr-policy-016`](../../../_core/adrs/principles/016-policy-subjects.md) — Policy subjects: BDR operations subject definition
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
+- [`_local-bdr-policy-402`](402-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
