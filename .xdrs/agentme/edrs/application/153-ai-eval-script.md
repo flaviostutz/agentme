@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-153-ai-eval-script
-description: Defines eval.py script requirements for AI projects — entry-first eval loop, --type test-type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment naming and port assignment. Use when implementing eval scripts. For eval folder structure see agentme-edr-151 rule 01. For the test type taxonomy and mock_fixtures envelope see agentme-edr-152. For mock file naming see agentme-edr-126 rule 10. For report format see agentme-edr-154. For repeatability loop exception see agentme-edr-155.
+description: Defines eval.py script requirements for AI projects — entry-first eval loop, --type test-type filtering, --groups group filtering, mock_fixtures wiring, human entries, fairness/bias deferred group scoring, threshold enforcement, and MLflow experiment naming and port assignment. Use when implementing eval scripts. For eval folder structure see agentme-edr-151 rule 01. For the test type taxonomy and mock_fixtures envelope see agentme-edr-152. For mock file naming see agentme-edr-126 rule 10. For report format see agentme-edr-154. For repeatability loop exception see agentme-edr-155. For fairness/bias group scoring see agentme-edr-156.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-07-07
 ---
@@ -25,8 +25,10 @@ For when evals are required per AI tier, see [agentme-edr-501](../governance/501
 
 Each `eval.py` script MUST:
 
-- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-201](../data/201-ml-dataset-structure.md) and the entry envelope in [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`, optional `mock_fixtures`).
+- Load the golden dataset from `golden_dataset/` in the same eval folder, following [agentme-edr-201](../data/201-ml-dataset-structure.md) and the entry envelope in [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02` (one JSON file per entry, `test_types` array, `input`, `expected_output`, optional `mock_fixtures`, optional `group`, optional `comparison_group`).
 - Accept a required `--type=<test_type>|all` CLI argument and filter entries whose `test_types` array contains the requested value; `--type=all` includes every entry.
+- Accept an optional `--groups=<name1>,<name2>,...` CLI argument. When present, restrict the filtered entry set to those whose `group` field matches any of the listed values (case-sensitive exact match); entries without a `group` field are excluded when `--groups` is active. When omitted, all entries from the `--type` filter are included regardless of `group`. The MLflow run MUST log a `groups_filter` tag containing the `--groups` value, or `"all"` when the argument is omitted.
+- **Fairness/bias deferred group scoring:** for entries whose `test_types` includes `fairness` or `bias`, the `fairness`/`bias` test_type MUST be skipped in the inline per-entry scoring step and the entry's `actual_output` buffered by `comparison_group`. Other test_types on the same entry (e.g. `functional`) are still scored inline normally. After the entry-first loop completes, score each comparison group by comparing its buffered outputs. See [agentme-edr-156](156-ai-eval-fairness-bias.md) for the full scoring loop, approach options, metrics, and report shape.
 - Iterate **entry-first**: for each entry in the filtered set, invoke the real component exactly once; then score that single `actual_output` for every `test_types` value the entry carries that falls within the current `--type` scope — MUST NOT invoke the component more than once per entry per run.
 - When an entry contains `mock_fixtures` ([agentme-edr-152](152-ai-test-types-taxonomy.md) rule `02`), configure each named mock adapter with its fixture data BEFORE invoking the component for that entry. Each entry MUST use fresh mock instances so fixture state does not bleed across entries. `mock_fixtures` applies to all test types including `human`. `mock_fixtures` MUST NOT configure LLM adapters — the LLM call MUST be real (see [agentme-edr-152](152-ai-test-types-taxonomy.md) rule `03`). How mock adapters are discovered and instantiated is left to the project; see [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) rule `10` for the `_mock` file naming and placement convention.
 - Run every component invocation against **real LLM providers** (not mocked responses), to capture model drift.
@@ -53,15 +55,20 @@ def get_min_accuracy(test_type: str) -> float:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--type", required=True)
+parser.add_argument("--groups", required=False, default=None)
 args = parser.parse_args()
 
 entries = load_golden_dataset("golden_dataset/", test_type=args.type)  # "all" loads every entry
+if args.groups:
+    groups_filter = set(args.groups.split(","))
+    entries = [e for e in entries if e.get("group") in groups_filter]
 resolved_types = resolve_types(args.type, entries)
 
 mlflow.set_experiment("document-review/eval-basic")
 
 with mlflow.start_run():
     mlflow.set_tag("test_types", ",".join(sorted(resolved_types)))
+    mlflow.set_tag("groups_filter", args.groups if args.groups else "all")
 
     results = defaultdict(list)
     cumulative_metrics = defaultdict(lambda: {"accuracy": [], "f1": []})  # Track cumulative metrics
@@ -129,6 +136,7 @@ The MLflow **experiment** is scoped to the eval scenario: `<component>/<eval-nam
 - [agentme-edr-151](151-ai-eval-standards.md) — AI eval core standards: eval folder structure (rule `01`) and LLM-as-judge binary scoring contract (rule `02`)
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: loop exception to rule `01`'s entry-first constraint, scoring methods, and cadence
+- [agentme-edr-156](156-ai-eval-fairness-bias.md) — AI eval fairness/bias: deferred group-scoring loop, `comparison_group` buffering, scoring approaches, and `fairness_accuracy`/`bias_accuracy` metrics
 - [agentme-edr-152](152-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum, golden dataset entry envelope (including `mock_fixtures`), and mocking constraints per type
 - [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) — Rule `10`: `_mock` file naming and placement convention for mock adapters used in `mock_fixtures`
 - [agentme-edr-201](../data/201-ml-dataset-structure.md) — ML dataset structure, per-entry JSON format, and schema-lint validation for golden datasets
