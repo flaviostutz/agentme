@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-151-ai-eval-standards
-description: Defines the eval folder structure and Makefile interface for AI projects, and the LLM-as-judge binary scoring contract applicable to all AI tiers and test types. Use when scaffolding evals or implementing an LLM judge. For eval script requirements see agentme-edr-153. For report format see agentme-edr-154. For repeatability see agentme-edr-155. For fairness/bias group scoring see agentme-edr-156. For when evals are required see agentme-edr-501 rule 09-ai-project-testing-requirements. For the test type taxonomy see agentme-edr-152.
+description: Defines the eval folder structure and Makefile interface for AI projects, and the LLM-as-judge binary scoring contract applicable to all AI tiers and test types. Use when scaffolding evals or implementing an LLM judge. For eval script requirements see agentme-edr-153. For report format see agentme-edr-154. For repeatability see agentme-edr-155. For fairness per-entry scoring and bias group scoring see agentme-edr-156. For when evals are required see agentme-edr-501 rule 09-ai-project-testing-requirements. For the test type taxonomy see agentme-edr-152.
 apply-to: Python AI projects (LLM, Agent, or Workflow tier) that implement eval testing
 valid-from: 2026-06-05
 ---
@@ -115,7 +115,7 @@ Output:
 - [agentme-edr-153](153-ai-eval-script.md) — AI eval script: entry-first eval loop, `--type` filtering, `mock_fixtures`, and MLflow conventions
 - [agentme-edr-154](154-ai-eval-report-format.md) — AI eval report format: `report-<type>.md` template, Wilson CI, and convergence analysis
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: loop exception, scoring methods (including LLM-as-judge per rule `02`), and cadence
-- [agentme-edr-156](156-ai-eval-fairness-bias.md) — AI eval fairness/bias: comparison_group group-scoring loop, scoring approaches (including LLM-as-judge per rule `02`), fairness_accuracy/bias_accuracy metrics, and report shape
+- [agentme-edr-156](156-ai-eval-fairness-bias.md) — AI eval fairness and bias: fairness per-entry inline scoring; bias `bias_group` deferred group-scoring loop, scoring approaches (including LLM-as-judge per rule `02`), fairness_accuracy/bias_accuracy metrics, and report shapes
 - [agentme-edr-501](../governance/501-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09`) and statistical model eval targets (rule `07`)
 - [agentme-edr-152](152-ai-test-types-taxonomy.md) — AI test types taxonomy: `test_types` enum and golden dataset entry envelope
 - [agentme-edr-201](../data/201-ml-dataset-structure.md) — ML dataset structure, per-entry JSON format, and schema-lint validation for golden datasets
