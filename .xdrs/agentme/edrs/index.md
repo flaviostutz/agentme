@@ -59,6 +59,7 @@ Standards for eval datasets, scripts, reports, and test type taxonomy.
 - [agentme-edr-153](application/153-ai-eval-script.md) - **AI eval script** - eval.py requirements: entry-first loop, --type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment conventions
 - [agentme-edr-154](application/154-ai-eval-report-format.md) - **AI eval report format** - report-<type>.md template, Wilson score confidence interval, convergence analysis, and human-type checklist artifact
 - [agentme-edr-155](application/155-ai-eval-repeatability.md) - **AI eval repeatability** - Repeatability test type: REPEAT_COUNT loop exception, semantic-similarity and LLM-as-judge scoring, repeatability_accuracy metric, report shape, and run cadence
+- [agentme-edr-156](application/156-ai-eval-fairness-bias.md) - **AI eval fairness and bias** - Defines the fairness/bias group-comparison eval methodology: comparison_group dataset structure, deferred group-scoring loop, semantic-similarity and LLM-as-judge scoring approaches, fairness_accuracy/bias_accuracy metrics, and report shape
 
 ## Data
 
