@@ -9,6 +9,7 @@ Propose changes via pull request. All changes must be verified for clarity and n
 Foundational standards, principles, and guidelines.
 
 - [150-plan-mode-consistency](principles/skills/150-plan-mode-consistency/SKILL.md) - **Plan mode consistency** — MANDATORY skill for ANY planning activity (plan, design, propose, outline, draft, brainstorm, architect). Read and follow in full before any execution begins. Must be read from XDRS even when not in `.agents/skills`. *(skill)*
+- [151-write-user-story](principles/skills/151-write-user-story/SKILL.md) - **Write user stories** — Write, refine, elaborate, study or develop the contents of a user story used to create a unit of work for an agile team via targeted follow-up questions, vertical-slice splits, and the standard story output template. *(skill)*
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
 - [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [200-run-skill-tests](application/skills/200-run-skill-tests/SKILL.md))*
