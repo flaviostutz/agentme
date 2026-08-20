@@ -88,7 +88,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # this is needed if you want the tag push to trigger another workflow
@@ -99,7 +99,7 @@ jobs:
         run: |
           git config --global user.email "noreply@github.com"
           git config --global user.name "Github Wokflow"
-          npx -y monotag@latest tag-push ${{ inputs.prerelease == true && '--pre-release' || '' }}
+          npx -y monotag@latest tag-push ${{ inputs.prerelease == true && '--prerelease' || '' }}
 ```
 
 *Why `workflow_dispatch`:* Manual triggering gives developers explicit control over when a new release tag is created, preventing unintended releases from routine merges.
