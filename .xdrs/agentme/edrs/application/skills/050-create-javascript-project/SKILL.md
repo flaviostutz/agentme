@@ -204,24 +204,17 @@ Use this dependency set.
   },
   "homepage": "https://github.com/[owner]/[repo]#readme",
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
     "@stutzlab/eslint-config": "^4.3.0",
     "@tsconfig/node24": "^24.0.1",
-    "@types/jest": "^30.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.0.0",
-    "eslint-import-resolver-typescript": "^4.0.0",
     "eslint-plugin-functional": "^10.0.0",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jest": "^29.0.0",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-promise": "^7.0.0",
-    "eslint-plugin-unicorn": "^73.0.0",
-    "jest": "^30.4.2",
-    "prettier": "^3.9.6",
-    "ts-jest": "^29.4.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.0",
     "typescript": "^6.0.3"
   }
 }
@@ -239,7 +232,8 @@ Keep `package.json` without `"type": "module"`. Use `eslint.config.mjs` as the E
     "rootDir": "src",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node", "jest"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
@@ -275,29 +269,20 @@ This avoids the deprecated `globals['ts-jest']` configuration style while forcin
 **`lib/eslint.config.mjs`** (ESLint 9 flat config format):
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
 import baseConfig from '@stutzlab/eslint-config';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
 export default [
-  ...compat.config(baseConfig),
+  ...baseConfig,
   {
     files: ['src/**/*.ts'],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.json'],
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
+];
 ];
 ```
 
