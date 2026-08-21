@@ -205,16 +205,24 @@ Use this dependency set.
   "homepage": "https://github.com/[owner]/[repo]#readme",
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@stutzlab/eslint-config": "^3.2.1",
+    "@stutzlab/eslint-config": "^4.3.0",
     "@tsconfig/node24": "^24.0.1",
-    "@types/jest": "^29.5.14",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
-    "esbuild": "^0.20.0",
-    "eslint": "^9.25.1",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5.9.0"
+    "@types/jest": "^30.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/parser": "^8.67.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.0.0",
+    "eslint-import-resolver-typescript": "^4.0.0",
+    "eslint-plugin-functional": "^10.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.0.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-promise": "^7.0.0",
+    "eslint-plugin-unicorn": "^73.0.0",
+    "jest": "^30.4.2",
+    "prettier": "^3.9.6",
+    "ts-jest": "^29.4.12",
+    "typescript": "^6.0.3"
   }
 }
 ```
