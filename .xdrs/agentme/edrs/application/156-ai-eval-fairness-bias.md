@@ -24,7 +24,7 @@ How should these two structurally different evals be implemented, scored, and re
 
 #### 01-dataset-entry-structure
 
-Fairness and bias entries have fundamentally different shapes.
+Fairness and bias entries MUST follow different shapes as defined in the sub-rules below.
 
 ##### Fairness entries
 
