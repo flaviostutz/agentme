@@ -209,11 +209,11 @@ if it's valid.
 Want a structured procedure that enforces all six practices
 with mandatory phases, consistency checks, and a pre-execution readiness gate?
 
-**`150-plan-mode-consistency`**
+**`150-refine-plan-mode`**
 
 ```
 .xdrs/agentme/edrs/principles/skills/
-  150-plan-mode-consistency/SKILL.md
+  150-refine-plan-mode/SKILL.md
 ```
 
 ---
@@ -222,4 +222,4 @@ with mandatory phases, consistency checks, and a pre-execution readiness gate?
 
 - [Article: copilot-plan-best-practices](../001-copilot-plan-best-practices.md)
 - [Demo script](demo-script.md)
-- [150-plan-mode-consistency](../../../../../agentme/edrs/principles/skills/150-plan-mode-consistency/SKILL.md)
+- [150-refine-plan-mode](../../../../../agentme/edrs/principles/skills/150-refine-plan-mode/SKILL.md)
