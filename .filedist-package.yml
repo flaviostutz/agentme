@@ -28,7 +28,7 @@ sets:
       path: .
       gitignore: false
       symlinks:
-        - source: .xdrs/**/skills/150-plan-mode-consistency
+        - source: .xdrs/**/skills/150-refine-plan-mode
           target: .agents/skills
     presets:
       - basic

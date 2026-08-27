@@ -1,5 +1,5 @@
 ---
-skill: 150-plan-mode-consistency
+skill: 150-refine-plan-mode
 skill-version: "1.0"
 ---
 

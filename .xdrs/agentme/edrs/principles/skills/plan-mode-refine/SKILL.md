@@ -1,5 +1,5 @@
 ---
-name: 150-plan-mode-consistency
+name: plan-mode-refine
 description: >
   MANDATORY for ANY planning activity. Read and follow this skill in full whenever the user asks
   to plan, design, propose, outline, draft, brainstorm, architect, or think through anything —
@@ -17,11 +17,13 @@ metadata:
 
 Ensures that every plan is deeply validated through iterative consistency checks, visual externalization, and multi-angle challenges before execution starts. The skill is not designed to make human work easier — its purpose is to identify precisely where human experience, feeling, and domain knowledge are irreplaceable, and to demand that input before moving forward.
 
-**No-assumption rule**: The agent performs all analysis autonomously. Surface findings as questions only when they are dubious, non-obvious, risky, or require subjective judgment — obvious and deterministic findings must be stated and the agent must continue without pausing. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue. Do not defer questions to the end of a check, round, or phase — raise them as soon as they arise. The human is the oracle for domain knowledge, intent, and subjective decisions; the agent is the oracle for everything deterministic.
+**No-assumption rule**: The agent performs all analysis autonomously. Ask questions about findings — only skip asking when a finding is trivially obvious and irrelevant to outcomes. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue. Do not defer questions to the end of a check, round, or phase — raise them as soon as they arise. The human is the oracle for domain knowledge, intent, and subjective decisions; the agent is the oracle for everything deterministic.
 
-**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 3 (consistency checks), create a todo for each check (a–i) at the start of each round and mark them individually. For Phase 5 (challenge angles), create a todo for each of the 11 angles before beginning Phase 5 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if a subjective decision was resolved without asking the human — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no subjective decision is self-resolved.
+**Decision gate rule**: Whenever the agent reaches a choice point — selecting between options, choosing how to interpret an ambiguous requirement, or deciding how to proceed — it MUST ask the human rather than self-resolve. Exception: trivially obvious decisions with no downstream impact may be stated and continued.
 
-**Round budget rule**: The entire skill runs on a global budget of at most 30 rounds. A round is one human interaction in which the agent asks 1–5 related questions together. Rounds are drawn from this shared budget across all phases in order. Stop early when two consecutive rounds return no new questions worth asking — do not exhaust the budget for its own sake.
+**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 3 (consistency checks), create a todo for each check (a–i) at the start of each round and mark them individually. For Phase 5 (challenge angles), create a todo for each of the 11 angles before beginning Phase 5 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Decision gate rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
+
+**Round budget rule**: The entire skill runs on a global budget of at most 30 rounds. A round is one human interaction; include all related questions — do not artificially limit the quantity per round. Rounds are drawn from this shared budget across all phases in order. Stop early when two consecutive rounds return no new questions worth asking — do not exhaust the budget for its own sake.
 
 ## Instructions
 
@@ -35,7 +37,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 ### Phase 2: Research, Dependencies, and Draft Plan
 
 1. Research the existing context: relevant files, prior decisions, established conventions, and analogous patterns already in place.
-2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), surface non-obvious, risky, or subjective items to the human and ask only when needed. Batch 1–5 related questions into a single round when multiple items need human input. Proceed without asking for obvious or deterministic context items.
+2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), ask questions about all non-trivial items. Batch related questions into a single round when multiple items need human input. Only skip asking for trivially obvious or deterministic context items with no decision weight.
 3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include two dedicated sections:
    - **Quality Verification Strategy**: (a) existing checks that must continue to pass; (b) new checks required for the task — for code: unit tests, integration tests, linting, type checking, dead code detection, security/dependency audit, schema/contract validation; for documents, analyses, and policies: proofreading, fact-checking, citation and link validation, policy compliance review, peer review, readability check; (c) exact executable steps or commands for each check; (d) what each check verifies. A plan without this section is incomplete.
    - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
@@ -45,7 +47,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 **Trivial tasks**: Run exactly one abbreviated round covering only checks (a), (e), (f), (h), and (i). Skip the remaining checks and mark them as not applicable. Proceed directly to Phase 4 after the single round.
 
-**Non-trivial tasks**: Run as many rounds as needed from the global budget. Each round asks 1–5 related questions spanning one or more checks (a–i). For each check, ask only for findings that are dubious, relevant, subjective, or risky — state obvious findings and continue. Stop when two consecutive rounds surface no new questions.
+**Non-trivial tasks**: Run as many rounds as needed from the global budget. Each round asks all related questions spanning one or more checks (a–i). For each check, ask questions about findings — only skip asking for trivially obvious findings with no decision weight. Stop when two consecutive rounds surface no new questions.
 
 Each round runs the following checks in order:
 
@@ -96,7 +98,7 @@ Each round runs the following checks in order:
 
 ### Phase 5: Challenge from 11 Distinct Angles
 
-Each angle is an analysis step. Run the angle and present findings. Batch questions from related angles into a single round of 1–5 questions when findings are related — batching questions is permitted, skipping analysis is not. For obvious or factual findings, state them and proceed immediately. For findings with major impact on users, emit a **SEVERE WARNING** and continue without asking. Ask clarifying questions whenever findings are ambiguous, subjective, risky, or very relevant — do not resolve those points unilaterally.
+Each angle is an analysis step. Run the angle and present findings. Batch questions from related angles into a single round when findings are related — batching questions is permitted, skipping analysis is not. Ask questions about findings. Only skip asking when a finding is trivially obvious and carries no decision weight. For findings with major impact on users, emit a **SEVERE WARNING** and continue without asking. Do not resolve choice points unilaterally — apply the Decision gate rule.
 
 #### Plan quality angles
 
@@ -107,7 +109,7 @@ Go back to the original request word by word. Is every part of the request cover
 Does the plan account for existing files, decisions, and constraints already in place? Does it contradict anything already established in the codebase, repository, or context?
 
 **3. Goal achievability**
-Walk the end state step by step: if every step in the plan is executed exactly as written, does the desired outcome actually result? State the end state explicitly. Ask the human to confirm only if there is genuine doubt about whether the outcome matches their expectation.
+Walk the end state step by step: if every step in the plan is executed exactly as written, does the desired outcome actually result? State the end state explicitly. Ask the human to confirm the end state and whether it matches their expectation.
 
 **4. Ambiguity scan**
 Is any step or decision in the plan interpretable in more than one way? Every ambiguity is a future mistake. List all ambiguous points and ask the human to resolve each one.
@@ -116,16 +118,16 @@ Is any step or decision in the plan interpretable in more than one way? Every am
 Assume the plan is executed and fails to reach the goal. What was the most likely reason? Identify the plan's most fragile assumption or weakest step. Specifically check whether any referenced resources, facts, tools, files, or capabilities are fabricated or assumed without verification — this is a common single-point failure mode regardless of task type.
 
 **6. Security and privacy scan**
-Does the plan or its output expose sensitive information, create privacy risks, or introduce misuse vectors? This applies to any task type: documentation, code, processes, data handling, communications. If findings are present and require a subjective decision to resolve, ask the human. For clear and obvious mitigations, state them and continue.
+Does the plan or its output expose sensitive information, create privacy risks, or introduce misuse vectors? This applies to any task type: documentation, code, processes, data handling, communications. Ask the human about any non-trivial findings. For trivially obvious mitigations with no decision weight, state them and continue.
 
 **7. Success criteria and falsifiability**
-Verification checks are the primary falsifiability mechanism. A plan without defined, executable verification has unverifiable success criteria — treat this as a blocking gap. How will we know this plan succeeded or failed? Are the success criteria concrete enough to be measurable and observable? If they are vague, the outcome cannot be evaluated. If the criteria are already clear and measurable, state the assessment and continue. Ask the human only when criteria are vague or require their input to sharpen.
+Verification checks are the primary falsifiability mechanism. A plan without defined, executable verification has unverifiable success criteria — treat this as a blocking gap. How will we know this plan succeeded or failed? Are the success criteria concrete enough to be measurable and observable? If they are vague, the outcome cannot be evaluated. Ask the human to validate the success criteria and confirm they are concrete and measurable.
 
 **8. Second-order effects**
-What changes as a side effect of executing this plan beyond the intended outcome? Does solving this problem create a new problem elsewhere — in adjacent systems, files, processes, or stakeholders? List the side effects. Ask the human whether they are acceptable only when the effects are non-obvious or the decision is subjective.
+What changes as a side effect of executing this plan beyond the intended outcome? Does solving this problem create a new problem elsewhere — in adjacent systems, files, processes, or stakeholders? List the side effects. Ask the human whether the side effects are acceptable.
 
 **9. Steelman the opposition**
-What is the strongest case against this approach? What would a well-informed critic say about this plan? Present the strongest objection. Ask the human to respond if the objection raises a genuine risk or requires a subjective decision — otherwise state the counter-argument and continue.
+What is the strongest case against this approach? What would a well-informed critic say about this plan? Present the strongest objection. Ask the human to respond to the objection.
 
 #### Output quality angles
 
@@ -140,7 +142,7 @@ Examples of scenario framing:
 Whenever a scenario reveals ambiguity or requires a subjective judgment, stop and ask the human a clarifying question. Do not resolve subjective decisions unilaterally.
 
 **11. Output internal consistency**
-Check that the planned output is internally consistent: no contradictions between parts, no gaps between sections, all elements serve the same goal. Run approximately 3 rounds until answers converge to single sentences with no new issues surfaced.
+Check that the planned output is internally consistent: no contradictions between parts, no gaps between sections, all elements serve the same goal. Run rounds until answers converge to single sentences with no new issues surfaced (apply general convergence signals).
 
 ### Phase 6: Pre-Execution Readiness
 
@@ -164,7 +166,7 @@ Only proceed to execution when every item is checked or explicitly marked N/A. D
 
 Avoid these common failure modes:
 
-- **Planning theater**: running rounds without real critical thinking. The quality of questioning matters more than the count of rounds. Rounds that confirm the plan against itself add false confidence — checks must challenge assumptions, not validate them.
+- **Planning theater**: running rounds without real critical thinking. Asking many questions is correct behavior — the anti-pattern is asking hollow, self-validating questions, not asking frequently. Rounds that confirm the plan against itself add false confidence — checks must challenge assumptions, not validate them.
 - **Scope creep silence**: the plan grows beyond the original request without the human noticing. Every addition must be flagged explicitly.
 - **Agent self-validation**: the agent answers its own questions on subjective, domain, or intent-based decisions and proceeds without asking the human. The human is the oracle for domain knowledge, intent, and subjective decisions — the agent must not self-resolve those unilaterally.
 - **Confidence as a proxy for correctness**: an agent expressing certainty does not mean the plan is correct. Run all checks regardless of how confident the agent sounds.
