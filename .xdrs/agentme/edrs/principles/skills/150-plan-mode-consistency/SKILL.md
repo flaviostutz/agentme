@@ -19,7 +19,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 **No-assumption rule**: The agent performs all analysis autonomously. Surface findings as questions only when they are dubious, non-obvious, risky, or require subjective judgment — obvious and deterministic findings must be stated and the agent must continue without pausing. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue. Do not defer questions to the end of a check, round, or phase — raise them as soon as they arise. The human is the oracle for domain knowledge, intent, and subjective decisions; the agent is the oracle for everything deterministic.
 
-**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 3 (consistency checks), create a todo for each check (a–g) at the start of each round and mark them individually. For Phase 5 (challenge angles), create a todo for each of the 11 angles before beginning Phase 5 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if a subjective decision was resolved without asking the human — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no subjective decision is self-resolved.
+**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 3 (consistency checks), create a todo for each check (a–i) at the start of each round and mark them individually. For Phase 5 (challenge angles), create a todo for each of the 11 angles before beginning Phase 5 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if a subjective decision was resolved without asking the human — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no subjective decision is self-resolved.
 
 **Round budget rule**: The entire skill runs on a global budget of at most 30 rounds. A round is one human interaction in which the agent asks 1–5 related questions together. Rounds are drawn from this shared budget across all phases in order. Stop early when two consecutive rounds return no new questions worth asking — do not exhaust the budget for its own sake.
 
@@ -36,26 +36,46 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 1. Research the existing context: relevant files, prior decisions, established conventions, and analogous patterns already in place.
 2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), surface non-obvious, risky, or subjective items to the human and ask only when needed. Batch 1–5 related questions into a single round when multiple items need human input. Proceed without asking for obvious or deterministic context items.
-3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end.
-4. Present the draft and ask: "Does this match your intent? What am I missing?" Wait for the answer before continuing.
+3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include two dedicated sections:
+   - **Quality Verification Strategy**: (a) existing checks that must continue to pass; (b) new checks required for the task — for code: unit tests, integration tests, linting, type checking, dead code detection, security/dependency audit, schema/contract validation; for documents, analyses, and policies: proofreading, fact-checking, citation and link validation, policy compliance review, peer review, readability check; (c) exact executable steps or commands for each check; (d) what each check verifies. A plan without this section is incomplete.
+   - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
+4. Present the draft and ask: "Does this match your intent? What am I missing? What verification checks exist today, and what new checks will confirm the key outcomes of this plan?" Wait for the answer before continuing.
 
 ### Phase 3: Iterative Consistency Checks
 
-**Trivial tasks**: Run exactly one abbreviated round covering only checks (a), (e), and (f). Skip the remaining checks and mark them as not applicable. Proceed directly to Phase 4 after the single round.
+**Trivial tasks**: Run exactly one abbreviated round covering only checks (a), (e), (f), (h), and (i). Skip the remaining checks and mark them as not applicable. Proceed directly to Phase 4 after the single round.
 
-**Non-trivial tasks**: Run as many rounds as needed from the global budget. Each round asks 1–5 related questions spanning one or more checks (a–g). For each check, ask only for findings that are dubious, relevant, subjective, or risky — state obvious findings and continue. Stop when two consecutive rounds surface no new questions.
+**Non-trivial tasks**: Run as many rounds as needed from the global budget. Each round asks 1–5 related questions spanning one or more checks (a–i). For each check, ask only for findings that are dubious, relevant, subjective, or risky — state obvious findings and continue. Stop when two consecutive rounds surface no new questions.
 
 Each round runs the following checks in order:
 
 - **(a) Internal consistency**: Are there contradictions between steps? Do the scope boundaries align with the implementation steps?
-- **(b) Dry run**: Walk through the plan with the most complex realistic scenario. Where does it break or leave gaps?
+- **(b) Dry run**: Walk through the plan with the most complex realistic scenario. Where does it break or leave gaps? During the dry run, execute all verification checks that already exist and are applicable to the context. Failing checks and missing coverage for planned changes are blockers — surface them immediately.
 - **(c) Component consistency**: Do all elements of the plan work together as a coherent whole? Are there missing connections between parts?
 - **(d) XDR alignment**: Does this plan align with the relevant XDRs governing this area? Have the right policies been consulted?
 - **(e) Feasibility**: Is each step actually achievable given the current context, constraints, and available resources?
 - **(f) Completeness**: Is anything missing that would leave the task half-done or the outcome broken for its consumer?
-- **(g) Scope creep check**: Has the plan grown beyond the original request? Flag any additions and ask the human to confirm or reject each one explicitly before continuing.
+- **(g) Scope creep check**: Has the plan grown beyond the original request? Flag any additions and ask the human to confirm or reject each one explicitly before continuing. For large plans (more than approximately 10 steps), verify that each step traces to a requirement, user request, or policy — untraceable steps must be explicitly confirmed by the human.
+- **(h) Verification coverage and executability**: Are verification checks defined for each changed or new outcome, with exact executable steps or commands? Do they cover the applicable strategies for the context — for code: unit tests, integration tests, linting, type checking, dead code detection, security audit, schema/contract validation; for documents and analyses: proofreading, fact-checking, link and citation validation, policy compliance review, peer review, readability check? Can a reviewer independently confirm correctness by executing them without setup friction?
+- **(i) Unverified claims audit**: Scan the plan for any factual claim, reference, or resource that the agent did not verify with a tool call or direct inspection — for code: file paths, function names, CLIs, library APIs; for documents and analyses: cited statistics, quoted sources, URLs, named people or organizations, legal references. Either verify each one immediately (preferred) or add it to the Unverified References section with a mandatory first-step verification before use. This check MUST NOT be skipped even when the agent is confident.
 
 **Convergence signals** (non-trivial tasks only): Stop running rounds when the last 2 consecutive rounds produce only single-sentence answers with no new issues surfaced. Do not stop on a round count alone — stop when the checks genuinely have nothing left to surface.
+
+**Human prompt examples** — these are effective ways to drive a round:
+
+- `"Check for more features I would probably need but that are not part of the plan. Ask questions."`
+- `"What happens if the file doesn't exist? Ask questions."`
+- `"Dry run if I send a file with 10GB in size"`
+- `"What happens if we have 10 million files?"`
+- `"Explore if all types of input would work with this utility"`
+- `"Is the plan doing everything we asked in the beginning?"`
+- `"How are you making sure those things are implemented correctly?"`
+- `"Verify all references in the plan. Ask questions."`
+- `"Check for edge cases we didn't discuss yet. Ask questions."`
+- `"Check for consistency and ask questions"`
+- `"Show me a diagram explaining the overall feature structure"`
+- `"Explain to me what this utility does"`
+- `"How could I distribute this utility?"`
 
 ### Phase 4: Visual Consistency Validation
 
@@ -93,13 +113,13 @@ Walk the end state step by step: if every step in the plan is executed exactly a
 Is any step or decision in the plan interpretable in more than one way? Every ambiguity is a future mistake. List all ambiguous points and ask the human to resolve each one.
 
 **5. Pre-mortem**
-Assume the plan is executed and fails to reach the goal. What was the most likely reason? Identify the plan's most fragile assumption or weakest step.
+Assume the plan is executed and fails to reach the goal. What was the most likely reason? Identify the plan's most fragile assumption or weakest step. Specifically check whether any referenced resources, facts, tools, files, or capabilities are fabricated or assumed without verification — this is a common single-point failure mode regardless of task type.
 
 **6. Security and privacy scan**
 Does the plan or its output expose sensitive information, create privacy risks, or introduce misuse vectors? This applies to any task type: documentation, code, processes, data handling, communications. If findings are present and require a subjective decision to resolve, ask the human. For clear and obvious mitigations, state them and continue.
 
 **7. Success criteria and falsifiability**
-How will we know this plan succeeded or failed? Are the success criteria concrete enough to be measurable and observable? If they are vague, the outcome cannot be evaluated. If the criteria are already clear and measurable, state the assessment and continue. Ask the human only when criteria are vague or require their input to sharpen.
+Verification checks are the primary falsifiability mechanism. A plan without defined, executable verification has unverifiable success criteria — treat this as a blocking gap. How will we know this plan succeeded or failed? Are the success criteria concrete enough to be measurable and observable? If they are vague, the outcome cannot be evaluated. If the criteria are already clear and measurable, state the assessment and continue. Ask the human only when criteria are vague or require their input to sharpen.
 
 **8. Second-order effects**
 What changes as a side effect of executing this plan beyond the intended outcome? Does solving this problem create a new problem elsewhere — in adjacent systems, files, processes, or stakeholders? List the side effects. Ask the human whether they are acceptable only when the effects are non-obvious or the decision is subjective.
@@ -132,6 +152,9 @@ Before approving execution, verify ALL items in the checklist below. If any item
 - [ ] No unresolved human questions outstanding
 - [ ] Scope confirmed by the human with no silent expansions
 - [ ] Any irreversible or high-impact steps have a mitigation or fallback noted *(trivial tasks: N/A if no irreversible steps)*
+- [ ] Quality Verification Strategy defined in the plan with exact executable steps for all applicable check types (code: unit tests, integration tests, linting, static analysis; documents/analyses: fact-checking, link and citation validation, peer review, etc.)
+- [ ] Verification checks executed during dry run and results reviewed — failures and coverage gaps resolved
+- [ ] All high-risk unverified references (code or factual) listed in the Unverified References section with explicit first-step verification in the execution plan
 
 Only proceed to execution when every item is checked or explicitly marked N/A. Do not start execution to escape planning discomfort — only start when confidence is genuine and all items are verified.
 
@@ -145,6 +168,7 @@ Avoid these common failure modes:
 - **Scope creep silence**: the plan grows beyond the original request without the human noticing. Every addition must be flagged explicitly.
 - **Agent self-validation**: the agent answers its own questions on subjective, domain, or intent-based decisions and proceeds without asking the human. The human is the oracle for domain knowledge, intent, and subjective decisions — the agent must not self-resolve those unilaterally.
 - **Confidence as a proxy for correctness**: an agent expressing certainty does not mean the plan is correct. Run all checks regardless of how confident the agent sounds.
+- **Treating unverified references as facts**: the agent references files, CLIs, statistics, library APIs, quoted sources, or named organizations without a tool call or direct inspection to confirm they exist. All high-risk references must be verified immediately or explicitly listed in the Unverified References section with a mandatory first-step check before use.
 
 ## Re-Plan Triggers
 
@@ -168,6 +192,12 @@ Stop execution and return to Phase 1 if any of the following occur:
 **Input**: "Write operator documentation for the conveyor belt system."
 
 - Phase 5, angle 10 (output dry runs): Scenario 1 — "An operator needs to restart the belt after an emergency stop at midnight." The draft plan has no emergency stop section; human asked whether to add it. Scenario 3 — "Operator reading on a mobile phone." Human asked whether a condensed quick-reference card is needed alongside the full manual.
+
+**Input**: "Add input validation to the user registration endpoint."
+
+- Phase 2: Quality Verification Strategy lists: unit tests for each validation rule (Jest), integration test for the full registration flow, ESLint + TypeScript tsc. Unverified References lists: `zod` library — unverified; verification step: `npm list zod`.
+- Phase 3, check (i): agent scans plan and finds `zod` schema API usage not confirmed — added to Unverified References. Check (h): unit tests cover each validation rule with exact command `npm test -- --testPathPattern=registration`.
+- Phase 6: Quality Verification Strategy checked; `zod` listed as unverified with first-step `npm list zod` before any schema code is written.
 
 ## Edge Cases
 
