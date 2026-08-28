@@ -1,6 +1,6 @@
 ---
 skill: 150-refine-plan-mode
-skill-version: "1.1"
+skill-version: "2.7"
 ---
 
 ## Test Scenarios
@@ -13,7 +13,7 @@ skill-version: "1.1"
 
 **Expected Behaviour**
 
-The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 1.5 — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 2 until it converges before moving to the next; (4) runs iterative consistency checks, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram and loops until the human explicitly confirms it; (6) analyzes all 11 challenge angles applying the Phase navigation rule per angle; (7) verifies the Phase 6 checklist before approving execution.
+The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 2 (Requirements Qualification) — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 3 (Research, Dependencies, and Draft Plan) until it converges before moving to the next; (4) runs iterative consistency checks in Phase 4, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram in Phase 5 and loops until the human explicitly confirms it; (6) analyzes all 18 challenge angles in Phase 6 applying the Phase navigation rule per angle; (7) verifies the Phase 7 Pre-Execution Readiness checklist before approving execution.
 
 **Simulated Human Responses**
 1. "Yes, goal and scope match exactly."
@@ -28,15 +28,15 @@ The skill activates plan mode immediately. Before writing any code or editing an
 
 **Assertions**
 
-- [ ] Skill does not write or edit any file before Phase 6 is complete.
-- [ ] Skill runs Phase 1.5 before Phase 2: restates understanding, scans 6 areas, loops asking follow-up questions, and runs scope item 3-check review.
+- [ ] Skill does not write or edit any file before Phase 7 is complete.
+- [ ] Skill runs Phase 2 (Requirements Qualification) before Phase 3: restates understanding, scans 6 areas, loops asking follow-up questions, and runs scope item 3-check review.
 - [ ] Each human interaction round across all phases contains 1–5 questions grouped together.
 - [ ] Skill applies the Phase navigation rule convergence signal rather than a fixed round cap.
-- [ ] Skill generates a diagram in Phase 4 and loops until the human explicitly confirms it.
-- [ ] All 11 challenge angles are analyzed; related angles may share a round.
-- [ ] Phase 6 checklist is verified before execution is approved.
+- [ ] Skill generates a diagram in Phase 5 (Visual Consistency Validation) and loops until the human explicitly confirms it.
+- [ ] All 18 challenge angles in Phase 6 are analyzed; related angles may share a round.
+- [ ] Phase 7 Pre-Execution Readiness checklist is verified before execution is approved.
 
-### Scenario 2: Well-structured input still triggers full Phase 1.5
+### Scenario 2: Well-structured input still triggers full Phase 2 Requirements Qualification
 
 **Trigger / Input**
 
@@ -44,7 +44,7 @@ The skill activates plan mode immediately. Before writing any code or editing an
 
 **Expected Behaviour**
 
-Despite the input being detailed and well-structured, the skill runs Phase 1.5 in full. It restates the current understanding, scans all 6 areas for missing information, and asks follow-up questions. At minimum it asks: who the consumer of the endpoint is, whether authentication is required, what the expected response content-type is, and whether any existing health-check infrastructure must be integrated. After convergence on Step 3, it runs the scope item 3-check review.
+Despite the input being detailed and well-structured, the skill runs Phase 2 (Requirements Qualification) in full. It restates the current understanding, scans all 6 areas for missing information, and asks follow-up questions. At minimum it asks: who the consumer of the endpoint is, whether authentication is required, what the expected response content-type is, and whether any existing health-check infrastructure must be integrated. After convergence on Step 3, it runs the scope item 3-check review.
 
 **Simulated Human Responses**
 1. "Consumer is the load balancer. No auth required. Content-type JSON. No existing health-check infrastructure."
@@ -52,10 +52,10 @@ Despite the input being detailed and well-structured, the skill runs Phase 1.5 i
 
 **Assertions**
 
-- [ ] Skill does not skip Phase 1.5 because the input appears complete.
-- [ ] Skill scans all 6 areas in Phase 1.5 Step 2 regardless of input detail level.
-- [ ] Skill runs the scope item 3-check review in Phase 1.5 Step 4.
-- [ ] Skill applies the Phase navigation rule convergence signal before advancing to Phase 2.
+- [ ] Skill does not skip Phase 2 (Requirements Qualification) because the input appears complete.
+- [ ] Skill scans all 6 areas in Phase 2 Step 2 regardless of input detail level.
+- [ ] Skill runs the scope item 3-check review in Phase 2 Step 4.
+- [ ] Skill applies the Phase navigation rule convergence signal before advancing to Phase 3.
 
 ### Scenario 3: Overconfident agent wants to skip planning
 
@@ -65,13 +65,13 @@ Despite the input being detailed and well-structured, the skill runs Phase 1.5 i
 
 **Expected Behaviour**
 
-The skill explicitly states that agent confidence is not a substitute for consistency checks and proceeds with all 6 phases regardless of the expressed certainty level.
+The skill explicitly states that agent confidence is not a substitute for consistency checks and proceeds with all 7 phases regardless of the expressed certainty level.
 
 **Assertions**
 
 - [ ] Skill does not skip any phase because the agent expressed confidence.
 - [ ] Skill explicitly states the Questioning rule: confidence does not replace consistency checks.
-- [ ] Phase 1 is still executed — goal and scope are stated; Phase 1.5 is run to qualify requirements.
+- [ ] Phase 1 is still executed — goal and scope are stated; Phase 2 (Requirements Qualification) is run to qualify requirements.
 
 ### Scenario 4: Agent resolves a subjective output design decision without asking the human
 

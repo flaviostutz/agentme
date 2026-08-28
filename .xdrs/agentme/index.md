@@ -17,7 +17,7 @@ The `agentme` scope is a curated library of XDRs and skills encoding best practi
 
 ### What this scope covers
 
-The `agentme` scope provides opinionated, reusable guidance on how to scaffold, build, test, and ship software projects. It targets AI coding agents and human developers who want consistent, high-quality defaults across JavaScript, Go, and Python projects.
+The `agentme` scope provides opinionated, reusable guidance on how to scaffold, build, test, and ship software projects. It targets AI coding agents and human developers who want consistent, high-quality defaults across JavaScript, Go, and Python projects. It also provides business decisions for software development project management (epics, features, user stories).
 
 All content in this scope is published and consumed by external projects. Changes must be clear, backwards-compatible where possible, and thoroughly reviewed before merging.
 
@@ -25,6 +25,11 @@ All content in this scope is published and consumed by external projects. Change
 
 The `agentme` EDRs cover project tooling and structure for each supported language, CLI standards, monorepo layout, CI/CD pipelines, and observability. See the full list in the [EDRs Index](edrs/index.md).
 
+### Business decisions
+
+The `agentme` BDRs cover software development project management practices: how to organize and track epics, features, and user stories using XDRS plan documents. See the full list in the [BDRs Index](bdrs/index.md).
+
 ## Type Indexes
 
 - [EDRs Index](edrs/index.md) - Engineering decisions for coding best practices and project tooling
+- [BDRs Index](bdrs/index.md) - Business decisions for software development project management

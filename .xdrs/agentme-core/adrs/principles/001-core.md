@@ -21,7 +21,7 @@ What is the `agentme` scope's identity, who does it serve, and how must content 
 
 #### 01-scope-identity
 
-The `agentme` scope is a curated library of engineering XDRs and agent skills encoding best practices for software development. It is distributed to other projects as an npm package preset. The companion `agentme-core` scope that governs authoring conventions MUST NOT be included in any preset or published distribution — it is for internal use only.
+The `agentme` scope is a curated library of engineering XDRs, business XDRs, and agent skills encoding best practices for software development. It is distributed to other projects as an npm package preset. The companion `agentme-core` scope that governs authoring conventions MUST NOT be included in any preset or published distribution — it is for internal use only.
 
 #### 02-audience-and-consumers
 
@@ -41,6 +41,7 @@ Content in `agentme` MUST address at least one of the following development-phas
 - Implementation: concrete coding patterns, idioms, tool usage, naming, error handling.
 - Testing: unit testing, integration testing, AI-specific evals, test structure, coverage requirements.
 - Development team governance: practices that govern how development teams work during the development phase — contribution workflows, code-review standards, XDR enrichment processes, team-wide quality agreements.
+- Software development project management: organizing and tracking development work using epics, features, and user stories as defined in `agentme-bdr-401`.
 
 Content that addresses only deployment infrastructure, HR, or organizational process unrelated to the development phase does not belong in `agentme` (e.g., a CI/CD standard that enforces test gates belongs; a personnel policy does not).
 
