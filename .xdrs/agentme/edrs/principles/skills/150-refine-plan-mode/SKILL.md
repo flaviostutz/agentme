@@ -8,32 +8,34 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "1.1"
+  version: "2.7"
 ---
 
 ## Overview
 
 Ensures that every plan is deeply validated through iterative consistency checks, visual externalization, and multi-angle challenges before execution starts. The skill is not designed to make human work easier — its purpose is to identify precisely where human experience, feeling, and domain knowledge are irreplaceable, and to demand that input before moving forward.
 
-**Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 3 or Phase 5, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
+**Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 4 or Phase 6, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
 
-**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 3 (consistency checks), create a todo for each check (a–i) before beginning Phase 3 and mark each completed when that check individually converges. For Phase 5 (challenge angles), create a todo for each of the 17 angles before beginning Phase 5 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
+**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 4 (consistency checks), create a todo for each check (a–i) before beginning Phase 4 and mark each completed when that check individually converges. For Phase 6 (challenge angles), create a todo for each of the 18 angles before beginning Phase 6 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
 
 **Phase navigation rule**: Governs loop control, convergence, and phase transitions across all phases:
 - **Loop**: within each phase, loop asking questions until convergence or Skip. Convergence means the last 2 consecutive rounds produced only single-sentence answers with no new issues surfaced — do not stop on a round count alone; stop only when checks genuinely have nothing left to surface. Explicit human confirmation that the phase output is correct also counts as convergence.
 - **Checklist gate**: after convergence, verify any completion checklist — if items are unmet, ask those specifically (targeted questions, not a full loop restart) before advancing.
 - **Skip**: when the human invokes Skip, stop the loop, record all open items as named Deferred Risks (visible in the plan, carried forward), suspend the hard gate for those items, and advance immediately.
-- **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; Phase 1 concerns re-route to Phase 1.5 Step 1.
+- **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; Phase 1 concerns re-route to Phase 2 Step 1.
+
+**Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
 
 ## Instructions
 
 ### Phase 1: Activate Plan Mode
 
-1. Switch to plan mode. Do not write, edit, or execute anything until the plan is fully validated through Phase 6.
+1. Switch to plan mode. Do not write, edit, or execute anything until the plan is fully validated through Phase 7.
 2. State the goal in one sentence: what problem is being solved and what the expected outcome is.
 3. State the scope boundaries explicitly: what is included and what is explicitly excluded.
 
-### Phase 1.5: Requirements Qualification
+### Phase 2: Requirements Qualification
 
 ### Step 1 — Restate the request
 Restate current understanding in 2-3 lines. A well-structured or detailed input does NOT exempt you from running all steps — always proceed through the full phase top-down.
@@ -62,23 +64,46 @@ For every in-scope item, run these three checks. For each check, ask questions a
 | Edge cases | Unusual paths not yet captured? Add any found. |
 | Technical constraints | Item implies or conflicts with existing technical constraint? |
 
-### Completion criteria for Phase 1.5
-Do not proceed to Phase 2 until all are true:
+### Completion criteria for Phase 2
+Do not proceed to Step 5 until all are true:
 - [ ] Problem, intended value, and beneficiary unambiguous.
 - [ ] Scope boundaries explicit (in / out / unchanged).
 - [ ] Requirements, flow, edge cases, dependencies known or explicitly deferred.
 - [ ] Every in-scope item passes 3-check review with no open findings.
 
-### Phase 2: Research, Dependencies, and Draft Plan
+### Step 5 — Scope size evaluation
+Assess whether the feature as currently scoped is suitable for a single focused planning and implementation run. A feature is likely too large if two or more of the following are true (a single criterion alone is not sufficient):
+- More than approximately 10 distinct subsystems, components, or modules are affected.
+- More than approximately 20 distinct in-scope items resulted from Step 4.
+- The work spans 3 or more qualitatively different concerns each requiring substantial independent design effort (e.g., a new data model, a new public API surface, and a new CLI — all non-trivial).
+- Multiple independent stakeholder groups or deployment environments are involved in distinct, non-overlapping ways.
+
+If the feature qualifies as too large, propose a split into 2–4 coherent parts where each part is independently releasable or testable. Present the proposed split with a brief rationale for each part's boundary. Use `vscode_askQuestions` with:
+- **"Accept split — start planning [Part 1 name]"** (recommended) — restart from Phase 1 with the narrower scope of the selected part; record all deferred parts in a **Deferred Features** list in the plan so they can be tracked for future runs.
+- **"Keep original scope — continue"** — proceed without splitting; note the human explicitly accepted the larger scope.
+- Free text to adjust the proposed part boundaries before deciding.
+
+If the human accepts the split, restart the entire planning process from Phase 1 with the new narrower scope. The deferred parts are preserved in the Deferred Features list and will be surfaced again at the Phase 7 handoff gate.
+
+4. Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance. Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
+   - **"Continue to Phase 3 — Research and Draft Plan"** (recommended when scope is clear and agreed) — proceed with research and drafting.
+   - **"Re-run Phase 2 — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
+   - **"Add a comment or correction"** (open box) — re-run Phase 2 in full, treating the comment as additional context and constraints, then re-present this gate.
+
+### Phase 3: Research, Dependencies, and Draft Plan
 
 1. Research the existing context: relevant files, prior decisions, established conventions, and analogous patterns already in place.
 2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), ask questions about all non-trivial items. For each dependency or context item, apply the Phase navigation rule: loop asking questions until that item converges before moving to the next. Only skip asking for trivially obvious or deterministic context items with no decision weight.
 3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include two dedicated sections:
    - **Quality Verification Strategy**: (a) existing checks that must continue to pass; (b) new checks required for the task — for code: unit tests, integration tests, linting, type checking, dead code detection, security/dependency audit, schema/contract validation; for documents, analyses, and policies: proofreading, fact-checking, citation and link validation, policy compliance review, peer review, readability check; (c) exact executable steps or commands for each check; (d) what each check verifies. A plan without this section is incomplete.
    - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
-4. Present the draft and ask: "Does this match your intent? What am I missing? What verification checks exist today, and what new checks will confirm the key outcomes of this plan?" Wait for the answer before continuing. Apply Phase navigation rule: loop re-presenting the updated draft until the human explicitly confirms no gaps remain.
+4. Present the draft and use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this draft match your intent? What verification checks exist today, and what new checks will confirm the key outcomes?" Present at least these options:
+   - **"Continue to Phase 4 — Consistency Checks"** (recommended when no gaps remain) — advance.
+   - **"Re-run Phase 3 — explore deeper"** — repeat the research and drafting pass looking for context, dependencies, or constraints not yet surfaced, then re-present the gate.
+   - **"Add a comment or correction"** (open box) — re-run Phase 3 in full, treating the comment as additional context and constraints, then re-present this gate.
+   Wait for the answer before continuing.
 
-### Phase 3: Iterative Consistency Checks
+### Phase 4: Iterative Consistency Checks
 
 Run checks (a–i) sequentially. For each check: formulate 2–3 questions targeted at that check in the context of the current plan, attempt to answer by reasoning through evidence — this is not self-resolving. For anything unresolved or subjective, ask the human per the Questioning rule. Loop on each check until it fully converges before moving to the next check. Convergence for a check = last 2 consecutive exchanges on that check produced only single-sentence answers with no new issues surfaced (per Phase navigation rule).
 
@@ -87,7 +112,7 @@ Checks to run in order:
 - **(a) Internal consistency**: Are there contradictions between steps? Do the scope boundaries align with the implementation steps?
 - **(b) Dry run**: Walk through the plan with the most complex realistic scenario. Where does it break or leave gaps? During the dry run, execute all verification checks that already exist and are applicable to the context. Failing checks and missing coverage for planned changes are blockers — surface them immediately.
 - **(c) Component consistency**: Do all elements of the plan work together as a coherent whole? Are there missing connections between parts?
-- **(d) XDR alignment**: Does this plan align with the relevant XDRs governing this area? Have the right policies been consulted?
+- **(d) XDRS alignment**: Does this plan align with the relevant XDRS governing this area? Have the right policies been consulted?
 - **(e) Feasibility**: Is each step actually achievable given the current context, constraints, and available resources?
 - **(f) Completeness**: Is anything missing that would leave the task half-done or the outcome broken for its consumer?
 - **(g) Scope creep check**: Has the plan grown beyond the original request? Flag any additions and ask the human to confirm or reject each one explicitly before continuing. For large plans (more than approximately 10 steps), verify that each step traces to a requirement, user request, or policy — untraceable steps must be explicitly confirmed by the human.
@@ -110,9 +135,19 @@ Checks to run in order:
 - `"Explain to me what this utility does"`
 - `"How could I distribute this utility?"`
 
-### Phase 4: Visual Consistency Validation
+After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 4 gate with at least these options:
+- **"Continue to Phase 5 — Visual Consistency Validation"** (recommended when all checks have converged) — advance.
+- **"Re-run Phase 4 — deeper pass"** — restart all checks (a–i) with fresh eyes, prioritising angles and scenarios not yet explored, then re-present this gate.
+- **"Add a comment or correction"** (open box) — re-run Phase 4 in full, treating the comment as additional context and constraints, then re-present this gate.
 
-1. Choose the diagram type that best externalizes this plan's structure:
+### Phase 5: Visual Consistency Validation
+
+1. **Assess the plan's visual complexity** and select 1–5 diagram perspectives to generate. Use the following scale:
+   - **1 diagram** — narrow, single-concern plan (one flow, one component, one decision path).
+   - **2–3 diagrams** — moderate complexity: multiple interacting components, non-trivial flows, or a mix of structural and behavioral concerns.
+   - **4–5 diagrams** — high complexity: multiple subsystems, multiple actor types, significant state or lifecycle concerns, or a plan that proved hard to reason about in Phases 3–4.
+
+   For each perspective needed, choose the diagram type that best externalizes that aspect:
    - **Flowchart** — step-by-step decision flows and process branches
    - **Concept map** — ideas, relationships, and conceptual structure
    - **Dependency graph** — components and their dependencies
@@ -120,57 +155,61 @@ Checks to run in order:
    - **State diagram** — lifecycle states and transitions
    - **Activity diagram** — business workflows with parallel paths
    - **Entity diagram** — data models and relationships
-   2. Generate the diagram.
-   3. Ask the human: "Does this diagram match your mental model of the solution?" Wait for the answer. Apply Phase navigation rule: loop regenerating and re-presenting the diagram until the human explicitly confirms it matches their mental model.
-   4. If the diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 3 before continuing.
 
-### Phase 5: Challenge from 17 Distinct Angles
+   Do not repeat diagram types unless a second instance covers a meaningfully different scope or actor. Label each diagram with the perspective it externalizes (e.g. "Component dependencies", "Registration flow", "Session lifecycle").
 
-Each angle is an analysis step. Run the angle and present findings. Batch questions from related angles into a single round when findings are related — batching questions is permitted, skipping analysis is not. Ask questions about findings. Only skip asking when a finding is trivially obvious and carries no decision weight. For findings with major impact on users, emit a **SEVERE WARNING** and continue without asking. Apply Phase navigation rule to each angle: ask questions about findings proactively; loop on that angle's findings until no new questions surface before marking the angle complete. Do not resolve choice points unilaterally — apply the Questioning rule.
+2. **Generate all selected diagrams** in sequence, each with a one-line description of what it is meant to reveal.
+
+3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do these diagrams match your mental model of the solution? Is any important perspective missing?" Present at least these options:
+   - **"Continue to Phase 6 — 18 Challenge Angles"** (recommended when the diagrams match) — advance.
+   - **"Re-run Phase 5 — add or replace a diagram"** — add a missing perspective or replace one with a different type, then re-present this gate.
+   - **"Add a comment or correction"** (open box) — re-run Phase 5 in full, treating the comment as additional context and constraints, then re-present this gate.
+
+4. If any diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
+
+### Phase 6: Challenge from 17 Distinct Angles
+
+Each angle is an analysis step. **For each angle:** formulate 5–10 challenge questions grounded in the current plan and broader context (codebase, prior decisions); reason through each surfacing evidence — not self-resolving; bring unresolved or subjective questions to the human per the Questioning rule; then run the angle's analysis. Run the angle and present findings. Batch questions from related angles into a single round when findings are related — batching questions is permitted, skipping analysis is not. Ask questions about findings. Only skip asking when a finding is trivially obvious and carries no decision weight. For findings with major impact on users, emit a **SEVERE WARNING** and continue without asking. Apply Phase navigation rule to each angle: ask questions about findings proactively; loop on that angle's findings until no new questions surface before marking the angle complete. Do not resolve choice points unilaterally — apply the Questioning rule.
+
+**Scenario-to-test rule**: Across all angles — especially angles 3 (dry run), 10 (scenario runs), 12 (input coverage), and 13 (stress/failure) — continuously collect scenarios into the plan's Quality Verification Strategy as named test cases. Capture a scenario from each of the following categories whenever one is encountered during investigation:
+
+| Category | When to add |
+|---|---|
+| **Gap** | Scenario reveals behaviour not yet covered by existing tests |
+| **Challenging** | Hardest to reason about, required the most conditions to align, or exposed the deepest assumptions |
+| **Happy flow** | The primary success path a typical user will follow; must always pass |
+| **Complex flow** | Multi-step or multi-condition path that exercises several components together |
+| **Edge case** | Valid but unusual input or state at the boundary of defined behaviour |
+| **Model doubt** | Any case where the agent was uncertain whether the implementation would handle it correctly — add it regardless of outcome |
+| **Regression** | A scenario that passed during planning but could silently break after future changes to the plan |
+| **Adversarial / invalid** | Deliberately malformed, hostile, or out-of-contract input |
+| **Smoke** | Minimal "does it work at all" check for the primary function — derived from feasibility analysis (Phase 4e) |
+| **Integration** | Components connect and communicate correctly — derived from component consistency analysis (Phase 4c) |
+| **Policy / contract compliance** | Behaviour matches a declared policy, interface contract, or external API shape — derived from XDRS alignment (Phase 4d) and unverified claims (Phase 4i) |
+| **Assumption** | A planning assumption that must hold true at runtime — derived from pre-mortem analysis (angle 5) and unverified references |
+| **Security** | No sensitive data exposed, no attack surface created, no OWASP violation — derived from security scan (angle 6) |
+| **Side-effect / isolation** | Executing this feature leaves adjacent systems, files, and state unaffected — derived from second-order effects analysis (angle 8) |
+| **Observability** | Failures and error states are detectable, logged, and produce actionable messages — derived from observability analysis (angle 17) |
+| **Acceptance** | The originally requested feature or outcome is demonstrably delivered end-to-end — derived from faithfulness (angle 1), goal achievability (angle 3), and success criteria (angle 7) |
+
+Name each test case as `<descriptive action or scenario> (<category>)` so the purpose is immediately readable after implementation without needing to look up the planning notes. The descriptive part should name the concrete scenario; the category in parentheses identifies why it was captured. Examples: `"Validate BOM-prefixed file (edge case)"`, `"glob pattern [invalid throws (adversarial/invalid)"`, `"10 000 files processed synchronously (stress)"`, `"CLI exits 0 when all files valid (acceptance)"`, `"readFileSync EACCES returns invalid result (integration)"`. Optionally append the source angle in brackets for full traceability: `"BOM-prefixed file (edge case) [12-22]"`. Show a sample of the most revealing scenarios as brief inline callouts during the analysis to make the depth of analysis visible without producing a wall of text.
 
 #### Plan quality angles
 
 **1. Prompt faithfulness**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Go back to the original request word by word. Is every part of the request covered? Is anything included in the plan that was not asked for? Identify gaps and additions explicitly.
-
-**2. Local context consistency**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 Does the plan account for existing files, decisions, and constraints already in place? Does it contradict anything already established in the codebase, repository, or context?
 
 **3. Goal achievability**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Walk the end state step by step: if every step in the plan is executed exactly as written, does the desired outcome actually result? State the end state explicitly. Ask the human to confirm the end state and whether it matches their expectation.
-
-**4. Ambiguity scan**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 Is any step or decision in the plan interpretable in more than one way? Every ambiguity is a future mistake. List all ambiguous points and ask the human to resolve each one.
 
 **5. Pre-mortem**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Assume the plan is executed and fails to reach the goal. What was the most likely reason? Identify the plan's most fragile assumption or weakest step. Specifically check whether any referenced resources, facts, tools, files, or capabilities are fabricated or assumed without verification — this is a common single-point failure mode regardless of task type.
-
-**6. Security and privacy scan**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 Does the plan or its output expose sensitive information, create privacy risks, or introduce misuse vectors? This applies to any task type: documentation, code, processes, data handling, communications. Ask the human about any non-trivial findings. For trivially obvious mitigations with no decision weight, state them and continue.
 
 **7. Success criteria and falsifiability**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Verification checks are the primary falsifiability mechanism. A plan without defined, executable verification has unverifiable success criteria — treat this as a blocking gap. How will we know this plan succeeded or failed? Are the success criteria concrete enough to be measurable and observable? If they are vague, the outcome cannot be evaluated. Ask the human to validate the success criteria and confirm they are concrete and measurable.
-
-**8. Second-order effects**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 What changes as a side effect of executing this plan beyond the intended outcome? Does solving this problem create a new problem elsewhere — in adjacent systems, files, processes, or stakeholders? List the side effects. Ask the human whether the side effects are acceptable.
 
 **9. Steelman the opposition**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-What is the strongest case against this approach? What would a well-informed critic say about this plan? Present the strongest objection. Ask the human to respond to the objection.
-
-#### Output quality angles
-
-**10. Output scenario dry runs**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Simulate 5 realistic usage scenarios of the expected output by its actual consumer. For each scenario, ask: "Does the output serve its consumer in this situation?" Use scenarios that cover typical use, edge cases, and at least one adversarial or failure case.
+Simulate 10 realistic usage scenarios of the expected output by its actual consumer. For each scenario, ask: "Does the output serve its consumer in this situation?" Use scenarios that cover typical use, edge cases, and at least two adversarial or failure cases.
 
 Examples of scenario framing:
 - If the output is operator documentation: "A worker needs to reset the machine at 2 AM — will they find the procedure in under 2 minutes?"
@@ -180,41 +219,28 @@ Examples of scenario framing:
 Whenever a scenario reveals ambiguity or requires a subjective judgment, stop and ask the human a clarifying question. Do not resolve subjective decisions unilaterally.
 
 **11. Output internal consistency**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Check that the planned output is internally consistent: no contradictions between parts, no gaps between sections, all elements serve the same goal. Apply Phase navigation rule.
-
-**12. Input coverage dry run**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Simulate 50 different inputs against the produced element with the goal of discovering edge cases, security issues, and unresolved discussion points not yet surfaced in earlier phases. The 50 inputs are a breadth-forcing tool — not a pass/fail test. What counts as an "input" depends on the task type: for code/systems — function arguments, API payloads, config values; for documents/policies/processes — reader queries, usage scenarios, edge-case interpretations. Inputs must span typical, edge, boundary, invalid, adversarial, and combined cases. For each, ask: does this reveal a new edge case, security risk, or ambiguity not already addressed? Surface all findings as questions to the human per the Questioning rule.
+Simulate 50–200 different inputs against the produced element with the goal of discovering edge cases, security issues, and unresolved discussion points not yet surfaced in earlier phases. Scale toward 200 when the feature has high input diversity (many argument types, branches, modes, or configuration axes) — use the lower end only for narrow, single-path features. These inputs are a breadth-forcing tool — not a pass/fail test. What counts as an "input" depends on the task type: for code/systems — function arguments, API payloads, config values; for documents/policies/processes — reader queries, usage scenarios, edge-case interpretations. Inputs must span typical, edge, boundary, invalid, adversarial, and combined cases. Add more inputs for each distinct branch or configuration axis the plan introduces — the more divergent paths exist in the logic, the more inputs are needed to cover them. For each, ask: does this reveal a new edge case, security risk, or ambiguity not already addressed? Surface all findings as questions to the human per the Questioning rule.
 
 **13. Stress and failure conditions**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Simulate 20 different stress or failure situations that could occur while the product/output is being used or running, with the goal of discovering resilience gaps, missing recovery paths, and unhandled failure modes not yet surfaced. The 20 situations are a breadth-forcing tool — not a pass/fail test. What counts as a "stress situation" depends on the task type: for code/systems — infrastructure failures (e.g., database down mid-transaction, third-party API unavailable), user-side disruptions (e.g., device freezes mid-task, session timeout, connectivity loss), environmental degradation (e.g., slow under load, corrupt data mid-process), combined/cascading failures; for documents/policies/processes — reader under time pressure, document misread during a crisis, policy applied by someone who skips sections, ambiguous instruction followed incorrectly under stress. Human factors apply to all types (e.g., user gets bored and abandons a long or confusing flow). For each situation, ask: does this expose a gap in error handling, recovery, communication, or resilience? Surface all findings as questions to the human per the Questioning rule.
-
-#### Discussion and improvement angles
-
-**14. Alternative approaches**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 Enumerate 2–3 meaningfully different ways the goal could be achieved. For each alternative, describe the approach in 1–2 lines and compare it against the current plan on at least: implementation effort, reversibility, risk, and fit with existing context. The goal is to surface whether the current plan is the right approach or just the first one considered. Ask the human: which tradeoffs matter most, and does the current approach still win? If an alternative is clearly superior in the context, flag it prominently and ask the human to reconsider.
 
 **15. Stakeholder perspective tour**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Walk through the plan from the perspective of 3–5 distinct stakeholders who are not the primary requester — e.g., maintainer, ops/support team, end user, affected third party, security reviewer, first-time reader. For each stakeholder, ask: what would they find problematic, missing, or unclear in this plan? This is not about their usage scenarios (covered by angle 10) but about their critique of the plan itself. Surface all findings as questions to the human per the Questioning rule.
-
-**16. Simplification check**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
 Review the plan for anything that could be cut, simplified, or deferred without losing essential value. For each candidate: what is it, why might it be unnecessary, and what is the risk of removing it? This is not the same as scope-creep detection (angle 1, which checks for additions) — this angle actively proposes reductions. Ask the human to confirm or reject each simplification candidate explicitly.
 
 **17. Observability and failure recovery**
-**Challenge questions:** Formulate 3–5 questions that could challenge the current plan from this angle, grounded in the current plan and broader context (codebase, prior decisions). Reason through each, surfacing evidence — not self-resolving. Bring unresolved or subjective questions to the human per the Questioning rule. Then run the analysis below.
-Ask: if the output fails or behaves incorrectly while in use, will anyone know, and can it be corrected? What counts as "observability" depends on the task type: for code/systems — are there logs, metrics, alerts, health checks, debug tooling, and a rollback path? For documents/policies/processes — is it known where and by whom the document is being used? Is there a way to detect misapplication or misinterpretation? Is it clear how to report an issue with the document, and how corrections reach all consumers? If none of these mechanisms are planned, ask the human whether they are needed. If the output is a prototype or throwaway artifact with no ongoing use, this angle may be explicitly marked N/A.
+Ask: will someone who did not build this be able to understand, change, and extend it safely 6 months from now? For code: are responsibilities clearly separated, is there excessive coupling, are there undocumented assumptions baked into the implementation, are naming and structure consistent with the codebase conventions? For documents and policies: is the content organized so that a future editor can update one section without inadvertently invalidating another? Is the vocabulary stable and defined, or does it rely on context that may not survive contributor turnover? For processes: are the steps atomic and independently verifiable, or do they depend on unstated tribal knowledge? Identify the parts of the plan most likely to become a maintenance burden and ask the human whether the trade-off is acceptable.
 
-### Phase 6: Pre-Execution Readiness
+After all 18 angles are complete, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 6 gate with at least these options:
+- **"Continue to Phase 7 — Pre-Execution Readiness"** (recommended when all angles are complete and no open questions remain) — advance.
+- **"Re-run Phase 6 — deeper pass"** — repeat all 18 angles with fresh challenge questions, prioritising scenarios and inputs not yet explored, then re-present this gate.
+- **"Add a comment or correction"** (open box) — re-run Phase 6 in full, treating the comment as additional context and constraints, then re-present this gate.
+
+### Phase 7: Pre-Execution Readiness
 
 Before approving execution, verify ALL items in the checklist below. If any item cannot be checked, return to the relevant phase and resolve it first.
 
 - [ ] Consistency rounds converged (convergence signals met — last 2 rounds produced only single-sentence answers with no new issues) (per Phase navigation rule)
-- [ ] All 17 challenge angles completed with human input received for every ambiguity and subjective decision
+- [ ] All 18 challenge angles completed with human input received for every ambiguity and subjective decision
 - [ ] Diagram generated and confirmed by the human
 - [ ] No unresolved human questions outstanding
 - [ ] Scope confirmed by the human with no silent expansions
@@ -222,8 +248,39 @@ Before approving execution, verify ALL items in the checklist below. If any item
 - [ ] Quality Verification Strategy defined in the plan with exact executable steps for all applicable check types (code: unit tests, integration tests, linting, static analysis; documents/analyses: fact-checking, link and citation validation, peer review, etc.)
 - [ ] Verification checks executed during dry run and results reviewed — failures and coverage gaps resolved
 - [ ] All high-risk unverified references (code or factual) listed in the Unverified References section with explicit first-step verification in the execution plan
+- [ ] All scenarios from any phase or angle that revealed gaps, raised model doubt, or qualified for any category in the Scenario-to-test table have been added as named test cases to the plan's Quality Verification Strategy
 
-Only proceed to execution when every item is checked or explicitly marked N/A. Do not start execution to escape planning discomfort — only start when confidence is genuine and all items are verified.
+Once all items are checked or explicitly marked N/A, present a **brief scenario summary** — a short bulleted list of the most significant scenarios discovered across all phases (aim for 5–10 entries), each showing: the angle or check that surfaced it, what it revealed, and what test case was added to the plan. This makes the depth of analysis visible before handoff.
+
+If any features were placed in the **Deferred Features** list during Phase 2 Step 5 (scope split) or explicitly excluded from scope at any point, present a **Deferred Features summary** — a bulleted list of each deferred part with a one-line description of what it covers and why it was deferred. Then use `vscode_askQuestions` with:
+- **"Save to BACKLOG.md"** (recommended) — append the list under a `## Deferred Features` heading in `BACKLOG.md` at the workspace root (create the file if it does not exist), so the user can plan future implementation runs from it.
+- **"Save to a different file"** (open box) — human specifies the file path; append there instead.
+- **"Skip — do not save"** — proceed without saving.
+This step is skipped if no features were deferred.
+
+Before the final gate, add a step to the implementation plan to produce a concise feature documentation file. Use `vscode_askQuestions` to ask:
+- **"Save to README.md"** (recommended) — append the documentation to `README.md` in the feature’s directory (create if absent).
+- **"Save to a different file"** (open box) — human specifies the file path.
+- **"Skip — do not save"** — proceed without saving.
+
+If the human chooses to save, the implementation plan must include a dedicated step to write the file. The content must be brief and practical — not exhaustive prose — covering only what is most useful for someone revisiting the feature later:
+- One-paragraph description of what the feature does and why it exists.
+- The diagram generated in Phase 5 (the one the human confirmed).
+- Key design decisions that are non-obvious (3–6 bullet points max).
+- A short summary of the main API or usage (CLI flags, HTTP endpoints, or equivalent).
+- Links to relevant policies or EDRs consulted.
+
+Then use `vscode_askQuestions` (per Phase gate UI rule) to present the final gate with at least these options:
+- **"Hand off to implementation"** (recommended when all checklist items pass) — confirm the plan is ready and signal execution can begin.
+- **"Re-run all phases again with different challenges"** — restart from Phase 1 using the current plan as context, generating fresh scenarios, stress tests, and challenge angles to stress-test the plan further before committing to implementation.
+- Free text for any other concern or question.
+
+Do not start execution to escape planning discomfort — only start when confidence is genuine and all items are verified.
+
+**Test execution rule**: After implementation is complete, all tests defined in the Quality Verification Strategy must be run before the work is considered done:
+- **Automated tests** (unit tests, integration tests, linting, type checking, coverage): run them directly using the exact commands defined in the plan. If any fail, fix the issue and re-run before proceeding.
+- **Manual tests**: for each manual test step in the plan, guide the human explicitly — state what command to run or action to take, what to look at, and what the expected output or behaviour is. Wait for the human to confirm the result before moving to the next step. If the result doesn’t match, treat it as a failure and investigate before continuing.
+- Do not mark the work done until every test — automated and manual — has a confirmed passing result.
 
 ---
 
@@ -250,28 +307,28 @@ Stop execution and return to Phase 1 if any of the following occur:
 **Input**: "Add a rate-limiting feature to the API."
 
 - Phase 1: Goal stated as "rate-limit all POST endpoints to 100 req/min per user; internal service calls excluded."
-- Phase 1.5: Requirements qualification — problem and value confirmed; scope boundaries explicit; human asked whether internal service calls need a separate bypass mechanism (edge case); all in-scope items pass 3-check review.
-- Phase 2: Discovers existing middleware and an in-progress PR touching the same path. Human asked about each before drafting.
-- Phase 3: Round 1 — check (a) finds the plan references a `RateLimiter` class not yet decided on; human asked to clarify. Round 5 — all checks return trivial answers; convergence reached.
-- Phase 4: Sequence diagram generated. Human confirms it matches their model.
-- Phase 5: Angle 8 (second-order effects) reveals that rate-limiting breaks an existing test suite that sends rapid sequential requests; human decides to add a test bypass header. Angle 9 (steelman) surfaces that Redis dependency adds operational complexity; human accepts the trade-off.
-- Phase 6: All items checked. Execution approved.
+- Phase 2: Requirements qualification — problem and value confirmed; scope boundaries explicit; human asked whether internal service calls need a separate bypass mechanism (edge case); all in-scope items pass 3-check review.
+- Phase 3: Discovers existing middleware and an in-progress PR touching the same path. Human asked about each before drafting.
+- Phase 4: Round 1 — check (a) finds the plan references a `RateLimiter` class not yet decided on; human asked to clarify. Round 5 — all checks return trivial answers; convergence reached.
+- Phase 5: Sequence diagram generated. Human confirms it matches their model.
+- Phase 6: Angle 8 (second-order effects) reveals that rate-limiting breaks an existing test suite that sends rapid sequential requests; human decides to add a test bypass header. Angle 9 (steelman) surfaces that Redis dependency adds operational complexity; human accepts the trade-off.
+- Phase 7: All items checked. Execution approved.
 
 **Input**: "Write operator documentation for the conveyor belt system."
 
-- Phase 5, angle 10 (output dry runs): Scenario 1 — "An operator needs to restart the belt after an emergency stop at midnight." The draft plan has no emergency stop section; human asked whether to add it. Scenario 3 — "Operator reading on a mobile phone." Human asked whether a condensed quick-reference card is needed alongside the full manual.
+- Phase 6, angle 10 (output dry runs): Scenario 1 — "An operator needs to restart the belt after an emergency stop at midnight." The draft plan has no emergency stop section; human asked whether to add it. Scenario 3 — "Operator reading on a mobile phone." Human asked whether a condensed quick-reference card is needed alongside the full manual.
 
 **Input**: "Add input validation to the user registration endpoint."
 
-- Phase 2: Quality Verification Strategy lists: unit tests for each validation rule (Jest), integration test for the full registration flow, ESLint + TypeScript tsc. Unverified References lists: `zod` library — unverified; verification step: `npm list zod`.
-- Phase 3, check (i): agent scans plan and finds `zod` schema API usage not confirmed — added to Unverified References. Check (h): unit tests cover each validation rule with exact command `npm test -- --testPathPattern=registration`.
-- Phase 6: Quality Verification Strategy checked; `zod` listed as unverified with first-step `npm list zod` before any schema code is written.
+- Phase 3: Quality Verification Strategy lists: unit tests for each validation rule (Jest), integration test for the full registration flow, ESLint + TypeScript tsc. Unverified References lists: `zod` library — unverified; verification step: `npm list zod`.
+- Phase 4, check (i): agent scans plan and finds `zod` schema API usage not confirmed — added to Unverified References. Check (h): unit tests cover each validation rule with exact command `npm test -- --testPathPattern=registration`.
+- Phase 7: Quality Verification Strategy checked; `zod` listed as unverified with first-step `npm list zod` before any schema code is written.
 
 ## Edge Cases
 
 - **Agent that insists it knows the answer**: Do not skip any phase because the agent expresses confidence. Confidence is not a substitute for consistency checks.
-- **Diagram cannot be generated**: Describe the flow in a plain-language walkthrough step by step. The intent of Phase 4 is to externalize the plan's structure — the medium is secondary.
-- **Scope change discovered mid-planning**: If Phase 3 or Phase 5 reveals that the scope must change significantly, restart from Phase 2 with the revised scope. Do not patch the plan incrementally without a full re-check.
+- **Diagram cannot be generated**: Describe the flow in a plain-language walkthrough step by step. The intent of Phase 5 is to externalize the plan's structure — the medium is secondary.
+- **Scope change discovered mid-planning**: If Phase 4 or Phase 6 reveals that the scope must change significantly, restart from Phase 3 with the revised scope. Do not patch the plan incrementally without a full re-check.
 - **Human is unavailable for a step**: Note the unanswered question explicitly in the plan. Do not proceed past that point until the human responds.
 
 ## References
