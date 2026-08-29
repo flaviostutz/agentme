@@ -32,8 +32,8 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 **Assertions**
 - [ ] Skill asks at least one question about who receives notifications and what triggers them before producing any output.
 - [ ] Skill does not output a story while any area in the identification table (problem, scope, requirements, flow, edge cases, dependencies) has an open question.
-- [ ] Final output follows the output template with Title (max 10 words), User Story (As a … I want … so that …), Scope, and Acceptance Criteria sections.
-- [ ] Acceptance criteria items are verifiable and start with a checkbox `- [ ]`.
+- [ ] Output follows the output template with Title (max 10 words), User Story (As a … I want … so that …), Scope, and Acceptance Criteria sections.
+- [ ] Output contains acceptance criteria items that are verifiable and start with a checkbox `- [ ]`.
 
 ---
 
@@ -87,15 +87,15 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 6. "No rate limiting, CAPTCHA, or 2FA in scope for now. Each flow ships independently."
 
 **Assertions**
-- [ ] Phase 0 is skipped (no XDRS scope found).
+- [ ] Skill skips Phase 0 when no XDRS scope is found.
 - [ ] Skill proposes a split at Phase 2 with rationale for each slice boundary.
 - [ ] Skill uses `vscode_askQuestions` to present the split options, not plain text.
-- [ ] After the user accepts, skill restarts Phase 1 for the chosen slice (registration) only.
-- [ ] Final output contains exactly one fully refined story (the chosen slice), using the full output template.
-- [ ] The three deferred slices appear in a Deferred Items summary at Phase 8, each with a one-line description.
+- [ ] Skill restarts Phase 1 for the chosen slice (registration) only after the user accepts the split.
+- [ ] Output contains exactly one fully refined story (the chosen slice) using the full output template.
+- [ ] Deferred Items summary at Phase 8 lists the three deferred slices, each with a one-line description.
 - [ ] Skill does NOT produce a single merged story covering all four flows.
-- [ ] The chosen slice's story is independently shippable and delivers a complete end-to-end user-visible outcome.
-- [ ] No slice is a technical-layer-only story (e.g. "implement the auth database schema" alone is not acceptable).
+- [ ] Output confirms the chosen slice delivers a complete, independently shippable end-to-end user outcome.
+- [ ] Output shows no slice is a technical-layer-only story (e.g. "implement the auth database schema" alone is not acceptable).
 
 ---
 
@@ -121,7 +121,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The skill has co
 - [ ] Skill re-runs Phase 4 (does not skip to Phase 5) when the human selects re-run.
 - [ ] Skill surfaces at least one new finding during the deeper pass.
 - [ ] Skill asks a question about the new finding before re-presenting the gate.
-- [ ] The Phase 4 gate is re-presented after the human responds.
+- [ ] Skill re-presents the Phase 4 gate after the human responds.
 - [ ] Skill does not advance to Phase 5 until the gate is explicitly confirmed with "Continue".
 
 ---
@@ -149,7 +149,7 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 - [ ] Skill runs Phase 6 analysis before producing any output.
 - [ ] Skill surfaces the missing loading state and download confirmation as a finding during angle 1 (User journey completeness).
 - [ ] Skill asks at least one question about the finding using `vscode_askQuestions` before moving to angle 2.
-- [ ] After the human responds, the answer is reflected in the story scope (loading spinner + success toast added).
+- [ ] Skill reflects the human's answer in the story scope (loading spinner + success toast added).
 - [ ] Skill does not skip to Phase 8 while any angle has open questions.
 
 ---
@@ -183,11 +183,11 @@ Each `.assets/userstory-*.md` file contains `**Status:** to-be-refined` plus any
 8. Skill updates the task entry link text in Milestone 1 to `- [Reduce payment steps at checkout](.assets/userstory-001-reduce-payment-steps.md)`.
 
 **Assertions**
-- [ ] Phase 0 detects pending stories by reading file content (`**Status:** to-be-refined`), not by task entry name format.
-- [ ] All three pending stories are listed before Phase 1 begins.
-- [ ] NNN and slug are extracted from the placeholder file's `**Story ID:**` line, not from the task entry text.
-- [ ] After Phase 8, the story detail file is overwritten with the refined content and no `**Status:**` field.
-- [ ] The Milestone 1 task entry link text is updated to the refined story title; the file path stays the same.
+- [ ] Skill detects pending stories by reading file content (`**Status:** to-be-refined`), not by task entry name format.
+- [ ] Skill lists all three pending stories before Phase 1 begins.
+- [ ] Output shows NNN and slug extracted from the placeholder file's `**Story ID:**` line, not from the task entry text.
+- [ ] Skill overwrites the story detail file with refined content and no `**Status:**` field after Phase 8.
+- [ ] Skill updates the Milestone 1 task entry link text to the refined story title; the file path stays the same.
 - [ ] Skill does NOT offer "Save to BACKLOG.md" for deferred items while a plan doc is active.
 
 ---
@@ -205,11 +205,11 @@ After completing Phases 1–6, Phase 8 produces the final story: "Show personali
 3. Skill inserts `- [Show personalised welcome screen on first login](.assets/userstory-001-welcome-screen-first-login.md)` as a key task in Milestone 1 of the plan doc.
 
 **Assertions**
-- [ ] Story detail file is created at the correct path inside the plan's `.assets/` folder.
-- [ ] File uses all required template sections including `## Constraints` and `## Detailed Specs`.
-- [ ] File includes a back-link to the parent epic plan.
-- [ ] The plan doc's Milestone 1 key tasks section contains a markdown link entry pointing to the new file.
-- [ ] NNN is 001 (first story in this epic's `.assets/` folder).
+- [ ] Skill creates the story detail file at the correct path inside the plan's `.assets/` folder.
+- [ ] Output uses all required template sections including `## Constraints` and `## Detailed Specs`.
+- [ ] Output includes a back-link to the parent epic plan.
+- [ ] Plan doc's Milestone 1 key tasks section contains a markdown link entry pointing to the new file.
+- [ ] Output shows NNN as 001 (first story in this epic's `.assets/` folder).
 
 ---
 
@@ -227,10 +227,10 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 4. If the story is split, the deferred slices prompt offers: add to existing epic plan, create new epic plan, or save to `BACKLOG.md`.
 
 **Assertions**
-- [ ] Phase 0 does not block or present any plan-doc questions when no XDRS scope exists.
-- [ ] Phase 8 asks for a save location with a clear default path.
-- [ ] The story file is saved to the user-confirmed path.
-- [ ] Split deferred stories trigger a destination choice (not silently written to BACKLOG.md).
+- [ ] Skill does not block or present any plan-doc questions when no XDRS scope exists.
+- [ ] Skill asks for a save location with a clear default path at Phase 8.
+- [ ] Skill saves the story file to the user-confirmed path.
+- [ ] Skill triggers a destination choice for split deferred stories (not silently writing to BACKLOG.md).
 
 ---
 
@@ -353,3 +353,103 @@ Phase 6 converged without surfacing major gaps. The skill is now entering Phase 
 - [ ] Phase 9 Check A items 8 and 12 pass in the final output (error paths and security addressed in story).
 - [ ] Phase 9 Check B detects no split needed; skill presents the completion gate.
 - [ ] Final story includes error handling for OAuth failure, duplicate email, and revoked token (out-of-scope noted), and documents the CSRF state validation and auth prerequisite in Acceptance Criteria or Detailed Specs.
+
+---
+
+### Scenario 13: Context Enrichment — existing CRM system, domain inferred, URL provided, mid-phase probe fires
+
+**Trigger / Input**
+You are an agent with the `151-refine-user-story` skill loaded. The workspace has no `.xdrs/` directory. The user says:
+
+"Delete contacts from Leads."
+
+**Expected Behaviour**
+1. Phase 1 Step 3 fires (Context Enrichment).
+2. Skill performs quick request analysis internally and infers the domain is likely a CRM based on the entities "contacts" and "Leads."
+3. Skill scans the workspace — finds no relevant source code, READMEs, or prior stories.
+4. Skill asks targeted, domain-specific questions: *"This looks like a CRM — is it? Can you point me to the Leads screen documentation or any existing specs?"* and *"Do you have screenshots or a recording of the current Leads / Contacts flow?"*
+5. User provides a URL: `https://internal.docs/crm/leads-screen`.
+6. Skill reads the URL content and summarises it (factual, labeled with source).
+7. Context loop re-evaluates: no further gaps at this stage; convergence reached after 1 round. Skill presents the convergence gate.
+8. User selects "Context is sufficient — continue to Phase 2."
+9. Skill compiles the Context Summary and carries it into Phase 2.
+10. During Phase 2 Step 2 (requirements loop), skill hits an interface-and-integration gap: the URL did not specify the API used for deleting contacts. Skill applies the Context Probe rule and asks: *"The docs describe the UI flow but do not mention the API contract for contact deletion — do you have an API reference or endpoint spec?"*
+11. User provides a partial answer. Skill records it and continues.
+
+**Simulated Human Responses**
+1. (Quick analysis internal — not shown)
+2. URL: `https://internal.docs/crm/leads-screen`
+3. (Convergence gate) "Context is sufficient — continue to Phase 2"
+4. (API probe) "We use a REST API. DELETE /contacts/:id. No other docs."
+
+**Assertions**
+- [ ] Skill performs quick internal analysis before surfacing any question.
+- [ ] First questions are domain-specific and tied to inferred domain (CRM), not generic.
+- [ ] Skill auto-reads the provided URL and summarizes its content with source label.
+- [ ] Context loop converges after 1 round and presents the convergence gate.
+- [ ] Context Summary is compiled and referenced in Phase 2.
+- [ ] Mid-phase Context Probe fires in Phase 2 for the API gap — ask is tied to the specific gap, not generic.
+- [ ] Skipped or partial answers (no further docs) are recorded as "Context: not provided for [topic]" and do NOT block Phase 2 progress.
+
+---
+
+### Scenario 14: Context Enrichment — new feature, no codebase, user pastes KR + interview excerpt, loop converges in 2 rounds
+
+**Trigger / Input**
+You are an agent with the `151-refine-user-story` skill loaded. The workspace has no `.xdrs/` directory. The user says:
+
+"We need a way for field technicians to report equipment failures from their mobile device."
+
+**Expected Behaviour**
+1. Phase 1 Step 3 fires (Context Enrichment).
+2. Quick analysis identifies: domain = field service / maintenance; key entities = technicians, equipment, failure reports; no named system; operation = create/report flow.
+3. Workspace scan finds nothing relevant — no source code, no docs.
+4. Skill asks targeted questions: *"What business outcome is expected from this feature? Are there OKR or KR documents describing the goal?"* and *"Were there user interviews or stakeholder discussions about this need? A transcript or notes would help."* and *"Is there an existing system (even paper-based or manual) that this replaces?"*
+5. User pastes a KR: "KR: 90% of failures reported within 15 minutes of occurrence (baseline: 45% today)" and an interview excerpt: "Technicians said they often forget details by the time they reach a desk. They need it on-site."
+6. Skill summarizes the pasted content with source label.
+7. Context loop re-evaluates: a new gap surfaced (no info on mobile platform or existing backend). Skill asks 1 follow-up round: *"What mobile platform should this target (iOS, Android, both)? Is there an existing backend or API that failure reports should be sent to?"*
+8. User answers. Loop re-evaluates — no further gaps. Convergence reached after 2 rounds.
+9. Skill presents the convergence gate; user selects "Context is sufficient — continue to Phase 2."
+10. Context Summary is compiled with KR, interview excerpt, and platform answer all labeled.
+
+**Simulated Human Responses**
+1. (No workspace artifacts found — no answer needed)
+2. KR + interview excerpt (pasted inline)
+3. Follow-up: "Android only. No existing backend — we'll build it."
+
+**Assertions**
+- [ ] Skill asks targeted questions derived from domain inference even when workspace scan finds nothing.
+- [ ] Pasted KR and interview excerpt are summarized with source label (e.g. `**Source:** user-provided KR — 90% failure reporting rate target`).
+- [ ] Loop fires a second round when new gaps are identified after first answers.
+- [ ] Loop converges after exactly 2 rounds (no infinite loop).
+- [ ] Context Summary contains all three pieces: KR, interview excerpt, platform decision.
+- [ ] Phase 2 references the Context Summary when restating understanding.
+
+---
+
+### Scenario 15: Context Enrichment — user skips entirely, Phase 2 proceeds, no fabrication
+
+**Trigger / Input**
+You are an agent with the `151-refine-user-story` skill loaded. The workspace has no `.xdrs/` directory. The user says:
+
+"Add a dark mode toggle to the settings page."
+
+**Expected Behaviour**
+1. Phase 1 Step 3 fires (Context Enrichment).
+2. Quick analysis: domain = UI/UX, web or mobile app; key entity = settings page; operation = toggle/preference.
+3. Workspace scan finds nothing.
+4. Skill asks targeted questions: *"Is there an existing design system or theme configuration? Can you point me to the settings page code or design spec?"* and *"What frameworks or platforms does this app use?"*
+5. User selects "Skip — no additional context available."
+6. Skill records `Context: none available` and proceeds immediately to Phase 2.
+7. Phase 2 restates understanding without any fabricated system details, noting context is unavailable.
+8. Phase 2 requirements loop asks about the existing theme system, frameworks, and user preference persistence — without assuming any specific technology.
+
+**Simulated Human Responses**
+1. "Skip — no additional context available"
+
+**Assertions**
+- [ ] Skill records `Context: none available` explicitly and does not invent any system details.
+- [ ] Skill proceeds to Phase 2 immediately after the skip — no re-prompting.
+- [ ] Phase 2 Step 1 restate does not reference any assumed technologies or design systems.
+- [ ] Phase 2 requirements loop asks about theme system and framework without assuming anything from the story text.
+- [ ] Skipped Context Probe is not treated as an unresolved decision — does not block the Hard Gate.

@@ -1,11 +1,11 @@
 ---
-name: _local-bdr-policy-401-product-team-roles
+name: agentme-bdr-policy-402-product-team-roles
 description: Defines roles, responsibilities, and skills for Product Teams, covering cross-team and team-level roles. Use when staffing, onboarding, or assigning responsibilities in a product team.
 apply-to: All product teams and cross-team roles in the organisation
 valid-from: 2026-08-18
 ---
 
-# _local-bdr-policy-401: Product team roles
+# agentme-bdr-policy-402: Product team roles
 
 ## Context and Problem Statement
 
@@ -311,4 +311,6 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 - [`_core-adr-policy-016`](../../../_core/adrs/principles/016-policy-subjects.md) — Policy subjects: BDR operations subject definition
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
-- [`_local-bdr-policy-402`](402-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
+- [`agentme-bdr-001`](../principles/001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
+- [`agentme-bdr-002`](../principles/002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions
+- [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
