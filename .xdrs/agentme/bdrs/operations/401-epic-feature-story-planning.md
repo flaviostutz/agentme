@@ -133,7 +133,7 @@ A user story that lacks enough detail to begin architecture, planning, or implem
 
 Stories MUST be refined using the `151-refine-user-story` skill. The skill:
 - Detects active epic plan documents and lists pending stories for selection.
-- MUST run a structured 7-phase refinement process including interface/integration spec discovery.
+- MUST run a structured 10-phase refinement process including interface/integration spec discovery.
 - MUST write the resulting detail file and update the key task link in the plan's Milestone.
 - When a story is split, MUST create placeholder files for each deferred slice and add them as pending task links in the plan.
 

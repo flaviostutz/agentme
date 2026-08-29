@@ -1,6 +1,6 @@
 ---
 skill: 151-refine-user-story
-skill-version: "2.0"
+skill-version: "3.0"
 ---
 
 ## Test Scenarios
@@ -74,7 +74,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 5. Skill presents `vscode_askQuestions` with "Accept split — start refining Registration" (recommended) plus options to adjust boundaries or keep the original scope.
 6. User accepts the split and picks "Registration" as the first slice to refine.
 7. Skill restarts from Phase 1 with the narrower registration scope. The remaining 3 slices are recorded as Deferred Stories.
-8. Phases 1–7 run on the registration slice only. At Phase 7, a Deferred Items summary lists the 3 remaining slices.
+8. Phases 1–7 run on the registration slice only. At Phase 8, a Deferred Items summary lists the 3 remaining slices.
 9. Because no plan doc is active, skill presents `vscode_askQuestions` asking where to save the deferred slices; user picks BACKLOG.md.
 10. Skill outputs one fully refined story (registration) and appends the 3 deferred slices to BACKLOG.md.
 
@@ -92,7 +92,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 - [ ] Skill uses `vscode_askQuestions` to present the split options, not plain text.
 - [ ] After the user accepts, skill restarts Phase 1 for the chosen slice (registration) only.
 - [ ] Final output contains exactly one fully refined story (the chosen slice), using the full output template.
-- [ ] The three deferred slices appear in a Deferred Items summary at Phase 7, each with a one-line description.
+- [ ] The three deferred slices appear in a Deferred Items summary at Phase 8, each with a one-line description.
 - [ ] Skill does NOT produce a single merged story covering all four flows.
 - [ ] The chosen slice's story is independently shippable and delivers a complete end-to-end user-visible outcome.
 - [ ] No slice is a technical-layer-only story (e.g. "implement the auth database schema" alone is not acceptable).
@@ -140,7 +140,7 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 2. Skill presents this as a finding and asks: "What should the user see while the export is being prepared — an immediate download, a loading indicator, or a background task with a notification? What feedback confirms the download completed?"
 3. Human answers the question.
 4. Skill incorporates the answer into the story scope and continues to angles 2–9.
-5. Skill does NOT produce the final story until Phase 7 is complete and the readiness checklist passes.
+5. Skill does NOT produce the final story until Phase 8 is complete and the readiness checklist passes.
 
 **Simulated Human Responses**
 1. "Show a spinner while generating. When ready, auto-download the file and show a success toast: 'Your CSV is ready'."
@@ -150,7 +150,7 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 - [ ] Skill surfaces the missing loading state and download confirmation as a finding during angle 1 (User journey completeness).
 - [ ] Skill asks at least one question about the finding using `vscode_askQuestions` before moving to angle 2.
 - [ ] After the human responds, the answer is reflected in the story scope (loading spinner + success toast added).
-- [ ] Skill does not skip to Phase 7 while any angle has open questions.
+- [ ] Skill does not skip to Phase 8 while any angle has open questions.
 
 ---
 
@@ -179,14 +179,14 @@ Each `.assets/userstory-*.md` file contains `**Status:** to-be-refined` plus any
 4. User picks the "Reduce payment steps" story from Milestone 1.
 5. Skill reads the placeholder file — extracts NNN (001) and slug (`reduce-payment-steps`) from its `**Story ID:**` line; carries any notes into Phase 1 as starting context.
 6. Skill proceeds to Phase 1 using the placeholder's title and notes as the subject.
-7. After Phase 7, skill overwrites `.assets/userstory-001-reduce-payment-steps.md` with the fully refined content (no `**Status:**` line).
+7. After Phase 8, skill overwrites `.assets/userstory-001-reduce-payment-steps.md` with the fully refined content (no `**Status:**` line).
 8. Skill updates the task entry link text in Milestone 1 to `- [Reduce payment steps at checkout](.assets/userstory-001-reduce-payment-steps.md)`.
 
 **Assertions**
 - [ ] Phase 0 detects pending stories by reading file content (`**Status:** to-be-refined`), not by task entry name format.
 - [ ] All three pending stories are listed before Phase 1 begins.
 - [ ] NNN and slug are extracted from the placeholder file's `**Story ID:**` line, not from the task entry text.
-- [ ] After Phase 7, the story detail file is overwritten with the refined content and no `**Status:**` field.
+- [ ] After Phase 8, the story detail file is overwritten with the refined content and no `**Status:**` field.
 - [ ] The Milestone 1 task entry link text is updated to the refined story title; the file path stays the same.
 - [ ] Skill does NOT offer "Save to BACKLOG.md" for deferred items while a plan doc is active.
 
@@ -197,10 +197,10 @@ Each `.assets/userstory-*.md` file contains `**Status:** to-be-refined` plus any
 **Trigger / Input**
 You are an agent with the `151-refine-user-story` skill loaded. Phase 0 has detected an active plan doc at `.xdrs/_local/bdrs/operations/plans/002-epic-onboarding.md` with Milestone 1: "First Login Experience". The user is refining a new story to be placed there.
 
-After completing Phases 1–6, Phase 7 produces the final story: "Show personalised welcome screen on first login".
+After completing Phases 1–6, Phase 8 produces the final story: "Show personalised welcome screen on first login".
 
 **Expected Behaviour**
-1. Phase 7 determines the next NNN in the plan's `.assets/` folder (no existing userstory files → NNN = 001).
+1. Phase 8 determines the next NNN in the plan's `.assets/` folder (no existing userstory files → NNN = 001).
 2. Skill writes `.assets/userstory-001-welcome-screen-first-login.md` using the output template sections: Title, User Story, Scope, Edge Cases, Out of Scope, Constraints, Detailed Specs, Acceptance Criteria, Attachments, plus a back-link to the epic plan.
 3. Skill inserts `- [Show personalised welcome screen on first login](.assets/userstory-001-welcome-screen-first-login.md)` as a key task in Milestone 1 of the plan doc.
 
@@ -223,12 +223,12 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 **Expected Behaviour**
 1. Phase 0 finds no XDRS scope and skips to Phase 1 immediately.
 2. Skill runs all phases normally.
-3. At Phase 7, after producing the final story, skill asks via `vscode_askQuestions` where to save the story file, defaulting to `userstory-001-reset-pin-via-sms.md` at the workspace root.
+3. At Phase 8, after producing the final story, skill asks via `vscode_askQuestions` where to save the story file, defaulting to `userstory-001-reset-pin-via-sms.md` at the workspace root.
 4. If the story is split, the deferred slices prompt offers: add to existing epic plan, create new epic plan, or save to `BACKLOG.md`.
 
 **Assertions**
 - [ ] Phase 0 does not block or present any plan-doc questions when no XDRS scope exists.
-- [ ] Phase 7 asks for a save location with a clear default path.
+- [ ] Phase 8 asks for a save location with a clear default path.
 - [ ] The story file is saved to the user-confirmed path.
 - [ ] Split deferred stories trigger a destination choice (not silently written to BACKLOG.md).
 
@@ -248,17 +248,17 @@ After Phase 2 Step 1, no API endpoints, no payload structures, no documentation 
 2. Skill asks targeted questions: "What is the payment provider? Do you have an API reference or documentation link? What is the payment flow — which endpoints are called, in what order, with what payload?"
 3. Human provides partial answers: "We use Stripe. Charge endpoint. Don't know the exact payload."
 4. Skill asks follow-up: "Can you share the Stripe API documentation link or the name of someone who owns the Stripe integration?"
-5. Phase 7 readiness checklist item for Detailed Specs fails until sufficient detail is provided (endpoint, payload shape, or doc link).
+5. Phase 8 readiness checklist item for Detailed Specs fails until sufficient detail is provided (endpoint, payload shape, or doc link).
 
 **Assertions**
 - [ ] Phase 2 Step 1 explicitly surfaces the missing integration details before Step 2 is reached.
 - [ ] Skill does not produce a final story while `## Detailed Specs` remains empty for a story involving an external API.
-- [ ] Phase 7 checklist item for Detailed Specs is checked only after sufficient detail (at minimum a doc link or endpoint) is provided.
+- [ ] Phase 8 checklist item for Detailed Specs is checked only after sufficient detail (at minimum a doc link or endpoint) is provided.
 - [ ] Final output's `## Detailed Specs` section contains at least the Stripe API reference and the charge endpoint.
 
 ---
 
-### Scenario 10: XDRS scope active, start fresh, story split — Phase 7 asks where to put deferred slices
+### Scenario 10: XDRS scope active, start fresh, story split — Phase 8 asks where to put deferred slices
 
 **Trigger / Input**
 You are an agent with the `151-refine-user-story` skill loaded. Phase 0 detected an XDRS scope with two existing epic plans but the user chose "start fresh — no plan context". During Phase 2, the story is found to be too large and split into three slices. The user accepts the split and starts refining Slice 1.
@@ -266,13 +266,13 @@ You are an agent with the `151-refine-user-story` skill loaded. Phase 0 detected
 **Expected Behaviour**
 1. Phase 0 detects XDRS scope, presents epic plan list plus "Start fresh" option, user picks "Start fresh".
 2. Phases 1–7 run normally for Slice 1.
-3. At Phase 7, because the context is "start fresh" (no active plan doc), the two deferred slices trigger a `vscode_askQuestions` prompt: "Where should the deferred story slices go?" with options: add to an existing epic plan (lists found epics), create a new epic plan, or save to BACKLOG.md.
+3. At Phase 8, because the context is "start fresh" (no active plan doc), the two deferred slices trigger a `vscode_askQuestions` prompt: "Where should the deferred story slices go?" with options: add to an existing epic plan (lists found epics), create a new epic plan, or save to BACKLOG.md.
 4. Skill applies the chosen action (e.g., creates placeholder files for the two deferred slices and inserts `- [Slice description — pending](.assets/userstory-NNN-slug.md)` task entries in the chosen epic plan, or appends descriptions to BACKLOG.md).
 
 **Assertions**
 - [ ] Phase 0 presents the XDRS epic plan list even in "start fresh" mode.
 - [ ] Deferred slices do NOT go silently to BACKLOG.md when an XDRS scope is present.
-- [ ] Phase 7 presents a `vscode_askQuestions` destination choice for deferred slices.
+- [ ] Phase 8 presents a `vscode_askQuestions` destination choice for deferred slices.
 - [ ] If an epic plan is chosen, deferred slices are created as placeholder files and inserted as `- [description — pending](.assets/...)` link entries in the correct Milestone.
 
 ---
@@ -296,7 +296,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
    - Slice 6: Post-purchase upsell screen
 4. Skill presents `vscode_askQuestions` asking which slice to refine first; user picks Slice 1.
 5. Phases 1–7 run on Slice 1 only. The remaining 5 slices are tracked as Deferred Stories.
-6. At Phase 7, because no plan doc is active, skill presents `vscode_askQuestions`:
+6. At Phase 8, because no plan doc is active, skill presents `vscode_askQuestions`:
    - **"Save deferred slices to BACKLOG.md"** (recommended)
    - **"Save to a different file"** (open box)
    - **"Skip — do not save"**
@@ -308,9 +308,48 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 - [ ] Skill explicitly states at Phase 2 that the request is too large and must be split.
 - [ ] All identified slices are presented for user selection before any refinement begins.
 - [ ] Only the user-selected slice (Slice 1) is refined through Phases 1–7.
-- [ ] The remaining slices appear in a Deferred Items summary at Phase 7.
-- [ ] `vscode_askQuestions` is used at Phase 7 to ask where to save deferred slices (not silently appended).
+- [ ] The remaining slices appear in a Deferred Items summary at Phase 8.
+- [ ] `vscode_askQuestions` is used at Phase 8 to ask where to save deferred slices (not silently appended).
 - [ ] BACKLOG.md is created (or appended to) at the workspace root with a `## Deferred Stories` section.
 - [ ] Each deferred slice in BACKLOG.md has a one-line description and reason for deferral.
 - [ ] The final output contains exactly one refined story (Slice 1), not all slices.
 - [ ] Skill does NOT offer BACKLOG.md for deferred items from an active plan doc (this scenario has no plan doc — condition satisfied).
+
+---
+
+### Scenario 12: Phase 6 passes cleanly but Phase 7 implementer angles surface missing error paths and a security concern
+
+**Trigger / Input**
+You are an agent with the `151-refine-user-story` skill loaded. The workspace has no `.xdrs/` directory. Phases 1–6 have completed for:
+
+"Allow users to link their Google account to an existing account so they can sign in with Google."
+
+Phase 6 converged without surfacing major gaps. The skill is now entering Phase 7.
+
+**Expected Behaviour**
+1. Phase 7 fires and applies the per-angle protocol to all 8 implementer angles.
+2. Angle 2 (Error and edge paths): the protocol generates questions about failure modes. The current story does not describe what happens if: the Google OAuth callback fails, the Google email is already linked to another account, or the OAuth token is revoked after linking. Skill surfaces these as findings and asks the user how each should be handled.
+3. Angle 6 (Security implications): the protocol generates questions about auth handling. The story does not specify how the OAuth state parameter is validated, how long the linking session is valid, or whether the user must be authenticated before initiating Google linking. Skill surfaces these as an auth concern and asks.
+4. Angles 1, 3, 4, 5, 7 converge quickly with answers drawn from story contents or brief user responses.
+5. Angle 8 (Implementer dry run): a cold engineer following the story would get stuck on the OAuth callback error handling and the authentication prerequisite — both already surfaced by angles 2 and 6. Skill confirms these are now resolved and the dry run passes.
+6. Phase 8 checklist requires both Phase 6 (9 user-perspective angles) and Phase 7 (8 implementer-perspective angles) complete before output is produced.
+7. Phase 9 Check A re-validates items 8 (error and edge paths) and 12 (security implications) in the final output. Both pass.
+8. Phase 9 Check B applies the 4 size criteria — none are met — skill presents the completion gate.
+
+**Simulated Human Responses**
+1. (Phase 7 angle 2 question on OAuth callback failure) "Show an error toast: 'Could not link Google account. Please try again.' Keep the user on the account settings page."
+2. (Phase 7 angle 2 question on email already linked) "Show: 'This Google account is already linked to another user.' Do not link or merge — block the attempt."
+3. (Phase 7 angle 2 question on revoked token) "Out of scope — user must re-link manually if token is revoked."
+4. (Phase 7 angle 6 question on auth prerequisite) "User must be logged in. Redirect to login if not."
+5. (Phase 7 angle 6 question on state parameter validation) "Yes — validate CSRF state parameter on callback. Reject if missing or mismatched."
+
+**Assertions**
+- [ ] Phase 6 completes with all 9 user-perspective angles run using the per-angle protocol (5–10 questions generated per angle, answers attempted, gaps asked).
+- [ ] Phase 7 fires after Phase 6 gate is confirmed.
+- [ ] Phase 7 angle 2 surfaces at least the OAuth callback failure and the "email already linked" case as open findings and asks the user about each.
+- [ ] Phase 7 angle 6 surfaces the missing authentication prerequisite and CSRF state validation as a security concern and asks the user.
+- [ ] Phase 7 angle 8 (implementer dry run) references the gaps found in angles 2 and 6 and confirms they are resolved before marking the dry run passed.
+- [ ] Phase 8 checklist explicitly requires both Phase 6 (9 angles) and Phase 7 (8 angles) complete.
+- [ ] Phase 9 Check A items 8 and 12 pass in the final output (error paths and security addressed in story).
+- [ ] Phase 9 Check B detects no split needed; skill presents the completion gate.
+- [ ] Final story includes error handling for OAuth failure, duplicate email, and revoked token (out-of-scope noted), and documents the CSRF state validation and auth prerequisite in Acceptance Criteria or Detailed Specs.
