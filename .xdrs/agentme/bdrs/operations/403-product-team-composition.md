@@ -1,11 +1,11 @@
 ---
-name: _local-bdr-policy-402-product-team-composition
+name: agentme-bdr-policy-403-product-team-composition
 description: Defines team composition models, squad structure, squad dynamics, and known structural gaps for Product Teams. Use when structuring or scaling a new or existing product team.
 apply-to: All product teams and cross-team roles in the organisation
 valid-from: 2026-08-18
 ---
 
-# _local-bdr-policy-402: Product team composition
+# agentme-bdr-policy-403: Product team composition
 
 ## Context and Problem Statement
 
@@ -98,4 +98,4 @@ Teams MUST be aware of the following structural gaps and MUST apply the recommen
 
 - [`_core-adr-policy-016`](../../../_core/adrs/principles/016-policy-subjects.md) — Policy subjects: BDR operations subject definition
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
-- [`_local-bdr-policy-401`](401-product-team-roles.md) — Role definitions for all team members referenced in this policy
+- [`agentme-bdr-402`](402-product-team-roles.md) — Role definitions for all team members referenced in this policy

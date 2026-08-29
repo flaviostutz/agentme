@@ -7,12 +7,12 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "3.0"
+  version: "4.0"
 ---
 
 ## Overview
 
-Turns a vague request or rough draft into an implementation-ready user story by running a structured 10-phase refinement process (Phase 0 is setup/context): understanding the request, qualifying requirements with a scope size check, researching existing context and drafting a story skeleton, checking consistency and scope completeness, validating visually with a user journey diagram, challenging from 9 user-perspective angles (Phase 6), challenging from 8 implementer-perspective angles (Phase 7), producing a final ready-to-implement story with a readiness checklist (Phase 8), and running a final readiness double-check (Phase 9).
+Turns a vague request or rough draft into an implementation-ready user story by running a structured 9-phase refinement process: establishing plan context and gathering external information to ground the analysis (Phase 1), analysing the request and qualifying requirements with a scope size check (Phase 2), researching existing context and drafting a story skeleton (Phase 3), checking consistency and scope completeness (Phase 4), validating visually with a user journey diagram (Phase 5), challenging from 9 user-perspective angles (Phase 6), challenging from 8 implementer-perspective angles (Phase 7), producing a final ready-to-implement story with a readiness checklist (Phase 8), and running a final readiness double-check (Phase 9).
 
 Activate when:
 - The request is vague, incomplete, or internally inconsistent.
@@ -37,13 +37,15 @@ Activate when:
 - **Loop**: within each phase, loop asking questions until convergence or Skip. Convergence means the last 2 consecutive rounds produced only single-sentence answers with no new issues surfaced — do not stop on a round count alone; stop only when checks genuinely have nothing left to surface. Explicit human confirmation that the phase output is correct also counts as convergence.
 - **Checklist gate**: after convergence, verify any completion checklist — if items are unmet, ask those specifically (targeted questions, not a full loop restart) before advancing.
 - **Skip**: when the human invokes Skip, stop the loop, record all open items as named Deferred Risks (visible in the story, carried forward), suspend the hard gate for those items, and advance immediately.
-- **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; Phase 1 concerns re-route to Phase 2 Step 1.
+- **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; concerns about the initial request understanding re-route to Phase 2 Step 1 (Classify and restate).
 
 **Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
 
+**Context Probe rule**: In every phase, whenever you encounter a gap, uncertainty, or ambiguity that external documentation, specifications, URLs, screenshots, or other artifacts could resolve — ask the user proactively. Tie the ask to the specific gap identified (e.g. *"I need to understand how the current deletion confirmation works — do you have a design spec or screenshot?"*). Never ask generically ("do you have any docs?"). The user can always skip; skipped probes are recorded as "Context: not provided for [topic]" and do **not** count as unresolved decisions under the Hard Gate. Do not re-probe gaps already covered by the Context Summary from Phase 1.
+
 ---
 
-### Phase 0: Plan Document Context
+### Phase 1: Plan Document Context & Context Enrichment
 
 Before beginning refinement, determine the working context and where output will be saved.
 
@@ -62,8 +64,8 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
 2. For each linked file, read it and check for `**Status:** to-be-refined`. Collect only those as pending stories.
 3. Use `vscode_askQuestions` to list all pending stories (by their link text and file name) plus a "New story — I will describe it" option.
 4. If the user picks a pending story:
-   - Read the placeholder file. Extract the NNN and slug from its `**Story ID:**` line. Carry any notes, context, or related-story links from the placeholder into Phase 1 as starting context.
-   - Use the placeholder's title and notes as the subject for Phase 1.
+   - Read the placeholder file. Extract the NNN and slug from its `**Story ID:**` line. Carry any notes, context, or related-story links from the placeholder into Phase 1 Step 3 (Context Enrichment) as starting context.
+   - Use the placeholder's title and notes as the subject for Phase 2.
 5. If the user picks "New story", ask which Milestone to place it in; offer to add the Milestone if it does not exist. The slug and NNN for the new story are assigned in Phase 8.
 
 **Step 2b — XDRS scope found but no plan document provided:**
@@ -97,21 +99,54 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
      **Key tasks:**
      ```
    - Proceed as Step 2a (the new plan is now the active plan context, Milestone 1 is the target).
-5. If "start fresh" is chosen, continue to Phase 1 with no active plan context; Phase 8 will handle deferred stories.
+5. If "start fresh" is chosen, continue to Phase 1 Step 3 (Context Enrichment) with no active plan context; Phase 8 will handle deferred stories.
 
 **Step 2c — No XDRS scope found:**
-Skip Phase 0. Proceed directly to Phase 1. Phase 8 will ask where to save output.
+Skip Phase 1 Steps 1–2. Proceed directly to Phase 1 Step 3 (Context Enrichment). Phase 8 will ask where to save output.
 
-**Plan context record:** note the active plan file path (or none) and the target Milestone name; carry these into Phase 8.
+**Step 3 — Context Enrichment**
+
+Before beginning analysis, gather factual context about the system, process, or domain the story touches. This step runs for all Phase 1 paths (2a, 2b, 2c).
+
+1. **Quick request analysis** *(internal — not surfaced verbatim to the user)*: read the story request and perform a rapid 3–5 bullet read to identify: domain/system type (CRM, e-commerce, auth, internal tool, etc.); key entities mentioned (contacts, leads, orders, users…); type of operation (CRUD, integration, notification, UI change…); any named systems, teams, or technologies. Used solely to generate targeted questions; NOT the full Phase 2 analysis.
+
+2. **Auto-discovery**: scan the workspace for signals — source code folders, documentation files (`.md`, `.pdf`, `.txt`), XDRS decisions, prior user stories (`.assets/userstory-*.md`), README files, API specs, test files, diagrams. Summarize findings in 3–5 bullet points (do not dump raw content). Include any notes or context carried forward from Step 2a/2b placeholder files.
+
+3. **Generate targeted context questions** derived from the quick analysis and auto-discovery. Questions must be specific — derived from what the request implies, not generic boilerplate:
+   - **Domain-specific probes** (examples: *"This looks like a CRM — is it? Can you point me to the Leads screen documentation or any existing specs?"* / *"Do you have screenshots, mockups, or a recording of the current flow?"* / *"Is there an existing implementation to reference? If so, point me to the relevant folder or file."*)
+   - **Business intent / artifact probes** (examples: *"What business outcome is expected from this change? Are there OKR or KR documents that describe the goal?"* / *"Were there any user interviews or stakeholder discussions about this need? A transcript or notes would help."*)
+   - ≤5 questions per `vscode_askQuestions` call; freeform answers preferred; use `options` only for bounded choices.
+
+4. After answers, auto-read any provided files/URLs and summarize them (factual only, each item labeled with its source). If the answers surface new questions that external info could address, generate a new targeted round and loop. Apply the Phase navigation rule (convergence = last 2 consecutive rounds produced no new actionable information).
+
+5. Present the convergence gate via `vscode_askQuestions`:
+   - **"Context is sufficient — continue to Phase 2"** *(recommended when meaningful context has been gathered)*
+   - **"Add more context"** (free text) — record and loop back to step 4
+   - **"Skip — no additional context available"** — record `Context: none available` and proceed
+
+6. Compile the **Context Summary**: a labeled bullet list of all gathered information, each item attributed to its source (e.g. `**Source:** workspace/README.md — describes the existing Contact entity model`). Carry this summary into all subsequent phases.
+
+**Hard constraint**: never invent or synthesize context from the story description alone. If nothing was found and the user skips, record `Context: none available.`
 
 ---
 
-### Phase 1: Understand the Request
+**Plan context record:** note the active plan file path (or none), the target Milestone name, and the Context Summary from Step 3; carry these into Phase 8.
+
+---
+
+### Phase 2: Request Analysis & Requirements Qualification
+
+#### Step 1 — Classify and restate
 
 1. Announce that you are activating the refine-user-story skill. State the story goal in one sentence: what the user wants to accomplish and what value it should deliver.
 2. **Classify the input.** Decide whether the input is a vague request, partial draft, or near-complete story. State the classification explicitly.
-3. **Restate current understanding** in 2–3 lines before asking any questions.
-4. **Identify missing information.** Scan across 6 areas:
+3. **Restate current understanding** in 2–3 lines, drawing on the Context Summary from Phase 1 when present.
+
+#### Step 2 — Requirements loop
+
+Loop asking questions across the 6 areas below until convergence. Apply the Phase navigation rule. A detailed or well-structured input does NOT exempt you from the question loop — treat apparent completeness as a signal to look harder for hidden ambiguities.
+
+**Apply Context Probe rule** throughout this step: whenever a gap in any area could be resolved by an external document, spec, URL, screenshot, or artifact not yet in the Context Summary, ask for it specifically.
 
 | Area | Questions to resolve |
 |---|---|
@@ -120,30 +155,13 @@ Skip Phase 0. Proceed directly to Phase 1. Phase 8 will ask where to save output
 | Requirements | What must the system do? What inputs, outputs, or contracts matter? What constraints shape the solution? |
 | Flow and interactions | What is the main end-to-end flow? Which actors, systems, or interfaces are involved? Are there state transitions or lifecycle rules? |
 | Edge cases | What unusual but valid scenarios must work? What invalid inputs or error paths must be handled? What happens on retries, duplicates, partial failure, or missing data? |
-| Dependencies | What upstream or downstream systems affect the change? Are there required approvals, sequencing, or external decisions? Does any migration, rollout, or compatibility concern exist? |
+| Dependencies | What upstream or downstream systems affect the change? Are there required approvals, sequencing, or external decisions? Does any migration, rollout, or compatibility concern exist? Is there a real named person — a domain expert, business owner, or decision maker — who can be contacted during implementation if questions arise? (Capture name and role only when they are an actual known person; never fabricate a contact.) |
 
-Use `vscode_askQuestions` to ask at most 4–5 tightly related questions from the initial scan. Apply the Phase navigation rule.
+**Interface and integration scan** (apply Context Probe rule here): before closing Step 2, explicitly check for: external APIs invoked (endpoints, HTTP methods, request/response payloads, authentication, behavior); input/output data (field names, types, formats, valid values, meanings, constraints); documentation links (specs, API references, runbooks); contact names and roles (owners of external systems or business rules); process rules or business logic tied to the story. For any missing detail, ask targeted questions or apply the Context Probe rule to request external sources.
 
-Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
-- **"Continue to Phase 2 — Requirements Qualification"** (recommended when initial understanding is sufficient)
-- **"Re-run Phase 1 — deeper pass"** — revisit classification and 6-area scan with fresh eyes, then re-present this gate.
-- **"Add a comment or correction"** (open box) — re-run Phase 1 treating the comment as additional context, then re-present this gate.
+Do not proceed to Step 3 while any open decision, unresolved assumption, or ambiguous rule exists. If you find yourself wanting to write "or X" / "TBD" / "to be documented" anywhere, that is a sign you skipped a question.
 
----
-
-### Phase 2: Requirements Qualification
-
-#### Step 1 — Ask follow-up questions
-
-Loop asking questions across the 6 areas from Phase 1. After each answer, evaluate whether new ambiguities surfaced before continuing. Apply the Phase navigation rule.
-
-- **Always use `vscode_askQuestions`** when available. Never dump questions as plain text.
-- Ask at most 4–5 tightly related questions per call. Do not batch many unrelated questions together.
-- Use `options` whenever the answer space is bounded. Use free-form text only when truly open-ended.
-- **Do not proceed to Step 2 while any open decision, unresolved assumption, or ambiguous rule exists.** If you find yourself wanting to write "or X" / "TBD" / "to be documented" anywhere, that is a sign you skipped a question.
-- **Interface and integration scan**: before closing Step 1, explicitly check for: external APIs invoked (endpoints, HTTP methods, request/response payloads, authentication, behavior); input/output data (field names, types, formats, valid values, meanings, constraints); documentation links (specs, API references, runbooks); contact names and roles (owners of external systems or business rules); process rules or business logic tied to the story. Ask targeted questions for any missing details.
-
-#### Step 2 — Scope size evaluation
+#### Step 3 — Scope size evaluation
 
 Assess whether the request as currently scoped is suitable for a single focused story. A request is likely too large if two or more of the following are true (a single criterion alone is not sufficient):
 - More than approximately 10 distinct scope items resulted from questioning.
@@ -152,13 +170,13 @@ Assess whether the request as currently scoped is suitable for a single focused 
 - Multiple distinct actor groups experiencing the feature in non-overlapping ways.
 
 If too large, propose a split into 2–4 vertical slices where each slice delivers independent end-to-end releasable value. Present the proposed split with a brief rationale for each slice's boundary. Use `vscode_askQuestions` with:
-- **"Accept split — start refining [Slice 1 name]"** (recommended) — restart from Phase 1 with the narrower scope; record all deferred slices in a **Deferred Stories** list so they can be tracked for future runs.
+- **"Accept split — start refining [Slice 1 name]"** (recommended) — restart from Phase 2 with the narrower scope; record all deferred slices in a **Deferred Stories** list so they can be tracked for future runs.
 - **"Keep original scope — continue"** — proceed without splitting; note the human explicitly accepted the larger scope.
 - Free text to adjust the proposed slice boundaries before deciding.
 
-If the human accepts the split, restart the entire process from Phase 1 with the new narrower scope.
+If the human accepts the split, restart the entire process from Phase 2 with the new narrower scope.
 
-#### Step 3 — Feature summary and phase gate
+#### Step 4 — Feature summary and phase gate
 
 Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance.
 
@@ -171,7 +189,7 @@ Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these opti
 
 ### Phase 3: Context & Story Draft
 
-1. **Research existing context**: inspect relevant workspace files, existing user stories or tickets, prior decisions, established conventions, and analogous patterns already in place. Ask questions about any non-trivial context items found. Apply the Phase navigation rule.
+1. **Build on the Context Summary** from Phase 1 Step 3. Do not re-scan the workspace for what is already captured there; instead focus on story-specific patterns, prior decisions, analogous implementations, and established conventions not yet covered in the Context Summary. Apply the Context Probe rule: if this deeper pass surfaces a partial or missing artifact (a referenced doc that was not provided, a prior story that links to an external spec), ask for it specifically. Apply the Phase navigation rule.
 2. **Draft a story skeleton** — a rough but structured version of the output template — incorporating context found. The skeleton must include at minimum: Title, User Story, Scope, and Acceptance Criteria as first drafts (not final).
 3. Present the draft skeleton and use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
    - **"Continue to Phase 4 — Consistency & Scope Review"** (recommended when the draft matches intent)
@@ -201,7 +219,7 @@ For every item listed under **Scope**, loop through these five checks before mov
 | Completeness | Is the item fully described? Are inputs, outputs, triggers, and expected behavior clear enough for autonomous implementation without guessing? |
 | Edge cases | Does this item have unusual paths — errors, empty states, boundary values, retries, or concurrency — not yet captured? Add any found. |
 | Technical constraints | Does this item imply or conflict with an existing technical constraint (e.g. API contract, data model, performance budget, auth model)? Flag any that must be honored. |
-| Missing attachments | Would a screenshot, mockup, flow diagram, or reference document make this item unambiguous? If so, ask for it explicitly before proceeding. |
+| Missing attachments | Would a screenshot, mockup, flow diagram, or reference document make this item unambiguous? If so, apply the Context Probe rule and ask for it explicitly before proceeding. |
 | Detailed Specs | Did refinement surface any external APIs, data contracts, documentation links, or contact names relevant to this item? If yes, are they fully recorded? If anything is missing, ask targeted questions. If none apply, note it explicitly so the N/A can be recorded in the output. |
 
 Do **not** advance while any scope item fails a check. If a check reveals a new gap, return to Phase 2 and ask the follow-up question.
@@ -229,6 +247,7 @@ After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) wi
    - **"Add a comment or correction"** (open box) — re-run Phase 5 treating the comment as additional context, then re-present this gate.
 
 4. If the diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
+5. **Save the confirmed diagram.** Write the Mermaid source to `.assets/userstory-NNN-slug-journey.md` inside the plan's `.assets/` folder (when a plan doc is active) or to `userstory-journey.md` at the workspace root otherwise. Record this path to include as a diagram attachment in `## Attachments` when Phase 8 writes the story file.
 
 ---
 
@@ -239,8 +258,9 @@ For each angle, apply the following protocol. The Phase navigation rule (converg
 1. Generate 10–20 specific questions about that angle **in the context of this story** (grounded in what has been gathered, not generic).
 2. Attempt to answer each question from the current story contents.
 3. For every question that cannot be answered, is unanswered, or reveals a gap or inconsistency: elaborate the finding and ask the user via `vscode_askQuestions`.
-4. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
-5. Do not resolve choice points unilaterally.
+4. Apply the Context Probe rule: if any gap could be resolved by an external spec, interview transcript, design doc, or other artifact, ask for it specifically.
+5. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
+6. Do not resolve choice points unilaterally.
 
 **1. User journey completeness**
 Does the story cover the full user journey from trigger to completion, including what happens immediately after? Identify any step the user must take that is not covered by the story.
@@ -283,8 +303,9 @@ For each angle, apply the following protocol. The Phase navigation rule (converg
 1. Generate 10–20 specific questions about that angle **in the context of this story** (grounded in what has been gathered, not generic).
 2. Attempt to answer each question from the current story contents.
 3. For every question that cannot be answered, is unanswered, or reveals a gap or inconsistency: elaborate the finding and ask the user via `vscode_askQuestions`.
-4. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
-5. Do not resolve choice points unilaterally.
+4. Apply the Context Probe rule: if any gap could be resolved by an external spec, API reference, interface contract, or other artifact, ask for it specifically.
+5. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
+6. Do not resolve choice points unilaterally.
 
 **1. Verifiable acceptance criteria**
 Can every acceptance criterion be independently tested by a developer without ambiguity? Is "done" unambiguous for each item, with no subjective interpretation required? Are criteria specific enough to write automated tests against?
@@ -299,7 +320,7 @@ Is any external team decision, environment access, infrastructure change, or thi
 What external APIs, systems, services, or teams does this story depend on to function — not necessarily blocking start, but required for the feature to work? For each: is the integration contract (endpoints, auth, data format, SLAs, contact) documented? Are there known risks, rate limits, reliability concerns, or ownership questions that the implementer needs to know?
 
 **5. Non-functional requirements**
-Are performance, scalability, availability, and accessibility expectations stated? If none apply, is that explicitly noted? (Mark N/A if not applicable.)
+Are performance, scalability, availability, and accessibility expectations stated? If none apply, is that explicitly noted? (Mark N/A if not applicable.) Any measurable NFR discovered here (e.g. "response time < 2s", "supports 50 concurrent users") MUST also appear as a verifiable item in `## Acceptance Criteria` — recording it only in `## Constraints` is not sufficient.
 
 **6. Security implications**
 Are authentication model, authorization rules, sensitive data handling, and input validation concerns identified and addressed? Are any known threat vectors or compliance constraints noted? (Mark N/A if not applicable.)
@@ -337,9 +358,9 @@ Once all items are checked or explicitly marked N/A, **produce the final result*
 - If the work is too large, output only the split stories using the same template.
 - Acceptance criteria must be a plain checklist.
 
-If any stories or features were placed in the **Deferred Stories** list during Phase 2 Step 2 (scope split), or any items were recorded as named **Deferred Risks** during a Skip, present a **Deferred Items summary** — a bulleted list of each deferred item with a one-line description of what it covers and why it was deferred.
+If any stories or features were placed in the **Deferred Stories** list during Phase 2 Step 3 (scope split), or any items were recorded as named **Deferred Risks** during a Skip, present a **Deferred Items summary** — a bulleted list of each deferred item with a one-line description of what it covers and why it was deferred.
 
-**When an XDRS plan doc is active** (Phase 0 selected or created a plan): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the plan doc by the Plan document integration section below.
+**When an XDRS plan doc is active** (Phase 1 selected or created a plan): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the plan doc by the Plan document integration section below.
 
 **When no XDRS plan doc is active**: use `vscode_askQuestions` with:
 - **"Save to BACKLOG.md"** (recommended) — append the list under a `## Deferred Stories` heading in `BACKLOG.md` at the workspace root (create the file if it does not exist), so the items can be planned for future refinement runs.
@@ -350,12 +371,12 @@ This step is skipped if no stories were deferred and no Deferred Risks were reco
 
 ### Plan document integration
 
-After producing the final story output, persist it according to the active plan context from Phase 0.
+After producing the final story output, persist it according to the active plan context from Phase 1.
 
-**When an XDRS plan doc is active (Phase 0 selected or created a plan):**
+**When an XDRS plan doc is active (Phase 1 selected or created a plan):**
 1. Determine the NNN and slug for the story detail file:
-   - **Placeholder story** (Phase 0 picked a pending story): extract the NNN and slug from the placeholder file's `**Story ID:**` line. Reuse them for the refined file.
-   - **New story** (Phase 0 chose "New story" or a new epic was created): use the next available NNN in the plan's `.assets/` folder (list existing `userstory-NNN-*.md` files, increment the highest; start at 001 if empty). Derive the slug by kebab-casing the refined `## Title`, keeping at most 7 words, e.g. `save-payment-method-future-checkouts`.
+   - **Placeholder story** (Phase 1 picked a pending story): extract the NNN and slug from the placeholder file's `**Story ID:**` line. Reuse them for the refined file.
+   - **New story** (Phase 1 chose "New story" or a new epic was created): use the next available NNN in the plan's `.assets/` folder (list existing `userstory-NNN-*.md` files, increment the highest; start at 001 if empty). Derive the slug by kebab-casing the refined `## Title`, keeping at most 7 words, e.g. `save-payment-method-future-checkouts`.
 2. Write the refined story as `.assets/userstory-NNN-slug.md` inside the plan's `.assets/` folder using the output template, including the `**Story ID:** userstory-NNN-slug` line at the top (no `**Status:**` line — absence of the status field indicates a refined story).
 3. In the plan doc, update the task entry link text in the active Milestone: change `[Brief description — pending]` to `[Refined Story Title]` (keep the same `.assets/userstory-NNN-slug.md` path). For new stories, insert a new task entry `- [Refined Story Title]{.assets/userstory-NNN-slug.md}`.
 4. When splitting: for each non-chosen slice, create a placeholder file at `.assets/userstory-NNN-slug.md` containing:
@@ -415,6 +436,9 @@ As a [role], I want to [action], so that [benefit].
 ## Attachments
 [highly desirable — screenshots, mockups, or diagrams illustrating the feature.]
 - [attachment]
+
+**Epic plan:** [NNN-epic-slug.md](../NNN-epic-slug.md)
+*(omit when no XDRS plan doc is active)*
 ```
 
 ---
@@ -444,14 +468,15 @@ Verify all 14 items against the final story output:
 12. **Security implications** — auth model, data handling, and input validation addressed or explicitly N/A.
 13. **Independent releasability** — can ship without waiting for another story; any hard coupling explicitly stated.
 14. **Implementer dry run passed** — a cold engineer can read the story, understand where to start, and make progress without getting stuck or making wrong assumptions.
+15. **Definition of Done** — ask whether the team has a DoD; if so, confirm that its implicit criteria (e.g. code reviewed, tests passing, deployed to staging) are either satisfied by the story's scope or explicitly noted as out of scope.
 
 #### Check B — Size re-evaluation
 
-Apply the same 4 criteria from Phase 2 Step 2. If two or more are met, the story is still too large.
+Apply the same 4 criteria from Phase 2 Step 3. If two or more are met, the story is still too large.
 
 - **Passes** → use `vscode_askQuestions` to confirm the skill is complete and the story is ready.
 - **Too large** → propose 2–4 vertical slices with rationale. Use `vscode_askQuestions` with:
-  - **"Accept split — start refining [Slice 1 name]"** (recommended) — restart from Phase 1 with the narrower scope; Phase 0 context is preserved; deferred slices follow Phase 2 Step 2 rules.
+  - **"Accept split — start refining [Slice 1 name]"** (recommended) — restart from Phase 2 with the narrower scope; Phase 1 context is preserved; deferred slices follow Phase 2 Step 3 rules.
   - Free text to adjust the proposed slice boundaries before deciding.
 
 ---
@@ -477,4 +502,4 @@ Apply the same 4 criteria from Phase 2 Step 2. If two or more are met, the story
 
 - [`agentme-edr-012`](../../012-continuous-xdr-enrichment.md) — Continuous XDR enrichment policy
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing mandate
-- [`agentme-bdr-401`](../../../../bdrs/operations/401-epic-feature-story-planning.md) — Epic/feature/user story planning structure (policy source for the inline reference in Phase 0)
+- [`agentme-bdr-401`](../../../../bdrs/operations/401-epic-feature-story-planning.md) — Epic/feature/user story planning structure (policy source for the inline reference in Phase 1)

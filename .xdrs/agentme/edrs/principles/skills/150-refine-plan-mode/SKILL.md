@@ -8,7 +8,7 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "2.7"
+  version: "2.8"
 ---
 
 ## Overview
@@ -17,7 +17,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 **Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 4 or Phase 6, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
 
-**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 4 (consistency checks), create a todo for each check (a–i) before beginning Phase 4 and mark each completed when that check individually converges. For Phase 6 (challenge angles), create a todo for each of the 18 angles before beginning Phase 6 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
+**Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 4 (consistency checks), create a todo for each check (a–i) before beginning Phase 4 and mark each completed when that check individually converges. For Phase 6 (challenge angles), create a todo for each of the 9 angles before beginning Phase 6 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
 
 **Phase navigation rule**: Governs loop control, convergence, and phase transitions across all phases:
 - **Loop**: within each phase, loop asking questions until convergence or Skip. Convergence means the last 2 consecutive rounds produced only single-sentence answers with no new issues surfaced — do not stop on a round count alone; stop only when checks genuinely have nothing left to surface. Explicit human confirmation that the phase output is correct also counts as convergence.
@@ -85,7 +85,7 @@ If the feature qualifies as too large, propose a split into 2–4 coherent parts
 
 If the human accepts the split, restart the entire planning process from Phase 1 with the new narrower scope. The deferred parts are preserved in the Deferred Features list and will be surfaced again at the Phase 7 handoff gate.
 
-4. Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance. Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
+Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance. Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
    - **"Continue to Phase 3 — Research and Draft Plan"** (recommended when scope is clear and agreed) — proceed with research and drafting.
    - **"Re-run Phase 2 — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 2 in full, treating the comment as additional context and constraints, then re-present this gate.
@@ -94,7 +94,7 @@ If the human accepts the split, restart the entire planning process from Phase 1
 
 1. Research the existing context: relevant files, prior decisions, established conventions, and analogous patterns already in place.
 2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), ask questions about all non-trivial items. For each dependency or context item, apply the Phase navigation rule: loop asking questions until that item converges before moving to the next. Only skip asking for trivially obvious or deterministic context items with no decision weight.
-3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include two dedicated sections:
+3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include a dedicated phase for test generation and execution whenever applicable — this phase must appear as an explicit step in the ordered plan, not only in the verification section. It must specify: (a) what tests to create or extend (unit, integration, end-to-end, or manual); (b) the exact commands or manual steps to run them; (c) the expected outcome for each. Examples: "Generate unit tests for X and run `npm test` — expect all pass", "Run integration tests with `make test-integration` — verify no regressions", "Manually open the generated document and verify sections Y and Z look correct". If no automated or manual tests apply, explicitly state why and mark the phase N/A. The plan MUST also include two dedicated sections:
    - **Quality Verification Strategy**: (a) existing checks that must continue to pass; (b) new checks required for the task — for code: unit tests, integration tests, linting, type checking, dead code detection, security/dependency audit, schema/contract validation; for documents, analyses, and policies: proofreading, fact-checking, citation and link validation, policy compliance review, peer review, readability check; (c) exact executable steps or commands for each check; (d) what each check verifies. A plan without this section is incomplete.
    - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
 4. Present the draft and use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this draft match your intent? What verification checks exist today, and what new checks will confirm the key outcomes?" Present at least these options:
@@ -161,17 +161,17 @@ After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI 
 2. **Generate all selected diagrams** in sequence, each with a one-line description of what it is meant to reveal.
 
 3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do these diagrams match your mental model of the solution? Is any important perspective missing?" Present at least these options:
-   - **"Continue to Phase 6 — 18 Challenge Angles"** (recommended when the diagrams match) — advance.
+   - **"Continue to Phase 6 — 9 Challenge Angles"** (recommended when the diagrams match) — advance.
    - **"Re-run Phase 5 — add or replace a diagram"** — add a missing perspective or replace one with a different type, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 5 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 4. If any diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
 
-### Phase 6: Challenge from 17 Distinct Angles
+### Phase 6: Challenge from 9 Distinct Angles
 
 Each angle is an analysis step. **For each angle:** formulate 5–10 challenge questions grounded in the current plan and broader context (codebase, prior decisions); reason through each surfacing evidence — not self-resolving; bring unresolved or subjective questions to the human per the Questioning rule; then run the angle's analysis. Run the angle and present findings. Batch questions from related angles into a single round when findings are related — batching questions is permitted, skipping analysis is not. Ask questions about findings. Only skip asking when a finding is trivially obvious and carries no decision weight. For findings with major impact on users, emit a **SEVERE WARNING** and continue without asking. Apply Phase navigation rule to each angle: ask questions about findings proactively; loop on that angle's findings until no new questions surface before marking the angle complete. Do not resolve choice points unilaterally — apply the Questioning rule.
 
-**Scenario-to-test rule**: Across all angles — especially angles 3 (dry run), 10 (scenario runs), 12 (input coverage), and 13 (stress/failure) — continuously collect scenarios into the plan's Quality Verification Strategy as named test cases. Capture a scenario from each of the following categories whenever one is encountered during investigation:
+**Scenario-to-test rule**: Across all angles — especially angles 5 (scenario runs), 6 (input coverage), and 7 (stress/failure) — continuously collect scenarios into the plan's Quality Verification Strategy as named test cases. Capture a scenario from each of the following categories whenever one is encountered during investigation:
 
 | Category | When to add |
 |---|---|
@@ -186,11 +186,11 @@ Each angle is an analysis step. **For each angle:** formulate 5–10 challenge q
 | **Smoke** | Minimal "does it work at all" check for the primary function — derived from feasibility analysis (Phase 4e) |
 | **Integration** | Components connect and communicate correctly — derived from component consistency analysis (Phase 4c) |
 | **Policy / contract compliance** | Behaviour matches a declared policy, interface contract, or external API shape — derived from XDRS alignment (Phase 4d) and unverified claims (Phase 4i) |
-| **Assumption** | A planning assumption that must hold true at runtime — derived from pre-mortem analysis (angle 5) and unverified references |
-| **Security** | No sensitive data exposed, no attack surface created, no OWASP violation — derived from security scan (angle 6) |
-| **Side-effect / isolation** | Executing this feature leaves adjacent systems, files, and state unaffected — derived from second-order effects analysis (angle 8) |
-| **Observability** | Failures and error states are detectable, logged, and produce actionable messages — derived from observability analysis (angle 17) |
-| **Acceptance** | The originally requested feature or outcome is demonstrably delivered end-to-end — derived from faithfulness (angle 1), goal achievability (angle 3), and success criteria (angle 7) |
+| **Assumption** | A planning assumption that must hold true at runtime — derived from pre-mortem analysis (angle 3) and unverified references |
+| **Security** | No sensitive data exposed, no attack surface created, no OWASP violation — derived from security scan (angle 3) |
+| **Side-effect / isolation** | Executing this feature leaves adjacent systems, files, and state unaffected — derived from second-order effects analysis (angle 4) |
+| **Observability** | Failures and error states are detectable, logged, and produce actionable messages — derived from observability analysis (angle 9) |
+| **Acceptance** | The originally requested feature or outcome is demonstrably delivered end-to-end — derived from faithfulness (angle 1), goal achievability (angle 2), and success criteria (angle 4) |
 
 Name each test case as `<descriptive action or scenario> (<category>)` so the purpose is immediately readable after implementation without needing to look up the planning notes. The descriptive part should name the concrete scenario; the category in parentheses identifies why it was captured. Examples: `"Validate BOM-prefixed file (edge case)"`, `"glob pattern [invalid throws (adversarial/invalid)"`, `"10 000 files processed synchronously (stress)"`, `"CLI exits 0 when all files valid (acceptance)"`, `"readFileSync EACCES returns invalid result (integration)"`. Optionally append the source angle in brackets for full traceability: `"BOM-prefixed file (edge case) [12-22]"`. Show a sample of the most revealing scenarios as brief inline callouts during the analysis to make the depth of analysis visible without producing a wall of text.
 
@@ -199,16 +199,16 @@ Name each test case as `<descriptive action or scenario> (<category>)` so the pu
 **1. Prompt faithfulness**
 Does the plan account for existing files, decisions, and constraints already in place? Does it contradict anything already established in the codebase, repository, or context?
 
-**3. Goal achievability**
+**2. Goal achievability**
 Is any step or decision in the plan interpretable in more than one way? Every ambiguity is a future mistake. List all ambiguous points and ask the human to resolve each one.
 
-**5. Pre-mortem**
+**3. Pre-mortem**
 Does the plan or its output expose sensitive information, create privacy risks, or introduce misuse vectors? This applies to any task type: documentation, code, processes, data handling, communications. Ask the human about any non-trivial findings. For trivially obvious mitigations with no decision weight, state them and continue.
 
-**7. Success criteria and falsifiability**
+**4. Success criteria and falsifiability**
 What changes as a side effect of executing this plan beyond the intended outcome? Does solving this problem create a new problem elsewhere — in adjacent systems, files, processes, or stakeholders? List the side effects. Ask the human whether the side effects are acceptable.
 
-**9. Steelman the opposition**
+**5. Steelman the opposition**
 Simulate 10 realistic usage scenarios of the expected output by its actual consumer. For each scenario, ask: "Does the output serve its consumer in this situation?" Use scenarios that cover typical use, edge cases, and at least two adversarial or failure cases.
 
 Examples of scenario framing:
@@ -218,21 +218,21 @@ Examples of scenario framing:
 
 Whenever a scenario reveals ambiguity or requires a subjective judgment, stop and ask the human a clarifying question. Do not resolve subjective decisions unilaterally.
 
-**11. Output internal consistency**
+**6. Output internal consistency**
 Simulate 50–200 different inputs against the produced element with the goal of discovering edge cases, security issues, and unresolved discussion points not yet surfaced in earlier phases. Scale toward 200 when the feature has high input diversity (many argument types, branches, modes, or configuration axes) — use the lower end only for narrow, single-path features. These inputs are a breadth-forcing tool — not a pass/fail test. What counts as an "input" depends on the task type: for code/systems — function arguments, API payloads, config values; for documents/policies/processes — reader queries, usage scenarios, edge-case interpretations. Inputs must span typical, edge, boundary, invalid, adversarial, and combined cases. Add more inputs for each distinct branch or configuration axis the plan introduces — the more divergent paths exist in the logic, the more inputs are needed to cover them. For each, ask: does this reveal a new edge case, security risk, or ambiguity not already addressed? Surface all findings as questions to the human per the Questioning rule.
 
-**13. Stress and failure conditions**
+**7. Stress and failure conditions**
 Enumerate 2–3 meaningfully different ways the goal could be achieved. For each alternative, describe the approach in 1–2 lines and compare it against the current plan on at least: implementation effort, reversibility, risk, and fit with existing context. The goal is to surface whether the current plan is the right approach or just the first one considered. Ask the human: which tradeoffs matter most, and does the current approach still win? If an alternative is clearly superior in the context, flag it prominently and ask the human to reconsider.
 
-**15. Stakeholder perspective tour**
+**8. Stakeholder perspective tour**
 Review the plan for anything that could be cut, simplified, or deferred without losing essential value. For each candidate: what is it, why might it be unnecessary, and what is the risk of removing it? This is not the same as scope-creep detection (angle 1, which checks for additions) — this angle actively proposes reductions. Ask the human to confirm or reject each simplification candidate explicitly.
 
-**17. Observability and failure recovery**
+**9. Observability and failure recovery**
 Ask: will someone who did not build this be able to understand, change, and extend it safely 6 months from now? For code: are responsibilities clearly separated, is there excessive coupling, are there undocumented assumptions baked into the implementation, are naming and structure consistent with the codebase conventions? For documents and policies: is the content organized so that a future editor can update one section without inadvertently invalidating another? Is the vocabulary stable and defined, or does it rely on context that may not survive contributor turnover? For processes: are the steps atomic and independently verifiable, or do they depend on unstated tribal knowledge? Identify the parts of the plan most likely to become a maintenance burden and ask the human whether the trade-off is acceptable.
 
-After all 18 angles are complete, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 6 gate with at least these options:
+After all 9 angles are complete, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 6 gate with at least these options:
 - **"Continue to Phase 7 — Pre-Execution Readiness"** (recommended when all angles are complete and no open questions remain) — advance.
-- **"Re-run Phase 6 — deeper pass"** — repeat all 18 angles with fresh challenge questions, prioritising scenarios and inputs not yet explored, then re-present this gate.
+- **"Re-run Phase 6 — deeper pass"** — repeat all 9 angles with fresh challenge questions, prioritising scenarios and inputs not yet explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 6 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 ### Phase 7: Pre-Execution Readiness
@@ -240,12 +240,13 @@ After all 18 angles are complete, use `vscode_askQuestions` (per Phase gate UI r
 Before approving execution, verify ALL items in the checklist below. If any item cannot be checked, return to the relevant phase and resolve it first.
 
 - [ ] Consistency rounds converged (convergence signals met — last 2 rounds produced only single-sentence answers with no new issues) (per Phase navigation rule)
-- [ ] All 18 challenge angles completed with human input received for every ambiguity and subjective decision
+- [ ] All 9 challenge angles completed with human input received for every ambiguity and subjective decision
 - [ ] Diagram generated and confirmed by the human
 - [ ] No unresolved human questions outstanding
 - [ ] Scope confirmed by the human with no silent expansions
 - [ ] Any irreversible or high-impact steps have a mitigation or fallback noted
 - [ ] Quality Verification Strategy defined in the plan with exact executable steps for all applicable check types (code: unit tests, integration tests, linting, static analysis; documents/analyses: fact-checking, link and citation validation, peer review, etc.)
+- [ ] A dedicated test generation and execution phase is present in the ordered plan steps (or explicitly marked N/A with a reason)
 - [ ] Verification checks executed during dry run and results reviewed — failures and coverage gaps resolved
 - [ ] All high-risk unverified references (code or factual) listed in the Unverified References section with explicit first-step verification in the execution plan
 - [ ] All scenarios from any phase or angle that revealed gaps, raised model doubt, or qualified for any category in the Scenario-to-test table have been added as named test cases to the plan's Quality Verification Strategy
@@ -311,12 +312,12 @@ Stop execution and return to Phase 1 if any of the following occur:
 - Phase 3: Discovers existing middleware and an in-progress PR touching the same path. Human asked about each before drafting.
 - Phase 4: Round 1 — check (a) finds the plan references a `RateLimiter` class not yet decided on; human asked to clarify. Round 5 — all checks return trivial answers; convergence reached.
 - Phase 5: Sequence diagram generated. Human confirms it matches their model.
-- Phase 6: Angle 8 (second-order effects) reveals that rate-limiting breaks an existing test suite that sends rapid sequential requests; human decides to add a test bypass header. Angle 9 (steelman) surfaces that Redis dependency adds operational complexity; human accepts the trade-off.
+- Phase 6: Angle 4 (second-order effects) reveals that rate-limiting breaks an existing test suite that sends rapid sequential requests; human decides to add a test bypass header. Angle 5 (steelman) surfaces that Redis dependency adds operational complexity; human accepts the trade-off.
 - Phase 7: All items checked. Execution approved.
 
 **Input**: "Write operator documentation for the conveyor belt system."
 
-- Phase 6, angle 10 (output dry runs): Scenario 1 — "An operator needs to restart the belt after an emergency stop at midnight." The draft plan has no emergency stop section; human asked whether to add it. Scenario 3 — "Operator reading on a mobile phone." Human asked whether a condensed quick-reference card is needed alongside the full manual.
+- Phase 6, angle 5 (steelman): Scenario 1 — "An operator needs to restart the belt after an emergency stop at midnight." The draft plan has no emergency stop section; human asked whether to add it. Scenario 3 — "Operator reading on a mobile phone." Human asked whether a condensed quick-reference card is needed alongside the full manual.
 
 **Input**: "Add input validation to the user registration endpoint."
 

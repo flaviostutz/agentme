@@ -144,7 +144,16 @@ Epic plans and their associated user story detail files are ephemeral artifacts.
 - The `.assets/` folder and all user story detail files MUST be deleted with it.
 - The lasting outputs of an epic are the implemented code, decisions, skills, articles, and other artifacts produced during execution.
 
+#### 08-okr-connection
+
+Epics SHOULD be connected to one or more Tactical OKRs from `agentme-bdr-002` that represent the quarterly goals the epic is helping achieve.
+
+- The OKR reference MUST be placed in a `## OKRs` section immediately after the heading line of the epic plan document, listing each Tactical OKR by name or identifier.
+- An epic without a linked Tactical OKR MUST document the reason in the `## OKRs` section (e.g., "No Tactical OKR defined for this quarter — tracked as a conscious decision").
+- The relationship is many-to-many: one Tactical OKR MAY drive multiple Epics; one Epic MAY contribute to multiple Tactical OKRs.
+
 ## References
 
 - [`_core-adr-policy-007`](../../../_core/adrs/principles/007-plan-standards.md) — Plan document standards: structure, lifecycle, and Milestone template
+- [`agentme-bdr-002`](../principles/002-okr-framework.md) — OKR framework: Tactical OKR definition and epic connection rule
 - [`agentme-edr-skill-151`](../../edrs/principles/skills/151-refine-user-story/SKILL.md) — Refine user story skill: structured refinement workflow that produces output following this policy
