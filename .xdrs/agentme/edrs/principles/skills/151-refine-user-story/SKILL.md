@@ -7,12 +7,12 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "2.0"
+  version: "3.0"
 ---
 
 ## Overview
 
-Turns a vague request or rough draft into an implementation-ready user story by running a structured 7-phase refinement process: understanding the request, qualifying requirements with a scope size check, researching existing context and drafting a story skeleton, checking consistency and scope completeness, validating visually with a user journey diagram, challenging from 9 user-perspective angles, and producing a final ready-to-implement story with a readiness checklist.
+Turns a vague request or rough draft into an implementation-ready user story by running a structured 10-phase refinement process (Phase 0 is setup/context): understanding the request, qualifying requirements with a scope size check, researching existing context and drafting a story skeleton, checking consistency and scope completeness, validating visually with a user journey diagram, challenging from 9 user-perspective angles (Phase 6), challenging from 8 implementer-perspective angles (Phase 7), producing a final ready-to-implement story with a readiness checklist (Phase 8), and running a final readiness double-check (Phase 9).
 
 Activate when:
 - The request is vague, incomplete, or internally inconsistent.
@@ -64,7 +64,7 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
 4. If the user picks a pending story:
    - Read the placeholder file. Extract the NNN and slug from its `**Story ID:**` line. Carry any notes, context, or related-story links from the placeholder into Phase 1 as starting context.
    - Use the placeholder's title and notes as the subject for Phase 1.
-5. If the user picks "New story", ask which Milestone to place it in; offer to add the Milestone if it does not exist. The slug and NNN for the new story are assigned in Phase 7.
+5. If the user picks "New story", ask which Milestone to place it in; offer to add the Milestone if it does not exist. The slug and NNN for the new story are assigned in Phase 8.
 
 **Step 2b — XDRS scope found but no plan document provided:**
 1. Search for files matching `*/bdrs/operations/plans/*-epic-*.md`.
@@ -97,12 +97,12 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
      **Key tasks:**
      ```
    - Proceed as Step 2a (the new plan is now the active plan context, Milestone 1 is the target).
-5. If "start fresh" is chosen, continue to Phase 1 with no active plan context; Phase 7 will handle deferred stories.
+5. If "start fresh" is chosen, continue to Phase 1 with no active plan context; Phase 8 will handle deferred stories.
 
 **Step 2c — No XDRS scope found:**
-Skip Phase 0. Proceed directly to Phase 1. Phase 7 will ask where to save output.
+Skip Phase 0. Proceed directly to Phase 1. Phase 8 will ask where to save output.
 
-**Plan context record:** note the active plan file path (or none) and the target Milestone name; carry these into Phase 7.
+**Plan context record:** note the active plan file path (or none) and the target Milestone name; carry these into Phase 8.
 
 ---
 
@@ -194,7 +194,7 @@ Ask questions about all findings. Apply the Phase navigation rule.
 
 #### Step 2 — Scope item review
 
-For every item listed under **Scope**, loop through these four checks before moving on:
+For every item listed under **Scope**, loop through these five checks before moving on:
 
 | Check | What to look for |
 |---|---|
@@ -234,7 +234,13 @@ After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) wi
 
 ### Phase 6: User-Perspective Challenge
 
-Each angle is an analysis step. Run the angle and present findings. Ask questions about all findings per the Phase navigation rule. Only skip asking when a finding is trivially obvious and carries no decision weight. Loop on each angle until no new questions surface before marking it complete. Do not resolve choice points unilaterally.
+For each angle, apply the following protocol. The Phase navigation rule (convergence, Skip, Backtracking) governs loop control on top of this protocol.
+
+1. Generate 10–20 specific questions about that angle **in the context of this story** (grounded in what has been gathered, not generic).
+2. Attempt to answer each question from the current story contents.
+3. For every question that cannot be answered, is unanswered, or reveals a gap or inconsistency: elaborate the finding and ask the user via `vscode_askQuestions`.
+4. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
+5. Do not resolve choice points unilaterally.
 
 **1. User journey completeness**
 Does the story cover the full user journey from trigger to completion, including what happens immediately after? Identify any step the user must take that is not covered by the story.
@@ -264,13 +270,54 @@ Are there data privacy, error recovery, or safety implications from the user's p
 Can a new user complete this story's scenario without reading documentation? What is the first-use experience? Are there onboarding moments, tooltips, or self-describing UI elements needed?
 
 After all 9 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
-- **"Continue to Phase 7 — Story Output & Readiness"** (recommended when all angles have converged and no open questions remain)
+- **"Continue to Phase 7 — Implementer-Perspective Challenge"** (recommended when all angles have converged and no open questions remain)
 - **"Re-run Phase 6 — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 6 treating the comment as additional context, then re-present this gate.
 
 ---
 
-### Phase 7: Story Output & Readiness
+### Phase 7: Implementer-Perspective Challenge
+
+For each angle, apply the following protocol. The Phase navigation rule (convergence, Skip, Backtracking) governs loop control on top of this protocol.
+
+1. Generate 10–20 specific questions about that angle **in the context of this story** (grounded in what has been gathered, not generic).
+2. Attempt to answer each question from the current story contents.
+3. For every question that cannot be answered, is unanswered, or reveals a gap or inconsistency: elaborate the finding and ask the user via `vscode_askQuestions`.
+4. Only mark the angle complete when all questions are answered or explicitly deferred as named risks.
+5. Do not resolve choice points unilaterally.
+
+**1. Verifiable acceptance criteria**
+Can every acceptance criterion be independently tested by a developer without ambiguity? Is "done" unambiguous for each item, with no subjective interpretation required? Are criteria specific enough to write automated tests against?
+
+**2. Error and edge paths**
+Are all failure modes, invalid inputs, retries, empty states, and boundary values explicitly handled? Does the story cover what happens when things go wrong — not only the happy path? Are error responses and recovery flows described?
+
+**3. Blocking dependencies & startability**
+Is any external team decision, environment access, infrastructure change, or third-party system onboarding required before work can start? Is it clear when this story can be picked up — are there ordering constraints relative to other stories, milestones, or external events? All blocking items must be either resolved or explicitly deferred as named risks with the expected resolution date or condition.
+
+**4. Functional dependencies**
+What external APIs, systems, services, or teams does this story depend on to function — not necessarily blocking start, but required for the feature to work? For each: is the integration contract (endpoints, auth, data format, SLAs, contact) documented? Are there known risks, rate limits, reliability concerns, or ownership questions that the implementer needs to know?
+
+**5. Non-functional requirements**
+Are performance, scalability, availability, and accessibility expectations stated? If none apply, is that explicitly noted? (Mark N/A if not applicable.)
+
+**6. Security implications**
+Are authentication model, authorization rules, sensitive data handling, and input validation concerns identified and addressed? Are any known threat vectors or compliance constraints noted? (Mark N/A if not applicable.)
+
+**7. Independent releasability**
+Can this story be deployed to production without requiring another story to be completed first? If a hard coupling exists, is it explicitly stated and justified?
+
+**8. Implementer dry run**
+Simulate an engineer receiving this story cold — no prior context, no verbal briefing. Walk through their experience step by step: reading the title and user story, scanning the scope, reading the acceptance criteria, checking the detailed specs, looking at external system references, identifying where to start. At each step ask: would they get stuck? Would they need to ask a question? Would they make a wrong assumption? Flag every point where the story is insufficient to let them start and make progress without outside help. This is the final integration check: if any of angles 1–7 left gaps, they will surface here.
+
+After all 8 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
+- **"Continue to Phase 8 — Story Output & Readiness"** (recommended when all angles have converged and no open questions remain)
+- **"Re-run Phase 7 — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
+- **"Add a comment or correction"** (open box) — re-run Phase 7 treating the comment as additional context, then re-present this gate.
+
+---
+
+### Phase 8: Story Output & Readiness
 
 Before producing the final story, verify ALL items in the checklist below. If any item cannot be checked, return to the relevant phase and resolve it first.
 
@@ -280,7 +327,7 @@ Before producing the final story, verify ALL items in the checklist below. If an
 - [ ] Every in-scope item passes the 5-check review (completeness, edge cases, technical constraints, attachments, detailed specs) with no open findings.
 - [ ] No contradictions between goal, scope, and acceptance criteria.
 - [ ] Story is either one thin vertical slice or a clean set of split slices, each delivering complete releasable value.
-- [ ] All 9 user-perspective challenge angles completed with human input received for every ambiguity and subjective decision.
+- [ ] All 9 user-perspective challenge angles (Phase 6) and all 8 implementer-perspective angles (Phase 7) completed with human input received for every ambiguity and subjective decision.
 - [ ] Diagram generated and confirmed by the human.
 - [ ] No unresolved human questions outstanding.
 - [ ] For every in-scope item where integration or interface details exist: `## Detailed Specs` is populated or explicitly marked N/A; the story contains enough detail to begin architecture or implementation without further business clarification.
@@ -369,6 +416,43 @@ As a [role], I want to [action], so that [benefit].
 [highly desirable — screenshots, mockups, or diagrams illustrating the feature.]
 - [attachment]
 ```
+
+---
+
+### Phase 9: Final Readiness & Size Re-Validation
+
+Run two sequential checks. For any item in Check A not met in the final output, ask targeted questions and update the story before moving to Check B.
+
+#### Check A — Readiness double-check
+
+Verify all 14 items against the final story output:
+
+**Story-level (6 items):**
+1. **Vertical completeness** — story covers everything needed for end-to-end implementation; no half-slices that silently assume separate parallel work.
+2. **Size** — one person can develop it in roughly 2–3 days.
+3. **Engineering-ready detail** — sufficient for architecture and engineering detailing without further business clarification.
+4. **External systems** — all external systems documented with APIs, endpoints, data fields, formats, constraints, and known concerns.
+5. **User context** — user perspective present: what the user will do with this feature in their context, including concrete usage examples.
+6. **Scope boundary** — explicit statement of what is included and what is not included in this implementation.
+
+**Implementer double-check (mirrors Phase 7 angles 1–8):**
+7. **Verifiable acceptance criteria** — every criterion independently testable; "done" is unambiguous.
+8. **Error and edge paths** — failure modes, invalid inputs, empty states, and boundary values explicitly handled beyond the happy path.
+9. **Blocking dependencies & startability** — all blocking items resolved or deferred; ordering constraints and startability conditions are explicit.
+10. **Functional dependencies** — all external APIs, systems, services, and teams documented with integration contracts; known risks and reliability concerns noted.
+11. **Non-functional requirements** — performance, availability, and accessibility expectations stated or explicitly N/A.
+12. **Security implications** — auth model, data handling, and input validation addressed or explicitly N/A.
+13. **Independent releasability** — can ship without waiting for another story; any hard coupling explicitly stated.
+14. **Implementer dry run passed** — a cold engineer can read the story, understand where to start, and make progress without getting stuck or making wrong assumptions.
+
+#### Check B — Size re-evaluation
+
+Apply the same 4 criteria from Phase 2 Step 2. If two or more are met, the story is still too large.
+
+- **Passes** → use `vscode_askQuestions` to confirm the skill is complete and the story is ready.
+- **Too large** → propose 2–4 vertical slices with rationale. Use `vscode_askQuestions` with:
+  - **"Accept split — start refining [Slice 1 name]"** (recommended) — restart from Phase 1 with the narrower scope; Phase 0 context is preserved; deferred slices follow Phase 2 Step 2 rules.
+  - Free text to adjust the proposed slice boundaries before deciding.
 
 ---
 
