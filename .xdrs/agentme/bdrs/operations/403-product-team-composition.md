@@ -34,7 +34,7 @@ A team with a bounded product scope and limited AI surface MUST operate as a sim
 | Product Owner | 1 | |
 | Business Analyst or AI BA | 1 | |
 | Tech Lead | 1 | |
-| Engineer | 1–2 | Any sub-type from `agentme-bdr-402` (Backend, Frontend, DevOps/Infra, Full Stack) |
+| Engineer | 1–2 | Any sub-type from `agentme-bdr-404` (Backend, Frontend, DevOps/Infra, Full Stack) |
 | AI Engineer (if AI work exists) | 0–1 | |
 
 The Tech Lead MAY also contribute as an engineer in a simple team. The BA MUST work directly with the PO on requirements without squad separation.
@@ -56,7 +56,7 @@ A team with a broad product scope or significant AI surface MUST operate with in
 |---|---|---|
 | Business Analyst (BA or AI BA) | 1 | Ideally one per squad; may move |
 | AI Engineer | 2 | |
-| Engineer | 2 | Any sub-type from `agentme-bdr-402` (Backend, Frontend, DevOps/Infra, Full Stack) |
+| Engineer | 2 | Any sub-type from `agentme-bdr-404` (Backend, Frontend, DevOps/Infra, Full Stack) |
 | Squad Lead | 1 | One of the engineers above, designated by soft skills |
 
 Squads MUST NOT exceed 4 engineers (AI + Full Stack combined) to preserve cohesion and limit coordination overhead.
@@ -86,9 +86,9 @@ Teams MUST be aware of the following structural gaps and MUST apply the recommen
 |---|---|---|
 | PO, Tech Lead, AI Lead spanning 3 squads | Bandwidth overload; leads become bottlenecks | Squad Lead MUST absorb daily unblocking and within-squad prioritisation; leads focus on design, mentoring, and cross-squad alignment |
 | Principal Engineer covering all teams | Single point of knowledge for engineering standards | Architecture documentation MUST be kept current; Principal Engineer MUST actively pair with Tech Leads and AI Leads to distribute knowledge |
-| No embedded UX/Design role | UI and interaction design absorbed informally by BA or PO | A UX Designer Specialist (see `agentme-bdr-402`) SHOULD be engaged for user-facing features with significant interaction design needs; otherwise bring in a contract designer |
+| No embedded UX/Design role | UI and interaction design absorbed informally by BA or PO | A UX Designer Specialist (see `agentme-bdr-404`) SHOULD be engaged for user-facing features with significant interaction design needs; otherwise bring in a contract designer |
 | No Data Engineering / MLOps role | Data pipelines, feature stores, and model serving infrastructure absorbed by Engineers and AI Engineers | Teams MUST plan a dedicated hire when the AI surface grows beyond squad capacity |
-| No embedded QA role | Test quality depends on individual engineer discipline with no gate owner | A Tester / QA Specialist (see `agentme-bdr-402`) SHOULD be engaged during high-complexity delivery phases; Tech Lead and AI Lead MUST own quality gates; acceptance criteria from BA and AI BA MUST include testable conditions |
+| No embedded QA role | Test quality depends on individual engineer discipline with no gate owner | A Tester / QA Specialist (see `agentme-bdr-404`) SHOULD be engaged during high-complexity delivery phases; Tech Lead and AI Lead MUST own quality gates; acceptance criteria from BA and AI BA MUST include testable conditions |
 | No Security / SecOps role | Security design and review absorbed by Tech Lead on top of architecture load | Teams MUST schedule an external security review cadence; Principal Engineer MUST maintain security standards in the engineering blueprint |
 | BA squad fluidity | Knowledge transfer cost each time a BA moves | BAs MUST coordinate handoff timing to minimise disruption |
 | Squad Lead selection uncertainty | Squads without a clear lead default to ambiguity in ceremonies and prioritisation | Squad Lead MUST be identified at squad formation; MUST NOT be left to emerge organically after work has started |
@@ -98,4 +98,5 @@ Teams MUST be aware of the following structural gaps and MUST apply the recommen
 
 - [`_core-adr-policy-016`](../../../_core/adrs/principles/016-policy-subjects.md) — Policy subjects: BDR operations subject definition
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
-- [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles: role definitions for all roles referenced in this policy
+- [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, and Solution Architect definitions
+- [`agentme-bdr-404`](404-team-roles-and-specialists.md) — Digital product roles (team & specialists): role definitions for all team-level roles and specialists referenced in this policy

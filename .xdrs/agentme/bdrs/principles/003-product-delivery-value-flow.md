@@ -9,7 +9,7 @@ valid-from: 2026-08-30
 
 ## Context and Problem Statement
 
-The agentme framework defines organisational levels (`agentme-bdr-001`), OKR structure (`agentme-bdr-002`), delivery artefacts (`agentme-bdr-401`), and roles (`agentme-bdr-402`) as independent policies. Without a connecting document, the relationships between these concepts remain implicit — creating gaps in how practitioners understand who hands off what to whom, and how a fulfilled Tactical OKR connects back to the decisions made at the strategic level.
+The agentme framework defines organisational levels (`agentme-bdr-001`), OKR structure (`agentme-bdr-002`), delivery artefacts (`agentme-bdr-401`), and roles (`agentme-bdr-402` and `agentme-bdr-404`) as independent policies. Without a connecting document, the relationships between these concepts remain implicit — creating gaps in how practitioners understand who hands off what to whom, and how a fulfilled Tactical OKR connects back to the decisions made at the strategic level.
 
 How do roles, artefacts, and decisions connect from Strategic OKRs all the way to measurable outcomes that fulfil Tactical OKRs?
 
@@ -21,7 +21,7 @@ How do roles, artefacts, and decisions connect from Strategic OKRs all the way t
 
 #### 01-value-chain-stages
 
-The delivery value chain consists of the following ordered stages. Each stage produces an artefact that becomes the input for the next stage.
+The delivery value chain consists of the following ordered stages. Each stage MUST produce its designated artefact before the next stage begins. Teams MUST NOT skip stages unless stage 5 (architecture) is explicitly inapplicable per the conditions in `02-stage-notes`.
 
 | Stage | Role | Input | Output / Artefact |
 |---|---|---|---|
@@ -49,7 +49,7 @@ The delivery value chain consists of the following ordered stages. Each stage pr
 
 **Stage 6 — Technical refinement**: The Tech Lead (for non-AI components) and AI Lead (for AI components) add technical detail to User Stories and Architectural Blueprints so that Engineers can implement them without ambiguity.
 
-**Stage 7 — Implementation**: Engineers implement the refined Stories, producing code, models, agents, and deployments. Engineer sub-types are defined in `agentme-bdr-402`.
+**Stage 7 — Implementation**: Engineers implement the refined Stories, producing code, models, agents, and deployments. Engineer sub-types are defined in `agentme-bdr-404`.
 
 **Stage 8 — Production**: Deployments reach production. The product team monitors outcomes against the acceptance criteria defined in User Stories and the Key Results of the Tactical OKRs.
 
@@ -57,7 +57,7 @@ The delivery value chain consists of the following ordered stages. Each stage pr
 
 #### 03-parallel-support-roles
 
-The following roles operate in parallel alongside the main value chain. They do not produce primary chain artefacts but are essential to flow and quality:
+The following roles operate in parallel alongside the main value chain. Teams MUST engage these roles at the stages where their contribution is listed. They SHOULD be involved proactively rather than reactively to avoid rework.
 
 | Role | Parallel contribution |
 |---|---|
@@ -65,7 +65,7 @@ The following roles operate in parallel alongside the main value chain. They do 
 | Principal Engineer | Engineering standards, platform guidance, and mentoring that inform stages 5–7 |
 | Specialists (UX Designer, Tester, Business SME, etc.) | Embedded or shared support at specific stages — UX at stage 4 and 6; Testers at stages 7–8; Business SME at stages 3–4 |
 
-See `agentme-bdr-402` for full definitions of all roles referenced here.
+See `agentme-bdr-402` for org-level and cross-team role definitions and `agentme-bdr-404` for team-level and specialist role definitions.
 
 #### 04-operational-okrs-parallel-track
 
@@ -86,4 +86,5 @@ An unfulfilled Tactical OKR at cycle end MUST be explicitly reviewed — either 
 - [`agentme-bdr-001`](001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
 - [`agentme-bdr-002`](002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions and rules
 - [`agentme-bdr-401`](../operations/401-epic-feature-story-planning.md) — Epic / Feature / User Story planning: structure and OKR connection rules
-- [`agentme-bdr-402`](../operations/402-digital-product-roles.md) — Digital product roles: full role definitions for all roles referenced in this policy
+- [`agentme-bdr-402`](../operations/402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, and Solution Architect definitions
+- [`agentme-bdr-404`](../operations/404-team-roles-and-specialists.md) — Digital product roles (team & specialists): full role definitions for all team-level roles and specialists referenced in this policy
