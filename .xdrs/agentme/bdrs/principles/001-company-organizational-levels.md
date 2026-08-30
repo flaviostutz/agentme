@@ -52,9 +52,9 @@ Product teams are cross-functional execution units that sit inside a Business Un
 - A product team MUST be accountable for a defined product scope — an API, a business process, or a platform consumed by others.
 - Product teams implement Tactical OKR work through epics, sprints, and kanban flows. They do NOT set Tactical OKRs; Tactical OKRs are set at the Group, Company, or Business Unit level.
 - Product teams MAY define Operational OKRs for day-to-day execution tracking. See `agentme-bdr-002` for the full OKR framework.
-- Full role definitions for product teams are in `agentme-bdr-402`.
+- All digital product role definitions — including org-level roles such as Product Manager — are in `agentme-bdr-402`.
 
 ## References
 
 - [`agentme-bdr-002`](002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions
-- [`agentme-bdr-402`](../operations/402-product-team-roles.md) — Product team roles: role definitions for all team members
+- [`agentme-bdr-402`](../operations/402-digital-product-roles.md) — Digital product roles: role definitions for all digital product roles including org-level roles

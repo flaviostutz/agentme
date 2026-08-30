@@ -104,7 +104,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 **Trigger / Input**
 You are an agent with the `151-refine-user-story` skill loaded. The skill has completed Phase 4 (Consistency & Scope Review) and presents the phase gate. The user selects:
 
-"Re-run Phase 4 — deeper pass"
+"Re-run Phase 4: Consistency & Scope Review — deeper pass"
 
 **Expected Behaviour**
 1. Skill does NOT advance to Phase 5 — it restarts Phase 4 Step 1 (consistency check) and Phase 4 Step 2 (scope item review) with fresh eyes.
@@ -114,7 +114,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The skill has co
 5. Skill re-presents the Phase 4 gate with "Continue to Phase 5 — Visual Validation" as the recommended option.
 
 **Simulated Human Responses**
-1. (Re-run Phase 4 selected at gate)
+1. (Re-run Phase 4: Consistency & Scope Review selected at gate)
 2. "The empty state message should appear only after a 300 ms delay to avoid a flash on fast networks."
 
 **Assertions**

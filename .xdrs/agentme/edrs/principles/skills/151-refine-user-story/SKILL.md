@@ -182,7 +182,7 @@ Present a brief feature summary — a short bullet list of what will be built or
 
 Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
 - **"Continue to Phase 3 — Context & Story Draft"** (recommended when requirements are clear and agreed)
-- **"Re-run Phase 2 — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
+- **"Re-run Phase 2: Request Analysis & Requirements — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 2 in full treating the comment as additional context, then re-present this gate.
 
 ---
@@ -193,7 +193,7 @@ Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these opti
 2. **Draft a story skeleton** — a rough but structured version of the output template — incorporating context found. The skeleton must include at minimum: Title, User Story, Scope, and Acceptance Criteria as first drafts (not final).
 3. Present the draft skeleton and use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
    - **"Continue to Phase 4 — Consistency & Scope Review"** (recommended when the draft matches intent)
-   - **"Re-run Phase 3 — explore deeper"** — repeat the research pass looking for context, decisions, or constraints not yet surfaced, then re-present this gate.
+   - **"Re-run Phase 3: Context & Story Draft — explore deeper"** — repeat the research pass looking for context, decisions, or constraints not yet surfaced, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 3 treating the comment as additional context, then re-present this gate.
 4. If the draft reveals gaps or contradictions, return to Phase 2 before continuing.
 
@@ -226,7 +226,7 @@ Do **not** advance while any scope item fails a check. If a check reveals a new 
 
 After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
 - **"Continue to Phase 5 — Visual Validation"** (recommended when all items pass all checks)
-- **"Re-run Phase 4 — deeper pass"** — repeat all consistency and scope checks with fresh eyes, then re-present this gate.
+- **"Re-run Phase 4: Consistency & Scope Review — deeper pass"** — repeat all consistency and scope checks with fresh eyes, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 4 treating the comment as additional context, then re-present this gate.
 
 ---
@@ -243,7 +243,7 @@ After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) wi
 
 3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this diagram match your mental model of the user journey?" Present at least these options:
    - **"Continue to Phase 6 — User-Perspective Challenge"** (recommended when the diagram matches)
-   - **"Re-run Phase 5 — try a different diagram type"** — choose a different type or regenerate with a different framing, then re-present this gate.
+   - **"Re-run Phase 5: Visual Validation — try a different diagram type"** — choose a different type or regenerate with a different framing, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 5 treating the comment as additional context, then re-present this gate.
 
 4. If the diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
@@ -291,7 +291,7 @@ Can a new user complete this story's scenario without reading documentation? Wha
 
 After all 9 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
 - **"Continue to Phase 7 — Implementer-Perspective Challenge"** (recommended when all angles have converged and no open questions remain)
-- **"Re-run Phase 6 — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
+- **"Re-run Phase 6: User-Perspective Challenge — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 6 treating the comment as additional context, then re-present this gate.
 
 ---
@@ -333,7 +333,7 @@ Simulate an engineer receiving this story cold — no prior context, no verbal b
 
 After all 8 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
 - **"Continue to Phase 8 — Story Output & Readiness"** (recommended when all angles have converged and no open questions remain)
-- **"Re-run Phase 7 — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
+- **"Re-run Phase 7: Implementer-Perspective Challenge — deeper pass"** — repeat all angles with fresh challenge questions, prioritising angles not yet fully explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 7 treating the comment as additional context, then re-present this gate.
 
 ---

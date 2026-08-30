@@ -87,7 +87,7 @@ If the human accepts the split, restart the entire planning process from Phase 1
 
 Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance. Then use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
    - **"Continue to Phase 3 — Research and Draft Plan"** (recommended when scope is clear and agreed) — proceed with research and drafting.
-   - **"Re-run Phase 2 — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
+   - **"Re-run Phase 2: Requirements Qualification — deeper pass"** — repeat all steps with fresh eyes, prioritising areas not yet fully explored, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 2 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 ### Phase 3: Research, Dependencies, and Draft Plan
@@ -99,7 +99,7 @@ Present a brief feature summary — a short bullet list of what will be built or
    - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
 4. Present the draft and use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this draft match your intent? What verification checks exist today, and what new checks will confirm the key outcomes?" Present at least these options:
    - **"Continue to Phase 4 — Consistency Checks"** (recommended when no gaps remain) — advance.
-   - **"Re-run Phase 3 — explore deeper"** — repeat the research and drafting pass looking for context, dependencies, or constraints not yet surfaced, then re-present the gate.
+   - **"Re-run Phase 3: Research, Dependencies & Draft Plan — explore deeper"** — repeat the research and drafting pass looking for context, dependencies, or constraints not yet surfaced, then re-present the gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 3 in full, treating the comment as additional context and constraints, then re-present this gate.
    Wait for the answer before continuing.
 
@@ -137,7 +137,7 @@ Checks to run in order:
 
 After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 4 gate with at least these options:
 - **"Continue to Phase 5 — Visual Consistency Validation"** (recommended when all checks have converged) — advance.
-- **"Re-run Phase 4 — deeper pass"** — restart all checks (a–i) with fresh eyes, prioritising angles and scenarios not yet explored, then re-present this gate.
+- **"Re-run Phase 4: Consistency Checks — deeper pass"** — restart all checks (a–i) with fresh eyes, prioritising angles and scenarios not yet explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 4 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 ### Phase 5: Visual Consistency Validation
@@ -162,7 +162,7 @@ After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI 
 
 3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do these diagrams match your mental model of the solution? Is any important perspective missing?" Present at least these options:
    - **"Continue to Phase 6 — 9 Challenge Angles"** (recommended when the diagrams match) — advance.
-   - **"Re-run Phase 5 — add or replace a diagram"** — add a missing perspective or replace one with a different type, then re-present this gate.
+   - **"Re-run Phase 5: Visual Consistency Validation — add or replace a diagram"** — add a missing perspective or replace one with a different type, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 5 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 4. If any diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
@@ -232,7 +232,7 @@ Ask: will someone who did not build this be able to understand, change, and exte
 
 After all 9 angles are complete, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 6 gate with at least these options:
 - **"Continue to Phase 7 — Pre-Execution Readiness"** (recommended when all angles are complete and no open questions remain) — advance.
-- **"Re-run Phase 6 — deeper pass"** — repeat all 9 angles with fresh challenge questions, prioritising scenarios and inputs not yet explored, then re-present this gate.
+- **"Re-run Phase 6: 9 Challenge Angles — deeper pass"** — repeat all 9 angles with fresh challenge questions, prioritising scenarios and inputs not yet explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 6 in full, treating the comment as additional context and constraints, then re-present this gate.
 
 ### Phase 7: Pre-Execution Readiness
