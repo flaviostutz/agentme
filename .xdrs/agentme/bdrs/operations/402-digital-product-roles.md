@@ -1,21 +1,21 @@
 ---
-name: agentme-bdr-policy-402-product-team-roles
-description: Defines roles, responsibilities, and skills for Product Teams, covering cross-team and team-level roles. Use when staffing, onboarding, or assigning responsibilities in a product team.
-apply-to: All product teams and cross-team roles in the organisation
-valid-from: 2026-08-18
+name: agentme-bdr-policy-402-digital-product-roles
+description: Defines roles, responsibilities, and skills for all digital product roles — from organisation-level strategy through cross-team standards to team execution and specialist support. Use when staffing, onboarding, or assigning responsibilities across any level of a digital product organisation.
+apply-to: All roles involved in building and operating digital products, from organisation level through team specialists
+valid-from: 2026-08-30
 ---
 
-# agentme-bdr-policy-402: Product team roles
+# agentme-bdr-policy-402: Digital product roles
 
 ## Context and Problem Statement
 
-Product teams operate across diverse domains — internal APIs, customer-facing business processes, and shared platforms. Without a clear definition of each role's responsibilities, boundaries, and expected skills, teams accumulate ambiguity about who owns what, leading to gaps in coverage, duplicated effort, and unclear escalation paths.
+Digital product organisations involve roles at multiple levels — from strategy and product direction at the organisation level, through cross-team architectural and engineering standards, to daily execution inside product teams. Without a clear definition of each role's responsibilities, boundaries, and expected skills, ambiguity accumulates about who owns what, leading to gaps in coverage, duplicated effort, and unclear escalation paths.
 
-What roles make up a product team, and what does each role own?
+What roles are involved in building and operating digital products, and what does each role own?
 
 ## Decision Outcome
 
-**A defined set of cross-team and team-level roles with explicit responsibilities and skill requirements**
+**A defined set of organisation-level, cross-team, team-level, and specialist roles with explicit responsibilities, authority boundaries, and skill requirements**
 
 ### Details
 
@@ -51,45 +51,49 @@ Teams MUST allocate available capacity across three categories. These are target
 
 #### 04-roles-overview
 
-Teams MUST be staffed using the roles defined in this Policy. Each role MUST be filled by a person with the required hard skills.
+All roles MUST be filled by a person with the required hard skills. Organisation-level roles MUST operate at the Group, Company, or Business Unit level. Cross-team roles MUST operate across all product teams within a domain. Team-level roles MUST belong to a specific product team.
 
 | Role | Scope | Focus |
 |---|---|---|
-| PO Lead | Cross-team | What / When |
+| Product Manager (PM) | Org-level | What / When |
 | Principal Engineer | Cross-team | How |
-| Domain Architect | Cross-team | What |
+| Solution Architect | Cross-team | What |
 | Product Owner (PO) | Team | What / When |
-| Project Manager (PM) | Team | When / How |
+| Project Manager (PjM) | Team | When / How |
 | Business Analyst (BA) | Team / Squad | What / How |
 | AI Business Analyst (AI BA) | Team / Squad | What / How |
 | AI Lead | Team / Squad | How / When |
 | AI Engineer | Squad | How |
 | Tech Lead | Team / Squad | How / When |
+| Backend Engineer | Squad | How |
+| Frontend Engineer | Squad | How |
+| DevOps/Infra Engineer | Squad | How |
 | Full Stack Engineer | Squad | How |
 
-#### 05-cross-team-roles
+#### 05-organisation-and-cross-team-roles
 
-The following roles MUST operate across all product teams within a domain. They MUST NOT belong to a single team.
+The following roles operate at the organisation level (Group, Company, or Business Unit) or across all product teams within a domain. They MUST NOT belong to a single product team.
 
 ---
 
-**PO Lead**
+**Product Manager (PM)**
 
-*Purpose*: Maintain overarching tactical vision and priority alignment across all product teams. Acts as the senior escalation path for cross-team priority conflicts.
+*Purpose*: Own the product direction for the organisation — defining what to build and why — and translate strategic objectives into Tactical OKRs that product teams execute.
 
 *Responsibilities*:
-- Define higher-level OKRs that span multiple product teams
-- Maintain visibility into each team's product vision and sprint priorities
-- Arbitrate priority ordering when teams have conflicting dependencies or competing goals
-- Communicate strategic direction to team-level Product Owners
+- Translate Strategic OKRs (set at Group, Company, or Business Unit level) into Tactical OKRs for quarterly execution
+- Prioritise Epics across product teams to maximise contribution to Tactical OKRs
+- Communicate Tactical OKRs and Epic priorities to Product Owners (POs) so teams can execute against them; the PO is the primary recipient of this direction and executes it within the team
+- Maintain visibility into the product portfolio and adjust priorities as market or business conditions change
+- Own the product roadmap and communicate it to stakeholders
 
-*Authority*: Not a line manager. Teams retain full operational autonomy. The PO Lead's authority is limited to deciding priority ordering when teams cannot resolve cross-team conflicts themselves.
+*Authority*: The PM owns WHAT the organisation builds at the portfolio level and WHEN Tactical OKRs are set. The PM does NOT own day-to-day team decisions — those remain with each team's Product Owner and Tech Lead. The PM does NOT set engineering practices or platform choices — those are owned by the Principal Engineer.
 
-*Soft skills*: Strategic thinking, stakeholder communication, conflict resolution, big-picture prioritisation, influence without authority
+*Soft skills*: Strategic thinking, product vision, stakeholder communication, prioritisation across competing goals, ability to synthesise market and business context into clear direction
 
-*Hard skills*: OKR methodology, product roadmap management, backlog and dependency management across multiple teams
+*Hard skills*: OKR methodology, product roadmap management, market and business analysis, Epic-level prioritisation across multiple product teams
 
-*Common activities*: Cross-team prioritisation meetings, OKR reviews, dependency mapping, Product Owner syncs, escalation handling
+*Common activities*: OKR planning cycles, product roadmap reviews, Epic prioritisation sessions, Product Owner alignment meetings, stakeholder presentations, portfolio health reviews
 
 ---
 
@@ -103,8 +107,9 @@ The following roles MUST operate across all product teams within a domain. They 
 - Shape AI engineering practices and the adoption of AI-assisted development
 - Connect architecture decisions, business requirements, and standardised platforms into a coherent engineering blueprint
 - Mentor Tech Leads and AI Leads on standards and practices
+- Connect with Product Manager (PM), Project Manager (PjM), Solution Architects, and team leads to translate, converge, and align the technological landscape, standards, and processes
 
-*Soft skills*: Technical leadership, communication across skill levels, systems thinking, mentoring, cross-team influence
+*Soft skills*: Technical leadership, communication across skill levels, systems thinking, mentoring, cross-team influence — a nexialist connecting engineering, management, architecture, platforms, and product
 
 *Hard skills*: Software architecture, platform engineering, AI/ML practices, CI/CD, observability, security engineering, developer experience
 
@@ -112,21 +117,22 @@ The following roles MUST operate across all product teams within a domain. They 
 
 ---
 
-**Domain Architect**
+**Solution Architect**
 
-*Purpose*: Own the WHAT at the domain level — how all applications and systems interact, what the main business processes are, and how platforms are used across the domain.
+*Purpose*: Define the architecture for solutions that require new cross-system standards, new platforms, integrations with external systems, or significant security and compliance concerns.
 
 *Responsibilities*:
-- Define and maintain the overarching architecture for the domain, including application interaction models
-- Author blueprints for adopted platforms and their usage patterns
-- Map main business processes and their relationships to applications
+- Design architectural solutions for Epics or initiatives that span multiple systems or teams
+- Define new integration patterns, platform adoptions, and cross-system standards when existing standards do not cover the need
+- Produce architectural blueprints that Tech Leads and AI Leads can implement within their teams
+- Assess security, compliance, and risk dimensions of proposed architectures
 - Ensure architectural consistency across product teams within the domain
 
-*Soft skills*: Holistic thinking, stakeholder communication, structured documentation, facilitation
+*Soft skills*: Holistic thinking, stakeholder communication, structured documentation, facilitation, ability to balance pragmatism with rigour
 
-*Hard skills*: Enterprise architecture, business process modelling, integration patterns, platform architecture, domain-driven design
+*Hard skills*: Enterprise architecture, system integration patterns, cloud architecture, security architecture, business process modelling, platform evaluation, domain-driven design
 
-*Common activities*: Domain architecture diagrams, blueprint authoring, business process mapping, architecture review participation, cross-team design alignment sessions
+*Common activities*: Architecture design for complex Epics, blueprint authoring, cross-system integration design, security and compliance assessment, architecture review participation, cross-team design alignment sessions
 
 #### 06-team-roles
 
@@ -141,7 +147,8 @@ The following roles MUST belong to a product team. Some roles are shared across 
 *Responsibilities*:
 - Define and maintain the product vision for the team
 - Set sprint goals and prioritise the team backlog
-- Align team-level OKRs with PO Lead direction
+- Align team-level OKRs with Product Manager direction and execute against Tactical OKRs set by the PM
+- Define and track Operational OKRs for the team's day-to-day execution, when applicable
 - Accept or reject completed work against acceptance criteria
 - Communicate product direction to stakeholders and team members
 
@@ -155,7 +162,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 ---
 
-**Project Manager (PM)**
+**Project Manager (PjM)**
 
 *Purpose*: Own stakeholder management, reporting, and cross-team coordination. Proactively unblock the team by connecting priorities and people across organisational boundaries.
 
@@ -181,7 +188,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 *Purpose*: Understand what needs to be built and translate business problems into clear, implementable requirements for non-AI features and processes.
 
 *Responsibilities*:
-- Research business problems through stakeholder interviews, process observation, and analysis
+- Research business problems through stakeholder interviews, process observation, and analysis — focusing on changes to processes and systems that contribute to Tactical OKR objectives
 - Model as-is and design to-be business processes
 - Define system requirements at requirement level: data inputs/outputs, business rules, human interactions, and external dependencies
 - Write user stories and acceptance criteria at a level implementable within a few days
@@ -277,8 +284,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 - Define and maintain Incident Management procedures
 - Sequence engineering implementation work
 - Refine user stories related to engineering with sufficient technical detail
-- Mentor Full Stack Engineers through pairing, code review, and knowledge sharing
+- Mentor Engineers through pairing, code review, and knowledge sharing
 - Co-design integrated features with AI Lead (tiebreaker on system boundary decisions)
+- Escalate to Solution Architect when an Epic requires new cross-system standards or integrations; escalate to Principal Engineer when new engineering standards are needed
 
 *Shared across squads*: Yes — the Tech Lead connects to all squads in the team.
 
@@ -286,13 +294,64 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Hard skills*: Software architecture, API design, event-driven systems, CI/CD pipelines, observability and alerting, incident management, security engineering basics, relevant languages and frameworks used by the team
 
-*Common activities*: Architecture design sessions, technical story refinement, code reviews, pairing sessions with Full Stack Engineers, incident post-mortems, CI/CD pipeline design, cross-lead technical alignment with AI Lead
+*Common activities*: Architecture design sessions, technical story refinement, code reviews, pairing sessions with Engineers, incident post-mortems, CI/CD pipeline design, cross-lead technical alignment with AI Lead
+
+---
+
+**Backend Engineer**
+
+*Purpose*: Implement server-side software components — APIs, business workflows, batch processes, event-driven integrations, and database access layers.
+
+*Responsibilities*:
+- Design and implement RESTful and event-driven APIs
+- Build business logic, workflows, and batch processing components
+- Develop database access layers and manage schema migrations
+- Implement integrations with external systems and third-party services
+- Support incident investigation for backend services
+
+*Hard skills*: Backend languages (Java, Go, Python, Node.js, or equivalent), API design, SQL and NoSQL databases, event-driven systems, containerisation
+
+*Common activities*: API implementation, data layer development, external integration work, schema migrations, code review participation, incident support
+
+---
+
+**Frontend Engineer**
+
+*Purpose*: Implement user-facing software components — web applications, mobile apps, and UI interactions.
+
+*Responsibilities*:
+- Build web pages, single-page applications, and responsive UI components
+- Implement mobile app screens and navigation flows (where applicable)
+- Integrate frontend with backend APIs and services
+- Ensure accessibility, performance, and cross-browser or cross-platform compatibility
+- Collaborate with UX Designers on interaction and visual design implementation
+
+*Hard skills*: HTML/CSS, modern frontend frameworks (React, Vue, Angular, or equivalent), mobile development (React Native, Flutter, or equivalent where applicable), API integration, browser and mobile performance tooling
+
+*Common activities*: UI component implementation, API integration, accessibility and performance testing, mobile screen development, code review participation
+
+---
+
+**DevOps/Infra Engineer**
+
+*Purpose*: Own the delivery pipeline and cloud infrastructure that enables teams to ship and run software reliably — covering both CI/CD automation and cloud provisioning.
+
+*Responsibilities*:
+- Build and maintain CI/CD pipelines, deployment automation, and release procedures including blue/green deployments and automated rollouts
+- Design and provision cloud infrastructure using templates and infrastructure-as-code blueprints
+- Manage networking, connectivity, certificates, and platform-level security controls
+- Define validation scripts and deployment checks that gate production releases
+- Monitor infrastructure health and respond to platform-level incidents
+
+*Hard skills*: CI/CD tooling (GitHub Actions, GitLab CI, or equivalent), cloud platforms (AWS, Azure, GCP, or equivalent), infrastructure-as-code (Terraform, Pulumi, or equivalent), containerisation and orchestration (Docker, Kubernetes), networking fundamentals
+
+*Common activities*: Pipeline authoring and maintenance, cloud resource provisioning, infrastructure monitoring, deployment procedure definition, certificate and connectivity management, incident response for platform issues
 
 ---
 
 **Full Stack Engineer**
 
-*Purpose*: Implement non-AI software components — CI/CD pipelines, connectors, platforms, workflows, web pages, mobile apps, scripts, APIs, database access, and event-based flows. Also bridges knowledge gaps with AI Engineers when needed.
+*Purpose*: Implement non-AI software components across the full stack — APIs, workflows, web pages, mobile apps, CI/CD pipelines, database access, and event-based flows. Suited to teams and contexts where frontend and backend work are tightly coupled or where a generalist profile is preferred over specialisation.
 
 *Responsibilities*:
 - Implement services, APIs, database access layers, event-based flows, and non-AI workflows
@@ -307,10 +366,23 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Common activities*: Feature implementation, API and data layer development, CI/CD pipeline work, code review participation, pairing with AI Engineers, frontend development, incident support
 
+#### 07-specialists
+
+Specialists are professionals with focused domain expertise who contribute to specific phases of product delivery. They MAY be shared across multiple product teams or embedded within a specific team when the scope or duration of work justifies it. Teams SHOULD plan specialist involvement proactively — engaging them ahead of the phases where their input is needed rather than reactively.
+
+| Specialist | Purpose | Typical engagement |
+|---|---|---|
+| UX Designer | Design user interactions, information architecture, and visual language for user-facing features | Embedded for user-facing feature phases; shared otherwise |
+| Tester / QA Specialist | Define test strategies, execute exploratory and structured testing, and validate acceptance criteria beyond automated test coverage | Embedded during high-complexity delivery phases; shared for periodic quality reviews |
+| Communication Specialist | Author internal and external communications, release announcements, and user-facing documentation | Shared; engaged at release and major milestone points |
+| Journalist / Technical Writer | Produce structured content — user guides, API documentation, internal knowledge bases | Shared or embedded when documentation volume is significant |
+| Business SME (Subject Matter Expert) | Validate requirements and processes against business domain knowledge; bridge between business stakeholders and product teams | Shared; engaged during requirements and validation phases |
+
 ## References
 
 - [`_core-adr-policy-016`](../../../_core/adrs/principles/016-policy-subjects.md) — Policy subjects: BDR operations subject definition
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
 - [`agentme-bdr-001`](../principles/001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
 - [`agentme-bdr-002`](../principles/002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions
+- [`agentme-bdr-003`](../principles/003-product-delivery-value-flow.md) — Product delivery value flow: end-to-end chain from Strategic OKRs to fulfilled Tactical OKRs
 - [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
