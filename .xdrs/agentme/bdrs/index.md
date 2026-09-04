@@ -14,7 +14,7 @@ Organisational structure, team topology, and strategic alignment concepts.
 
 Project management workflow and structure for development teams.
 
-- [agentme-bdr-401](operations/401-epic-feature-story-planning.md) - **Epic / Feature / User Story planning** — Organize development work as epics, features, and user stories using XDRS plan documents
+- [agentme-bdr-401](operations/401-epic-feature-story-planning.md) - **Epic / Feature / User Story planning** — Organize development work as epics, features, and user stories using XDRS initiative documents
 - [agentme-bdr-402](operations/402-digital-product-roles.md) - **Digital product roles — organisation & cross-team** — Defines team purpose, workforce allocation, roles overview, and org-level and cross-team roles (PM, Principal Engineer, Solution Architect)
 - [agentme-bdr-403](operations/403-product-team-composition.md) - **Product team composition** — Defines team composition models, squad structure, squad dynamics, and known structural gaps for Product Teams
 - [agentme-bdr-404](operations/404-team-roles-and-specialists.md) - **Digital product roles — team & specialists** — Defines team-level roles (PO, PjM, BA, AI BA, AI Lead, AI Engineer, Tech Lead, engineers) and shared specialist roles

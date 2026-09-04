@@ -75,7 +75,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 6. User accepts the split and picks "Registration" as the first slice to refine.
 7. Skill restarts from Phase 1 with the narrower registration scope. The remaining 3 slices are recorded as Deferred Stories.
 8. Phases 1–7 run on the registration slice only. At Phase 8, a Deferred Items summary lists the 3 remaining slices.
-9. Because no plan doc is active, skill presents `vscode_askQuestions` asking where to save the deferred slices; user picks TODO.md.
+9. Because no initiative doc is active, skill presents `vscode_askQuestions` asking where to save the deferred slices; user picks TODO.md.
 10. Skill outputs one fully refined story (registration) and appends the 3 deferred slices to TODO.md as a single `### Group:` section with one `#### ` subsection per slice.
 
 **Simulated Human Responses**
@@ -154,10 +154,10 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 
 ---
 
-### Scenario 6: Plan document with pending placeholder stories — user picks one to refine
+### Scenario 6: Initiative document with pending placeholder stories — user picks one to refine
 
 **Trigger / Input**
-You are an agent with the `151-refine-user-story` skill loaded. The user references an epic plan document at `.xdrs/_local/bdrs/operations/plans/001-epic-improve-checkout.md`. The plan contains:
+You are an agent with the `151-refine-user-story` skill loaded. The user references an epic initiative document at `.xdrs/_local/bdrs/operations/initiatives/001-epic-improve-checkout.md`. The initiative contains:
 
 ```
 ### Milestone 1: Payment Speed
@@ -173,7 +173,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The user referen
 Each `.assets/userstory-*.md` file contains `**Status:** to-be-refined` plus any preliminary notes captured when the story was created.
 
 **Expected Behaviour**
-1. Skill activates Phase 0, detects the plan document, and parses all Milestone key tasks.
+1. Skill activates Phase 0, detects the initiative document, and parses all Milestone key tasks.
 2. Skill reads each linked `.assets/userstory-*.md` file and checks for `**Status:** to-be-refined`. Identifies all three as pending.
 3. Skill presents a `vscode_askQuestions` list of the three pending stories plus a "New story" option.
 4. User picks the "Reduce payment steps" story from Milestone 1.
@@ -188,27 +188,27 @@ Each `.assets/userstory-*.md` file contains `**Status:** to-be-refined` plus any
 - [ ] Output shows NNN and slug extracted from the placeholder file's `**Story ID:**` line, not from the task entry text.
 - [ ] Skill overwrites the story detail file with refined content and no `**Status:**` field after Phase 8.
 - [ ] Skill updates the Milestone 1 task entry link text to the refined story title; the file path stays the same.
-- [ ] Skill does NOT offer "Save to TODO.md" for deferred items while a plan doc is active.
+- [ ] Skill does NOT offer "Save to TODO.md" for deferred items while an initiative doc is active.
 
 ---
 
-### Scenario 7: Refined story output writes asset file and updates plan Milestone link
+### Scenario 7: Refined story output writes asset file and updates initiative Milestone link
 
 **Trigger / Input**
-You are an agent with the `151-refine-user-story` skill loaded. Phase 0 has detected an active plan doc at `.xdrs/_local/bdrs/operations/plans/002-epic-onboarding.md` with Milestone 1: "First Login Experience". The user is refining a new story to be placed there.
+You are an agent with the `151-refine-user-story` skill loaded. Phase 0 has detected an active initiative doc at `.xdrs/_local/bdrs/operations/initiatives/002-epic-onboarding.md` with Milestone 1: "First Login Experience". The user is refining a new story to be placed there.
 
 After completing Phases 1–6, Phase 8 produces the final story: "Show personalised welcome screen on first login".
 
 **Expected Behaviour**
-1. Phase 8 determines the next NNN in the plan's `.assets/` folder (no existing userstory files → NNN = 001).
-2. Skill writes `.assets/userstory-001-welcome-screen-first-login.md` using the output template sections: Title, User Story, Scope, Edge Cases, Out of Scope, Constraints, Detailed Specs, Acceptance Criteria, Attachments, plus a back-link to the epic plan.
-3. Skill inserts `- [Show personalised welcome screen on first login](.assets/userstory-001-welcome-screen-first-login.md)` as a key task in Milestone 1 of the plan doc.
+1. Phase 8 determines the next NNN in the initiative's `.assets/` folder (no existing userstory files → NNN = 001).
+2. Skill writes `.assets/userstory-001-welcome-screen-first-login.md` using the output template sections: Title, User Story, Scope, Edge Cases, Out of Scope, Constraints, Detailed Specs, Acceptance Criteria, Attachments, plus a back-link to the epic initiative.
+3. Skill inserts `- [Show personalised welcome screen on first login](.assets/userstory-001-welcome-screen-first-login.md)` as a key task in Milestone 1 of the initiative doc.
 
 **Assertions**
-- [ ] Skill creates the story detail file at the correct path inside the plan's `.assets/` folder.
+- [ ] Skill creates the story detail file at the correct path inside the initiative's `.assets/` folder.
 - [ ] Output uses all required template sections including `## Constraints` and `## Detailed Specs`.
-- [ ] Output includes a back-link to the parent epic plan.
-- [ ] Plan doc's Milestone 1 key tasks section contains a markdown link entry pointing to the new file.
+- [ ] Output includes a back-link to the parent epic initiative.
+- [ ] Initiative doc's Milestone 1 key tasks section contains a markdown link entry pointing to the new file.
 - [ ] Output shows NNN as 001 (first story in this epic's `.assets/` folder).
 
 ---
@@ -224,10 +224,10 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 1. Phase 0 finds no XDRS scope and skips to Phase 1 immediately.
 2. Skill runs all phases normally.
 3. At Phase 8, after producing the final story, skill asks via `vscode_askQuestions` where to save the story file, defaulting to `userstory-001-reset-pin-via-sms.md` at the workspace root.
-4. If the story is split, the deferred slices prompt offers: add to existing epic plan, create new epic plan, or save to `TODO.md`.
+4. If the story is split, the deferred slices prompt offers: add to existing epic initiative, create new epic initiative, or save to `TODO.md`.
 
 **Assertions**
-- [ ] Skill does not block or present any plan-doc questions when no XDRS scope exists.
+- [ ] Skill does not block or present any initiative-doc questions when no XDRS scope exists.
 - [ ] Skill asks for a save location with a clear default path at Phase 8.
 - [ ] Skill saves the story file to the user-confirmed path.
 - [ ] Skill triggers a destination choice for split deferred stories (not silently writing to TODO.md).
@@ -261,19 +261,19 @@ After Phase 2 Step 1, no API endpoints, no payload structures, no documentation 
 ### Scenario 10: XDRS scope active, start fresh, story split — Phase 8 asks where to put deferred slices
 
 **Trigger / Input**
-You are an agent with the `151-refine-user-story` skill loaded. Phase 0 detected an XDRS scope with two existing epic plans but the user chose "start fresh — no plan context". During Phase 2, the story is found to be too large and split into three slices. The user accepts the split and starts refining Slice 1.
+You are an agent with the `151-refine-user-story` skill loaded. Phase 0 detected an XDRS scope with two existing epic initiatives but the user chose "start fresh — no initiative context". During Phase 2, the story is found to be too large and split into three slices. The user accepts the split and starts refining Slice 1.
 
 **Expected Behaviour**
-1. Phase 0 detects XDRS scope, presents epic plan list plus "Start fresh" option, user picks "Start fresh".
+1. Phase 0 detects XDRS scope, presents epic initiative list plus "Start fresh" option, user picks "Start fresh".
 2. Phases 1–7 run normally for Slice 1.
-3. At Phase 8, because the context is "start fresh" (no active plan doc), the two deferred slices trigger a `vscode_askQuestions` prompt: "Where should the deferred story slices go?" with options: add to an existing epic plan (lists found epics), create a new epic plan, or save to TODO.md.
-4. Skill applies the chosen action (e.g., creates placeholder files for the two deferred slices and inserts `- [Slice description — pending](.assets/userstory-NNN-slug.md)` task entries in the chosen epic plan, or appends a Group/Part entry to TODO.md).
+3. At Phase 8, because the context is "start fresh" (no active initiative doc), the two deferred slices trigger a `vscode_askQuestions` prompt: "Where should the deferred story slices go?" with options: add to an existing epic initiative (lists found epics), create a new epic initiative, or save to TODO.md.
+4. Skill applies the chosen action (e.g., creates placeholder files for the two deferred slices and inserts `- [Slice description — pending](.assets/userstory-NNN-slug.md)` task entries in the chosen epic initiative, or appends a Group/Part entry to TODO.md).
 
 **Assertions**
-- [ ] Phase 0 presents the XDRS epic plan list even in "start fresh" mode.
+- [ ] Phase 0 presents the XDRS epic initiative list even in "start fresh" mode.
 - [ ] Deferred slices do NOT go silently to TODO.md when an XDRS scope is present.
 - [ ] Phase 8 presents a `vscode_askQuestions` destination choice for deferred slices.
-- [ ] If an epic plan is chosen, deferred slices are created as placeholder files and inserted as `- [description — pending](.assets/...)` link entries in the correct Milestone.
+- [ ] If an epic initiative is chosen, deferred slices are created as placeholder files and inserted as `- [description — pending](.assets/...)` link entries in the correct Milestone.
 
 ---
 
@@ -296,7 +296,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
    - Slice 6: Post-purchase upsell screen
 4. Skill presents `vscode_askQuestions` asking which slice to refine first; user picks Slice 1.
 5. Phases 1–7 run on Slice 1 only. The remaining 5 slices are tracked as Deferred Stories.
-6. At Phase 8, because no plan doc is active, skill presents `vscode_askQuestions`:
+6. At Phase 8, because no initiative doc is active, skill presents `vscode_askQuestions`:
    - **"Save deferred slices to TODO.md"** (recommended)
    - **"Save to a different file"** (open box)
    - **"Skip — do not save"**
@@ -314,7 +314,7 @@ You are an agent with the `151-refine-user-story` skill loaded. The workspace ha
 - [ ] The Group heading records the origin (151-refine-user-story, Phase 2 Step 3), the original checkout-flow objective, and the split rationale.
 - [ ] Each of the 5 deferred slices appears as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
 - [ ] The final output contains exactly one refined story (Slice 1), not all slices.
-- [ ] Skill does NOT offer TODO.md for deferred items from an active plan doc (this scenario has no plan doc — condition satisfied).
+- [ ] Skill does NOT offer TODO.md for deferred items from an active initiative doc (this scenario has no initiative doc — condition satisfied).
 
 ---
 

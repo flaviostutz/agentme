@@ -2,7 +2,7 @@
 
 This module is shared across all XDRS writing skills. Read these instructions in full and execute every check before proceeding with any authoring task.
 
-Substitute `[DOCUMENT TYPE]` with the appropriate noun for the calling skill: `policy`, `skill`, `article`, `research`, `plan`, `presentation`, or `document`.
+Substitute `[DOCUMENT TYPE]` with the appropriate noun for the calling skill: `policy`, `skill`, `article`, `research`, `initiative`, `presentation`, or `document`.
 
 ---
 
@@ -16,4 +16,4 @@ Read the confirmed scope's `index.md` frontmatter and perform ALL of the followi
 
 Once all prerequisites pass, load ALL scope-type governance (see `_core-adr-policy-010` rule 22): for each declared type, resolve its full ancestor chain (primary, companions alphabetically, parent chain). Deduplicate keeping first occurrence. Then run conflict detection using the shared module at `.xdrs/_core/adrs/principles/skills/.assets/conflict-detection.md` across all loaded governance layers. Halt if undeclared structural conflicts are found (see `_core-adr-policy-010` rules 24 and 26).
 
-If the scope declares `extends:` entries (and the extends check above passed), load the inherited **policy documents** (decision records only — not skills, articles, research, or plans) from the full `extends:` chain using depth-first resolution (see `_core-adr-policy-010` rule 33): for each extends entry in declaration order, recursively resolve that scope's own `extends:` chain, then append the scope's own policies. Deduplicate keeping first occurrence. The extending scope's own policies always take precedence over all inherited ones. Apply the resolved policy set as additional context when authoring or reviewing [DOCUMENT TYPE] documents in this scope.
+If the scope declares `extends:` entries (and the extends check above passed), load the inherited **policy documents** (decision records only — not skills, articles, research, or initiatives) from the full `extends:` chain using depth-first resolution (see `_core-adr-policy-010` rule 33): for each extends entry in declaration order, recursively resolve that scope's own `extends:` chain, then append the scope's own policies. Deduplicate keeping first occurrence. The extending scope's own policies always take precedence over all inherited ones. Apply the resolved policy set as additional context when authoring or reviewing [DOCUMENT TYPE] documents in this scope.

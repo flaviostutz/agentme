@@ -16,10 +16,10 @@ The XDRS framework is built around a small set of artifact types that play diffe
 same decision system.
 
 A standard Decision Record normally combines several concerns in the same document: a reason
-(why, options considered), a policy (rules, core decision), a plan (consequences, implementation
+(why, options considered), a policy (rules, core decision), an initiative (consequences, implementation
 approach), a how-to (step-by-step procedure), and a view on a topic. The XDRS framework separates
 these concerns into different document types: Policies as the source of truth, Research for
-reasoning and evidence, Plans for implementation approach, Skills for execution procedures, and
+reasoning and evidence, Initiatives for implementation approach, Skills for execution procedures, and
 Articles for topic overviews. Supporting artifacts may explain, justify, or operationalize the
 policy, but they do not replace it. The compilation process of a raw Decision Record is to
 distribute it into those different documents and create links between them. You can also use the
@@ -43,10 +43,10 @@ without starting from a raw Decision Record.
 - **Articles** are synthetic views, like this one. They explain a topic across multiple Policies,
   Research documents, and Skills, helping readers understand the system without making new
   decisions. See [_core-adr-policy-004](../004-article-standards.md).
-- **Plans** describe a problem, a proposed solution, and the approach and activities needed to
-  solve it. They have a clear start and end and a well-defined scope. Plans are ephemeral: they
+- **Initiatives** describe a problem, a proposed solution, and the approach and activities needed to
+  solve it. They have a clear start and end and a well-defined scope. Initiatives are ephemeral: they
   must be deleted after full implementation, with lasting outputs captured as Policies, Skills,
-  Articles, or other artifacts. See [_core-adr-policy-007](../007-plan-standards.md).
+  Articles, or other artifacts. See [_core-adr-policy-007](../007-initiative-standards.md).
 - **Indexes and folder structure** are the discovery layer. They do not make decisions by
   themselves, but they determine how people and agents find the right artifacts, how scopes
   override one another, and how a large set of decisions remains navigable.
@@ -59,7 +59,7 @@ The easiest way to distinguish the central elements is by asking what job each o
 - **Research**: "What did we learn while evaluating options?"
 - **Skill**: "How do we carry out work under this decision?"
 - **Article**: "How do these artifacts fit together for a reader?"
-- **Plan**: "What are we going to do, why, and how?"
+- **Initiative**: "What are we going to do, why, and how?"
 - **Index/Scope structure**: "Where do I look, and which decision set takes precedence?"
 
 This separation matters because mixing these jobs into one file makes the system harder to search,
@@ -118,7 +118,7 @@ Every decision record and its supporting artifacts live at a fixed path:
             SKILL.md
         articles/
           [number]-[short-title].md
-        plans/
+        initiatives/
           [number]-[short-title].md
 ```
 
@@ -174,8 +174,8 @@ Follow [_core-adr-policy-001](../001-xdrs-standards.md) and [_core-adr-policy-00
   folder, following [_core-adr-policy-003](../003-skill-standards.md).
 - **New article** — add an `articles/[number]-[short-title].md` inside the relevant subject
   folder, following [_core-adr-policy-004](../004-article-standards.md).
-- **New plan** — add a `plans/[number]-[short-title].md` inside the relevant subject
-  folder, following [_core-adr-policy-007](../007-plan-standards.md).
+- **New initiative** — add an `initiatives/[number]-[short-title].md` inside the relevant subject
+  folder, following [_core-adr-policy-007](../007-initiative-standards.md).
 
 ### Using XDRS in your own project
 
@@ -199,7 +199,7 @@ Follow [_core-adr-policy-001](../001-xdrs-standards.md) and [_core-adr-policy-00
 - [_core-adr-policy-003](../003-skill-standards.md) - Skill standards and co-location rules
 - [_core-adr-policy-004](../004-article-standards.md) - Article standards
 - [_core-adr-policy-006](../006-research-standards.md) - Research standards
-- [_core-adr-policy-007](../007-plan-standards.md) - Plan standards
+- [_core-adr-policy-007](../007-initiative-standards.md) - Initiative standards
 - [001-review skill](../skills/001-review/SKILL.md) - Reviewing code against Policies
 - [002-write-policy skill](../skills/002-write-policy/SKILL.md) - Writing a new Policy
 - [003-write-skill skill](../skills/003-write-skill/SKILL.md) - Writing a new skill

@@ -12,7 +12,7 @@ metadata:
 
 ## Overview
 
-Turns a vague request or rough draft into an implementation-ready user story by running a structured 9-phase refinement process: establishing plan context and gathering external information to ground the analysis (Phase 1), analysing the request and qualifying requirements with a scope size check (Phase 2), researching existing context and drafting a story skeleton (Phase 3), checking consistency and scope completeness (Phase 4), validating visually with a user journey diagram (Phase 5), challenging from 9 user-perspective angles (Phase 6), challenging from 8 implementer-perspective angles (Phase 7), producing a final ready-to-implement story with a readiness checklist (Phase 8), and running a final readiness double-check (Phase 9).
+Turns a vague request or rough draft into an implementation-ready user story by running a structured 9-phase refinement process: establishing initiative context and gathering external information to ground the analysis (Phase 1), analysing the request and qualifying requirements with a scope size check (Phase 2), researching existing context and drafting a story skeleton (Phase 3), checking consistency and scope completeness (Phase 4), validating visually with a user journey diagram (Phase 5), challenging from 9 user-perspective angles (Phase 6), challenging from 8 implementer-perspective angles (Phase 7), producing a final ready-to-implement story with a readiness checklist (Phase 8), and running a final readiness double-check (Phase 9).
 
 Activate when:
 - The request is vague, incomplete, or internally inconsistent.
@@ -45,21 +45,21 @@ Activate when:
 
 ---
 
-### Phase 1: Plan Document Context & Context Enrichment
+### Phase 1: Initiative Document Context & Context Enrichment
 
 Before beginning refinement, determine the working context and where output will be saved.
 
 **Inline reference — Epic / Feature / User Story structure** (self-contained; no external policy file required to run this skill):
-- **Epic** — A plan document at `[scope]/bdrs/operations/plans/NNN-epic-slug.md`. Represents a group of features toward a well-defined objective (1–12 months). Heading: `# [scope]-bdr-plan-NNN: [Epic Title]`.
-- **Feature** — A `### Milestone N: [Feature Name]` section inside the epic plan. One Milestone per Feature. Duration: 2 weeks – 6 months.
+- **Epic** — An initiative document at `[scope]/bdrs/operations/initiatives/NNN-epic-slug.md`. Represents a group of features toward a well-defined objective (1–12 months). Heading: `# [scope]-bdr-initiative-NNN: [Epic Title]`.
+- **Feature** — A `### Milestone N: [Feature Name]` section inside the epic initiative. One Milestone per Feature. Duration: 2 weeks – 6 months.
 - **User Story** — A key task inside a Milestone, always as a link: `- [Brief description]{.assets/userstory-NNN-slug.md}`. Pending stories append ` — pending` to the link text and have `**Status:** to-be-refined` in the file. Refined stories have the full title. Duration: < 2 weeks; stories exceeding this MUST be split.
-- **User story detail file** — `.assets/userstory-NNN-slug.md` inside the epic plan's `.assets/` folder. NNN restarts at 001 per epic. Filenames always lowercase.
+- **User story detail file** — `.assets/userstory-NNN-slug.md` inside the epic initiative's `.assets/` folder. NNN restarts at 001 per epic. Filenames always lowercase.
 
 **Step 1 — Detect XDRS scope**
 
 Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based on what is found.
 
-**Step 2a — Plan document explicitly provided or referenced:**
+**Step 2a — Initiative document explicitly provided or referenced:**
 1. Parse all `### Milestone` sections (Features) and collect all task entries that link to `.assets/userstory-*.md` files.
 2. For each linked file, read it and check for `**Status:** to-be-refined`. Collect only those as pending stories.
 3. Use `vscode_askQuestions` to list all pending stories (by their link text and file name) plus a "New story — I will describe it" option.
@@ -68,16 +68,16 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
    - Use the placeholder's title and notes as the subject for Phase 2.
 5. If the user picks "New story", ask which Milestone to place it in; offer to add the Milestone if it does not exist. The slug and NNN for the new story are assigned in Phase 8.
 
-**Step 2b — XDRS scope found but no plan document provided:**
-1. Search for files matching `*/bdrs/operations/plans/*-epic-*.md`.
-2. Use `vscode_askQuestions` to ask the user to: pick an existing epic plan, create a new epic plan, or start fresh (no plan context).
-3. If an existing plan is picked, proceed as Step 2a.
-4. If **create a new epic plan** is chosen, run a guided Q&A using `vscode_askQuestions` to collect: Epic Title, one-sentence objective, Expected end date (YYYY-MM-DD), and name of the first Feature/Milestone. Then:
+**Step 2b — XDRS scope found but no initiative document provided:**
+1. Search for files matching `*/bdrs/operations/initiatives/*-epic-*.md`.
+2. Use `vscode_askQuestions` to ask the user to: pick an existing epic initiative, create a new epic initiative, or start fresh (no initiative context).
+3. If an existing initiative is picked, proceed as Step 2a.
+4. If **create a new epic initiative** is chosen, run a guided Q&A using `vscode_askQuestions` to collect: Epic Title, one-sentence objective, Expected end date (YYYY-MM-DD), and name of the first Feature/Milestone. Then:
    - Derive the epic slug by kebab-casing the title, keeping at most 7 words.
-   - Determine the epic NNN by scanning `[scope]/bdrs/operations/plans/` for existing plan files and using the next available number (start at 001).
-   - Create the file at `.xdrs/[scope]/bdrs/operations/plans/NNN-epic-slug.md` with the required `_core-adr-policy-007` sections:
+   - Determine the epic NNN by scanning `[scope]/bdrs/operations/initiatives/` for existing initiative files and using the next available number (start at 001).
+   - Create the file at `.xdrs/[scope]/bdrs/operations/initiatives/NNN-epic-slug.md` with the required `_core-adr-policy-007` sections:
      ```markdown
-     # [scope]-bdr-plan-NNN: [Epic Title]
+     # [scope]-bdr-initiative-NNN: [Epic Title]
 
      ## Executive Summary
      [To be completed.]
@@ -98,8 +98,8 @@ Scan the workspace for a `.xdrs/` directory. Proceed to Step 2a, 2b, or 2c based
 
      **Key tasks:**
      ```
-   - Proceed as Step 2a (the new plan is now the active plan context, Milestone 1 is the target).
-5. If "start fresh" is chosen, continue to Phase 1 Step 3 (Context Enrichment) with no active plan context; Phase 8 will handle deferred stories.
+   - Proceed as Step 2a (the new initiative is now the active initiative context, Milestone 1 is the target).
+5. If "start fresh" is chosen, continue to Phase 1 Step 3 (Context Enrichment) with no active initiative context; Phase 8 will handle deferred stories.
 
 **Step 2c — No XDRS scope found:**
 Skip Phase 1 Steps 1–2. Proceed directly to Phase 1 Step 3 (Context Enrichment). Phase 8 will ask where to save output.
@@ -130,7 +130,7 @@ Before beginning analysis, gather factual context about the system, process, or 
 
 ---
 
-**Plan context record:** note the active plan file path (or none), the target Milestone name, and the Context Summary from Step 3; carry these into Phase 8.
+**Initiative context record:** note the active initiative file path (or none), the target Milestone name, and the Context Summary from Step 3; carry these into Phase 8.
 
 ---
 
@@ -247,7 +247,7 @@ After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) wi
    - **"Add a comment or correction"** (open box) — re-run Phase 5 treating the comment as additional context, then re-present this gate.
 
 4. If the diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
-5. **Save the confirmed diagram.** Write the Mermaid source to `.assets/userstory-NNN-slug-journey.md` inside the plan's `.assets/` folder (when a plan doc is active) or to `userstory-journey.md` at the workspace root otherwise. Record this path to include as a diagram attachment in `## Attachments` when Phase 8 writes the story file.
+5. **Save the confirmed diagram.** Write the Mermaid source to `.assets/userstory-NNN-slug-journey.md` inside the initiative's `.assets/` folder (when an initiative doc is active) or to `userstory-journey.md` at the workspace root otherwise. Record this path to include as a diagram attachment in `## Attachments` when Phase 8 writes the story file.
 
 ---
 
@@ -360,9 +360,9 @@ Once all items are checked or explicitly marked N/A, **produce the final result*
 
 If any stories or features were placed in the **Deferred Stories** list during Phase 2 Step 3 (scope split), or any items were recorded as named **Deferred Risks** during a Skip, present a **Deferred Items summary** — a bulleted list of each deferred item with a one-line description of what it covers and why it was deferred.
 
-**When an XDRS plan doc is active** (Phase 1 selected or created a plan): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the plan doc by the Plan document integration section below.
+**When an XDRS initiative doc is active** (Phase 1 selected or created an initiative): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the initiative doc by the Initiative document integration section below.
 
-**When no XDRS plan doc is active**: use `vscode_askQuestions` with:
+**When no XDRS initiative doc is active**: use `vscode_askQuestions` with:
 - **"Save to TODO.md"** (recommended) — append an entry under a `## Deferred Stories` heading in `TODO.md` at the workspace root (create the file if it does not exist), using the template below.
 - **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same template.
 - **"Skip — do not save"** — proceed without saving.
@@ -371,16 +371,16 @@ This step is skipped if no stories were deferred and no Deferred Risks were reco
 
 **Deferred Stories template**: new `### Group: [title] — deferred [YYYY-MM-DD]` per split (1+ parts, never merged) with **Origin**, **Original objective**, **Split rationale**; one `#### [slice title]` per slice with **Objective**, **Scope**, **Context captured so far**, **Suggested prompt to resume**.
 
-### Plan document integration
+### Initiative document integration
 
-After producing the final story output, persist it according to the active plan context from Phase 1.
+After producing the final story output, persist it according to the active initiative context from Phase 1.
 
-**When an XDRS plan doc is active (Phase 1 selected or created a plan):**
+**When an XDRS initiative doc is active (Phase 1 selected or created an initiative):**
 1. Determine the NNN and slug for the story detail file:
    - **Placeholder story** (Phase 1 picked a pending story): extract the NNN and slug from the placeholder file's `**Story ID:**` line. Reuse them for the refined file.
-   - **New story** (Phase 1 chose "New story" or a new epic was created): use the next available NNN in the plan's `.assets/` folder (list existing `userstory-NNN-*.md` files, increment the highest; start at 001 if empty). Derive the slug by kebab-casing the refined `## Title`, keeping at most 7 words, e.g. `save-payment-method-future-checkouts`.
-2. Write the refined story as `.assets/userstory-NNN-slug.md` inside the plan's `.assets/` folder using the output template, including the `**Story ID:** userstory-NNN-slug` line at the top (no `**Status:**` line — absence of the status field indicates a refined story).
-3. In the plan doc, update the task entry link text in the active Milestone: change `[Brief description — pending]` to `[Refined Story Title]` (keep the same `.assets/userstory-NNN-slug.md` path). For new stories, insert a new task entry `- [Refined Story Title]{.assets/userstory-NNN-slug.md}`.
+   - **New story** (Phase 1 chose "New story" or a new epic was created): use the next available NNN in the initiative's `.assets/` folder (list existing `userstory-NNN-*.md` files, increment the highest; start at 001 if empty). Derive the slug by kebab-casing the refined `## Title`, keeping at most 7 words, e.g. `save-payment-method-future-checkouts`.
+2. Write the refined story as `.assets/userstory-NNN-slug.md` inside the initiative's `.assets/` folder using the output template, including the `**Story ID:** userstory-NNN-slug` line at the top (no `**Status:**` line — absence of the status field indicates a refined story).
+3. In the initiative doc, update the task entry link text in the active Milestone: change `[Brief description — pending]` to `[Refined Story Title]` (keep the same `.assets/userstory-NNN-slug.md` path). For new stories, insert a new task entry `- [Refined Story Title]{.assets/userstory-NNN-slug.md}`.
 4. When splitting: for each non-chosen slice, create a placeholder file at `.assets/userstory-NNN-slug.md` containing:
    - `**Story ID:** userstory-NNN-slug`
    - `**Status:** to-be-refined`
@@ -388,11 +388,11 @@ After producing the final story output, persist it according to the active plan 
    - A `## Notes from intake` section with any relevant context captured in this session: split rationale, relationship to the current story, any API or business details already known.
    - A `## Related` section linking to the current story being refined.
    Assign NNNs sequentially after the highest existing one in `.assets/` (the current story's file already written by step 2 counts as existing). Insert a task entry `- [Slice description — pending]{.assets/userstory-NNN-slug.md}` in the same Milestone (or a new Milestone if the split reveals a distinct Feature). Do NOT offer TODO.md for deferred slices.
-5. Add a back-link to the epic plan at the bottom of the story detail file: `**Epic plan:** [NNN-epic-slug.md]{../NNN-epic-slug.md}` (the `../` resolves from `.assets/` up to `plans/`).
+5. Add a back-link to the epic initiative at the bottom of the story detail file: `**Epic initiative:** [NNN-epic-slug.md]{../NNN-epic-slug.md}` (the `../` resolves from `.assets/` up to `initiatives/`).
 
-**When no XDRS plan doc is active ("start fresh" or no XDRS scope):**
+**When no XDRS initiative doc is active ("start fresh" or no XDRS scope):**
 - Ask the user where to save the refined story (default: `userstory-NNN-slug.md` at workspace root).
-- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic plan, create a new epic plan, or save to `TODO.md` per the template in Phase 8. Apply the chosen action.
+- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic initiative, create a new epic initiative, or save to `TODO.md` per the template in Phase 8. Apply the chosen action.
 
 ### Output Template
 
@@ -439,8 +439,8 @@ As a [role], I want to [action], so that [benefit].
 [highly desirable — screenshots, mockups, or diagrams illustrating the feature.]
 - [attachment]
 
-**Epic plan:** [NNN-epic-slug.md](../NNN-epic-slug.md)
-*(omit when no XDRS plan doc is active)*
+**Epic initiative:** [NNN-epic-slug.md](../NNN-epic-slug.md)
+*(omit when no XDRS initiative doc is active)*
 ```
 
 ---

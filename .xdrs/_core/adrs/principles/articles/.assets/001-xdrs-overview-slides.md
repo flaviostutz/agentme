@@ -28,7 +28,7 @@ A standard Decision Record combines too many concerns in one file:
 |---------|-----|
 | Why we decided | Rationale / Research |
 | What we decided | Policy (the rule) |
-| How to implement it | Plan |
+| How to implement it | Initiative |
 | How to apply it daily | Skill |
 | Overview for readers | Article |
 
@@ -44,7 +44,7 @@ XDRS splits the concerns into focused, linkable documents:
 - **Research** — exploration, options, evidence
 - **Skill** — step-by-step execution procedure
 - **Article** — synthetic overview linking multiple artifacts
-- **Plan** — ephemeral execution plan, deleted after implementation
+- **Initiative** — ephemeral execution initiative, deleted after implementation
 
 ---
 
@@ -93,7 +93,7 @@ Synthetic views that **explain a topic** across multiple Policies, Research, and
 
 ---
 
-## Plans
+## Initiatives
 
 Describe a problem, proposed solution, and implementation approach.
 
@@ -111,7 +111,7 @@ Describe a problem, proposed solution, and implementation approach.
 | Research | What did we learn while evaluating options? |
 | Skill | How do we carry out work under this decision? |
 | Article | How do these artifacts fit together for a reader? |
-| Plan | What are we going to do, why, and how? |
+| Initiative | What are we going to do, why, and how? |
 
 ---
 
@@ -140,7 +140,7 @@ Articles appear when the **ecosystem around the decision** needs explanation.
         researches/
         skills/[N]-[name]/SKILL.md
         articles/
-        plans/
+        initiatives/
         .assets/              ← slides, diagrams
 ```
 
@@ -217,7 +217,7 @@ This creates `AGENTS.md` and `.xdrs/index.md` with the `_core` scope pre-loaded.
 
 # Summary
 
-- XDRS separates concerns: Policy, Research, Skill, Article, Plan
+- XDRS separates concerns: Policy, Research, Skill, Article, Initiative
 - Policies are the source of truth; all other artifacts support them
 - Scopes and indexes make decisions discoverable and overridable
 - AI agents consult XDRS before every request via `AGENTS.md`

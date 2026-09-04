@@ -10,13 +10,13 @@ valid-from: 2025-01-01
 
 ## Overview
 
-The `_core` scope defines the XDRS framework itself: how policies, skills, research, articles, and plans are structured, written, versioned, and discovered. This scope is aimed at engineers, architects, and business analysts who build or consume xdrs-based documentation.
+The `_core` scope defines the XDRS framework itself: how policies, skills, research, articles, and initiatives are structured, written, versioned, and discovered. This scope is aimed at engineers, architects, and business analysts who build or consume xdrs-based documentation.
 
 ## Content
 
 ### What this scope covers
 
-The `_core` scope is the foundation that all other scopes inherit from. It establishes the rules and conventions that every Policy document, skill, article, research, and plan must follow regardless of which team, product, or domain produces them.
+The `_core` scope is the foundation that all other scopes inherit from. It establishes the rules and conventions that every Policy document, skill, article, research, and initiative must follow regardless of which team, product, or domain produces them.
 
 If you are evaluating whether to adopt XDRS, setting up a new XDRS project, or extending the framework with your own scopes, start here.
 
@@ -35,7 +35,7 @@ Each artifact type has its own writing standard:
 - **Skills** follow [_core-adr-policy-003](adrs/principles/003-skill-standards.md), using the agentskills format so they work for both humans and AI agents on an automation gradient from fully manual to fully automated.
 - **Articles** follow [_core-adr-policy-004](adrs/principles/004-article-standards.md), providing synthetic views that combine and link multiple Policies, research, and skills without replacing them as the source of truth.
 - **Research** follows [_core-adr-policy-006](adrs/principles/006-research-standards.md), using an IMRAD-based structure for studies that back decisions with reproducible evidence.
-- **Plans** follow [_core-adr-policy-007](adrs/principles/007-plan-standards.md), capturing ephemeral execution plans with problem context, proposed solutions, milestones, and deliverables that are deleted after implementation.
+- **Initiatives** follow [_core-adr-policy-007](adrs/principles/007-initiative-standards.md), capturing ephemeral execution initiatives with problem context, proposed solutions, milestones, and deliverables that are deleted after implementation.
 
 ### Versioning and distribution
 
@@ -68,7 +68,7 @@ The `_core` scope ships with seven skills that automate the most common framewor
 - **003-write-skill** guides creation of a new skill package
 - **004-write-article** guides creation of a new article
 - **005-write-research** guides creation of a new research document
-- **006-write-plan** guides creation of a new execution plan
+- **006-write-initiative** guides creation of a new execution initiative
 - **007-write-presentation** guides creation of Marp slide presentations
 
 ### Getting started
