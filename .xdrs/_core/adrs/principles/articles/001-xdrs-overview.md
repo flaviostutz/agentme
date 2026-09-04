@@ -2,7 +2,7 @@
 
 ## Overview
 
-This article introduces XDRS, explains its purpose and design, and guides
+This article introduces XDRS (eXtensible Decision Record System), explains its purpose and design, and guides
 teams through adopting, extending, and distributing them. It is an entry point for anyone new to
 the framework and links out to the authoritative Policy documents for full details.
 

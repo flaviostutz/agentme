@@ -10,7 +10,7 @@ valid-from: 2025-01-01
 
 ## Overview
 
-The `_core` scope defines the XDRS framework itself: how policies, skills, research, articles, and initiatives are structured, written, versioned, and discovered. This scope is aimed at engineers, architects, and business analysts who build or consume xdrs-based documentation.
+The `_core` scope defines the XDRS (eXtensible Decision Record System) framework itself: how policies, skills, research, articles, and initiatives are structured, written, versioned, and discovered. This scope is aimed at engineers, architects, and business analysts who build or consume xdrs-based documentation.
 
 ## Content
 

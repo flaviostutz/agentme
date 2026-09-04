@@ -58,7 +58,7 @@ Each refined user story MUST have a detail file placed at:
 - NNN and slug MUST match the placeholder file that was refined (extracted from its `**Story ID:**` line). For new stories without a placeholder, use the next available NNN in `.assets/` and derive the slug by kebab-casing the story title to at most 7 words.
 - The file MUST begin with a `**Story ID:** userstory-NNN-slug` line. A refined file has no `**Status:**` field; the absence of the status field indicates the story is complete.
 
-A **pending placeholder file** is created for every story added to the plan before it is refined. It MUST contain:
+A **pending placeholder file** is created for every story added to the epic initiative before it is refined. It MUST contain:
 ```markdown
 **Story ID:** userstory-NNN-slug
 **Status:** to-be-refined
