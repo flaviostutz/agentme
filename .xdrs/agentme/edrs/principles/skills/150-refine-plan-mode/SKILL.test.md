@@ -1,6 +1,6 @@
 ---
 skill: 150-refine-plan-mode
-skill-version: "2.7"
+skill-version: "2.9"
 ---
 
 ## Test Scenarios
@@ -89,3 +89,27 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Skill explicitly frames the question as a clarifying question, not a confirmation request.
 - [ ] Skill waits for the human's answer before continuing to the next angle.
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
+
+### Scenario 5: Feature split — deferred parts saved to TODO.md with Group/Part detail
+
+**Trigger / Input**
+
+"Build a complete admin dashboard: user management, billing management, and audit log viewer."
+
+**Expected Behaviour**
+
+Phase 2 Step 4 surfaces roughly 24 distinct in-scope items across the three subsystems. Phase 2 Step 5 judges the request too large — it spans 3 qualitatively different concerns (user management, billing, audit) each needing independent data-model and UI design, and exceeds the ~20-item threshold — and proposes a 3-way split. The human accepts the split and picks "User management" as Part 1. Phases 1–7 run on User management only; the other two parts are recorded in the Deferred Features list. At Phase 7, the skill presents a brief one-line-per-item Deferred Features summary, then uses `vscode_askQuestions` offering "Save to TODO.md" as the recommended option. The human picks it. The skill creates (or appends to) `TODO.md` at the workspace root with a `## Deferred Features` heading containing one `### Group:` section covering both deferred parts (Billing management, Audit log viewer), with Origin/Original objective/Split rationale, and each part as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
+
+**Simulated Human Responses**
+1. "Accept split — start planning User management"
+2. "Save to TODO.md"
+
+**Assertions**
+
+- [ ] Skill proposes a 3-way split with a brief rationale for each part's boundary, justified by at least two of the Phase 2 Step 5 size criteria.
+- [ ] Only the chosen part (User management) is planned through Phases 1–7; the other two parts are not further elaborated beyond the deferred entry.
+- [ ] Phase 7 presents a Deferred Features summary as brief one-line bullets before asking where to save.
+- [ ] `vscode_askQuestions` offers "Save to TODO.md" as the recommended option.
+- [ ] TODO.md is created (or appended to) at the workspace root with a `## Deferred Features` heading.
+- [ ] A single `### Group:` heading covers both deferred parts, recording Origin, Original objective, and Split rationale.
+- [ ] Each deferred part appears as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
