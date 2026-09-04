@@ -7,7 +7,7 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "4.0"
+  version: "4.1"
 ---
 
 ## Overview
@@ -363,11 +363,13 @@ If any stories or features were placed in the **Deferred Stories** list during P
 **When an XDRS plan doc is active** (Phase 1 selected or created a plan): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the plan doc by the Plan document integration section below.
 
 **When no XDRS plan doc is active**: use `vscode_askQuestions` with:
-- **"Save to BACKLOG.md"** (recommended) — append the list under a `## Deferred Stories` heading in `BACKLOG.md` at the workspace root (create the file if it does not exist), so the items can be planned for future refinement runs.
-- **"Save to a different file"** (open box) — human specifies the file path; append there instead.
+- **"Save to TODO.md"** (recommended) — append an entry under a `## Deferred Stories` heading in `TODO.md` at the workspace root (create the file if it does not exist), using the template below.
+- **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same template.
 - **"Skip — do not save"** — proceed without saving.
 
 This step is skipped if no stories were deferred and no Deferred Risks were recorded.
+
+**Deferred Stories template**: new `### Group: [title] — deferred [YYYY-MM-DD]` per split (1+ parts, never merged) with **Origin**, **Original objective**, **Split rationale**; one `#### [slice title]` per slice with **Objective**, **Scope**, **Context captured so far**, **Suggested prompt to resume**.
 
 ### Plan document integration
 
@@ -385,12 +387,12 @@ After producing the final story output, persist it according to the active plan 
    - A `## Title` with the preliminary description of the slice.
    - A `## Notes from intake` section with any relevant context captured in this session: split rationale, relationship to the current story, any API or business details already known.
    - A `## Related` section linking to the current story being refined.
-   Assign NNNs sequentially after the highest existing one in `.assets/` (the current story's file already written by step 2 counts as existing). Insert a task entry `- [Slice description — pending]{.assets/userstory-NNN-slug.md}` in the same Milestone (or a new Milestone if the split reveals a distinct Feature). Do NOT offer BACKLOG.md for deferred slices.
+   Assign NNNs sequentially after the highest existing one in `.assets/` (the current story's file already written by step 2 counts as existing). Insert a task entry `- [Slice description — pending]{.assets/userstory-NNN-slug.md}` in the same Milestone (or a new Milestone if the split reveals a distinct Feature). Do NOT offer TODO.md for deferred slices.
 5. Add a back-link to the epic plan at the bottom of the story detail file: `**Epic plan:** [NNN-epic-slug.md]{../NNN-epic-slug.md}` (the `../` resolves from `.assets/` up to `plans/`).
 
 **When no XDRS plan doc is active ("start fresh" or no XDRS scope):**
 - Ask the user where to save the refined story (default: `userstory-NNN-slug.md` at workspace root).
-- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic plan, create a new epic plan, or save to `BACKLOG.md`. Apply the chosen action.
+- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic plan, create a new epic plan, or save to `TODO.md` per the template in Phase 8. Apply the chosen action.
 
 ### Output Template
 
