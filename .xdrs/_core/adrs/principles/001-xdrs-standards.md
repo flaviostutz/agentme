@@ -1,6 +1,6 @@
 ---
 name: _core-adr-policy-001-xdrs-standards
-description: Defines the core XDRS framework including types (ADR, BDR, EDR), folder structure, scopes, subjects, and index requirements. Use when structuring or navigating policies.
+description: Defines the core XDRS (eXtensible Decision Record System) framework including types (ADR, BDR, EDR), folder structure, scopes, subjects, and index requirements. Use when structuring or navigating policies.
 apply-to: All XDRS scopes and document types
 valid-from: 2025-01-01
 ---

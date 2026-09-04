@@ -3,7 +3,7 @@ marp: true
 paginate: true
 ---
 
-# XDRS Framework
+# XDRS — eXtensible Decision Record System
 
 A structured system for capturing, organizing, and distributing architectural, business, and engineering decisions
 
