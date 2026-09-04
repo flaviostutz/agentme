@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 9111013f07f0
+  git:https://github.com/flaviostutz/xdrs-core.git@main: a4aef2230227
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -13,8 +13,6 @@ files:
     - .xdrs/_core/adrs/principles/019-compiled-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|cd828b8e1bfc|0
     - .xdrs/_core/adrs/principles/skills/.assets/conflict-detection.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|f17596b74e3a|0
     - .xdrs/_core/adrs/principles/skills/.assets/lint-verification.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|91abf268e6b3|0
-    - .xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|c063be59aa33|0
-    - .xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|d809c86d90a8|0
     - .xdrs/_core/adrs/principles/skills/.assets/scope-placement.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|c708f3f3a285|0
     - .xdrs/_core/adrs/principles/skills/.assets/scope-selection.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|f020fb131ff2|0
     - .xdrs/_core/adrs/principles/skills/009-compile-scope/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|ad14b946b016|0
@@ -27,27 +25,29 @@ files:
     - .xdrs/_core/adrs/principles/016-policy-subjects.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|e0a376355d73|0
     - .xdrs/_core/adrs/principles/017-policy-numbering-ranges.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|818b91fe40cf|0
     - .xdrs/_core/adrs/principles/018-external-path-symlinks.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|d66697c2f3d0|0
-    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|4c553120885b|0
-    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|170fcdc01734|0
-    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview.svg|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|d46674c04b53|0
-    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|c28ae72d8039|0
     - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|06ed54281344|0
-    - .xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|7a64c263c614|0
     - .xdrs/_core/adrs/principles/006-research-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|9b031be1bb23|0
-    - .xdrs/_core/adrs/principles/007-plan-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|a9197dae0941|0
-    - .xdrs/_core/adrs/principles/009-presentation-standards.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|b9677ba67b11|0
-    - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|54f0d3273d79|0
     - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|f1c11a51367d|0
     - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|8357e60165bf|0
     - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|6ddf0af7c0f6|0
     - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|71e9ee1ada40|0
-    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|e893c76dceb1|file|6ad6a6ad1604|0
-    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|e1a223f47970|0
-    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|4b1a052e5f08|0
-    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|0e98e55fc0da|file|91e012a6b5ca|0
-    - .xdrs/_core/adrs/principles/010-scope-governance.md|https://github.com/flaviostutz/xdrs-core.git|3ace30edb2dc|file|9276e92c9076|0
-    - .xdrs/_core/adrs/principles/001-xdrs-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|2c549d92e307|0
     - .xdrs/_core/adrs/principles/002-policy-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|4e0b1cc4a3cc|0
     - .xdrs/_core/adrs/principles/020-media-and-asset-standards.md|https://github.com/flaviostutz/xdrs-core.git|9111013f07f0|file|a468a30588b5|0
-checksum: 52800d87278a
+    - .xdrs/_core/adrs/principles/007-initiative-standards.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|5b33743c1b09|0
+    - .xdrs/_core/adrs/principles/skills/006-write-initiative/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|444f25a461a1|0
+    - .xdrs/_core/adrs/index.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|b64535a45dce|0
+    - .xdrs/_core/adrs/principles/001-xdrs-standards.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|29a0c4a16b0f|0
+    - .xdrs/_core/adrs/principles/004-article-standards.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|3582cee21c93|0
+    - .xdrs/_core/adrs/principles/009-presentation-standards.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|9c8180dffa93|0
+    - .xdrs/_core/adrs/principles/010-scope-governance.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|78a521a35f40|0
+    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|4cad532a84cc|0
+    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview.svg|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|13ac32baab7e|0
+    - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|7a758ea99faa|0
+    - .xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|3dc7d87087b0|0
+    - .xdrs/_core/adrs/principles/skills/.assets/prerequisites-gate.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|c27f3899d610|0
+    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|80717f50fd2f|0
+    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|ae41ab8961b7|0
+    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|2351a772c81f|0
+    - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|a4aef2230227|file|337121471143|0
+checksum: e24761d4d828
 

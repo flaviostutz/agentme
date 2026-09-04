@@ -42,7 +42,17 @@ Performs a structured review of code changes or files against the Policies in th
    - **Local meta-policies (policy documents only):** Apply all found local meta-policy files as mandatory conventions when reviewing policy documents in the scope. Local meta-policies take highest precedence in the chain. See `_core-adr-policy-010` rules 23, 24, and 26.
 3. Filter relevance based on file types, domains, and architectural patterns in scope.
 
-### Phase 3: Policy Review
+### Phase 3: Diagram Validation
+
+1. For every file in scope, scan for fenced ` ```mermaid ` code blocks.
+2. For each diagram found, extract the content to a temporary `.mmd` file and run:
+   ```bash
+   npx -y @mermaid-js/mermaid-cli -i <tempfile>.mmd --quiet 2>&1
+   ```
+3. For each diagram that fails validation, report as ERROR: include the file path, approximate location (heading or surrounding text), and the error message from `mmdc`.
+4. Delete all temporary files created in this step.
+
+### Phase 4: Policy Review
 
 1. Cross-reference each file in scope against active, applicable Policies.
    - **Drop any finding that cannot be traced to a specific rule in an Accepted Policy.** General good-practice observations, personal opinions, or inferred issues without an explicit Policy backing must not be reported.
@@ -60,14 +70,14 @@ Performs a structured review of code changes or files against the Policies in th
    - Consider context (existing style, legacy sections, etc.).
 3. For related Policies and files, lookup for the specific line number in both the Policy and the code that are related to the finding. This will be used in the reporting phase to provide precise references and actionable suggestions.
 
-### Phase 4: Judgment
+### Phase 5: Judgment
 1. Judgment criteria (all must be true to keep a finding):
    - Is the violation explicitly stated as a rule in an Accepted Policy using mandatory or advisory language? Templates, examples, and diagrams in Policies are illustrative only — they do not constitute rules. If the only evidence for the violation is an implicit pattern in a code sample or template, drop it.
    - Is there concrete evidence in the code or diff?
    - Is the finding actionable?
    - Would fixing it meaningfully improve compliance with the Policies?
 
-### Phase 5: Reporting
+### Phase 6: Reporting
 
 **Report template**
 ```text

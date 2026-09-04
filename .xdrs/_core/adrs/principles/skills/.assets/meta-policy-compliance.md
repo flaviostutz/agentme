@@ -2,7 +2,7 @@
 
 This module is shared across XDRS writing skills. Read and execute every check during the final review of a document.
 
-Substitute `[DOCUMENT]` with the appropriate noun for the calling skill: `policy`, `skill`, `article`, `research`, or `plan`.
+Substitute `[DOCUMENT]` with the appropriate noun for the calling skill: `policy`, `skill`, `article`, `research`, or `initiative`.
 
 ---
 

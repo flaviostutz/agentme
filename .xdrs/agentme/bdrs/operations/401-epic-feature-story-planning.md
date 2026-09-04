@@ -1,6 +1,6 @@
 ---
 name: agentme-bdr-policy-401-epic-feature-user-story-planning
-description: Defines how to organize software development project management work as epics, features, and user stories using XDRS plan documents. Use when creating, reviewing, or navigating epic plans, feature milestones, or user story files.
+description: Defines how to organize software development project management work as epics, features, and user stories using XDRS initiative documents. Use when creating, reviewing, or navigating epic initiatives, feature milestones, or user story files.
 apply-to: AI coding agents and developers managing software development work in projects that follow agentme standards
 valid-from: 2026-08-28
 ---
@@ -15,7 +15,7 @@ How should software development project management work be organized within an X
 
 ## Decision Outcome
 
-**Epics are XDRS plan documents. Features are Milestones inside those plans. User stories are key tasks linked to detail files.**
+**Epics are XDRS initiative documents. Features are Milestones inside those initiatives. User stories are key tasks linked to detail files.**
 
 ### Details
 
@@ -23,19 +23,19 @@ How should software development project management work be organized within an X
 
 An epic is a group of features that together achieve a well-defined objective. Epics typically span 1–12 months.
 
-- Each epic MUST be represented as one XDRS plan document of type BDR, placed at:
-  `.xdrs/[scope]/bdrs/operations/plans/NNN-epic-slug.md`
-- The plan heading MUST follow the format: `# [scope]-bdr-plan-NNN: [Epic Title]`
-- NNN is the plan's unique number within the `[scope]/bdrs/operations/plans/` namespace, assigned sequentially per `_core-adr-policy-007`.
+- Each epic MUST be represented as one XDRS initiative document of type BDR, placed at:
+  `.xdrs/[scope]/bdrs/operations/initiatives/NNN-epic-slug.md`
+- The initiative heading MUST follow the format: `# [scope]-bdr-initiative-NNN: [Epic Title]`
+- NNN is the initiative's unique number within the `[scope]/bdrs/operations/initiatives/` namespace, assigned sequentially per `_core-adr-policy-007`.
 - The slug MUST be lowercase, hyphen-separated, and descriptive (e.g., `001-epic-improve-checkout.md`).
-- Each epic plan MUST include all required sections from `_core-adr-policy-007`: Executive Summary, Context and Problem Statement, Proposed Solution (with Expected end date), and Milestones.
-- Epic plans are ephemeral and MUST be deleted after the epic is fully implemented, per `_core-adr-policy-007`.
+- Each epic initiative MUST include all required sections from `_core-adr-policy-007`: Executive Summary, Context and Problem Statement, Proposed Solution (with Expected end date), and Milestones.
+- Epic initiatives are ephemeral and MUST be deleted after the epic is fully implemented, per `_core-adr-policy-007`.
 
 #### 02-feature-as-milestone
 
 A feature is a specific activity, tool, or functionality that contributes to the epic's objective. Features typically span 2 weeks to 6 months.
 
-- Each feature MUST be represented as one `### Milestone N: [Feature Name]` section inside the epic plan.
+- Each feature MUST be represented as one `### Milestone N: [Feature Name]` section inside the epic initiative.
 - One Milestone per Feature; do not combine unrelated features into a single Milestone.
 - Milestone sections MUST follow the structure defined in `_core-adr-policy-007`:
   - Owner, Due date, Description, optional Acceptance checklist, Key tasks, optional Risks.
@@ -47,13 +47,13 @@ A user story is a unit of work within a Feature that delivers perceivable value 
 - Each user story MUST appear as a key task entry inside its parent Milestone's `**Key tasks:**` list, always as a markdown link to its detail file.
 - **Pending (not yet refined):** `- [Brief description — pending]{.assets/userstory-NNN-slug.md}` — file has `**Status:** to-be-refined`
 - **Refined:** `- [Story title]{.assets/userstory-NNN-slug.md}` — no status field in the file
-- NNN is local to the epic plan's `.assets/` folder; it restarts at 001 for each epic.
+- NNN is local to the epic initiative's `.assets/` folder; it restarts at 001 for each epic.
 - Story slugs MUST be lowercase and hyphen-separated (e.g., `userstory-001-add-login-page`).
 
 #### 04-user-story-detail-file
 
 Each refined user story MUST have a detail file placed at:
-`.xdrs/[scope]/bdrs/operations/plans/.assets/userstory-NNN-slug.md`
+`.xdrs/[scope]/bdrs/operations/initiatives/.assets/userstory-NNN-slug.md`
 
 - NNN and slug MUST match the placeholder file that was refined (extracted from its `**Story ID:**` line). For new stories without a placeholder, use the next available NNN in `.assets/` and derive the slug by kebab-casing the story title to at most 7 words.
 - The file MUST begin with a `**Story ID:** userstory-NNN-slug` line. A refined file has no `**Status:**` field; the absence of the status field indicates the story is complete.
@@ -117,7 +117,7 @@ As a [role], I want to [action], so that [benefit].
 [highly desirable — screenshots, mockups, or diagrams illustrating the feature.]
 - [attachment]
 
-**Epic plan:** [NNN-epic-slug.md](../NNN-epic-slug.md)
+**Epic initiative:** [NNN-epic-slug.md](../NNN-epic-slug.md)
 ```
 
 #### 05-detailed-specs-requirement
@@ -132,15 +132,15 @@ A user story that lacks enough detail to begin architecture, planning, or implem
 #### 06-refinement-workflow
 
 Stories MUST be refined using the `151-refine-user-story` skill. The skill:
-- Detects active epic plan documents and lists pending stories for selection.
+- Detects active epic initiative documents and lists pending stories for selection.
 - MUST run a structured 10-phase refinement process including interface/integration spec discovery.
-- MUST write the resulting detail file and update the key task link in the plan's Milestone.
-- When a story is split, MUST create placeholder files for each deferred slice and add them as pending task links in the plan.
+- MUST write the resulting detail file and update the key task link in the initiative's Milestone.
+- When a story is split, MUST create placeholder files for each deferred slice and add them as pending task links in the initiative.
 
 #### 07-ephemeral-lifecycle
 
-Epic plans and their associated user story detail files are ephemeral artifacts. Once an epic is fully implemented:
-- The epic plan document MUST be deleted.
+Epic initiatives and their associated user story detail files are ephemeral artifacts. Once an epic is fully implemented:
+- The epic initiative document MUST be deleted.
 - The `.assets/` folder and all user story detail files MUST be deleted with it.
 - The lasting outputs of an epic are the implemented code, decisions, skills, articles, and other artifacts produced during execution.
 
@@ -148,12 +148,12 @@ Epic plans and their associated user story detail files are ephemeral artifacts.
 
 Epics SHOULD be connected to one or more Tactical OKRs from `agentme-bdr-002` that represent the quarterly goals the epic is helping achieve.
 
-- The OKR reference MUST be placed in a `## OKRs` section immediately after the heading line of the epic plan document, listing each Tactical OKR by name or identifier.
+- The OKR reference MUST be placed in a `## OKRs` section immediately after the heading line of the epic initiative document, listing each Tactical OKR by name or identifier.
 - An epic without a linked Tactical OKR MUST document the reason in the `## OKRs` section (e.g., "No Tactical OKR defined for this quarter — tracked as a conscious decision").
 - The relationship is many-to-many: one Tactical OKR MAY drive multiple Epics; one Epic MAY contribute to multiple Tactical OKRs.
 
 ## References
 
-- [`_core-adr-policy-007`](../../../_core/adrs/principles/007-plan-standards.md) — Plan document standards: structure, lifecycle, and Milestone template
+- [`_core-adr-policy-007`](../../../_core/adrs/principles/007-initiative-standards.md) — Initiative document standards: structure, lifecycle, and Milestone template
 - [`agentme-bdr-002`](../principles/002-okr-framework.md) — OKR framework: Tactical OKR definition and epic connection rule
 - [`agentme-edr-skill-151`](../../edrs/principles/skills/151-refine-user-story/SKILL.md) — Refine user story skill: structured refinement workflow that produces output following this policy

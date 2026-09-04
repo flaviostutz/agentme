@@ -27,7 +27,7 @@ The `agentme` EDRs cover project tooling and structure for each supported langua
 
 ### Business decisions
 
-The `agentme` BDRs cover software development project management practices: how to organize and track epics, features, and user stories using XDRS plan documents. See the full list in the [BDRs Index](bdrs/index.md).
+The `agentme` BDRs cover software development project management practices: how to organize and track epics, features, and user stories using XDRS initiative documents. See the full list in the [BDRs Index](bdrs/index.md).
 
 ## Type Indexes
 

@@ -12,7 +12,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-004](principles/004-article-standards.md) - **Article standards** — How to write synthetic views combining Policies, research, and skills
 - [_core-adr-policy-005](principles/005-semantic-versioning-for-xdrs-packages.md) - **Semantic versioning for XDRS packages** — How to version XDRS packages to communicate upgrade impact
 - [_core-adr-policy-006](principles/006-research-standards.md) - **Research standards** — How to structure research documents backing Policy decisions
-- [_core-adr-policy-007](principles/007-plan-standards.md) - **Plan standards** — How to structure ephemeral execution plans that implement decisions
+- [_core-adr-policy-007](principles/007-initiative-standards.md) - **Initiative standards** — How to structure ephemeral execution initiatives that implement decisions
 - [_core-adr-policy-008](principles/008-policy-structured-standards.md) - **Policy structured standards** — How to expose individually referenceable numbered rules inside a Policy when external citation by identifier is required
 - [_core-adr-policy-009](principles/009-presentation-standards.md) - **Presentation standards** — How to structure Marp slide presentations that support XDRS documents
 - [_core-adr-policy-010](principles/010-scope-governance.md) - **Scope governance** — How to define custom scope types, scope-local standards, and how all governance mechanisms apply with their precedence chain
@@ -36,7 +36,7 @@ Step-by-step procedural guides for humans and AI agents.
 - [003-write-skill](principles/skills/003-write-skill/SKILL.md) - **Write Skill** — create a new skill package
 - [004-write-article](principles/skills/004-write-article/SKILL.md) - **Write Article** — create a new article document
 - [005-write-research](principles/skills/005-write-research/SKILL.md) - **Write Research** — create a new research document
-- [006-write-plan](principles/skills/006-write-plan/SKILL.md) - **Write Plan** — create a new plan document
+- [006-write-initiative](principles/skills/006-write-initiative/SKILL.md) - **Write Initiative** — create a new initiative document
 - [007-write-presentation](principles/skills/007-write-presentation/SKILL.md) - **Write Presentation** — create Marp slide presentations for XDRS documents
 - [008-write-xdrs-doc](principles/skills/008-write-xdrs-doc/SKILL.md) - **Write XDRS Doc** — router skill; infers document type and delegates to the appropriate authoring skill
 - [009-compile-scope](principles/skills/009-compile-scope/SKILL.md) - **Compile Scope** — compiles or updates a `compiled`-type scope from its configured external sources

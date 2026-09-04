@@ -118,7 +118,7 @@ Creating a local meta-policy is optional. It SHOULD be created when a scope has 
 
 #### 18-local-content
 
-A local meta-policy SHOULD define the same kinds of instructions as a scope-type definition policy (rules 04–05 above): naming conventions for content in the scope, allowed content, forbidden content, and organisation rules. These instructions apply only to policy documents authored in this one scope; they do not govern non-policy artifacts (skills, articles, plans, research).
+A local meta-policy SHOULD define the same kinds of instructions as a scope-type definition policy (rules 04–05 above): naming conventions for content in the scope, allowed content, forbidden content, and organisation rules. These instructions apply only to policy documents authored in this one scope; they do not govern non-policy artifacts (skills, articles, initiatives, research).
 
 #### 19-local-must-be-structured
 
@@ -192,7 +192,7 @@ A `## Conflicts` section MAY also document cross-scope-type incompatibilities fo
 
 #### 27-extends-declaration
 
-A scope MAY declare an `extends:` field in its `index.md` YAML frontmatter. The value MUST be a single scope name or a comma-separated list (YAML list format also valid). The field causes all **policy documents** (decision records only — skills, articles, research, and plans are NOT inherited) from the listed scopes to be treated as if authored in the extending scope. Valid for all scope types.
+A scope MAY declare an `extends:` field in its `index.md` YAML frontmatter. The value MUST be a single scope name or a comma-separated list (YAML list format also valid). The field causes all **policy documents** (decision records only — skills, articles, research, and initiatives are NOT inherited) from the listed scopes to be treated as if authored in the extending scope. Valid for all scope types.
 
 #### 28-extends-disjoint
 

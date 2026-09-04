@@ -9,7 +9,7 @@ valid-from: 2025-01-01
 
 ## Context and Problem Statement
 
-Teams often need slide presentations to communicate decisions, research findings, plans, or article content to different audiences. Without a standard, slides drift from the authoritative documents, use inconsistent formats, and become disconnected from the policies they support.
+Teams often need slide presentations to communicate decisions, research findings, initiatives, or article content to different audiences. Without a standard, slides drift from the authoritative documents, use inconsistent formats, and become disconnected from the policies they support.
 
 How should slide presentations be structured, placed, and maintained within the XDRS framework so they remain consistent, discoverable, and always traceable to the documents they support?
 
@@ -21,7 +21,7 @@ Presentations are Markdown files in Marp format, stored in the `.assets/` folder
 
 ### Details
 
-- Slides are supporting media for XDRS documents. They MUST NOT exist as standalone artifacts without a parent decision, research, article, or plan.
+- Slides are supporting media for XDRS documents. They MUST NOT exist as standalone artifacts without a parent decision, research, article, or initiative.
 - Slides MUST use the [Marp](https://marp.app/) Markdown format with a minimal YAML frontmatter block at the beginning of the file:
   ```
   ---
@@ -35,7 +35,7 @@ Presentations are Markdown files in Marp format, stored in the `.assets/` folder
   - Example: parent `003-naming-conventions.md` produces `003-naming-conventions-slides.md` or `003-naming-conventions-slides-overview.md`.
 - Slide file names MUST NOT exceed 64 characters (including the `.md` extension).
 - Slide file names MUST be lowercase.
-- When slides refer to content from multiple decisions, plans, or research documents, an article explaining the combined view MUST be written first. The slides then support that article, not the individual documents directly.
+- When slides refer to content from multiple decisions, initiatives, or research documents, an article explaining the combined view MUST be written first. The slides then support that article, not the individual documents directly.
 - Slides SHOULD contain minimal text. For diagrams, prefer ASCII art for very simple cases, Mermaid for flows and relationships, and draw.io when Mermaid is insufficient (see [`_core-adr-policy-020`](020-media-and-asset-standards.md)); for other slide content, prefer short bullet points, key short statements, and tables. Use longer text only when the exact wording MUST be evaluated by the audience (policies, texts under discussion, controls).
 - Slides SHOULD follow a clean, linear storytelling structure (context, problem, solution, actions). Follow the structure of the underlying document, extracting the most important points and stressing central questions, answers, doubts, decisions, and risks.
 - Define the central message or objective of the presentation before creating the slides. If the objective is unclear or there are multiple possible paths, ask the user before proceeding.

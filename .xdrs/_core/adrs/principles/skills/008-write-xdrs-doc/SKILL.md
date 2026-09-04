@@ -1,7 +1,7 @@
 ---
 name: 008-write-xdrs-doc
 description: >
-  Use when writing documents such as decisions, policies, skills, procedures, research, plans, articles, or presentations.
+  Use when writing documents such as decisions, policies, skills, procedures, research, initiatives, articles, or presentations.
   Activate this skill when the user asks to create or write any XDRS element.
 metadata:
   author: flaviostutz
@@ -20,11 +20,11 @@ Routes the request to the appropriate XDRS authoring skill based on the type of 
    - **Policy** (ADR/BDR/EDR) — user wants to record a decision, rule, standard, guideline, or architectural/business/engineering policy
    - **Skill** — user wants to create an agent skill, SKILL.md, or reusable workflow instruction
    - **Research** — user wants to produce a study, investigation, evidence-based analysis, or IMRAD-style document
-   - **Plan** — user wants to create an execution plan, project plan, roadmap, or milestone document
+   - **Initiative** — user wants to create an execution plan, project plan, roadmap, or milestone document
    - **Article** — user wants to create a guide, overview, or synthetic document that combines multiple XDRS elements
    - **Presentation** — user wants to create slides or a Marp deck for an existing XDRS document
 
-2. If the type cannot be confidently inferred, ask the user one focused question: *"What type of XDRS document do you want to create — Policy, Skill, Research, Plan, Article, or Presentation?"* Wait for the answer before proceeding.
+2. If the type cannot be confidently inferred, ask the user one focused question: *"What type of XDRS document do you want to create — Policy, Skill, Research, Initiative, Article, or Presentation?"* Wait for the answer before proceeding.
 
 ### Phase 1.5: Prerequisites Gate — MUST complete before writing
 
@@ -40,8 +40,18 @@ Read the full content of the skill file for the inferred type, then follow all i
 | Skill | `.xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md` |
 | Article | `.xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md` |
 | Research | `.xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md` |
-| Plan | `.xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md` |
+| Initiative | `.xdrs/_core/adrs/principles/skills/006-write-initiative/SKILL.md` |
 | Presentation | `.xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md` |
+
+### Phase 3: Validate Mermaid Diagrams
+
+1. After the delegated skill completes, scan all files written in this session for fenced ` ```mermaid ` code blocks.
+2. For each diagram found, extract the content to a temporary `.mmd` file and run:
+   ```bash
+   npx -y @mermaid-js/mermaid-cli -i <tempfile>.mmd --quiet 2>&1
+   ```
+3. For each diagram that fails validation, report the error to the user and ask them to correct the diagram before saving.
+4. Delete all temporary files created in this step.
 
 ### Constraints
 

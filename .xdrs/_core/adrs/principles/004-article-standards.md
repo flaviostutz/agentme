@@ -26,7 +26,7 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 - The primary objective of an article is to make information available and accessible to humans. Good copywriting style, storytelling, clear organization, and clustering of related information are essential. Avoid repetitive content; each sentence SHOULD add new value.
 - Articles SHOULD stay under 2000 words (approximately a 10-minute read) to maximize reader engagement. When planning an article, keep it as small as possible. Break large subjects into separate chapters, each in its own article, so readers can consume and understand sections independently.
 - When a topic is broken into multiple articles, organize them as a **series**: each article MUST declare its position at the very top (e.g., `_This is article 2/4 of the "Engineering Practices" series._`) and MUST link to the previous and next articles in the series so readers can navigate the sequence without returning to an index.
-- Articles MUST NOT exceed 8000 words (hard limit). Move or point to detailed contents referenced in Policy decisions, researches, plans, or skills.
+- Articles MUST NOT exceed 8000 words (hard limit). Move or point to detailed contents referenced in Policy decisions, researches, initiatives, or skills.
 
 **Content and structure**
 

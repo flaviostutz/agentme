@@ -1,7 +1,7 @@
 ---
 name: 007-write-presentation
 description: >
-  Creates a Marp slide presentation for an existing XDRS document (policy, research, article, or plan).
+  Creates a Marp slide presentation for an existing XDRS document (policy, research, article, or initiative).
   Activate this skill when the user asks to create slides, a presentation, or a slide deck for an XDRS document.
 metadata:
   author: flaviostutz
@@ -22,7 +22,7 @@ Identify the target scope from the parent document's path or the user's request;
 
 1. Read `.xdrs/_core/adrs/principles/009-presentation-standards.md` in full to internalize all presentation rules.
 2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` for `.assets/` placement rules and general framework structure.
-3. Identify the parent document (policy, research, article, or plan) that the slides will support. The parent document must already exist. If no parent document exists, inform the user that slides cannot be standalone and suggest creating the parent document first.
+3. Identify the parent document (policy, research, article, or initiative) that the slides will support. The parent document must already exist. If no parent document exists, inform the user that slides cannot be standalone and suggest creating the parent document first.
 4. If the user wants slides covering content from multiple documents, check whether an article already exists that synthesizes those documents. If not, suggest creating an article first (using the 004-write-article skill) and then creating slides for that article.
 
 ### Phase 2: Define the Presentation Scope
@@ -120,7 +120,7 @@ Rules:
    - Articles: `[xdrs-root]/[scope]/[type]/[subject]/articles/.assets/[slide-file].md`
    - Research: `[xdrs-root]/[scope]/[type]/[subject]/researches/.assets/[slide-file].md`
    - Skills: `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/[slide-file].md`
-   - Plans: `[xdrs-root]/[scope]/[type]/[subject]/plans/.assets/[slide-file].md`
+   - Initiatives: `[xdrs-root]/[scope]/[type]/[subject]/initiatives/.assets/[slide-file].md`
 2. Update the parent document with the link to the slide file.
 3. Verify that the slide file name is <= 64 characters and lowercase.
 

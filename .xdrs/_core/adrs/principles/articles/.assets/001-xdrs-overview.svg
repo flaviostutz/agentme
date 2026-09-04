@@ -88,9 +88,9 @@
   <text x="354" y="400" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Synthetic texts combining multiple policies and skills.</text>
   <text x="354" y="417" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Never replace policies as source of truth.</text>
 
-  <!-- Plans element -->
+  <!-- Initiatives element -->
   <rect x="334" y="437" width="412" height="64" rx="6" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
-  <text x="354" y="457" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Plans — When / How to roll out</text>
+  <text x="354" y="457" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Initiatives — When / How to roll out</text>
   <text x="354" y="474" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Ephemeral execution docs. Deleted after implementation.</text>
   <text x="354" y="491" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#444">Lasting outputs become Policies, Skills, or Articles.</text>
 
@@ -151,7 +151,7 @@
   <text x="38" y="722" font-family="Courier New,monospace" font-size="11" fill="#333">        researches/     ← Research docs</text>
   <text x="38" y="740" font-family="Courier New,monospace" font-size="11" fill="#333">        skills/         ← Skill packages</text>
   <text x="38" y="758" font-family="Courier New,monospace" font-size="11" fill="#333">        articles/       ← Article docs</text>
-  <text x="38" y="776" font-family="Courier New,monospace" font-size="11" fill="#333">        plans/          ← Plan docs</text>
+  <text x="38" y="776" font-family="Courier New,monospace" font-size="11" fill="#333">        initiatives/    ← Initiative docs</text>
   <text x="38" y="794" font-family="Courier New,monospace" font-size="11" fill="#333">        .assets/        ← Binary assets</text>
 
   <!-- ===== SECTION: GOVERNANCE MECHANISMS ===== -->
