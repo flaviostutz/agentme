@@ -8,7 +8,7 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "2.9"
+  version: "3.0"
 ---
 
 ## Overview
@@ -26,6 +26,21 @@ Ensures that every plan is deeply validated through iterative consistency checks
 - **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; Phase 1 concerns re-route to Phase 2 Step 1.
 
 **Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
+
+**Artifact rule**: The plan is a single continuously-edited final artifact, not an append-only log. Process detail — Q&A rounds, phase-gate confirmations, todo-list tracking — never enters the deliverable; todos stay in the agent's todo-list tool. When a later phase reverses an earlier decision or section, edit it in place — never leave the superseded content beside the replacement. The final artifact's structure follows the **Final Plan Artifact Template** below.
+
+## Final Plan Artifact Template
+
+The **final artifact** (Phase 7 handoff) uses this exact section order, no competing top-level sections — matching GitHub Copilot's native Plan Mode output shape:
+
+1. **Title/TL;DR** — `## Plan: <title>` plus a short what/why/approach paragraph; embed confirmed Phase 5 diagrams inline here, no separate heading.
+2. **Steps** — ordered, numbered; group into phases (`*Phase A: ...*`) at 5+ steps; annotate `*(depends on step N)*` / `*(parallel with step N)*`; always include the Phase 3 Step 3 test step.
+3. **Relevant files** — flat list: path plus what changes (if not obvious).
+4. **Quality Verification Strategy** — existing checks that must keep passing; new checks (code: tests, linting, type checking, dead code, security/dependency audit, schema/contract validation; documents: proofreading, fact-checking, citation/link validation, policy compliance, peer review, readability) with exact commands and what each verifies; named test scenarios (Phase 6 Scenario-to-test rule) as `<scenario> (<category>)`; an **Unverified References** sub-list, each *"unverified — must verify before use"* with a first-step verification.
+5. **Decisions** — final facts only; edit a reversed decision in place, never append a contradiction; a Phase 2 Step 5 split adds one bullet naming the chosen part (full detail stays in `TODO.md`).
+6. **Further Considerations** — optional, 1-3 out-of-scope or deferred items.
+
+Not in the artifact: round-by-round narrative, a session log, superseded drafts left beside replacements, meta-tags like "(updated in round 3)", or todo-list tracking (stays in the todo-list tool).
 
 ## Instructions
 
@@ -94,9 +109,7 @@ Present a brief feature summary — a short bullet list of what will be built or
 
 1. Research the existing context: relevant files, prior decisions, established conventions, and analogous patterns already in place.
 2. For each contextual input, constraint, or dependency found (existing files, prior decisions, external systems, in-progress work by others), ask questions about all non-trivial items. For each dependency or context item, apply the Phase navigation rule: loop asking questions until that item converges before moving to the next. Only skip asking for trivially obvious or deterministic context items with no decision weight.
-3. Draft a plan with ordered steps, items to create or modify, and a verification step at the end. The plan MUST include a dedicated phase for test generation and execution whenever applicable — this phase must appear as an explicit step in the ordered plan, not only in the verification section. It must specify: (a) what tests to create or extend (unit, integration, end-to-end, or manual); (b) the exact commands or manual steps to run them; (c) the expected outcome for each. Examples: "Generate unit tests for X and run `npm test` — expect all pass", "Run integration tests with `make test-integration` — verify no regressions", "Manually open the generated document and verify sections Y and Z look correct". If no automated or manual tests apply, explicitly state why and mark the phase N/A. The plan MUST also include two dedicated sections:
-   - **Quality Verification Strategy**: (a) existing checks that must continue to pass; (b) new checks required for the task — for code: unit tests, integration tests, linting, type checking, dead code detection, security/dependency audit, schema/contract validation; for documents, analyses, and policies: proofreading, fact-checking, citation and link validation, policy compliance review, peer review, readability check; (c) exact executable steps or commands for each check; (d) what each check verifies. A plan without this section is incomplete.
-   - **Unverified References**: any resource referenced in the plan but not verified during planning must be listed here as *"unverified — must verify before use"* with a concrete first-step verification. For code: file paths, function names, CLIs, library APIs (e.g., `which cmd`, `npm list pkg`). For documents and analyses: statistics, quotes, cited studies, named organizations or people, URLs, legal or regulatory references. This section is the primary defense against fabricated claims surfacing only at execution time.
+3. Draft a plan with ordered steps, items to create or modify, and a dedicated test generation/execution step — this MUST appear as an explicit step in the ordered plan, not only in Quality Verification Strategy. Specify: (a) what tests to create or extend (unit, integration, end-to-end, or manual); (b) the exact commands or manual steps to run them; (c) the expected outcome for each. Example: "Generate unit tests for X and run `npm test` — expect all pass". If no automated or manual tests apply, explicitly state why and mark the phase N/A. The plan MUST also populate the **Final Plan Artifact Template**'s Quality Verification Strategy and Unverified References content — this is the primary defense against fabricated claims surfacing only at execution time.
 4. Present the draft and use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this draft match your intent? What verification checks exist today, and what new checks will confirm the key outcomes?" Present at least these options:
    - **"Continue to Phase 4 — Consistency Checks"** (recommended when no gaps remain) — advance.
    - **"Re-run Phase 3: Research, Dependencies & Draft Plan — explore deeper"** — repeat the research and drafting pass looking for context, dependencies, or constraints not yet surfaced, then re-present the gate.
@@ -116,7 +129,7 @@ Checks to run in order:
 - **(e) Feasibility**: Is each step actually achievable given the current context, constraints, and available resources?
 - **(f) Completeness**: Is anything missing that would leave the task half-done or the outcome broken for its consumer?
 - **(g) Scope creep check**: Has the plan grown beyond the original request? Flag any additions and ask the human to confirm or reject each one explicitly before continuing. For large plans (more than approximately 10 steps), verify that each step traces to a requirement, user request, or policy — untraceable steps must be explicitly confirmed by the human.
-- **(h) Verification coverage and executability**: Are verification checks defined for each changed or new outcome, with exact executable steps or commands? Do they cover the applicable strategies for the context — for code: unit tests, integration tests, linting, type checking, dead code detection, security audit, schema/contract validation; for documents and analyses: proofreading, fact-checking, link and citation validation, policy compliance review, peer review, readability check? Can a reviewer independently confirm correctness by executing them without setup friction?
+- **(h) Verification coverage and executability**: Are verification checks defined for each changed or new outcome, with exact executable steps or commands, covering the applicable strategies from the **Final Plan Artifact Template**'s Quality Verification Strategy? Can a reviewer independently confirm correctness by executing them without setup friction?
 - **(i) Unverified claims audit**: Scan the plan for any factual claim, reference, or resource that the agent did not verify with a tool call or direct inspection — for code: file paths, function names, CLIs, library APIs; for documents and analyses: cited statistics, quoted sources, URLs, named people or organizations, legal references. Either verify each one immediately (preferred) or add it to the Unverified References section with a mandatory first-step verification before use. This check MUST NOT be skipped even when the agent is confident.
 
 **Human prompt examples** — these are effective ways to drive a round:
@@ -237,6 +250,8 @@ After all 9 angles are complete, use `vscode_askQuestions` (per Phase gate UI ru
 
 ### Phase 7: Pre-Execution Readiness
 
+**Final Artifact Compaction pass** (run before the checklist below): (a) Template conformance — confirm the plan document matches the **Final Plan Artifact Template** exactly, with no other top-level sections; a safety net, not normally a large rewrite, since the Artifact rule already mandates in-place editing throughout. (b) Coherence-with-source check — compare the compacted plan against the full raw process history of this session (all phase outputs, questions and answers, research findings, and decisions actually made) and confirm no decision, requirement, or finding was lost, weakened, or contradicted by compaction. Fix any drift by correcting the plan directly, never by re-inserting raw process narrative.
+
 Before approving execution, verify ALL items in the checklist below. If any item cannot be checked, return to the relevant phase and resolve it first.
 
 - [ ] Consistency rounds converged (convergence signals met — last 2 rounds produced only single-sentence answers with no new issues) (per Phase navigation rule)
@@ -245,11 +260,12 @@ Before approving execution, verify ALL items in the checklist below. If any item
 - [ ] No unresolved human questions outstanding
 - [ ] Scope confirmed by the human with no silent expansions
 - [ ] Any irreversible or high-impact steps have a mitigation or fallback noted
-- [ ] Quality Verification Strategy defined in the plan with exact executable steps for all applicable check types (code: unit tests, integration tests, linting, static analysis; documents/analyses: fact-checking, link and citation validation, peer review, etc.)
+- [ ] Quality Verification Strategy defined in the plan with exact executable steps, per the **Final Plan Artifact Template**
 - [ ] A dedicated test generation and execution phase is present in the ordered plan steps (or explicitly marked N/A with a reason)
 - [ ] Verification checks executed during dry run and results reviewed — failures and coverage gaps resolved
 - [ ] All high-risk unverified references (code or factual) listed in the Unverified References section with explicit first-step verification in the execution plan
-- [ ] All scenarios from any phase or angle that revealed gaps, raised model doubt, or qualified for any category in the Scenario-to-test table have been added as named test cases to the plan's Quality Verification Strategy
+- [ ] All scenarios that revealed gaps, raised model doubt, or matched a Scenario-to-test category have been added as named test cases to Quality Verification Strategy
+- [ ] Final Artifact Compaction pass complete: the plan matches the template structure and has been checked for coherence against the full raw process history
 
 Once all items are checked or explicitly marked N/A, present a **brief scenario summary** — a short bulleted list of the most significant scenarios discovered across all phases (aim for 5–10 entries), each showing: the angle or check that surfaced it, what it revealed, and what test case was added to the plan. This makes the depth of analysis visible before handoff.
 
@@ -284,7 +300,7 @@ Do not start execution to escape planning discomfort — only start when confide
 
 **Test execution rule**: After implementation is complete, all tests defined in the Quality Verification Strategy must be run before the work is considered done:
 - **Automated tests** (unit tests, integration tests, linting, type checking, coverage): run them directly using the exact commands defined in the plan. If any fail, fix the issue and re-run before proceeding.
-- **Manual tests**: for each manual test step in the plan, guide the human explicitly — state what command to run or action to take, what to look at, and what the expected output or behaviour is. Wait for the human to confirm the result before moving to the next step. If the result doesn’t match, treat it as a failure and investigate before continuing.
+- **Manual tests**: for each manual step, guide the human explicitly — state the action, what to look at, and the expected result. Wait for confirmation before the next step; treat a mismatch as a failure and investigate before continuing.
 - Do not mark the work done until every test — automated and manual — has a confirmed passing result.
 
 ---
@@ -298,6 +314,7 @@ Avoid these common failure modes:
 - **Agent self-validation**: the agent answers its own questions on subjective, domain, or intent-based decisions and proceeds without asking the human. The human is the oracle for domain knowledge, intent, and subjective decisions — the agent must not self-resolve those unilaterally.
 - **Confidence as a proxy for correctness**: an agent expressing certainty does not mean the plan is correct. Run all checks regardless of how confident the agent sounds.
 - **Treating unverified references as facts**: the agent references files, CLIs, statistics, library APIs, quoted sources, or named organizations without a tool call or direct inspection to confirm they exist. All high-risk references must be verified immediately or explicitly listed in the Unverified References section with a mandatory first-step check before use.
+- **Artifact bloat**: the final plan accretes process narrative (Q&A rounds, phase-gate confirmations, todo-list tracking, superseded drafts) instead of converging to the **Final Plan Artifact Template**. It's a continuously-edited deliverable, not an append-only log.
 
 ## Re-Plan Triggers
 

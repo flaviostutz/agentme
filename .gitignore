@@ -3,3 +3,4 @@ dist
 
 .filedist-tmp
 .mypy_cache
+.tmp/

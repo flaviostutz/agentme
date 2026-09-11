@@ -1,6 +1,6 @@
 ---
 skill: 150-refine-plan-mode
-skill-version: "2.9"
+skill-version: "3.0"
 ---
 
 ## Test Scenarios
@@ -13,7 +13,7 @@ skill-version: "2.9"
 
 **Expected Behaviour**
 
-The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 2 (Requirements Qualification) — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 3 (Research, Dependencies, and Draft Plan) until it converges before moving to the next; (4) runs iterative consistency checks in Phase 4, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram in Phase 5 and loops until the human explicitly confirms it; (6) analyzes all 18 challenge angles in Phase 6 applying the Phase navigation rule per angle; (7) verifies the Phase 7 Pre-Execution Readiness checklist before approving execution.
+The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 2 (Requirements Qualification) — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 3 (Research, Dependencies, and Draft Plan) until it converges before moving to the next; (4) runs iterative consistency checks in Phase 4, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram in Phase 5 and loops until the human explicitly confirms it; (6) analyzes all 9 challenge angles in Phase 6 applying the Phase navigation rule per angle; (7) verifies the Phase 7 Pre-Execution Readiness checklist before approving execution.
 
 **Simulated Human Responses**
 1. "Yes, goal and scope match exactly."
@@ -33,7 +33,7 @@ The skill activates plan mode immediately. Before writing any code or editing an
 - [ ] Each human interaction round across all phases contains 1–5 questions grouped together.
 - [ ] Skill applies the Phase navigation rule convergence signal rather than a fixed round cap.
 - [ ] Skill generates a diagram in Phase 5 (Visual Consistency Validation) and loops until the human explicitly confirms it.
-- [ ] All 18 challenge angles in Phase 6 are analyzed; related angles may share a round.
+- [ ] All 9 challenge angles in Phase 6 are analyzed; related angles may share a round.
 - [ ] Phase 7 Pre-Execution Readiness checklist is verified before execution is approved.
 
 ### Scenario 2: Well-structured input still triggers full Phase 2 Requirements Qualification
@@ -113,3 +113,27 @@ Phase 2 Step 4 surfaces roughly 24 distinct in-scope items across the three subs
 - [ ] TODO.md is created (or appended to) at the workspace root with a `## Deferred Features` heading.
 - [ ] A single `### Group:` heading covers both deferred parts, recording Origin, Original objective, and Split rationale.
 - [ ] Each deferred part appears as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
+
+### Scenario 6: Final plan artifact contains no process narrative
+
+**Trigger / Input**
+
+A user runs the full 150-refine-plan-mode workflow across multiple rounds — including at least one re-run of a phase gate (e.g., "Re-run Phase 4: Consistency Checks — deeper pass") and one Phase 2 Step 5 scope split with a deferred part — before reaching Phase 7 and confirming "Hand off to implementation".
+
+**Expected Behaviour**
+
+Throughout every phase, the plan document is maintained as a single continuously-edited artifact per the Artifact rule. When Phase 4 is re-run, the consistency-check findings from the first pass are merged or replaced in place — not appended as a second "round 2" narrative block. When a decision is revisited, the earlier entry is edited, not left beside a newer contradicting one. The final plan handed off at Phase 7 follows the structure in SKILL.md's Final Plan Artifact Template section: Title/TL;DR, Steps, Relevant files, Quality Verification Strategy (including Unverified References), Decisions, Further Considerations — with no additional top-level sections such as a session log, round-by-round history, or Q&A transcript.
+
+**Simulated Human Responses**
+1. "Accept split — start planning [Part 1 name]" (Phase 2 Step 5 scope split)
+2. "Re-run Phase 4: Consistency Checks — deeper pass"
+3. "Continue to Phase 5 — Visual Consistency Validation" (after the re-run converges)
+4. "Hand off to implementation" (Phase 7 final gate)
+
+**Assertions**
+
+- [ ] The final plan document contains no section narrating the planning process itself (e.g. "Round 1", "Round 2", phase-gate Q&A transcripts, a session status log).
+- [ ] No decision or section appears twice with one marked as superseding the other — reversed decisions are edited in place.
+- [ ] The final plan's top-level sections match SKILL.md's Final Plan Artifact Template section exactly, with zero additional top-level sections.
+- [ ] Todo-list tracking used during the workflow (per the Task tracking rule) does not appear inside the final plan document.
+- [ ] The Deferred Features entry from the Phase 2 Step 5 split appears only in `TODO.md` (per the existing template), not duplicated inside the main plan body.
