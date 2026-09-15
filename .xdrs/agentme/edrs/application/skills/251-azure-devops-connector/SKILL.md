@@ -8,7 +8,7 @@ description: >
   DevOps.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Overview
@@ -71,7 +71,8 @@ with `curl`/another HTTP client, and never fetch or scrape the PR's web UI as a 
   GET before first use in a new environment.
 
 Normalize every thread's comments to the shared record shape (`id`, `kind`, `status`,
-`can_reply`, `can_resolve`, `path`, `line`, `content`, `author`, `in_reply_to`):
+`can_reply`, `can_resolve`, `path`, `line`, `content`, `author`, `in_reply_to`, `diff_hunk`,
+`url`):
 - `id` is `"thread-comment/<threadId>.<commentId>"` -- Azure DevOps ids are scoped per PR, not
   global, so always keep the PR number alongside when persisting.
 - `kind` is always `"thread-comment"` -- Azure DevOps has no separate review-summary concept;
@@ -88,6 +89,16 @@ Normalize every thread's comments to the shared record shape (`id`, `kind`, `sta
 - `in_reply_to` is the thread's first comment id whenever the target is a reply within the
   same thread -- Azure DevOps threads are flat, so there is no root-vs-reply distinction to
   resolve.
+- `diff_hunk` has no native equivalent in the Azure DevOps API -- `threadContext` exposes
+  only a file path and line range, not a unified-diff-style hunk string. Leave `diff_hunk`
+  null rather than fabricating one; `pr-owner-assistant` degrades to relying on
+  `source-lines` alone in that case, exactly as it does for a general (non-file-scoped)
+  comment.
+- `url` has no direct field in the thread-comment response either. Synthesize a best-effort
+  permalink from the PR's own web URL plus a `?discussionId=<threadId>` anchor (Azure
+  DevOps' web UI convention for deep-linking to a thread); fall back to the PR's own URL
+  with no anchor when this convention cannot be confirmed reliable for the target
+  organization, rather than risking a broken or misleading link (see Known Issues).
 
 ### Writing data
 
@@ -164,6 +175,14 @@ threads/comments `POST`, then updates thread status via the `PATCH` call.
   the Authentication check step, report the missing or failed `az` session plainly, and wait
   for the human to install, extend, or authenticate `az` before retrying the same read or
   write through `az`.
+- **Symptom:** a synthesized comment permalink (`url`) 404s, or lands on the PR overview
+  instead of the specific thread, when opened.
+  **Cause:** Azure DevOps' web UI deep-link format for a specific thread
+  (`?discussionId=<threadId>`) is a UI convention, not a documented, versioned part of the
+  REST API, and can vary by organization or Azure DevOps version.
+  **Fix:** verify the `?discussionId=<threadId>` anchor against a live PR in the target
+  organization before relying on it; degrade to the PR's own URL with no anchor when
+  uncertain, rather than guessing at a format that might mislead the human.
 
 ## References
 

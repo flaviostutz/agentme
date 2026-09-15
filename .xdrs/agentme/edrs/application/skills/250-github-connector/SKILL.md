@@ -7,7 +7,7 @@ description: >
   post PR comments, resolve review threads, or check out a PR branch on GitHub.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Overview
@@ -69,7 +69,7 @@ never lost to a pager.
   `reviewThreads` query on the PR, reading `isResolved` and each thread's comment node ids.
 
 Normalize every fetched item to the shared record shape (`id`, `kind`, `status`, `can_reply`,
-`can_resolve`, `path`, `line`, `content`, `author`, `in_reply_to`):
+`can_resolve`, `path`, `line`, `content`, `author`, `in_reply_to`, `diff_hunk`, `url`):
 - `kind` is `"issue-comment"`, `"review-comment"`, or `"review-summary"`.
 - `status` is `"resolved"` when the GraphQL thread lookup marks it resolved, else `"open"`.
   GitHub has no `wontfix`/`closed` state of its own -- `pr-owner-assistant` tracks those
@@ -80,6 +80,13 @@ Normalize every fetched item to the shared record shape (`id`, `kind`, `status`,
   reply, so replies always thread correctly.
 - If the reply target is a reply-to-a-reply, resolve `in_reply_to` up to the root comment id
   first (GitHub only allows replying to the root of a review thread).
+- `diff_hunk` is taken verbatim from the `diff_hunk` field already present on each
+  `"review-comment"` item returned by the review-comments read command above -- no extra
+  fetch needed. Null for `"issue-comment"` and `"review-summary"` items, since neither is
+  file/line-scoped.
+- `url` is taken verbatim from the `html_url` field already present on every issue-comment,
+  review-comment, and review object returned by the read commands above -- no extra fetch
+  needed for any `kind`.
 
 ### Writing data
 
