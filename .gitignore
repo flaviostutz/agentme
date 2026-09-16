@@ -4,3 +4,4 @@ dist
 .filedist-tmp
 .mypy_cache
 .tmp/
+.DS_Store

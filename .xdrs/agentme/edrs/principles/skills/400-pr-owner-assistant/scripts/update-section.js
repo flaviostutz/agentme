@@ -26,12 +26,13 @@ const SCALAR_FIELDS = [
   'comment-url',
   'type',
   'possible-user-intention',
+  'suggested-fix-assessment',
   'criticality',
   'action',
   'resolve-on-apply',
   'pending-reply',
 ];
-const BLOCK_FIELDS = ['source-lines', 'diff-hunk-raw', 'comment-raw', 'reply-draft'];
+const BLOCK_FIELDS = ['source-lines', 'diff-hunk-raw', 'suggested-fix', 'comment-raw', 'reply-draft'];
 const LIST_FIELDS = ['replies-raw', 'possible-follow-ups'];
 const ALL_FIELDS = [...SCALAR_FIELDS, ...BLOCK_FIELDS, ...LIST_FIELDS];
 const NEXT_FIELD_RE = new RegExp(`^(?:${ALL_FIELDS.join('|')}):`);

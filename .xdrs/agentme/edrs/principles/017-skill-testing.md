@@ -57,6 +57,9 @@ specific enough that two independent agents produce comparable outputs.]
 
 Rules:
 - MUST contain at least two scenarios: one happy path and one edge or failure case.
+- MUST default to the 3 most relevant scenarios (typically the happy path plus the
+  highest-value edge/failure cases) and MUST NOT exceed 3 unless the user explicitly requests
+  more — larger suites cost more to execute and slow down verification.
 - Each scenario MUST have at least two assertions.
 - Assertions MUST be falsifiable (a pass/fail determination must be possible without ambiguity).
 - Assertion text MUST start with a verb ("Output contains …", "Skill asks …", "Review reports …").
