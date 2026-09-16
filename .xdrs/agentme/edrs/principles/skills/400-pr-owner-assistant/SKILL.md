@@ -14,7 +14,7 @@ description: >
   and asks to process its comments.
 metadata:
   author: flaviostutz
-  version: "2.2.1"
+  version: "2.3.0"
 ---
 
 ## Overview
@@ -107,9 +107,10 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    deleting `.tmp/<repo-dir>` (`rm -rf`) afterwards fully and cleanly removes it with no
    residue in either direction, and nothing about the current directory's own git state is
    ever touched by creating or removing it. If `.tmp/<repo-dir>` already exists from a prior
-   run against the same repo, reuse it (fetch + checkout) instead of re-cloning. If the human
-   declines the offer, stop -- there is no other override. Once created, this sandbox becomes
-   the local repo root for the rest of the run (Phase 3 onward), including where
+   run against the same repo, reuse it (fetch + checkout) instead of re-cloning, so a
+   `.tmp/review-pr-<N>.md` from that earlier session is resumed rather than recreated. If the
+   human declines the offer, stop -- there is no other override. Once created, this sandbox
+   becomes the local repo root for the rest of the run (Phase 3 onward), including where
    `.tmp/review-pr-<N>.md` is written.
 4. Before this run writes anything under `.tmp/` for the first time in a given repo root (the
    sandbox clone above, or Phase 3's tracking file), check whether that repo root's
@@ -155,19 +156,24 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    comments; surface any queued `reply-draft` values into a
    pending-sync list for Phase 5. `replies-raw` always refreshes to the connector's current
    thread state on every sync, the same way `status` already does; `source-lines`, `type`,
-   `possible-user-intention`, and `possible-follow-ups` are then recomputed fresh on every
-   sync as well, but only for comments still at `pending-reply: none` -- a human edit to any
-   of these four is not preserved across a resync while still undecided, same as before.
-   Once a comment reaches `drafted` or `applied`, these four fields are left exactly as they
-   last stood: a decided comment never shows its full focus card again (only the condensed
-   resume reminder, which uses none of them), so recomputing them further would be wasted
-   work with nothing to show for it. `author-raw`, `comment-raw`, `diff-hunk-raw`, and
+   `possible-user-intention`, `possible-follow-ups`, `suggested-fix`, and
+   `suggested-fix-assessment` are then recomputed fresh on every sync as well, but only for
+   comments still at `pending-reply: none` -- a human edit to any of these
+   recomputed-while-`none` fields is not preserved across a resync while still undecided.
+   Once a comment reaches `drafted` or `applied`, these same fields are left exactly as they
+   last stood -- a decided comment never shows its full focus card again (only the
+   condensed resume reminder), so recomputing them further would be wasted work.
+   `author-raw`, `comment-raw`, `diff-hunk-raw`, and
    `comment-url`
    are each set once when the section is first created and are never recomputed afterward.
 5. If a comment's section was manually deleted from the file but the connector still reports
    it open, re-add it on this sync -- never silently lose track of open feedback.
 6. If a section is malformed or does not parse, never discard it -- flag it inline as an
-   unparsed block for manual review and continue with the rest of the file.
+   unparsed block for manual review and continue with the rest of the file. Cosmetic-only
+   residue that does NOT actually block parsing -- e.g. a stray trailing character left over
+   from a block-scalar marker, or a missing blank line before the next `### ` header -- is a
+   different case: normalize it silently on every sync (no confirmation, pure formatting, no
+   semantic change), rather than flagging it as malformed.
 7. When quoting a comment body, or rendering a `source-lines`/`diff-hunk-raw` code snippet,
    that itself contains a triple-backtick fence, wrap the quote in a longer fence run (4 or
    more backticks) so the tracking file's own structure survives.
@@ -183,10 +189,9 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    padded with 3 extra lines on each side (a line range gets that same +-3 padding applied to
    its start and end, not just the bare range), each shown line prefixed with its absolute
    line number, and a language tag inferred from the file extension when unambiguous
-   (omitted otherwise). Cap the block at approximately 60 total lines -- when the padded
-   range is larger, show only the first ~30 and last ~30 of those lines with a
-   `... (N lines omitted) ...` marker between them, rather than the full range. Recompute
-   this field fresh on every sync for comments still at `pending-reply: none`, from
+   (omitted otherwise). Always show the full padded range verbatim -- never cap it or omit
+   lines from the middle, since the human needs the complete surrounding code to decide.
+   Recompute this field fresh on every sync for comments still at `pending-reply: none`, from
    whatever the checked-out file currently contains; leave it unchanged once a comment is
    `drafted` or `applied` (see Phase 3 rule 4).
 10. `source-lines` renders `(PR conversation)` instead of a code block under the same
@@ -235,19 +240,30 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
       isolation. Include an already-addressed check: when the code visible in `source-lines`
       appears to already resolve the concern (e.g. a later commit fixed it, but the thread was
       never closed upstream), say so as one of the candidates instead of proposing further
-      work. Recomputed fresh every sync while still at `pending-reply: none`, same as
-      `type`/`possible-user-intention` (see Phase 3 rule 4); a human's manual edit is not
-      preserved across a resync while still undecided.
-16. If the PR has zero open comments (none at all, or all already resolved/closed), report
+      work. When a `suggested-fix` was detected for this comment, weight candidates against
+      its `suggested-fix-assessment` instead of proposing a generic fix that ignores it --
+      e.g. "fix: apply the suggested change as-is" for `accept-as-is`, or "fix: apply an
+      evolved version of the suggested change" for `evolve-with-changes`. Recomputed fresh
+      every sync while still at `pending-reply: none`, same as `type`/`possible-user-intention`
+      (see Phase 3 rule 4); a human's manual edit is not preserved across a resync while still
+      undecided.
+16. Render `suggested-fix` and `suggested-fix-assessment`: search `comment-raw` and every
+    `replies-raw` entry for a fenced code block labeled `suggestion` (GitHub's native
+    inline-suggestion syntax) and extract its code verbatim as `suggested-fix`; "(none)"
+    when none exists (other language tags never count). When not "(none)", set
+    `suggested-fix-assessment` to a one-line verdict -- `accept-as-is`, `evolve-with-changes`,
+    or `not-recommended` -- with a short rationale; blank otherwise. Both follow the same
+    recompute/freeze cadence as the other inferred fields (Phase 3 rule 4).
+17. If the PR has zero open comments (none at all, or all already resolved/closed), report
     "no comments to review yet" and exit cleanly.
 
 Fields suffixed `-raw` (`comment-raw`, `replies-raw`, `author-raw`, `diff-hunk-raw`) hold data
 exactly as the connector returned it, never altered by this skill's own reasoning.
-`comment-url` is the one deliberate exception to "never a provider URL" elsewhere in this
-skill -- it exists specifically so the human can open the original comment directly.
-Unsuffixed inferred fields (`type`, `possible-user-intention`, `criticality`,
-`possible-follow-ups`) and `source-lines` (derived from the local checkout rather than the
-connector) are this skill's own output.
+`comment-url` is the one exception to "never a provider URL" elsewhere in this skill -- it
+exists so the human can open the original comment directly. Unsuffixed inferred fields
+(`type`, `possible-user-intention`, `criticality`, `possible-follow-ups`,
+`suggested-fix-assessment`) and derived fields (`source-lines`, from the local checkout;
+`suggested-fix`, parsed from `comment-raw`/`replies-raw`) are this skill's own output.
 
 **Editing the tracking file**: when `scripts/update-section.js` (in this skill's own
 folder) is available, prefer it over hand-rolled text edits for every field read/update in
@@ -269,10 +285,13 @@ source-lines: |
   <fenced code block, line-numbered, language tag inferred from the file extension>
 diff-hunk-raw: |
   <original review diff hunk verbatim from the connector, or "(PR conversation)">
+suggested-fix: |
+  <verbatim code from a fenced suggestion block, or "(none)" if none found>
 author-raw: <comment author, verbatim, or "unknown">
 comment-url: <permalink to the comment on the provider's web UI>
 type: nitpick|question|issue|suggestion|discussion|praise|thought|chore|other|information
 possible-user-intention: <under-20-word inference of the author's likely worry/motivation, or blank>
+suggested-fix-assessment: <accept-as-is|evolve-with-changes|not-recommended, with a short rationale, or blank>
 criticality: critical|high|medium|low
 comment-raw: |
   <full original comment text, verbatim>
@@ -293,25 +312,21 @@ Replaces what used to be four separate triage/reply/wontfix/fix phases with a si
 walkthrough: every open comment gets its full context shown, then one decision, strictly one
 comment at a time. Phase 3 has already populated every comment's full record before this
 phase asks anything, so there is always complete context available before any question is
-asked.
+asked. Steps 1-2 are never skipped in favor of jumping straight to step 3's question, no
+matter how repetitive or trivial-looking consecutive comments look -- see the "Focus-card
+discipline" cross-cutting rule below.
 
 **Ordering**: group comments by file/area; general, non-file-scoped comments form their own
 group. Order the groups by each group's own highest-`criticality` comment first, then order
 comments within a group by `criticality`. The non-file-scoped group is ranked into this same
 ordering like any other group -- it does not automatically go last.
 
-0. **Upfront scope estimate** (once, before the first per-comment question of a fresh
-   walkthrough only -- never repeated, and never shown again on a revisit pass triggered by
-   Phase 5 step 4): report the total open comment count, the number of groups, a rough split
-   of how many look objectively trivial, a note that fixes validate in batches per group
-   rather than individually, a note that any comment can be skipped for this session, and a
-   note that bulk actions across similar comments can be requested in free text at any
-   point. In this same ask, also let the human choose an **apply-timing default** for the
-   rest of this walkthrough: confirm apply-now/defer individually for every comment (the
-   default when not asked), or default every comment to defer-to-end-of-session-sync unless
-   the human says otherwise for a specific one. Record the choice for step 5 below; it never
-   skips showing the mandatory confirmation text itself, only whether the timing
-   sub-question is asked each time.
+0. **Upfront scope estimate** (once, before the first question of a fresh walkthrough --
+   never repeated, never shown on a Phase 5 step 4 revisit): report the total open comment
+   count, group count, a rough trivial-vs-not split, that fixes validate in batches per
+   group, that every drafted reply/fix is only ever sent later in Phase 5 -- never
+   mid-walkthrough -- that any comment can be skipped, and that bulk actions can be
+   requested in free text.
    On a revisit pass, replace this with a single line instead, e.g. "Revisiting 3
    previously-skipped comments (1 of 3)...", which both orients the human and restarts the
    "Comment X of Y" counter for just this subset.
@@ -324,21 +339,19 @@ ordering like any other group -- it does not automatically go last.
    1. *Orientation*: a 1-line PR reminder (auto-summary + link) and a "Comment X of Y"
       counter with a short title.
    2. *Primary -- what they said and what it's about*: `comment-raw`, then the whole thread
-      verbatim and in order -- every entry in `replies-raw`, comment -> reply -> reply ->
-      ... -- never truncated or omitted, since the human deciding the action needs the full
-      back-and-forth, not a partial view. For threads with more than 3 entries, additionally
-      generate a `thread-summary` on the fly (never persisted -- regenerated at render time,
-      the same as the criticality rationale below): a short digest of the thread's
-      progression and where it currently stands, naming any open disagreement -- shown just
-      above the full verbatim thread as an orientation aid, never as a replacement for any of
-      the verbatim replies below it. Threads with 3 or fewer entries show all of
-      `replies-raw` verbatim with no summary. Then `diff-hunk-raw` and `source-lines`
-      together: when they resolve to identical content, render one block, not two; when they
-      differ, render both -- the difference itself is useful, since it means the code has
-      changed since the comment was made.
-   3. *Secondary -- compact metadata strip, one line*: `type` / `possible-user-intention` /
-      `criticality` with a one-line rationale generated fresh at render time (never
-      persisted) / a resolve-ability note when `can_resolve` is false for this comment.
+      verbatim and in order -- every entry in `replies-raw` -- never truncated, since the
+      human needs the full back-and-forth. For threads with more than 3 entries, also
+      generate a `thread-summary` on the fly (never persisted): a short digest of the
+      thread's progression and where it stands, naming any open disagreement -- shown above
+      the verbatim thread as an aid, never a replacement for it. 3-or-fewer-entry threads
+      show all of `replies-raw` with no summary. Then `diff-hunk-raw` and `source-lines`:
+      one block when identical, both when they differ (useful -- the code changed since the
+      comment). When `suggested-fix` isn't "(none)", render it right after with its
+      `suggested-fix-assessment` verdict and rationale, before asking anything below.
+   3. *Secondary -- full metadata, never compacted*: `type`, `possible-user-intention`, and
+      `criticality` each shown in full with its complete rationale generated fresh at render
+      time (never persisted), plus a resolve-ability note when `can_resolve` is false for
+      this comment -- nothing here is shortened or merged onto a single crammed line.
    4. *Action-oriented, immediately before the question*: `possible-follow-ups`.
    5. *Minor trailing link*: `comment-url`, offered as "open original" for when the rendered
       text isn't enough.
@@ -359,31 +372,31 @@ ordering like any other group -- it does not automatically go last.
      applied (only offered when `can_resolve` is true for this comment) and record the
      answer in `resolve-on-apply`.
    - `wontfix`: a rationale message (nitpick, out of context, not feasible, or a reasoned
-     argument for skipping it even when it looks important), with the same free-text
-     override and `resolve-on-apply` ask.
+     argument for skipping it), with the same free-text override and `resolve-on-apply` ask.
+     When declining a concrete `suggested-fix` or other proposed change, add a short inline
+     code comment stating why, unless already obvious -- this local edit feeds into Phase
+     5's commit/push gate too. Never added for a comment with no `path`/`line`.
    - `fix`: assess complexity only to calibrate how much explanation the drafted reply needs
      -- there is exactly one fix-implementation path regardless of that assessment. Read the
      relevant code and implement the change directly in this same session; never invoke
-     `150-refine-plan-mode` or any other nested planning workflow for this. Draft a summary
-     reply under 10 words describing the actual change made; the human may edit it freely.
-     Ask whether to also resolve the thread once applied (only when `can_resolve` is true)
-     and record the answer in `resolve-on-apply`. Do not run build/lint/test yet -- validation
-     is batched at the group boundary (step 8 below), not per individual fix.
+     `150-refine-plan-mode` or any other nested planning workflow for this. When a
+     `suggested-fix` exists, apply it verbatim (`accept-as-is`) or evolved
+     (`evolve-with-changes`), drafting a summary reply under 10 words stating which
+     happened. Add a short inline code comment at the relevant line(s) only if the rationale
+     wouldn't be obvious from the code/diff alone; skip for self-evident changes. The human
+     may edit the drafted summary reply freely. Ask whether to also resolve the thread once
+     applied (only when `can_resolve` is true) and record the answer in `resolve-on-apply`.
+     Do not run build/lint/test yet -- validation is batched at the group boundary (step 8
+     below), not per individual fix.
    Persist `reply-draft` (and `resolve-on-apply` when applicable) immediately.
-5. Always show the mandatory System/Operation/Fields/Estimated-impact confirmation (Cross-
-   cutting rules) before any write. When step 0's apply-timing default is "confirm
-   individually" (or was never asked), ask to apply now or defer to the Phase 5 end-of-
-   session sync. When the default is "defer everything," skip that sub-question and proceed
-   as if defer was chosen -- unless the human's free text for this specific comment requests
-   applying it now instead, which always takes precedence over the session default. For a
-   `fix` whose group has not yet validated, word "apply now" honestly as queuing the reply
-   to auto-send once that group's validation passes, rather than implying an immediate post.
-6. On apply-now for a non-`fix`, or an already-validated `fix`: invoke the connector,
-   resolving the thread too if `resolve-on-apply` was set, then set `pending-reply: applied`,
-   clear `reply-draft`, and persist. On defer, or a `fix` still awaiting validation: set
-   `pending-reply: drafted`, keep `reply-draft`, and persist. On skip: persist nothing --
-   `pending-reply` simply stays `none` (on a revisit pass, this naturally changes away from
-   `none` the moment a real decision is finally made; there is nothing extra to clean up).
+5. Show the mandatory confirmation (Cross-cutting rules' "Write confirmation structure")
+   titled `For comment "<short title>" (<author-raw>), reply with "<reply text>"
+   (+resolve comment)?` -- the `(+resolve comment)` tag appended only when
+   `resolve-on-apply` was just recorded true, omitted otherwise. Truncate the title's reply
+   text to ~100 characters plus "..." when longer; the body always shows the complete text.
+   Confirming simply locks in this text as what Phase 5 will later send.
+6. Set `pending-reply: drafted`, keep `reply-draft` as confirmed, and persist immediately.
+   There is only this one outcome now -- applying/posting happens only in Phase 5.
 7. Advance to the next comment in order (or jump ahead if the human's free text requested a
    bulk action across similar remaining comments). Comments already `applied` are silently
    skipped over if encountered again. Never pause proactively to suggest a break -- the
@@ -395,54 +408,66 @@ ordering like any other group -- it does not automatically go last.
    run the project's build, lint, and test commands per `AGENTS.md` once for that whole
    group. Re-validating a group more than once across separate passes is expected (e.g. a
    revisit adds one more fix to an otherwise-finished group), not an error.
-   - **On success**: every held `fix` reply in the group auto-sends immediately with no
-     further re-ask, as long as this happens within the same continuous session as when it
-     was confirmed. If the group is only reached again on a later, resumed invocation
-     instead, each held reply goes through step 1's resume-check first rather than
-     auto-sending.
+   - **On success**: every held `fix` reply in the group is confirmed safe to send -- it
+     stays `pending-reply: drafted` and is not sent here; sending happens only later, in the
+     Phase 5 end-of-session sync.
    - **On failure**: report it plainly and ask how to proceed -- fix forward within the group
      before continuing, or fall back to validating each change in the group in isolation (a
      slower fallback, offered only once a batched run has actually failed).
 
 ### Phase 5: End-of-Session Sync
 
+The only phase that ever posts to the provider -- Phase 4 only drafts and confirms text.
+
 1. Gather every comment currently `pending-reply: drafted`, scanned fresh across the whole
-   tracking file every time this step runs -- not limited to comments touched during the
-   walkthrough pass that just finished, so a comment deferred again at an earlier sync keeps
-   resurfacing at every later sync instead of silently dropping out after its first
-   appearance. This naturally excludes anything a group-boundary auto-send already cleared
-   earlier in the same session.
-2. For each, individually: re-show the exact previously-confirmed System/Operation/Fields/
-   Estimated-impact text, and ask to apply now, defer again, or discard the draft entirely.
-3. Post every applied item via the active connector (resolving the thread too, for any where
-   `resolve-on-apply` was set), persist immediately, and drop the section for any comment the
-   connector now reports resolved/closed, per Phase 3's reconciliation rule.
-4. **Continue-or-stop check**: if no comment is currently `pending-reply: none`, skip
-   straight to step 5. Otherwise, ask once whether to keep working on the N comments still at
-   `none` now, or stop here.
-   - **Continue**: loop back into Phase 4's walkthrough (step 0's revisit variant), scoped to
-     just those still-`none` comments, in the same relative order they were originally
-     filtered into during the pass that just finished -- not recomputed fresh. Each one gets
-     its full focus card again, exactly as if seen for the first time. Once that pass
-     concludes and this same Phase 5 sync completes again, repeat this same check -- there is
-     no cap on how many times it can repeat, since each repetition still requires an explicit
-     "continue" from the human.
-   - **Stop** (or nothing was left at `none`): proceed to step 5.
-5. Present the final summary and end the session:
-   - By action taken: P replied, Q marked won't-fix, K fixed (N = P+Q+K comments triaged this
-     session, meaning a real decision was made, regardless of whether it has been sent yet).
-   - By send status, cross-cutting the above: of those N, however many are still
-     `pending-reply: drafted` are called out as still drafted-and-deferred; the rest have
-     been applied.
-   - Skipped: L comments left at `pending-reply: none` with no decision made at all.
-   - A titled list (titles, not just counts) of every still-drafted-and-deferred and every
-     skipped comment, so the human sees exactly what remains, not just a number.
+   tracking file each run -- a comment deferred again keeps resurfacing here rather than
+   dropping out after its first appearance.
+2. Render a consolidated preview: one table row per gathered comment (`id`, title, `action`,
+   `resolve-on-apply`), then each row's exact draft text below the table rather than
+   crammed into a cell.
+3. Ask how to proceed: apply all now, one-by-one (re-confirm/defer/discard each), or stop
+   with nothing sent. Free-text overrides are supported (e.g. "apply all except comment 3").
+4. **Pre-flight commit/push gate** (runs once, before the first write): a live, read-only
+   git check -- (a) worktree has pending changes (`git status --porcelain`), and (b) local
+   `HEAD` has commits not yet on its remote tracking branch (`@{u}`). If either is true, show
+   a reminder to add/commit/push manually so other participants can see this code -- never
+   running git itself -- then wait for explicit confirmation before creating replies or
+   resolves. Skip silently when both are clean.
+5. Apply: the batch path posts every gathered item via the active connector (resolving
+   threads where `resolve-on-apply` was set), persisting each result as it completes so a
+   mid-batch failure never loses already-applied progress, then reports a per-item outcome.
+   The one-by-one path re-shows each item's exact confirmation (Phase 4 step 5's title
+   template) and applies, defers again, or discards, posting/persisting immediately.
+6. **Continue-or-stop check**: if no comment is currently `pending-reply: none`, skip to
+   step 7. Otherwise ask once whether to keep working on the N comments still at `none`.
+   - **Continue**: loop back into Phase 4 (step 0's revisit variant), scoped to those
+     comments, each shown its full focus card again. Repeats with no cap, each time
+     requiring an explicit "continue".
+   - **Stop** (or nothing left at `none`): proceed to step 7.
+7. Present the final summary and end the session:
+   - By action: P replied, Q won't-fix, K fixed (N = P+Q+K comments triaged this session).
+   - By send status: however many of those N are still `pending-reply: drafted` are called
+     drafted-and-deferred; the rest applied.
+   - Skipped: L comments left at `pending-reply: none`.
+   - A titled list of every still-drafted-and-deferred and skipped comment.
+
+**Applying replies via script**: prefer `scripts/post-replies-azure-devops.js --pr-url
+<url> <tracking-file>` (Azure DevOps) or `scripts/post-replies-github.js --pr-url <url>
+<tracking-file>` (GitHub) for step 5's batch-apply -- both verify each write via a fresh
+read before marking `pending-reply: applied` (`az rest` can exit 0 without persisting; see
+251-azure-devops-connector's Known Issues). Manual apply remains supported for either
+provider.
 
 ### Cross-cutting rules
 
-- **Automated-message suffix**: any posted text that the skill suggested or drafted and the
-  human accepted as-is (not edited or authored by the human) MUST be suffixed with
-  `(pr-owner-assistant skill)`. Human-edited or human-written text gets no suffix.
+- **Automated-message suffix**: every piece of text this skill posts (`reply`, `wontfix`
+  rationale, or `fix` summary) carries exactly one of two literal suffixes, chosen by
+  comparing the final text against this skill's original draft:
+  - `(pr-owner-assistant skill - using defaults)` -- posted exactly as drafted.
+  - `(pr-owner-assistant skill - guided)` -- the human changed, added to, or replaced the
+    draft, including text written entirely from scratch.
+  The confirmation's Fields line already shows the suffixed text; replies posted by an
+  earlier skill version keep their original suffix, never applied retroactively.
 - **AI-generated tone**: any reply, rationale, or fix summary this skill drafts (not
   human-edited) is written as an AI directly addressing the comment's author -- polite,
   direct, neutral, and focused on clear, accurate content. Never manufacture friendliness or
@@ -454,19 +479,14 @@ ordering like any other group -- it does not automatically go last.
   candidate next step but must never speculate about the commenter's competence or
   character. Human-edited or human-written text is exempt; the human may set whatever tone
   they choose.
-- **Write confirmation structure**: every "apply now?" prompt (Phase 4 and Phase 5) shows,
-  before asking: System (owner/repo or org/project/repo + PR number), Operation (reply /
-  resolve / post), Fields (the exact, full, verbatim text to be posted -- never truncated or
-  paraphrased), and Estimated impact (visible to PR participants, triggers notifications).
-  This confirmation is never skipped: the trivial-comment collapsed cadence (Phase 4 step 3)
-  merges it with the action choice into a single ask but still shows it in full; a `fix`
-  reply queued pending its group's batched validation (Phase 4 step 8) has its exact text
-  confirmed once before being queued, and auto-sends later with no further re-ask only
-  because nothing about that confirmed text changes in between; a resumed draft (Phase 4
-  step 1) is re-shown before it can be re-confirmed; the apply-timing default from step 0
-  may skip the per-comment timing sub-question but never skips showing this confirmation
-  text itself. The human always sees the exact text before it is ever posted, with no
-  exceptions.
+- **Write confirmation structure**: every confirmation shown before drafting/persisting a
+  reply (Phase 4 step 5) or before posting one (Phase 5) shows, before asking: System
+  (owner/repo or org/project/repo + PR number), Operation (reply / resolve / post), and
+  Fields (the exact, verbatim text to be posted, including the automated-message suffix).
+  Phase 4 step 5 and Phase 5's one-by-one confirmations also use the question-title template
+  described there. Never skipped -- a Phase 5 apply-all batch folds every item's
+  confirmation into one preview table instead of re-asking per item, but every item's exact
+  text still appears there.
 - **Incremental persistence**: the tracking file is written back to disk immediately after
   every confirmed field change during the walkthrough, not batched until later -- so a
   cancelled or interrupted session always resumes from exactly where it left off, with no
@@ -481,6 +501,10 @@ ordering like any other group -- it does not automatically go last.
   the trivial-comment collapsed cadence, a silently-generated field like
   `possible-user-intention` or `possible-follow-ups`, and the skip response all get exactly
   the same scrutiny as any other path; none of them is a reduced-scrutiny shortcut.
+- **Focus-card discipline**: every open comment gets its own full focus card (or, on
+  resume, its own condensed reminder) and explicit action question -- never assumed from a
+  pattern or silently batched, no matter how repetitive a run of comments looks. Only an
+  explicit skip response (Phase 4 step 3) bypasses drafting or confirming text for it.
 
 ## Examples
 
@@ -488,18 +512,16 @@ ordering like any other group -- it does not automatically go last.
 
 The skill selects `github-connector` (host is `github.com`), fetches PR #482's metadata and
 comments (Phase 1), confirms the current repo is `acme/widgets` on a related branch (Phase
-2), creates `.tmp/review-pr-482.md` with a section per open comment -- already-resolved ones
-are omitted -- fully populating every field, including `possible-follow-ups` and
-`diff-hunk-raw`, before asking anything (Phase 3). Phase 4 opens with a one-time estimate
-("14 open comments across 5 groups, roughly half look trivial, fixes validate per group, any
-comment can be skipped"), then walks the highest-criticality group first: for its first
-comment, it renders the full focus card (what the reviewer said, the code, criticality and
-type, possible follow-ups), asks the human to confirm the action, and -- since this one is a
-straightforward `fix` -- implements the change directly in this session (no nested planning
-invoked), drafts a short summary reply, and shows the exact confirmation text before asking
-to apply now or defer. It proceeds comment by comment this way; once every comment in that
-group is triaged, it runs the project's build/lint/test once for the whole group before
-auto-sending any fixes that were confirmed pending that validation.
+2), and creates `.tmp/review-pr-482.md` with a section per open comment -- already-resolved
+ones omitted -- fully populating every field before asking anything (Phase 3). Phase 4 opens
+with a one-time estimate ("14 open comments across 5 groups, roughly half trivial, fixes
+validate per group, any comment can be skipped"), then walks the highest-criticality group
+first: for its first comment, it renders the full focus card, asks the human to confirm the
+action, and -- since this one is a straightforward `fix` -- implements the change directly
+(no nested planning invoked), drafts a short summary reply, and shows the exact confirmation
+text before persisting it as a drafted reply -- nothing sent yet. It proceeds comment by
+comment; once the group is triaged, it runs the project's build/lint/test once, confirming
+the held fix reply is now safe to send -- still waiting for Phase 5.
 
 **Input**: `https://dev.azure.com/contoso/Widgets/_git/widgets-api/pullrequest/1029`
 
@@ -583,14 +605,14 @@ and each gets a real decision this time. Phase 5 runs again; this time nothing i
   `replies-raw` fresh every time a comment's focus card or resume reminder is rendered, the
   same as the criticality rationale -- there is nothing to reconcile or go stale on disk.
 - **A comment is already `drafted` or `applied` when a resync runs**: `source-lines`,
-  `type`, `possible-user-intention`, and `possible-follow-ups` are left exactly as they last
-  stood -- only `replies-raw`/`status` still refresh -- since a decided comment never shows
-  its full focus card again (only the condensed resume reminder, which uses none of those
-  four fields); recomputing them would be wasted work with nothing to show for it.
+  `type`, `possible-user-intention`, `possible-follow-ups`, `suggested-fix`, and
+  `suggested-fix-assessment` are left exactly as they last stood -- only `replies-raw`/
+  `status` still refresh, since a decided comment never shows its full focus card again.
 - **A group-boundary batched validation run fails**: report the failure plainly and ask
   whether to fix forward within that group before continuing, or fall back to validating
-  each remaining change in the group in isolation; never auto-send any of that group's held
-  fix replies until validation for it has actually passed.
+  each remaining change in isolation. Either way, nothing in that group is ever sent
+  automatically -- its held `fix` replies simply wait as `pending-reply: drafted` for the
+  Phase 5 end-of-session sync.
 - **Every comment in a group is skipped, replied to, or marked won't-fix** (no `fix` action
   chosen at all): the group-boundary batched validation step is skipped entirely -- there is
   nothing to build, lint, or test.

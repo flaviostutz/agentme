@@ -33,6 +33,9 @@ reply-draft: |
 id: review-comment/222
 status: open
 source: [lib/src/foo.ts:10-10](../lib/src/foo.ts#L10-L10)
+suggested-fix: |
+  const value = compute();
+suggested-fix-assessment: accept-as-is
 comment-raw: |
   Shall we rename this?
 replies-raw:
@@ -43,7 +46,7 @@ action: fix
 resolve-on-apply: true
 pending-reply: drafted
 reply-draft: |
-  Renamed as suggested. (pr-owner-assistant skill)
+  Renamed as suggested. (pr-owner-assistant skill - using defaults)
 `;
 
 function writeFixture(content = FIXTURE) {
@@ -95,6 +98,20 @@ test('get returns a list field with dash prefixes stripped', () => {
   assert.equal(stdout, '"fix: rename for consistency"\n"mark won\'t-fix: keep current naming"\n');
 });
 
+test('get returns the suggested-fix block field extracted for a comment', () => {
+  const file = writeFixture();
+  const { status, stdout } = run(['get', file, 'review-comment/222', 'suggested-fix']);
+  assert.equal(status, 0);
+  assert.equal(stdout, 'const value = compute();\n');
+});
+
+test('get returns the suggested-fix-assessment scalar field', () => {
+  const file = writeFixture();
+  const { status, stdout } = run(['get', file, 'review-comment/222', 'suggested-fix-assessment']);
+  assert.equal(status, 0);
+  assert.equal(stdout.trim(), 'accept-as-is');
+});
+
 test('set updates only the targeted scalar field, leaving the rest of the file untouched', () => {
   const file = writeFixture();
   const before = fs.readFileSync(file, 'utf8');
@@ -126,6 +143,25 @@ test('set-list replaces list content from stdin, skipping blank lines', () => {
   assert.equal(status, 0);
   const { stdout } = run(['get', file, 'issue-comment/111', 'possible-follow-ups']);
   assert.equal(stdout, 'item one\nitem two\n');
+});
+
+test('set-block replaces suggested-fix content, preserving multi-line code', () => {
+  const file = writeFixture();
+  const { status } = run(
+    ['set-block', file, 'review-comment/222', 'suggested-fix'],
+    'const value = 42;\nconst other = 1;\n',
+  );
+  assert.equal(status, 0);
+  const { stdout } = run(['get', file, 'review-comment/222', 'suggested-fix']);
+  assert.equal(stdout, 'const value = 42;\nconst other = 1;\n');
+});
+
+test('set updates the suggested-fix-assessment scalar field', () => {
+  const file = writeFixture();
+  const { status } = run(['set', file, 'review-comment/222', 'suggested-fix-assessment', 'evolve-with-changes']);
+  assert.equal(status, 0);
+  const { stdout } = run(['get', file, 'review-comment/222', 'suggested-fix-assessment']);
+  assert.equal(stdout.trim(), 'evolve-with-changes');
 });
 
 test('preserves absence of a trailing newline on the original file', () => {

@@ -161,6 +161,19 @@ threads/comments `POST`, then updates thread status via the `PATCH` call.
   on the repository.
   **Fix:** degrade to reply-only for that thread, report the permission gap plainly, and
   never retry the same call silently.
+- **Symptom:** `az rest` against a `dev.azure.com/.../_apis/...` URL fails most calls with
+  `TF400813: The user 'aaaaaaaa-aaaa-...' is not authorized`, or -- observed once, isolated
+  to a single call in an otherwise-failing batch -- exits 0 (looks successful) while the
+  write never actually appears when the thread is re-read.
+  **Cause:** `az rest` cannot always derive the correct Azure AD resource from the URL
+  alone and can silently fall back to an anonymous/placeholder identity; this has been
+  observed to be intermittent within a batch of otherwise-identical calls.
+  **Fix:** always pass `--resource 499b84ac-1321-427f-aa17-267ca6975798` (Azure DevOps'
+  well-known, tenant-agnostic AAD resource id) explicitly on every `az rest` call. Even
+  then, never treat a zero exit code alone as proof a write persisted -- read the thread
+  back afterward and verify the expected content/status is actually present before
+  reporting success. `400-pr-owner-assistant`'s `scripts/post-replies-azure-devops.js` does
+  this automatically for every write.
 - **Symptom:** a fetched thread has no obvious "kind" like GitHub's review-summary.
   **Cause:** Azure DevOps genuinely has no equivalent concept -- every comment lives inside a
   thread.
