@@ -29,13 +29,11 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the product vision for the team's scope, define sprint goals, and ensure team priorities align with broader OKRs.
 
-*Responsibilities*:
-- Define and maintain the product vision for the team
-- Set sprint goals and prioritise the team backlog
-- Align team-level OKRs with Product Manager direction and execute against Tactical OKRs set by the PM
-- Define and track Operational OKRs for the team's day-to-day execution, when applicable
-- Accept or reject completed work against acceptance criteria
-- Communicate product direction to stakeholders and team members
+*Accountability*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; UX and interaction design; Production readiness and go-live approval; Release/rollout communication and user-facing documentation, including deprecation and sunset notices; Service or system deprecation decision; Team-level outcome measurement (Operational OKRs)
+
+*Consulted on*: Vendor/third-party selection, contract, and SLA negotiation; Complex or high-risk stakeholder and issue/risk (RAID) management; Business metrics instrumentation and tracking
+
+*Informed about*: Tactical OKR translation, epic prioritisation, and business case/ROI justification
 
 *Shared across squads*: Yes — the PO connects to all squads in the team.
 
@@ -51,12 +49,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own stakeholder management, reporting, and cross-team coordination. Proactively unblock the team by connecting priorities and people across organisational boundaries.
 
-*Responsibilities*:
-- Manage relationships with external stakeholders and report on progress
-- Identify and resolve cross-team dependencies and scheduling conflicts before they block delivery
-- Coordinate cross-squad dependencies within the team
-- Track risks, assumptions, issues, and dependencies (RAID)
-- Facilitate communication between the team and external parties
+*Accountability*: Cross-team dependency tracking and schedule/milestone reporting; Complex or high-risk stakeholder and issue/risk (RAID) management
+
+*Consulted on*: Rollback decision authority; Cross-team technical emergency declaration and mobilization; Engineering standards, platforms, and AI-practice governance
 
 *Authority*: No authority over technical or product decisions. Facilitates and connects; does not override PO or Tech Lead decisions.
 
@@ -72,12 +67,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the people and workforce dimension of the team — hiring, career growth, and team health — so the team has the right people, growing in the right direction, at sustainable capacity.
 
-*Responsibilities*:
-- Own hiring, onboarding, and offboarding for the team
-- Own performance management, career growth conversations, and compensation/promotion decisions
-- Own workforce planning and capacity allocation across the team's needs
-- Own team health, psychological safety, and retention at the individual level (1:1s, HR support, attrition risk)
-- Own on-call scheduling and on-call compensation
+*Accountability*: Hiring, onboarding, and offboarding; Performance management, career growth, and compensation/promotion; Workforce planning and capacity allocation; Team health, psychological safety, and retention; On-call scheduling and compensation
+
+*Consulted on*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale
 
 *Disambiguation*: Unlike the Tech Lead, the Engineering Manager does not own technical direction or code mentoring — only people/HR accountability. Unlike the PjM, the Engineering Manager has no delivery-coordination or stakeholder-facing responsibility — only people authority.
 
@@ -95,12 +87,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Understand what needs to be built and translate business problems into clear, implementable requirements for non-AI features and processes.
 
-*Responsibilities*:
-- Research business problems through stakeholder interviews, process observation, and analysis — focusing on changes to processes and systems that contribute to Tactical OKR objectives
-- Model as-is and design to-be business processes
-- Define system requirements at requirement level: data inputs/outputs, business rules, human interactions, and external dependencies
-- Write user stories and acceptance criteria at a level implementable within a few days
-- Support engineers during implementation by clarifying requirements
+*Accountability*: Requirements and user stories (non-AI); Business metrics instrumentation and tracking
+
+*Consulted on*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work
 
 *Squad assignment*: Ideally one BA per squad, working ahead on upcoming features while available for in-sprint requirement clarification. May move between squads when demand shifts (self-organised with PO awareness).
 
@@ -116,20 +105,15 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Define what needs to be built for AI-powered solutions by translating business needs into clear, implementable AI requirements — covering workflows, agents, models, integrations, controls, and test criteria.
 
-*Responsibilities*:
-- Research business problems through analysis, stakeholder interviews, and process discovery
-- Design target business processes, AI workflows, agents, models, and required system integrations
-- Identify AI opportunities, risks, controls, and regulatory requirements
-- Define data inputs, outputs, business rules, human interactions, and external dependencies for AI systems
-- Specify which models, agents, and workflows need to be implemented, and the detailed input/output of all internal and external systems involved
-- Create detailed user stories and acceptance criteria that engineers can implement within a few days
-- Define test and evaluation requirements for AI systems
+*Accountability*: AI opportunity discovery; Requirements and user stories (AI)
+
+*Consulted on*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work; AI model evaluation, safety, and fairness testing
 
 *Research boundary*: The AI BA researches business problems, requirements, and AI opportunities before implementation begins. The AI Engineer researches technical approaches, model selection, data characteristics, and evaluation methods during implementation. These boundaries must not blur.
 
 *Squad assignment*: Same mobility rules as BA. AI BA and BA may exchange squad positions depending on which phase the squad is in and whether AI or non-AI features dominate.
 
-*Accountability*: The AI BA owns WHAT is required — business requirements, AI workflows, data definitions, controls, and acceptance criteria. Engineering teams own HOW the solution is implemented, including architecture, technology choices, infrastructure, security, and deployment.
+*Authority*: The AI BA owns WHAT is required — business requirements, AI workflows, data definitions, controls, and acceptance criteria. Engineering teams own HOW the solution is implemented, including architecture, technology choices, infrastructure, security, and deployment.
 
 *Deliverables*: Business and AI requirements, process and workflow designs, AI agent and model specifications, integration and data requirements, risk and control assessments, test and evaluation requirements for AI systems, epics, features, and user stories
 
@@ -145,13 +129,11 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the technical design of AI implementations within the team — architectures, platforms, implementation order, and output quality standards — and develop AI engineers through mentoring and pairing.
 
-*Responsibilities*:
-- Design the technical architecture for tests, models, agents, and workflows
-- Define implementation platforms and tooling for AI development
-- Sequence AI implementation work and define quality and monitoring standards for AI outputs
-- Refine user stories related to AI development with sufficient technical detail
-- Mentor AI Engineers through pairing, code review, and knowledge sharing
-- Co-design integrated features with Tech Lead (tiebreaker on AI component decisions)
+*Accountability*: Technical refinement (AI); Non-functional requirements sign-off (AI); Feature or model implementation, including migration, cutover, and legacy decommissioning build work (AI); Code or model review (AI); Independent QA and test execution (AI); AI model evaluation, safety, and fairness testing; Production monitoring, alerting, incident response, and post-incident review, including proactive remediation of disclosed vulnerabilities (AI)
+
+*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion)
+
+*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Engineering standards, platforms, and AI-practice governance
 
 *Shared across squads*: Yes — the AI Lead connects to all squads in the team.
 
@@ -167,12 +149,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Implement AI components — tests, models, agents, and workflows — according to the technical design provided by the AI Lead.
 
-*Responsibilities*:
-- Implement models, agents, and AI workflows to specification
-- Build evaluations (evals), regression tests, and datasets for AI systems
-- Research technical approaches, model selection, data characteristics, and evaluation methods during implementation (not business requirements — that is AI BA scope)
-- Perform data analysis to support model development and evaluation
-- Raise technical blockers and edge cases to the AI Lead
+*Responsibilities*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work; AI model evaluation, safety, and fairness testing
 
 *Soft skills*: Curiosity, structured problem-solving, willingness to experiment and discard, attention to evaluation rigour
 
@@ -186,15 +163,11 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the technical design of non-AI implementations — services, choreographers, web pages, app pages, CI/CD, monitoring, and incident procedures — and develop engineers through mentoring and pairing.
 
-*Responsibilities*:
-- Design technical architecture for services, choreographers, web pages, and mobile app pages
-- Define monitoring, alerting, and Change Management procedures integrated with CI/CD
-- Define and maintain Incident Management procedures
-- Sequence engineering implementation work
-- Refine user stories related to engineering with sufficient technical detail
-- Mentor Engineers through pairing, code review, and knowledge sharing
-- Co-design integrated features with AI Lead (tiebreaker on system boundary decisions)
-- Escalate to Solution Architect when an Epic requires new cross-system standards or integrations; escalate to Principal Engineer when new engineering standards are needed
+*Accountability*: Technical refinement (non-AI); Non-functional requirements sign-off (non-AI); Cross-team shared-component ownership; Feature or model implementation, including migration, cutover, and legacy decommissioning build work (non-AI); Code or model review (non-AI); Independent QA and test execution (non-AI); Dependency and license compliance; CI/CD pipeline and deployment automation; Rollback decision authority; Production monitoring, alerting, incident response, and post-incident review, including proactive remediation of disclosed vulnerabilities (non-AI); Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
+
+*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion); Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale
+
+*Consulted on*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Cross-team dependency tracking and schedule/milestone reporting (non-AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Business metrics instrumentation and tracking; Architecture blueprint (cross-system); Engineering standards, platforms, and AI-practice governance
 
 *Shared across squads*: Yes — the Tech Lead connects to all squads in the team.
 
@@ -210,12 +183,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Implement server-side software components — APIs, business workflows, batch processes, event-driven integrations, and database access layers.
 
-*Responsibilities*:
-- Design and implement RESTful and event-driven APIs
-- Build business logic, workflows, and batch processing components
-- Develop database access layers and manage schema migrations
-- Implement integrations with external systems and third-party services
-- Support incident investigation for backend services
+*Responsibilities*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work; Business metrics instrumentation and tracking
 
 *Hard skills*: Backend languages (Java, Go, Python, Node.js, or equivalent), API design, SQL and NoSQL databases, event-driven systems, containerisation
 
@@ -227,12 +195,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Implement user-facing software components — web applications, mobile apps, and UI interactions.
 
-*Responsibilities*:
-- Build web pages, single-page applications, and responsive UI components
-- Implement mobile app screens and navigation flows (where applicable)
-- Integrate frontend with backend APIs and services
-- Ensure accessibility, performance, and cross-browser or cross-platform compatibility
-- Collaborate with UX Designers on interaction and visual design implementation
+*Responsibilities*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work; Business metrics instrumentation and tracking
 
 *Hard skills*: HTML/CSS, modern frontend frameworks (React, Vue, Angular, or equivalent), mobile development (React Native, Flutter, or equivalent where applicable), API integration, browser and mobile performance tooling
 
@@ -244,12 +207,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the delivery pipeline and cloud infrastructure that enables teams to ship and run software reliably — covering both CI/CD automation and cloud provisioning.
 
-*Responsibilities*:
-- Build and maintain CI/CD pipelines, deployment automation, and release procedures including blue/green deployments and automated rollouts
-- Design and provision cloud infrastructure using templates and infrastructure-as-code blueprints
-- Manage networking, connectivity, certificates, and platform-level security controls
-- Define validation scripts and deployment checks that gate production releases
-- Monitor infrastructure health and respond to platform-level incidents
+*Responsibilities*: CI/CD pipeline and deployment automation; Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
+
+*Consulted on*: Production readiness and go-live approval
 
 *Hard skills*: CI/CD tooling (GitHub Actions, GitLab CI, or equivalent), cloud platforms (AWS, Azure, GCP, or equivalent), infrastructure-as-code (Terraform, Pulumi, or equivalent), containerisation and orchestration (Docker, Kubernetes), networking fundamentals
 
@@ -261,12 +221,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Implement non-AI software components across the full stack — APIs, workflows, web pages, mobile apps, CI/CD pipelines, database access, and event-based flows. Suited to teams and contexts where frontend and backend work are tightly coupled or where a generalist profile is preferred over specialisation.
 
-*Responsibilities*:
-- Implement services, APIs, database access layers, event-based flows, and non-AI workflows
-- Build and maintain CI/CD pipelines
-- Implement web pages, mobile app screens, and frontend components
-- Write and maintain scripts and automation for platform and operational needs
-- Support AI Engineers with software engineering knowledge gaps (e.g., API integration, data pipelines, infrastructure)
+*Responsibilities*: Feature or model implementation, including migration, cutover, and legacy decommissioning build work; Business metrics instrumentation and tracking
 
 *Soft skills*: Breadth of technical knowledge, pragmatism, collaborative problem-solving, ownership of delivered quality
 
@@ -278,13 +233,13 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 Specialists are professionals with focused domain expertise who contribute to specific phases of product delivery. They MAY be shared across multiple product teams or embedded within a specific team when the scope or duration of work justifies it. Teams SHOULD plan specialist involvement proactively — engaging them ahead of the phases where their input is needed rather than reactively.
 
-| Specialist | Purpose | Typical engagement |
-|---|---|---|
-| UX Designer | Design user interactions, information architecture, and visual language for user-facing features | Embedded for user-facing feature phases; shared otherwise |
-| Tester / QA Specialist | Define test strategies, execute exploratory and structured testing, and validate acceptance criteria beyond automated test coverage | Embedded during high-complexity delivery phases; shared for periodic quality reviews |
-| Communication Specialist | Author internal and external communications, release announcements, and user-facing documentation | Shared; engaged at release and major milestone points |
-| Journalist / Technical Writer | Produce structured content — user guides, API documentation, internal knowledge bases | Shared or embedded when documentation volume is significant |
-| Business SME (Subject Matter Expert) | Validate requirements and processes against business domain knowledge; bridge between business stakeholders and product teams | Shared; engaged during requirements and validation phases |
+| Specialist | Purpose | Typical engagement | RACI (`agentme-bdr-405`) |
+|---|---|---|---|
+| UX Designer | Design user interactions, information architecture, and visual language for user-facing features | Embedded for user-facing feature phases; shared otherwise | Responsible: UX and interaction design |
+| Tester / QA Specialist | Define test strategies, execute exploratory and structured testing, and validate acceptance criteria beyond automated test coverage | Embedded during high-complexity delivery phases; shared for periodic quality reviews | Responsible: Independent QA and test execution; AI model evaluation, safety, and fairness testing |
+| Communication Specialist | Author internal and external communications, release announcements, and user-facing documentation | Shared; engaged at release and major milestone points | Responsible: Release/rollout communication and user-facing documentation, including deprecation and sunset notices |
+| Journalist / Technical Writer | Produce structured content — user guides, API documentation, internal knowledge bases | Shared or embedded when documentation volume is significant | Responsible: Release/rollout communication and user-facing documentation, including deprecation and sunset notices |
+| Business SME (Subject Matter Expert) | Validate requirements and processes against business domain knowledge; bridge between business stakeholders and product teams | Shared; engaged during requirements and validation phases | Consulted: Initial compliance/privacy/risk triage, including breach-notification escalation; Requirements and user stories |
 
 ## References
 
