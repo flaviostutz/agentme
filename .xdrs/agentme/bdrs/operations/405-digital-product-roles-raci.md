@@ -34,7 +34,7 @@ The single RACI matrix in rule `10-raci-activity-matrix` below gives the full pe
 
 #### 01-raci-definitions
 
-Accountable (A) is the role that owns the outcome of an activity and answers for its success or failure; exactly one role MUST hold it per activity — e.g., the Tech Lead is Accountable for code review quality. Responsible (R) is the role that performs the work under the Accountable role's direction, normally in a tight, continuous communication loop with it — e.g., Engineers are Responsible for implementation under the Tech Lead. Consulted (C) is a role whose input MUST be sought before a decision is finalised, typically a cross-team or org-level role with broad hands-on experience — e.g., the Solution Architect is Consulted on cross-system architecture. Informed (I) is a role that MUST be notified of a decision or outcome because it affects their own work; Informed MAY extend to business stakeholders outside this roster (Sales, Finance, executives) even when they are not tracked as a column — e.g., the PM is Informed of production incidents that affect business KPIs.
+Accountable (A) MUST ensure an activity is done and done correctly, answering for its success or failure; exactly one role holds it per activity — e.g., the Tech Lead is Accountable for code review quality. Responsible (R) performs the task, under the Accountable role's direction and normally in a tight, continuous communication loop with it — e.g., Engineers are Responsible for implementation under the Tech Lead. Consulted (C) MUST participate in the design or decision process before it is finalised, typically a cross-team or org-level role with broad hands-on experience — e.g., the Solution Architect is Consulted on cross-system architecture. Informed (I) MUST receive the resulting reports or information to act on when needed, without shaping the decision; Informed MAY extend to business stakeholders outside this roster (Sales, Finance, executives) even when untracked as a column — e.g., the PM is Informed of production incidents that affect business KPIs.
 
 #### 02-exactly-one-accountable-per-activity
 
@@ -78,7 +78,7 @@ Every activity MUST have exactly one Accountable role, per rule `02-exactly-one-
 | Team formation & enablement | Performance management, career growth, and compensation/promotion | | | | A | | | | | | | | | | |
 | Team formation & enablement | Workforce planning and capacity allocation | C | | | A | | | | | | | | | | |
 | Team formation & enablement | Team health, psychological safety, and retention | I | | | A | | | | | | | | | | |
-| Team formation & enablement | Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale | I | A | | C | | | | R/C | | | | | | |
+| Team formation & enablement | Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale | I | A | | C | | | | R | | | | | | |
 | Discover | Strategic direction and OKR setting¹ | C | | | | | | | | | | | | | |
 | Discover | Tactical OKR translation, epic prioritisation, and business case/ROI justification | A | I | | | | | | | | | | | | |
 | Discover | Vendor/third-party selection, contract, and SLA negotiation | A | C | | | | | C | | | | | | | |
@@ -97,7 +97,7 @@ Every activity MUST have exactly one Accountable role, per rule `02-exactly-one-
 | Implement | Feature or model implementation, including migration, cutover, and legacy decommissioning build work | | | | | C | C | | A (non-AI) | A (AI) | | R | R | | |
 | Implement | Code or model review | | | | | | | | A (non-AI) | A (AI) | | | | | |
 | Implement | Independent QA and test execution | | | | | | | | A (non-AI) | A (AI) | | | | | R (Tester/QA) |
-| Implement | AI model evaluation, safety, and fairness testing | | | | | C | | | A | C | | R | | R (Tester/QA) |
+| Implement | AI model evaluation, safety, and fairness testing | | | | | | C | | | A | C | | R | | R (Tester/QA) |
 | Implement | Dependency and license compliance | | | | | | | | A | | C | | | | |
 | Deliver | CI/CD pipeline and deployment automation | | | | | | | | A | | | | | R | |
 | Deliver | Production readiness and go-live approval | | A | | | | | | C | C | | | | C | |
@@ -116,7 +116,7 @@ Every activity MUST have exactly one Accountable role, per rule `02-exactly-one-
 
 ¹ Accountable: Group/Company/Business Unit leadership, outside this role roster (see rule `07-scope-boundary`). ² Also Consulted: each contributing team's Tech Lead (non-AI) / AI Lead (AI). ³ Accountable: the shared/platform team's Tech Lead if one exists, otherwise one contributing team's Tech Lead designated by the Solution Architect; other contributing teams' Tech Leads are Informed. ⁴ Accountable: Group/Company/Business Unit leadership, outside this role roster; PM is Responsible for aggregating Tactical OKR results upward.
 
-Tech Lead and AI Lead are Responsible for the technical-ramp-up portion of onboarding; Tech Lead is also Responsible for flagging and protecting technical-debt/operational time on the workforce-allocation-enforcement row and Consulted on capacity trade-offs. Tech Lead and AI Lead also consult each other on shared (non-AI)/(AI) integration points. Specialist columns (R) apply only when that specialist is engaged on the initiative, per rule `05-role-collapsing-and-conditional-activities`; when not engaged, the Accountable role executes the activity directly.
+Tech Lead and AI Lead are Responsible for the technical-ramp-up portion of onboarding; Tech Lead is also Responsible for flagging and protecting technical-debt/operational time on the workforce-allocation-enforcement row. Tech Lead and AI Lead also consult each other on shared (non-AI)/(AI) integration points. Specialist columns (R) apply only when that specialist is engaged on the initiative, per rule `05-role-collapsing-and-conditional-activities`; when not engaged, the Accountable role executes the activity directly.
 
 #### 11-role-description-must-mirror-the-matrix
 

@@ -167,7 +167,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion); Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale
 
-*Consulted on*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Cross-team dependency tracking and schedule/milestone reporting (non-AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Business metrics instrumentation and tracking; Architecture blueprint (cross-system); Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (non-AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Business metrics instrumentation and tracking; Architecture blueprint (cross-system); Engineering standards, platforms, and AI-practice governance
 
 *Shared across squads*: Yes — the Tech Lead connects to all squads in the team.
 
