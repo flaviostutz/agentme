@@ -34,6 +34,7 @@ A team with a bounded product scope and limited AI surface MUST operate as a sim
 | Product Owner | 1 | |
 | Business Analyst or AI BA | 1 | |
 | Tech Lead | 1 | |
+| Engineering Manager | 0–1 | MAY be collapsed into the PO or Tech Lead in small teams |
 | Engineer | 1–2 | Any sub-type from `agentme-bdr-404` (Backend, Frontend, DevOps/Infra, Full Stack) |
 | AI Engineer (if AI work exists) | 0–1 | |
 
@@ -48,6 +49,7 @@ A team with a broad product scope or significant AI surface MUST operate with in
 | Product Owner | 1 | Shared across all squads |
 | Tech Lead | 1 | Shared across all squads |
 | AI Lead | 1 | Shared across all squads |
+| Engineering Manager | 1 | Shared across all squads |
 | Squad | 3 | See squad composition below |
 
 **Squad composition** (per squad):
@@ -100,3 +102,4 @@ Teams MUST be aware of the following structural gaps and MUST apply the recommen
 - [`_core-adr-policy-017`](../../../_core/adrs/principles/017-policy-numbering-ranges.md) — Policy numbering: BDR operations block 401–500
 - [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, and Solution Architect definitions
 - [`agentme-bdr-404`](404-team-roles-and-specialists.md) — Digital product roles (team & specialists): role definitions for all team-level roles and specialists referenced in this policy
+- [`agentme-bdr-405`](405-digital-product-roles-raci.md) — RACI matrix assigning decision rights across the digital-product lifecycle, including role-collapsing rules for Simple teams

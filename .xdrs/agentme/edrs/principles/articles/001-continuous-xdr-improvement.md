@@ -90,4 +90,4 @@ If the same clarification would likely be needed in another feature, by another 
 - [_core-adr-001](../../../../_core/adrs/principles/001-xdrs-standards.md) - XDR structure, numbering, and mandatory template
 - [_core-article-001](../../../../_core/adrs/principles/articles/001-xdrs-overview.md) - XDR introduction and general adoption guidance
 - [agentme-edr-012](../012-continuous-xdr-enrichment.md) - Shared-first XDR enrichment policy and 80% coverage target
-- [002-write-policy skill](../../../../_core/adrs/principles/skills/002-write-policy/SKILL.md) - Step-by-step procedure for drafting new XDRs
+- [write-policy skill](../../../../_core/adrs/principles/skills/write-policy/SKILL.md) - Step-by-step procedure for drafting new XDRs

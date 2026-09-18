@@ -1,5 +1,5 @@
 ---
-name: agentme-bdr-policy-401-plan-epic-feature-story
+name: agentme-bdr-policy-401-epic-feature-user-story-planning
 description: Defines how to organize software development project management work as epics, features, and user stories using XDRS initiative documents. Use when creating, reviewing, or navigating epic initiatives, feature milestones, or user story files.
 apply-to: AI coding agents and developers managing software development work in projects that follow agentme standards
 valid-from: 2026-08-28
