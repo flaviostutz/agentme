@@ -81,12 +81,13 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 *Purpose*: Own the product direction for the organisation — defining what to build and why — and translate strategic objectives into Tactical OKRs that product teams execute.
 
-*Responsibilities*:
-- Translate Strategic OKRs (set at Group, Company, or Business Unit level) into Tactical OKRs for quarterly execution
-- Prioritise Epics across product teams to maximise contribution to Tactical OKRs
-- Communicate Tactical OKRs and Epic priorities to Product Owners (POs) so teams can execute against them; the PO is the primary recipient of this direction and executes it within the team
-- Maintain visibility into the product portfolio and adjust priorities as market or business conditions change
-- Own the product roadmap and communicate it to stakeholders
+*Accountability*: Tactical OKR translation, epic prioritisation, and business case/ROI justification; Vendor/third-party selection, contract, and SLA negotiation; Tactical OKR fulfillment reporting to the organisation; OKR cycle retrospective, learnings capture, and unfulfilled-OKR review
+
+*Responsibilities*: Strategic OKR fulfillment review (multi-quarter or annual)
+
+*Consulted on*: Workforce planning and capacity allocation; Strategic direction and OKR setting; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Complex or high-risk stakeholder and issue/risk (RAID) management; Service or system deprecation decision; Engineering standards, platforms, and AI-practice governance
+
+*Informed about*: Team health, psychological safety, and retention; Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Cross-team technical emergency declaration and mobilization
 
 *Authority*: The PM owns WHAT the organisation builds at the portfolio level and WHEN Tactical OKRs are set. The PM does NOT own day-to-day team decisions — those remain with each team's Product Owner and Tech Lead. The PM does NOT set engineering practices or platform choices — those are owned by the Principal Engineer.
 
@@ -102,13 +103,9 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 *Purpose*: Own the HOW across all product teams — engineering practices, tooling standards, platform choices, and AI practices — and synthesise them into a blueprint that leads can apply.
 
-*Responsibilities*:
-- Define and maintain engineering standards across all product teams (coding practices, testing, CI/CD, observability)
-- Select and standardise platforms and tooling used by teams
-- Shape AI engineering practices and the adoption of AI-assisted development
-- Connect architecture decisions, business requirements, and standardised platforms into a coherent engineering blueprint
-- Mentor Tech Leads and AI Leads on standards and practices
-- Connect with Product Manager (PM), Project Manager (PjM), Solution Architects, and team leads to translate, converge, and align the technological landscape, standards, and processes
+*Accountability*: Engineering standards, platforms, and AI-practice governance; Cross-team technical emergency declaration and mobilization
+
+*Consulted on*: Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); AI model evaluation, safety, and fairness testing; Dependency and license compliance; Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
 
 *Soft skills*: Technical leadership, communication across skill levels, systems thinking, mentoring, cross-team influence — a nexialist connecting engineering, management, architecture, platforms, and product
 
@@ -122,12 +119,9 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 *Purpose*: Define the architecture for solutions that require new cross-system standards, new platforms, integrations with external systems, or significant security and compliance concerns.
 
-*Responsibilities*:
-- Design architectural solutions for Epics or initiatives that span multiple systems or teams
-- Define new integration patterns, platform adoptions, and cross-system standards when existing standards do not cover the need
-- Produce architectural blueprints that Tech Leads and AI Leads can implement within their teams
-- Assess security, compliance, and risk dimensions of proposed architectures
-- Ensure architectural consistency across product teams within the domain
+*Accountability*: Architecture blueprint (cross-system)
+
+*Consulted on*: Vendor/third-party selection, contract, and SLA negotiation; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; Cross-team dependency tracking and schedule/milestone reporting; Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); Cross-team shared-component ownership; Rollback decision authority; Engineering standards, platforms, and AI-practice governance
 
 *Soft skills*: Holistic thinking, stakeholder communication, structured documentation, facilitation, ability to balance pragmatism with rigour
 
