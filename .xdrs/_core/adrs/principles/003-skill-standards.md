@@ -19,7 +19,7 @@ How should skills be authored, structured, and organized within a project so tha
 
 **agentskills-compatible skill packages, co-located with XDRS**
 
-Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDRS subject folder under a `skills/` sub-directory. Each skill occupies its own numbered package folder, mirroring the XDRS numbering convention.
+Skills follow the [agentskills](https://agentskills.io/specification) open format and live inside the XDRS subject folder under a `skills/` sub-directory. Each skill occupies its own package folder named after the skill itself, without the numeric prefix used by other XDRS document types.
 
 A skill MAY target a human operator, an AI agent, or both. Instructions MUST be written imperatively and at a level of detail that either a person or an agent can follow without additional context. This design allows a skill to start as a human-only procedure and evolve — incrementally — toward partial or full AI automation without restructuring the document.
 
@@ -61,7 +61,7 @@ Quick test:
     [type]/
       [subject]/
         skills/
-          [number]-[skill-name]/
+          [skill-name]/
             SKILL.md              # required
             scripts/              # optional: executable scripts the agent may run
             references/           # optional: detailed reference material
@@ -69,21 +69,19 @@ Quick test:
 ```
 
 Examples:
-- `.xdrs/_core/adrs/principles/skills/001-code-review/SKILL.md`
-- `.xdrs/business-x/edrs/devops/skills/001-ci-pipeline-debug/SKILL.md`
-- `.xdrs/_local/adrs/principles/skills/001-my-nice-skill/SKILL.md`
+- `.xdrs/_core/adrs/principles/skills/code-review/SKILL.md`
+- `.xdrs/business-x/edrs/devops/skills/ci-pipeline-debug/SKILL.md`
+- `.xdrs/_local/adrs/principles/skills/my-nice-skill/SKILL.md`
 
-**Skill numbering**
+**Skill naming**
 
-- Each skill has a number unique within its `scope/type/subject/skills/` namespace.
-- Determine the next number by checking the highest number already present in that namespace. MUST NOT reuse numbers of deleted skills.
-- Gaps in the sequence are expected and allowed.
+Unlike Policies, Research, Articles, and Initiatives, skill packages are not auto-numbered. A skill is identified by a descriptive name, keeping it compatible with the wider agentskills ecosystem, where clients (including this framework's own agentskills-format consumers) expect a plain descriptive identifier rather than an auto-generated sequence number. The name MAY still contain digits, including as a prefix, when that is simply part of the descriptive name (e.g., `2fa-setup`). Each skill name MUST be unique within its `scope/type/subject/skills/` namespace; check for an existing skill with the same name before creating a new one.
 
 **SKILL.md format** (agentskills spec)
 
 ```
 ---
-name: [number]-[skill-name]              # required: matches the folder name exactly; max 64 chars
+name: [skill-name]              # required: matches the folder name exactly; max 64 chars
 description: >            # required: what the skill does AND when to activate it; max 1024 chars
   Concise explanation of the skill and the situations in which an agent should load it.
 license: <license>        # optional
@@ -112,8 +110,8 @@ Known gotchas and how to handle them.
 ```
 
 Rules:
-- The `name` field MUST match the folder name exactly (e.g., `001-code-review`). This keeps skill identifiers simple and aligned with the filesystem hierarchy.
-- The directory name MUST follow the format `[number]-[skill-name]` (e.g., `001-code-review`), matching the `name:` field.
+- The `name` field MUST match the folder name exactly (e.g., `code-review`). This keeps skill identifiers simple and aligned with the filesystem hierarchy.
+- The directory name and the `name:` field MUST contain only lowercase alphanumeric characters and hyphens (e.g., `code-review`, `2fa-setup`).
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
 - `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
 - For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
@@ -127,7 +125,7 @@ Rules:
 Use the [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills-ref) CLI to validate before committing:
 
 ```
-skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[number]-[skill-name]
+skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[skill-name]
 ```
 
 ## Considered Options

@@ -1,33 +1,35 @@
 ---
 name: agentme-core-adr-policy-003-skill-numbering-ranges
 description: >
-  Defines a global semantic skill numbering scheme where a skill's number encodes its category
-  (connectivity, operation type, and autonomy level), ordered by increasing complexity and risk.
-  Human and agentic skills share the same ranges — the number reflects the operation, not the
-  executor. Overrides the per-namespace sequential numbering from _core-adr-policy-003 for all
-  scopes except _core. Use when assigning a number to a new skill or reviewing whether an
-  existing skill number is correct.
-apply-to: all agentme scope contributors assigning numbers to new skills
-valid-from: 2026-08-06
+  Defines an OPTIONAL semantic skill numbering scheme a scope MAY adopt once its skill library
+  is complex enough to benefit from it (multiple layers of related skills, many categories
+  needing at-a-glance risk signaling). When adopted, a skill's number encodes its category
+  (connectivity, operation type, and autonomy level), ordered by increasing complexity and
+  risk; human and agentic skills share the same ranges. The `agentme` and `agentme-core`
+  scopes never use it. Use when deciding whether a new skill in another scope should be
+  numbered, assigning a number once a scope has opted in, or reviewing whether an existing
+  skill number is correct.
+apply-to: agentme scope contributors, and agents helping author skills in any scope that has opted into this numbering scheme
+valid-from: 2026-09-18
 ---
 
 # agentme-core-adr-policy-003: skill numbering ranges
 
 ## Context and Problem Statement
 
-[`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md) assigns skill numbers sequentially within each `scope/type/subject/skills/` namespace. As the skill library grows across multiple scopes, namespaces, and automation types, sequential-only numbers give no information about what a skill does or how risky it is to run. Discovering all connector skills, all autonomous-write skills, or all multi-system read skills requires scanning every namespace.
+[`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md) does not auto-number skills: a skill's folder and `name:` field are a plain, descriptive, lowercase-kebab identifier, and any digits present are expected to be an organic part of that descriptive name (e.g. `2fa-setup`), not an externally-imposed sequence or category code. That default works well for a small or single-purpose skill library, but as a skill library grows across multiple scopes, namespaces, and automation types — especially once related skills form multiple layers, such as the base/domain/operation adapter-skill hierarchy in [`agentme-edr-127`](../../../agentme/edrs/application/127-external-system-adapter-skills.md) — a purely descriptive name gives no signal of category or risk at a glance. Discovering all connector skills, all autonomous-write skills, or all multi-system read skills requires reading every skill in every namespace.
 
-How should skill numbers be structured so that the number itself communicates the skill's category — its external connectivity, operation type, and autonomy level — regardless of which scope or namespace it lives in?
+Should skill numbering ever be used on top of `_core-adr-policy-003`'s default, and if so, under what conditions, by whom, and with what scheme?
 
 ## Decision Outcome
 
-**Skill numbers are globally semantic: the number encodes the skill's category, ordered by increasing complexity and risk. Human and agentic skills share the same ranges — the number reflects the nature of the operation, not who or what executes it. All scopes except `_core` MUST assign skill numbers according to the range table in rule `01`. The per-namespace sequential assignment rule from `_core-adr-policy-003` is overridden by this policy for all scopes other than `_core`.**
+**Skill numbering is OPTIONAL. Every scope defaults to `_core-adr-policy-003`'s plain descriptive kebab-case naming — including `agentme` and `agentme-core`, which MUST NOT number their own skills. A scope MAY explicitly opt in to the semantic numbering scheme below once its own skill library is complex enough to benefit from it (rule `06`). When a scope opts in, a skill's number encodes its category — connectivity, operation type, and autonomy level — ordered by increasing complexity and risk; human and agentic skills share the same ranges, and the range table in rule `01` applies to that scope's skills. Before creating a new skill in any scope other than `agentme`/`agentme-core`, ask the human whether it should be numbered (rule `07`) before assigning a number (rule `08`).**
 
 ### Details
 
 #### 01-range-table
 
-A skill MUST be assigned a number from the range whose category best describes the skill's primary purpose. Each range is exactly 50 numbers wide. Higher numbers indicate higher complexity and risk. Ranges 650–899 are reserved for future categories; MUST NOT be used until a category is formally defined.
+A skill in a scope that has opted in to numbering (rule `07`) MUST be assigned a number from the range whose category best describes the skill's primary purpose. Each range is exactly 50 numbers wide. Higher numbers indicate higher complexity and risk. Ranges 650–899 are reserved for future categories; MUST NOT be used until a category is formally defined.
 
 | Range | Category | Key constraints |
 |-------|----------|-----------------|
@@ -49,7 +51,7 @@ A skill MUST be assigned a number from the range whose category best describes t
 
 #### 02-connector-naming
 
-A connector skill (range 250–299) MUST:
+A connector skill that is numbered (range 250–299) MUST:
 - Cover exactly one external system, or one focused scope within a system.
 - Include the system name and the suffix `connector` in both the folder name and the `name:` field. A scope qualifier MAY be inserted between the system name and the suffix (e.g., `260-github-connector`, `261-github-actions-connector`, `275-jira-connector`, `276-servicenow-incidents-connector`).
 - Provide reusable authentication patterns, connection scripts (curl, Python, or Playwright depending on system complexity), and connection tricks for that system.
@@ -88,22 +90,33 @@ If all external dependencies are mocked or stubbed, assign the skill to 200–24
 **Notification side-effect vs. primary write target (400–449 vs. 450–499)**
 Writing to a notification or messaging system (Slack, email, webhook) counts as the primary write target only when that write is the main purpose of the skill. If the notification is a side-effect of a write to a different primary system, it does not elevate the skill to multi-system (450–499); the skill stays in 400–449 (single system).
 
-#### 06-number-assignment
+#### 06-when-to-opt-in
 
-When assigning a number to a new skill:
+Numbering SHOULD only be adopted when a scope's skill library is genuinely complex, for example:
+
+- Multiple layers of related skills for the same domain, such as the base connector → domain → operation hierarchy described in [`agentme-edr-127`](../../../agentme/edrs/application/127-external-system-adapter-skills.md).
+- Many skills spread across several of the categories in rule `01`, where a plain descriptive name no longer makes category or risk obvious at a glance.
+
+A scope with only a handful of skills, or a single-purpose skill library, SHOULD stay with `_core-adr-policy-003`'s plain descriptive naming and MUST NOT adopt numbering just for its own sake.
+
+#### 07-ask-before-numbering-other-scopes
+
+The `agentme` and `agentme-core` scopes (this repository's own skills) MUST NOT use numbering; new skills there always follow `_core-adr-policy-003`'s plain kebab-case naming, with no exception. `_core` skills likewise follow `_core-adr-policy-003` directly and are never in scope for this policy.
+
+Before creating a new skill in any OTHER scope — for example a project's own `_local` scope, or a custom scope in a project that has adopted the `agentme` preset — an agent or contributor MUST ask the human whether the new skill should be numbered, briefly explaining the trade-off from rule `06`. If the human confirms, assign a number per rule `08` and prefix both the skill's folder name and its `name:` field with that number (e.g. `344-assess-codebase`). If declined, or when in doubt, default to no numeric prefix.
+
+#### 08-number-assignment
+
+Once a scope has opted in (rule `07`) and a new skill needs a number:
 
 1. Identify the range from rule `01` whose category best matches the skill's primary purpose.
 2. Apply tiebreaker rules from rule `05` if the skill sits on a boundary.
 3. Scan all skills across all scopes to find the lowest unoccupied number within that range.
 4. If a collision exists between two scopes using the same number, the scope listed last in the root `index.md` wins. Avoid collisions by choosing the next unoccupied number.
-5. MUST NOT reuse numbers of deleted skills (per [`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md)).
+5. MUST NOT reuse the number of a skill that was previously deleted from that range.
 6. If the preferred range is fully occupied, use the overflow range (900+) and add a comment in the skill's `## Overview` section noting which range it logically belongs to.
-
-#### 07-core-exemption
-
-Skills in the `_core` scope (numbers 001–009) are exempt from this policy. They MUST retain their existing sequential numbers and MAY ignore the range table in rule `01`.
 
 ## References
 
-- [`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md) — Skill package standards (structure, SKILL.md format, per-namespace sequential numbering — overridden by this policy for non-`_core` scopes)
-- [`agentme-edr-127`](../../../agentme/edrs/application/127-external-system-adapter-skills.md) — External system adapter skills (authoring standards for connector skills in the 250–299 range)
+- [`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md) — Skill package standards (structure, SKILL.md format; default plain kebab-case naming, not auto-numbered — this policy defines an optional, explicit category-numbering convention some scopes choose to layer on top)
+- [`agentme-edr-127`](../../../agentme/edrs/application/127-external-system-adapter-skills.md) — External system adapter skills (base/domain/operation layering that motivates rule `06`; connector skill authoring standards)

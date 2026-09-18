@@ -85,6 +85,6 @@ An unfulfilled Tactical OKR at cycle end MUST be explicitly reviewed — either 
 
 - [`agentme-bdr-001`](001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
 - [`agentme-bdr-002`](002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions and rules
-- [`agentme-bdr-401`](../operations/401-epic-feature-story-planning.md) — Epic / Feature / User Story planning: structure and OKR connection rules
+- [`agentme-bdr-401`](../operations/401-plan-epic-feature-story.md) — Epic / Feature / User Story planning: structure and OKR connection rules
 - [`agentme-bdr-402`](../operations/402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, and Solution Architect definitions
 - [`agentme-bdr-404`](../operations/404-team-roles-and-specialists.md) — Digital product roles (team & specialists): full role definitions for all team-level roles and specialists referenced in this policy

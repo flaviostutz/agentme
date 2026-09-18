@@ -90,4 +90,6 @@ Adapter skills for a given system benefit from layering so that knowledge at eac
 
 The depth of the hierarchy is discretionary. A simple system may need only a base skill. Complex systems benefit from the full three-layer structure. Higher-level skills SHOULD activate their lower-level dependencies explicitly at the start of their instructions.
 
+As this layered hierarchy grows across many systems, a scope MAY optionally prefix skill folder and `name:` values with a number that encodes category and risk (for example, grouping read-only skills below write skills, and single-system skills below multi-system ones), so skills sort and group at a glance. This is never required — skills default to a plain descriptive name with no numeric prefix — and MUST only be adopted for a new skill after asking the human whether it should be numbered. `agentme`'s own skills intentionally do not use numbering.
+
 When creating adapter skills for a new system, document the chosen integration approach (rule 01) in the skill's frontmatter description, follow the `-connector` naming convention (rule 06) for the base skill, and populate the `## Known Issues` section (rule 07) as experience accumulates. All system-specific adapter skills SHOULD be placed in the `_local` scope of the consuming project.

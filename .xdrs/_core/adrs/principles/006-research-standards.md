@@ -136,4 +136,4 @@ Prefer tables and bullet lists for simple comparisons; for diagrams see _core-ad
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
 - [_core-adr-policy-020 - Media and asset standards](020-media-and-asset-standards.md) - Diagram format preferences and non-Markdown asset rules
-- [005-write-research skill](skills/005-write-research/SKILL.md) - Step-by-step instructions for creating a research document
+- [write-research skill](skills/write-research/SKILL.md) - Step-by-step instructions for creating a research document

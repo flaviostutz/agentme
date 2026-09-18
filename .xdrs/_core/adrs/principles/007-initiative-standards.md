@@ -137,4 +137,4 @@ Due date: YYYY-MM-DD
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) - Framework elements: types, scopes, subjects, folder structure
 - [_core-adr-policy-004 - Article standards](004-article-standards.md) - Companion artifact type for synthetic views
 - [_core-adr-policy-006 - Research standards](006-research-standards.md) - Companion artifact type for exploratory evidence
-- [006-write-initiative skill](skills/006-write-initiative/SKILL.md) - Step-by-step instructions for creating a new initiative
+- [write-initiative skill](skills/write-initiative/SKILL.md) - Step-by-step instructions for creating a new initiative
