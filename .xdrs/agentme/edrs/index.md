@@ -93,3 +93,8 @@ Contribution and collaboration standards shared across projects.
 Production behavior and operational response decisions.
 
 - [agentme-edr-401](operations/401-service-health-check-endpoint.md) - **Service health check endpoint** - Expose a standard runtime health-check endpoint for services
+- [agentme-edr-402](operations/402-dora-metrics-framework.md) - **DORA metrics framework** - Per-service/team measurement, sub-metric composition, maturity tiers, and adoption order for DORA's four key metrics
+- [agentme-edr-403](operations/403-dora-deployment-frequency.md) - **DORA deployment frequency** - Calculation, examples, and challenges for deploys-per-week, batch size, and automation ratio
+- [agentme-edr-404](operations/404-dora-lead-time-for-changes.md) - **DORA lead time for changes** - Calculation, examples, and challenges for PR cycle time, review latency, deploy-pipeline time, and total lead time
+- [agentme-edr-405](operations/405-dora-change-failure-rate.md) - **DORA change failure rate** - Calculation, examples, and challenges for hotfix/revert rate, incident-linked deploy rate, and escaped defect rate, including cross-team attribution
+- [agentme-edr-406](operations/406-dora-time-to-restore-service.md) - **DORA time to restore service** - Calculation, examples, and challenges for total restore time, detection time, acknowledgement time, and resolution time
