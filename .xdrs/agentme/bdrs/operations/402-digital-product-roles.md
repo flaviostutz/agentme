@@ -60,6 +60,7 @@ All roles MUST be filled by a person with the required hard skills. Organisation
 | Solution Architect | Cross-team | What |
 | Product Owner (PO) | Team | What / When |
 | Project Manager (PjM) | Team | When / How |
+| Engineering Manager (EM) | Team | Who |
 | Business Analyst (BA) | Team / Squad | What / How |
 | AI Business Analyst (AI BA) | Team / Squad | What / How |
 | AI Lead | Team / Squad | How / When |
@@ -147,3 +148,4 @@ Team-level and specialist roles are defined in [`agentme-bdr-404`](404-team-role
 - [`agentme-bdr-003`](../principles/003-product-delivery-value-flow.md) — Product delivery value flow: end-to-end chain from Strategic OKRs to fulfilled Tactical OKRs
 - [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
 - [`agentme-bdr-404`](404-team-roles-and-specialists.md) — Team-level roles and specialists: PO, PjM, BA, AI BA, AI Lead, AI Engineer, Tech Lead, engineers, and specialists
+- [`agentme-bdr-405`](405-digital-product-roles-raci.md) — RACI matrix assigning decision rights across the digital-product lifecycle for the roles defined here

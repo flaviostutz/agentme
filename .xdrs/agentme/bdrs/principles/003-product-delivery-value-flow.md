@@ -53,7 +53,7 @@ The delivery value chain consists of the following ordered stages. Each stage MU
 
 **Stage 8 — Production**: Deployments reach production. The product team monitors outcomes against the acceptance criteria defined in User Stories and the Key Results of the Tactical OKRs.
 
-**Stage 9 — Outcome measurement**: The PO and PM review measurable production outcomes against the Tactical OKR Key Results. When Key Results are met, the Tactical OKR is considered fulfilled. Learnings from the cycle inform the next Strategic OKR planning round, closing the feedback loop.
+**Stage 9 — Outcome measurement**: The PO and PM review measurable production outcomes against the Tactical OKR Key Results. When Key Results are met, the Tactical OKR is considered fulfilled. Learnings from the cycle inform the next Strategic OKR planning round, closing the feedback loop. See `agentme-bdr-405` for the accountability split between the PO (team-level outcome measurement) and PM (Tactical OKR fulfillment reporting) at this stage.
 
 #### 03-parallel-support-roles
 
@@ -88,3 +88,4 @@ An unfulfilled Tactical OKR at cycle end MUST be explicitly reviewed — either 
 - [`agentme-bdr-401`](../operations/401-plan-epic-feature-story.md) — Epic / Feature / User Story planning: structure and OKR connection rules
 - [`agentme-bdr-402`](../operations/402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, and Solution Architect definitions
 - [`agentme-bdr-404`](../operations/404-team-roles-and-specialists.md) — Digital product roles (team & specialists): full role definitions for all team-level roles and specialists referenced in this policy
+- [`agentme-bdr-405`](../operations/405-digital-product-roles-raci.md) — RACI matrix assigning decision rights across the value chain, including the Stage 9 PO/PM accountability split

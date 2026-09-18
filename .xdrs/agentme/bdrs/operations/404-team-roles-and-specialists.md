@@ -1,6 +1,6 @@
 ---
 name: agentme-bdr-policy-404-digital-product-roles-team-specialists
-description: Defines team-level roles and specialist roles — Product Owner, Project Manager, Business Analyst, AI Business Analyst, AI Lead, AI Engineer, Tech Lead, Backend Engineer, Frontend Engineer, DevOps/Infra Engineer, Full Stack Engineer, and shared specialists. Use when staffing, onboarding, or assigning responsibilities within a product team.
+description: Defines team-level roles and specialist roles — Product Owner, Project Manager, Engineering Manager, Business Analyst, AI Business Analyst, AI Lead, AI Engineer, Tech Lead, Backend Engineer, Frontend Engineer, DevOps/Infra Engineer, Full Stack Engineer, and shared specialists. Use when staffing, onboarding, or assigning responsibilities within a product team.
 apply-to: All roles that belong to or support a product team
 valid-from: 2026-08-30
 ---
@@ -65,6 +65,29 @@ The following roles MUST belong to a product team. Some roles are shared across 
 *Hard skills*: Project planning, risk management, reporting, dependency tracking, facilitation, RAID log management
 
 *Common activities*: Stakeholder updates, dependency mapping sessions, risk reviews, cross-team syncs, status reporting, escalation facilitation
+
+---
+
+**Engineering Manager (EM)**
+
+*Purpose*: Own the people and workforce dimension of the team — hiring, career growth, and team health — so the team has the right people, growing in the right direction, at sustainable capacity.
+
+*Responsibilities*:
+- Own hiring, onboarding, and offboarding for the team
+- Own performance management, career growth conversations, and compensation/promotion decisions
+- Own workforce planning and capacity allocation across the team's needs
+- Own team health, psychological safety, and retention at the individual level (1:1s, HR support, attrition risk)
+- Own on-call scheduling and on-call compensation
+
+*Disambiguation*: Unlike the Tech Lead, the Engineering Manager does not own technical direction or code mentoring — only people/HR accountability. Unlike the PjM, the Engineering Manager has no delivery-coordination or stakeholder-facing responsibility — only people authority.
+
+*Shared across squads*: Yes — the Engineering Manager connects to all squads in the team, at the same granularity as the PO, Tech Lead, and AI Lead. In smaller organisations, one Engineering Manager MAY cover multiple teams.
+
+*Soft skills*: Empathy, active listening, coaching, conflict resolution, negotiation, organisational awareness
+
+*Hard skills*: Performance management frameworks, compensation benchmarking, hiring and interviewing, workforce capacity planning, on-call rotation management
+
+*Common activities*: 1:1s, hiring interviews and debriefs, performance and promotion cycles, capacity planning sessions, onboarding/offboarding, on-call schedule management
 
 ---
 
@@ -272,3 +295,4 @@ Specialists are professionals with focused domain expertise who contribute to sp
 - [`agentme-bdr-003`](../principles/003-product-delivery-value-flow.md) — Product delivery value flow: end-to-end chain from Strategic OKRs to fulfilled Tactical OKRs
 - [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, Solution Architect, and team structure context
 - [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
+- [`agentme-bdr-405`](405-digital-product-roles-raci.md) — RACI matrix assigning decision rights across the digital-product lifecycle for the roles defined here
