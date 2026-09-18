@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This module provides LLM-agent instructions for detecting semantic and structural conflicts between `#### NN-rulename` rule blocks across all governance policies loaded for a scope. It is invoked from within skills (001-review, 002-write-policy, etc.) after all governance layers have been loaded and before any authoring or review work begins.
+This module provides LLM-agent instructions for detecting semantic and structural conflicts between `#### NN-rulename` rule blocks across all governance policies loaded for a scope. It is invoked from within skills (review, write-policy, etc.) after all governance layers have been loaded and before any authoring or review work begins.
 
 Lint tools enforce *structural* conflicts only (duplicate rule numbers with different content). This module handles *semantic* conflicts: two rules with different numbers that are logically incompatible.
 

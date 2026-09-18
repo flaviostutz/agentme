@@ -114,7 +114,7 @@ Every decision record and its supporting artifacts live at a fixed path:
         researches/
           [number]-[short-title].md
         skills/
-          [number]-[skill-name]/
+          [skill-name]/
             SKILL.md
         articles/
           [number]-[short-title].md
@@ -170,7 +170,7 @@ Follow [_core-adr-policy-001](../001-xdrs-standards.md) and [_core-adr-policy-00
   allowed subject or use `principles` if none fits (propose a new subject via a `_core` ADR).
 - **New research** — add a `researches/[number]-[short-title].md` inside the relevant subject
   folder, following [_core-adr-policy-006](../006-research-standards.md).
-- **New skill** — add a `skills/[number]-[skill-name]/SKILL.md` inside the relevant subject
+- **New skill** — add a `skills/[skill-name]/SKILL.md` inside the relevant subject
   folder, following [_core-adr-policy-003](../003-skill-standards.md).
 - **New article** — add an `articles/[number]-[short-title].md` inside the relevant subject
   folder, following [_core-adr-policy-004](../004-article-standards.md).
@@ -200,9 +200,9 @@ Follow [_core-adr-policy-001](../001-xdrs-standards.md) and [_core-adr-policy-00
 - [_core-adr-policy-004](../004-article-standards.md) - Article standards
 - [_core-adr-policy-006](../006-research-standards.md) - Research standards
 - [_core-adr-policy-007](../007-initiative-standards.md) - Initiative standards
-- [001-review skill](../skills/001-review/SKILL.md) - Reviewing code against Policies
-- [002-write-policy skill](../skills/002-write-policy/SKILL.md) - Writing a new Policy
-- [003-write-skill skill](../skills/003-write-skill/SKILL.md) - Writing a new skill
-- [004-write-article skill](../skills/004-write-article/SKILL.md) - Writing a new article
-- [005-write-research skill](../skills/005-write-research/SKILL.md) - Writing a new research document
+- [review skill](../skills/review/SKILL.md) - Reviewing code against Policies
+- [write-policy skill](../skills/write-policy/SKILL.md) - Writing a new Policy
+- [write-skill skill](../skills/write-skill/SKILL.md) - Writing a new skill
+- [write-article skill](../skills/write-article/SKILL.md) - Writing a new article
+- [write-research skill](../skills/write-research/SKILL.md) - Writing a new research document
 - [_core-adr-policy-005](../005-semantic-versioning-for-xdrs-packages.md) - Semantic versioning rules for XDRS packages

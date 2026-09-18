@@ -31,15 +31,15 @@ Foundational standards, principles, and guidelines.
 
 Step-by-step procedural guides for humans and AI agents.
 
-- [001-review](principles/skills/001-review/SKILL.md) - **Review** — review code and files against Policies
-- [002-write-policy](principles/skills/002-write-policy/SKILL.md) - **Write Policy** — create a new Policy document
-- [003-write-skill](principles/skills/003-write-skill/SKILL.md) - **Write Skill** — create a new skill package
-- [004-write-article](principles/skills/004-write-article/SKILL.md) - **Write Article** — create a new article document
-- [005-write-research](principles/skills/005-write-research/SKILL.md) - **Write Research** — create a new research document
-- [006-write-initiative](principles/skills/006-write-initiative/SKILL.md) - **Write Initiative** — create a new initiative document
-- [007-write-presentation](principles/skills/007-write-presentation/SKILL.md) - **Write Presentation** — create Marp slide presentations for XDRS documents
-- [008-write-xdrs-doc](principles/skills/008-write-xdrs-doc/SKILL.md) - **Write XDRS Doc** — router skill; infers document type and delegates to the appropriate authoring skill
-- [009-compile-scope](principles/skills/009-compile-scope/SKILL.md) - **Compile Scope** — compiles or updates a `compiled`-type scope from its configured external sources
+- [review](principles/skills/review/SKILL.md) - **Review** — review code and files against Policies
+- [write-policy](principles/skills/write-policy/SKILL.md) - **Write Policy** — create a new Policy document
+- [write-skill](principles/skills/write-skill/SKILL.md) - **Write Skill** — create a new skill package
+- [write-article](principles/skills/write-article/SKILL.md) - **Write Article** — create a new article document
+- [write-research](principles/skills/write-research/SKILL.md) - **Write Research** — create a new research document
+- [write-initiative](principles/skills/write-initiative/SKILL.md) - **Write Initiative** — create a new initiative document
+- [write-presentation](principles/skills/write-presentation/SKILL.md) - **Write Presentation** — create Marp slide presentations for XDRS documents
+- [write-xdrs-doc](principles/skills/write-xdrs-doc/SKILL.md) - **Write XDRS Doc** — router skill; infers document type and delegates to the appropriate authoring skill
+- [compile-scope](principles/skills/compile-scope/SKILL.md) - **Compile Scope** — compiles or updates a `compiled`-type scope from its configured external sources
 
 ## Articles
 

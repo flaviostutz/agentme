@@ -53,7 +53,7 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
 - **Files listed in `.filedist.lock` are external XDRs.** A file whose path appears in the workspace root `.filedist.lock` file was distributed from an external source repository. It MUST NOT be modified locally. To change it, submit the change to the source repository and re-extract the updated package. The `.filedist.lock` format is one entry per line: `<relative-path>|<package>|<version>`. A scope is considered external when any of its files appear in `.filedist.lock`, and tools (such as `xdrs-core lint`) will skip external scopes by default. The `.filedist.lock` file can also be used to detect which files changed when bumping an external scope to a newer version: compare the version field in `.filedist.lock` entries before and after the upgrade and diff the affected paths to understand what decisions were added, updated, or removed.
 - Optional supporting artifacts under the same subject:
   - `[xdrs-root]/[scope]/[type]/[subject]/researches/[number]-[short-title].md`
-  - `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/SKILL.md`
+  - `[xdrs-root]/[scope]/[type]/[subject]/skills/[skill-name]/SKILL.md`
   - `[xdrs-root]/[scope]/[type]/[subject]/articles/[number]-[short-title].md`
   - `[xdrs-root]/[scope]/[type]/[subject]/initiatives/[number]-[short-title].md`
 - Research, skills, and articles are part of the framework, but each has its own concept-specific standards in dedicated Policies. This Policy defines the shared framework baseline; `_core-adr-policy-002` defines the Policy document writing standard.
@@ -67,7 +67,7 @@ ADR and EDR share the same six technical subject names (see [`_core-adr-policy-0
   - Articles use `[xdrs-root]/[scope]/[type]/[subject]/articles/.assets/`
   - Research uses `[xdrs-root]/[scope]/[type]/[subject]/researches/.assets/`
   - Initiatives use `[xdrs-root]/[scope]/[type]/[subject]/initiatives/.assets/`
-  - Skills use `[xdrs-root]/[scope]/[type]/[subject]/skills/[number]-[skill-name]/.assets/`
+  - Skills use `[xdrs-root]/[scope]/[type]/[subject]/skills/[skill-name]/.assets/`
 - **Scopes:** 
   - Short name that defines a group or a package of XDRS
   - examples: `business-x`, `business-y`, `team-43`, `_core`
@@ -147,8 +147,8 @@ subject/
 - [_core-adr-policy-010 - Scope governance](010-scope-governance.md) - Scope-type definition convention, scope-local standards, and governance application model
 - [_core-adr-policy-011 - core scope type](011-core-scope-type.md) - Defines the `core` scope type and meta-governance scope conventions
 - [_core-adr-policy-016 - Policy Subjects](016-policy-subjects.md) - Allowed subjects per type, descriptions, examples, and disambiguation tiebreakers
-- [001-review skill](skills/001-review/SKILL.md) - Skill for reviewing code changes against Policies
-- [002-write-policy skill](skills/002-write-policy/SKILL.md) - Skill for creating a new Policy following this standard
+- [review skill](skills/review/SKILL.md) - Skill for reviewing code changes against Policies
+- [write-policy skill](skills/write-policy/SKILL.md) - Skill for creating a new Policy following this standard
 - [_core-adr-policy-003 - Skill standards](003-skill-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)

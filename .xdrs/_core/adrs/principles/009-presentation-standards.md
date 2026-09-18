@@ -50,6 +50,6 @@ Presentations are Markdown files in Marp format, stored in the `.assets/` folder
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) - Framework structure and `.assets/` placement rules
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md) - Policy document writing rules
 - [_core-adr-policy-004 - Article standards](004-article-standards.md) - Article standards for multi-document views
-- [007-write-presentation skill](skills/007-write-presentation/SKILL.md) - Skill for creating slide presentations
+- [write-presentation skill](skills/write-presentation/SKILL.md) - Skill for creating slide presentations
 - [_core-adr-policy-020 - Media and asset standards](020-media-and-asset-standards.md) - Diagram format preferences and non-Markdown asset rules
 - [Marp](https://marp.app/) - Markdown Presentation Ecosystem

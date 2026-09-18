@@ -21,7 +21,7 @@ How should XDRS files be made accessible from paths outside the `.xdrs/` root wi
 
 When a file or directory inside `.xdrs/` needs to be reachable from an external path, a symlink MUST be created at the external path pointing to the canonical `.xdrs/` location. The canonical file MUST remain inside `.xdrs/`. Files MUST NOT be copied to external paths.
 
-**Example:** `.agents/skills/001-review` (symlink) → `.xdrs/_core/adrs/principles/skills/001-review/`
+**Example:** `.agents/skills/review` (symlink) → `.xdrs/_core/adrs/principles/skills/review/`
 
 ### Details
 

@@ -8,12 +8,12 @@ Propose changes via pull request. All changes must be verified for clarity and n
 
 Foundational standards, principles, and guidelines.
 
-- [150-refine-plan-mode](principles/skills/150-refine-plan-mode/SKILL.md) - **Refine plan mode** — MANDATORY skill for ANY planning activity (plan, design, propose, outline, draft, brainstorm, architect). Read and follow in full before any execution begins. Must be read from XDRS even when not in `.agents/skills`. *(skill)*
-- [151-refine-user-story](principles/skills/151-refine-user-story/SKILL.md) - **Refine user stories** — Refine, elaborate, study or develop the contents of a user story used to create a unit of work for an agile team. Runs a structured 10-phase refinement process: understand the request, qualify requirements, research context, review consistency, validate visually, challenge from 9 user-perspective angles (Phase 6), challenge from 8 implementer-perspective angles (Phase 7), produce a ready-to-implement story (Phase 8), and run a final readiness double-check (Phase 9). *(skill)*
-- [400-pr-owner-assistant](principles/skills/400-pr-owner-assistant/SKILL.md) - **PR owner assistant** — Helps the OWNER of a pull request work through comments left by others: fetches every comment (GitHub or Azure DevOps) from its URL, tracks them in a local file, and walks through triaging each one (reply-question, won't-fix, work-on-a-fix) with explicit human confirmation at every step. A hands-on, mutating workflow to answer feedback and land fixes -- not a code-review skill. Delegates provider-specific reads/writes to `250-github-connector` or `251-azure-devops-connector`. *(skill)*
+- [refine-plan-mode](principles/skills/refine-plan-mode/SKILL.md) - **Refine plan mode** — MANDATORY skill for ANY planning activity (plan, design, propose, outline, draft, brainstorm, architect). Read and follow in full before any execution begins. Must be read from XDRS even when not in `.agents/skills`. *(skill)*
+- [refine-user-story](principles/skills/refine-user-story/SKILL.md) - **Refine user stories** — Refine, elaborate, study or develop the contents of a user story used to create a unit of work for an agile team. Runs a structured 10-phase refinement process: understand the request, qualify requirements, research context, review consistency, validate visually, challenge from 9 user-perspective angles (Phase 6), challenge from 8 implementer-perspective angles (Phase 7), produce a ready-to-implement story (Phase 8), and run a final readiness double-check (Phase 9). *(skill)*
+- [resolve-pr-comments](principles/skills/resolve-pr-comments/SKILL.md) - **Resolve PR comments** — Helps the OWNER of a pull request work through comments left by others: fetches every comment (GitHub or Azure DevOps) from its URL, tracks them in a local file, and walks through triaging each one (reply, won't-fix, fix) at a human-chosen automation level -- from fully automatic to fully guided, with fine-grained free-text control over the mix -- while syncing back to the provider always stays its own explicitly confirmed step. A hands-on, mutating workflow to answer feedback and land fixes -- not a code-review skill. Delegates provider-specific reads/writes to `github-connector` or `azure-devops-connector`. *(skill)*
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
-- [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [200-run-skill-tests](application/skills/200-run-skill-tests/SKILL.md))*
+- [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [run-skill-tests](application/skills/run-skill-tests/SKILL.md))*
 
 ## Articles
 
@@ -31,17 +31,17 @@ Language and framework-specific tooling and project structure.
 - [agentme-edr-124](application/124-secrets-management.md) - **Secrets management** - Handle secrets securely using native keychains and cloud secret managers
 - [agentme-edr-125](application/125-coding-abstraction-practices.md) - **Coding abstraction practices** - Define when abstractions are justified and when they must be inlined
 - [agentme-edr-127](application/127-external-system-adapter-skills.md) - **External system adapter skills** - Priority-ordered approach and adapter skill authoring standards for automating interactions with external systems
-- [250-github-connector](application/skills/250-github-connector/SKILL.md) - **GitHub connector** — Base connector providing authentication, read access, and write access to GitHub pull requests and their comments via the `gh` CLI. *(skill)*
-- [251-azure-devops-connector](application/skills/251-azure-devops-connector/SKILL.md) - **Azure DevOps connector** — Base connector providing authentication, read access, and write access to Azure DevOps pull requests and their comment threads via the `az` CLI. *(skill)*
+- [github-connector](application/skills/github-connector/SKILL.md) - **GitHub connector** — Base connector providing authentication, read access, and write access to GitHub pull requests and their comments via the `gh` CLI. *(skill)*
+- [azure-devops-connector](application/skills/azure-devops-connector/SKILL.md) - **Azure DevOps connector** — Base connector providing authentication, read access, and write access to Azure DevOps pull requests and their comment threads via the `az` CLI. *(skill)*
 
 ### Language and framework tooling
 
-- [agentme-edr-101](application/101-javascript-project-tooling.md) - **JavaScript project tooling and structure** - Scaffold JavaScript libraries with the standard toolchain *(includes skill: [050-create-javascript-project](application/skills/050-create-javascript-project/SKILL.md))*
-- [agentme-edr-102](application/102-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [051-create-golang-project](application/skills/051-create-golang-project/SKILL.md))*
-- [agentme-edr-103](application/103-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [052-create-python-project](application/skills/052-create-python-project/SKILL.md))*
+- [agentme-edr-101](application/101-javascript-project-tooling.md) - **JavaScript project tooling and structure** - Scaffold JavaScript libraries with the standard toolchain *(includes skill: [create-javascript-project](application/skills/create-javascript-project/SKILL.md))*
+- [agentme-edr-102](application/102-golang-project-tooling.md) - **Go project tooling and structure** - Scaffold Go CLIs and libraries with the standard layout *(includes skill: [create-golang-project](application/skills/create-golang-project/SKILL.md))*
+- [agentme-edr-103](application/103-python-project-tooling.md) - **Python project tooling and structure** - Scaffold Python packages and CLIs with the standard layout *(includes skill: [create-python-project](application/skills/create-python-project/SKILL.md))*
 - [agentme-edr-104](application/104-cli-tool-standards.md) - **CLI tool standards** - Define command UX and behavior for CLI tools
 - [agentme-edr-126](application/126-pragmatic-hexagonal-architecture.md) - **Pragmatic hexagonal architecture** - Organize application layers as External/Adapters/Application with practical coupling rules
-- [010-select-relevant-xdrs](application/skills/010-select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
+- [select-relevant-xdrs](application/skills/select-relevant-xdrs/SKILL.md) - **Select relevant XDRs**
 
 ### AI development
 
@@ -75,7 +75,7 @@ Data layer implementation and data management decisions.
 
 Infrastructure implementation, delivery pipeline, and developer environment decisions.
 
-- [agentme-edr-301](platform/301-monorepo-structure.md) - **Monorepo structure** - Standardize monorepo layout, tooling, and package boundaries *(includes skill: [053-monorepo-setup](platform/skills/053-monorepo-setup/SKILL.md))*
+- [agentme-edr-301](platform/301-monorepo-structure.md) - **Monorepo structure** - Standardize monorepo layout, tooling, and package boundaries *(includes skill: [monorepo-setup](platform/skills/monorepo-setup/SKILL.md))*
 - [agentme-edr-302](platform/302-github-pipelines.md) - **GitHub CI/CD pipelines** - Define required CI stages and workflow structure
 - [agentme-edr-303](platform/303-common-targets.md) - **Common development script names** - Reuse standard build, lint, and test target names
 - [agentme-edr-304](platform/304-tool-execution-and-scripting.md) - **Tool execution and scripting** - Run tools consistently across shells, Makefiles, and CI

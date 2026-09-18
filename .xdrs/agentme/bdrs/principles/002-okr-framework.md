@@ -71,4 +71,4 @@ Operational OKRs track day-to-day execution and business-as-usual (BAU) stabilit
 ## References
 
 - [`agentme-bdr-001`](001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
-- [`agentme-bdr-401`](../operations/401-epic-feature-story-planning.md) — Epic / Feature / User Story planning: epic structure and OKR connection rule
+- [`agentme-bdr-401`](../operations/401-plan-epic-feature-story.md) — Epic / Feature / User Story planning: epic structure and OKR connection rule

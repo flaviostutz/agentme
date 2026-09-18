@@ -2,7 +2,7 @@
 name: agentme-edr-policy-017-skill-testing
 description: >
   Mandates a SKILL.test.md test file co-located with every skill, defines the test file format (scenarios with trigger, expected behaviour, and assertions), and requires execution before merging any change to the skill. Use when creating, updating, or reviewing skills.
-apply-to: contributors working in any scope that directly or transitively follows or extends agentme
+apply-to: the agentme scope itself, and any scope that directly or transitively follows or extends agentme
 valid-from: 2026-08-06
 ---
 
@@ -16,7 +16,7 @@ How should skill correctness be verified after every change, in a way that is co
 
 ## Decision Outcome
 
-**Every skill MUST have a `SKILL.test.md` file in the same directory as its `SKILL.md`. The file defines test scenarios with explicit input triggers and falsifiable assertions. It MUST be executed — using the `200-run-skill-tests` skill or manually — before merging any PR that modifies the skill or its test file.**
+**Every skill MUST have a `SKILL.test.md` file in the same directory as its `SKILL.md`. The file defines test scenarios with explicit input triggers and falsifiable assertions. It MUST be executed — using the `run-skill-tests` skill or manually — before merging any PR that modifies the skill or its test file.**
 
 ### Details
 
@@ -71,7 +71,7 @@ Rules:
 
 `SKILL.test.md` MUST be executed before merging any PR that modifies the skill or its test file. Execution means running each scenario and verifying all assertions pass.
 
-Use the `200-run-skill-tests` skill to execute the file, or run each scenario manually when automation is not available.
+Use the `run-skill-tests` skill to execute the file, or run each scenario manually when automation is not available.
 
 
 ## Considered Options
@@ -83,4 +83,4 @@ Use the `200-run-skill-tests` skill to execute the file, or run each scenario ma
 ## References
 
 - [`_core-adr-policy-003`](../../../_core/adrs/principles/003-skill-standards.md) — Skill package standards and folder layout
-- [`200-run-skill-tests`](../application/skills/200-run-skill-tests/SKILL.md) — Runner skill that executes `SKILL.test.md` scenarios
+- [`run-skill-tests`](../application/skills/run-skill-tests/SKILL.md) — Runner skill that executes `SKILL.test.md` scenarios

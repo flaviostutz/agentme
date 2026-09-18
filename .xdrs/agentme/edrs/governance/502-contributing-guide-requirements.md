@@ -67,4 +67,4 @@ The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` int
 ## References
 
 - [agentme-edr-301 - Monorepo structure](../platform/301-monorepo-structure.md)
-- [053-monorepo-setup skill](../platform/skills/053-monorepo-setup/SKILL.md)
+- [monorepo-setup skill](../platform/skills/monorepo-setup/SKILL.md)
