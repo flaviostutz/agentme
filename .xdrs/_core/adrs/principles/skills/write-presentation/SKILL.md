@@ -5,12 +5,45 @@ description: >
   Activate this skill when the user asks to create slides, a presentation, or a slide deck for an XDRS document.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Guides the creation of a Marp Markdown slide presentation that supports an existing XDRS document. The skill ensures the slides follow presentation standards (`_core-adr-policy-009`), are correctly placed in the `.assets/` folder, and maintain bidirectional links with the parent document.
+
+### Inputs
+
+#### Required
+
+- A parent XDRS document to present.
+
+#### Optional
+
+- Target audience for the slides.
+
+### Outputs
+
+#### Contents
+
+- A new Marp slide deck file.
+
+#### Changes
+
+- A bidirectional link added to the parent document.
+
+### Halt Conditions
+
+- Parent document does not exist yet.
+
+### User Interaction
+
+- Confirmation of audience when unclear.
+
+### Runtime Requirements
+
+- Marp-compatible viewer for visual rendering (optional).
 
 ## Instructions
 
@@ -158,6 +191,20 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - If the slide file name would exceed 64 characters, shorten the base name while keeping it recognizable.
 - If the content requires more than 30 slides, split into multiple slide sets with distinct audience or topic focus.
 - If the parent document changes after slides are created, the slides must be reviewed and updated.
+
+## Anti-Patterns
+
+- **Mistake:** Creating standalone slides for multiple documents without first creating a synthesizing article.
+  **Why it happens:** Building slides directly from several source documents feels quicker than authoring an article first.
+  **Instead:** When slides must cover multiple documents, create (or point to) an article first and build slides for that article.
+
+- **Mistake:** Packing dense paragraphs of text onto slides instead of short bullets and visuals.
+  **Why it happens:** Copying exact wording from the parent Policy feels safer than summarizing.
+  **Instead:** Minimize text per slide; use bullets, tables, and visuals, reserving longer text only for exact-wording cases like controls.
+
+- **Mistake:** Forgetting to add a back-link from the parent document to the new slide file.
+  **Why it happens:** The slide file itself already links to the parent, so the reverse link feels redundant.
+  **Instead:** Bidirectional links are required; always update the parent document's `## References` (Phase 6).
 
 ## References
 

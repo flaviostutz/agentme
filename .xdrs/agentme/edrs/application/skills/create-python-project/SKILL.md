@@ -6,7 +6,8 @@ description: >
   scaffold, or initialize a new Python package, CLI, or similar project structure.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 compatibility: Python 3.12+
 ---
 
@@ -19,6 +20,27 @@ organizes internal code following [agentme-edr-126](../../126-pragmatic-hexagona
 `.cache/`, and places runnable consumer projects under the sibling `examples/` folder.
 
 Related EDRs: [agentme-edr-103](../../103-python-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
+
+### Inputs
+
+#### Required
+- Package name (Python distribution/import name)
+
+#### Optional
+- Description, author, Python version, entry point, repo URL
+
+### Outputs
+
+#### Contents
+- Root/`lib/` Makefiles, `pyproject.toml`, `src/`, `tests/`, examples
+
+#### Changes
+- None
+
+### Halt Conditions
+- Package name not specified and not inferable from context
+- Framework-specific request conflicts with the baseline layout
+- Unsure whether the spike/experiment lint exemption applies
 
 ## Instructions
 
@@ -403,6 +425,18 @@ After creating the files:
 - If the project is fewer than 100 lines and explicitly marked as a spike or experiment, examples and linting may be skipped only when another applicable XDR allows it.
 - If an example needs extra dependencies, keep them in that example's `pyproject.toml`; do not move them into `lib/pyproject.toml` unless the library truly needs them.
 - If the user asks for an app with framework-specific needs such as FastAPI or Django, keep this baseline and add the framework config on top instead of replacing it.
+
+## Anti-Patterns
+
+- **Mistake:** Assuming host-installed Python/`uv` instead of pinning versions in `.mise.toml`.
+  **Why it happens:** The host tools appear to work fine during local testing.
+  **Instead:** Always pin the Python and `uv` versions in the root `.mise.toml`.
+- **Mistake:** Moving an example's extra dependencies into `lib/pyproject.toml`.
+  **Why it happens:** One shared dependency list looks simpler than several.
+  **Instead:** Keep example-only dependencies in that example's own `pyproject.toml`.
+- **Mistake:** Skipping examples and linting for any project that feels small.
+  **Why it happens:** "Small project" is treated as sufficient justification on its own.
+  **Instead:** Only skip when the project is under 100 lines AND another XDR explicitly allows it.
 
 ## References
 

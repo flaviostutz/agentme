@@ -8,7 +8,8 @@ description: >
   DevOps.
 metadata:
   author: flaviostutz
-  version: "1.1"
+  version: "1.2.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
@@ -20,6 +21,27 @@ client -- plus `az rest` for the handful of operations the extension does not ex
 dedicated subcommand. Contains no business logic (per rule 05): it only reads and writes
 data and normalizes it to the shape consumed by
 [`resolve-pr-comments`](../../../principles/skills/resolve-pr-comments/SKILL.md).
+
+### Inputs
+
+#### Required
+- PR identifier (org/project/repo + number) and operation
+
+#### Optional
+- Thread/comment id (replies, status changes)
+
+### Outputs
+
+#### Contents
+- Normalized thread/comment records; write confirmation
+
+#### Changes
+- PR thread comments or thread status (writes only)
+
+### Halt Conditions
+- `az`/`azure-devops` extension missing or unauthenticated
+- Write operation lacks explicit human confirmation
+- Only a non-`az` HTTP fallback is available
 
 ## Instructions
 
@@ -194,6 +216,18 @@ threads/comments `POST`, then updates thread status via the `PATCH` call.
   **Fix:** verify the `?discussionId=<threadId>` anchor against a live PR in the target
   organization before relying on it; degrade to the PR's own URL with no anchor when
   uncertain, rather than guessing at a format that might mislead the human.
+
+## Anti-Patterns
+
+- **Mistake:** Trusting a zero exit code from `az rest` as proof a write persisted.
+  **Why it happens:** `az rest` can silently fall back to an anonymous identity and still exit 0.
+  **Instead:** Always pass `--resource ...` explicitly and re-read the thread to confirm.
+- **Mistake:** Falling back to `curl`/web-UI scraping when `az` is missing or unauthenticated.
+  **Why it happens:** The target data often looks read-only, so a workaround feels harmless.
+  **Instead:** Stop at the Authentication check and wait for the human to fix `az`.
+- **Mistake:** Emitting a `"review-summary"` kind or fabricating a `diff_hunk` for Azure DevOps.
+  **Why it happens:** Callers modeled on GitHub's shape expect those fields to exist.
+  **Instead:** Normalize to `"thread-comment"` and leave `diff_hunk` null when absent.
 
 ## References
 

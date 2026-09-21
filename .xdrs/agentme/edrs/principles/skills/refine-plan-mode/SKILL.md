@@ -8,7 +8,8 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.0"
+  version: "3.1.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
@@ -28,6 +29,27 @@ Ensures that every plan is deeply validated through iterative consistency checks
 **Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
 
 **Artifact rule**: The plan is a single continuously-edited final artifact, not an append-only log. Process detail — Q&A rounds, phase-gate confirmations, todo-list tracking — never enters the deliverable; todos stay in the agent's todo-list tool. When a later phase reverses an earlier decision or section, edit it in place — never leave the superseded content beside the replacement. The final artifact's structure follows the **Final Plan Artifact Template** below.
+
+### Inputs
+
+#### Required
+- Task, feature, or decision to plan
+
+#### Optional
+- Constraints, prior art, related decisions
+
+### Outputs
+
+#### Contents
+- Final Plan Artifact (steps, verification, decisions)
+
+#### Changes
+- None until Phase 7 handoff
+
+### Halt Conditions
+- Unresolved ambiguity or open assumption remains
+- Human has not confirmed phase convergence
+- Low confidence in a subjective/domain decision
 
 ## Final Plan Artifact Template
 
@@ -301,14 +323,24 @@ Do not start execution to escape planning discomfort — only start when confide
 
 ## Anti-Patterns
 
-Avoid these common failure modes:
-
-- **Planning theater**: running rounds without real critical thinking. Asking many questions is correct behavior — the anti-pattern is asking hollow, self-validating questions, not asking frequently. Rounds that confirm the plan against itself add false confidence — checks must challenge assumptions, not validate them.
-- **Scope creep silence**: the plan grows beyond the original request without the human noticing. Every addition must be flagged explicitly.
-- **Agent self-validation**: the agent answers its own questions on subjective, domain, or intent-based decisions and proceeds without asking the human. The human is the oracle for domain knowledge, intent, and subjective decisions — the agent must not self-resolve those unilaterally.
-- **Confidence as a proxy for correctness**: an agent expressing certainty does not mean the plan is correct. Run all checks regardless of how confident the agent sounds.
-- **Treating unverified references as facts**: the agent references files, CLIs, statistics, library APIs, quoted sources, or named organizations without a tool call or direct inspection to confirm they exist. All high-risk references must be verified immediately or explicitly listed in the Unverified References section with a mandatory first-step check before use.
-- **Artifact bloat**: the final plan accretes process narrative (Q&A rounds, phase-gate confirmations, todo-list tracking, superseded drafts) instead of converging to the **Final Plan Artifact Template**. It's a continuously-edited deliverable, not an append-only log.
+- **Mistake:** Running Q&A rounds that only confirm the plan against itself.
+  **Why it happens:** Frequent questions look thorough even when they validate rather than challenge.
+  **Instead:** Ask questions that challenge assumptions, not ones that just self-validate.
+- **Mistake:** Letting the plan grow beyond the original request unnoticed.
+  **Why it happens:** Small additions feel harmless one at a time.
+  **Instead:** Flag every addition to the human explicitly.
+- **Mistake:** Answering subjective or domain questions on the agent's own and proceeding.
+  **Why it happens:** It feels faster than waiting for human input.
+  **Instead:** Treat the human as the oracle for domain and subjective decisions.
+- **Mistake:** Treating the agent's own certainty as proof the plan is correct.
+  **Why it happens:** A confident tone feels like validation on its own.
+  **Instead:** Run every check regardless of how confident the agent sounds.
+- **Mistake:** Citing files, APIs, statistics, or sources without verifying they exist.
+  **Why it happens:** Plausible-sounding references are mistaken for confirmed ones.
+  **Instead:** Verify immediately, or list in Unverified References with a first-step check.
+- **Mistake:** Letting the plan accumulate Q&A rounds, gate confirmations, and superseded drafts.
+  **Why it happens:** Process narrative is easy to leave behind when editing in a hurry.
+  **Instead:** Keep the plan a continuously-edited deliverable matching the Final Plan Artifact Template.
 
 ## Re-Plan Triggers
 

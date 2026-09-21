@@ -90,6 +90,23 @@ test('list renders one bullet block per section, not tab-aligned columns', () =>
   assert.match(stdout, /^ {2}similar-to: review-comment\/333$/m);
 });
 
+test('list --json renders one JSON object per section with the same fields', () => {
+  const file = writeFixture();
+  const { status, stdout } = run(['list', file, '--json']);
+  assert.equal(status, 0);
+  const rows = JSON.parse(stdout);
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].id, 'issue-comment/111');
+  assert.equal(rows[0].title, 'Contributor offers to help');
+  assert.equal(rows[1].id, 'review-comment/222');
+  assert.equal(rows[1]['author-raw'], 'octocat');
+  assert.equal(rows[1].criticality, 'medium');
+  assert.equal(rows[1]['automation-suggestion'], 'fully-auto');
+  assert.equal(rows[1].action, 'fix');
+  assert.equal(rows[1]['pending-reply'], 'drafted');
+  assert.equal(rows[1]['similar-to'], 'review-comment/333');
+});
+
 test('get returns a scalar field value', () => {
   const file = writeFixture();
   const { status, stdout } = run(['get', file, 'review-comment/222', 'status']);

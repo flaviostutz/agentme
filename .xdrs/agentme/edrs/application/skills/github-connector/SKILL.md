@@ -7,7 +7,8 @@ description: >
   post PR comments, resolve review threads, or check out a PR branch on GitHub.
 metadata:
   author: flaviostutz
-  version: "1.1"
+  version: "1.2.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
@@ -19,6 +20,27 @@ REST/GraphQL calls or handle GitHub-specific auth themselves. Contains no busine
 rule 05): it does not decide what a comment means, what action to take, or when to reply --
 it only reads and writes data and normalizes it to the shape consumed by
 [`resolve-pr-comments`](../../../principles/skills/resolve-pr-comments/SKILL.md).
+
+### Inputs
+
+#### Required
+- PR identifier (`owner/repo` + number) and operation
+
+#### Optional
+- Comment/thread id (replies, resolution)
+
+### Outputs
+
+#### Contents
+- Normalized comment/thread records; write confirmation
+
+#### Changes
+- PR comments, replies, thread resolution (writes only)
+
+### Halt Conditions
+- `gh` CLI missing or unauthenticated
+- Write operation lacks explicit human confirmation
+- Only a non-`gh` HTTP fallback is available
 
 ## Instructions
 
@@ -176,6 +198,18 @@ thread via the GraphQL mutation using that comment's thread node id.
   **Fix:** prefix every `gh` invocation with `GH_PAGER=cat` (e.g.
   `GH_PAGER=cat gh api repos/{owner}/{repo}/issues/{n}/comments`) when running non-
   interactively, which disables `gh`'s pager unconditionally.
+
+## Anti-Patterns
+
+- **Mistake:** Falling back to `curl`/HTML scraping when `gh` is missing or unauthenticated.
+  **Why it happens:** The target data is often technically public, so a workaround feels harmless.
+  **Instead:** Stop at the Authentication check and wait for the human to fix `gh`.
+- **Mistake:** Assuming a numeric REST comment/review id also works for GraphQL mutations.
+  **Why it happens:** Both values look like ordinary identifiers for the same comment.
+  **Instead:** Always resolve the thread's GraphQL node id first via `reviewThreads`.
+- **Mistake:** Posting a write without showing the mandatory confirmation summary.
+  **Why it happens:** The payload already looks correct, so confirmation feels redundant.
+  **Instead:** Always show System/Operation/Fields/Impact and wait for explicit confirmation.
 
 ## References
 

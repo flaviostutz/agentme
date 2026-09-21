@@ -7,7 +7,8 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "4.1"
+  version: "4.2.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
@@ -19,6 +20,27 @@ Activate when:
 - The acceptance criteria are missing or too shallow.
 - The change may affect multiple parts of a system and needs a vertical-slice check.
 - A requirement needs to be refined into a clear, testable story.
+
+### Inputs
+
+#### Required
+- Story request or draft to refine
+
+#### Optional
+- Initiative/epic context, related docs
+
+### Outputs
+
+#### Contents
+- Implementation-ready story, or split stories
+
+#### Changes
+- Story/initiative files under `.assets/`
+
+### Halt Conditions
+- Unresolved ambiguity or open decision remains
+- Human declines to answer a required question
+- Story still too large after a split is proposed
 
 ## Instructions
 
@@ -144,7 +166,7 @@ Before beginning analysis, gather factual context about the system, process, or 
 
 #### Step 2 — Requirements loop
 
-Loop asking questions across the 6 areas below until convergence. Apply the Phase navigation rule. A detailed or well-structured input does NOT exempt you from the question loop — treat apparent completeness as a signal to look harder for hidden ambiguities.
+Loop asking questions across the 6 areas below until convergence. Apply the Phase navigation rule and the Core Rules hard gate — a detailed-looking input does not exempt this loop.
 
 **Apply Context Probe rule** throughout this step: whenever a gap in any area could be resolved by an external document, spec, URL, screenshot, or artifact not yet in the Context Summary, ask for it specifically.
 
@@ -157,9 +179,9 @@ Loop asking questions across the 6 areas below until convergence. Apply the Phas
 | Edge cases | What unusual but valid scenarios must work? What invalid inputs or error paths must be handled? What happens on retries, duplicates, partial failure, or missing data? |
 | Dependencies | What upstream or downstream systems affect the change? Are there required approvals, sequencing, or external decisions? Does any migration, rollout, or compatibility concern exist? Is there a real named person — a domain expert, business owner, or decision maker — who can be contacted during implementation if questions arise? (Capture name and role only when they are an actual known person; never fabricate a contact.) |
 
-**Interface and integration scan** (apply Context Probe rule here): before closing Step 2, explicitly check for: external APIs invoked (endpoints, HTTP methods, request/response payloads, authentication, behavior); input/output data (field names, types, formats, valid values, meanings, constraints); documentation links (specs, API references, runbooks); contact names and roles (owners of external systems or business rules); process rules or business logic tied to the story. For any missing detail, ask targeted questions or apply the Context Probe rule to request external sources.
+**Interface and integration scan** (apply Context Probe rule): before closing Step 2, check for external APIs (endpoints, methods, payloads, auth), I/O data (fields, types, formats, constraints), docs/runbooks, contact names/roles, and business rules tied to the story. Ask targeted questions, or apply the Context Probe rule, for anything missing.
 
-Do not proceed to Step 3 while any open decision, unresolved assumption, or ambiguous rule exists. If you find yourself wanting to write "or X" / "TBD" / "to be documented" anywhere, that is a sign you skipped a question.
+Do not proceed to Step 3 while any open decision or ambiguous rule remains (Core Rules hard gate).
 
 #### Step 3 — Scope size evaluation
 
@@ -298,7 +320,7 @@ After all 9 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) 
 
 ### Phase 7: Implementer-Perspective Challenge
 
-For each angle, apply the same per-angle protocol defined in Phase 6: generate 10–20 questions about that angle grounded in the current story contents (not generic); attempt to answer each from what has been gathered; for every unanswered question or one that reveals a gap, ask the user via `vscode_askQuestions`; apply the Context Probe rule using implementer-relevant artifacts (an external spec, API reference, interface contract, or similar) when a gap could be resolved by one; mark the angle complete only when every question is answered or explicitly deferred as a named risk; and never resolve a choice point unilaterally. The Phase navigation rule (convergence, Skip, Backtracking) governs loop control on top of this protocol.
+For each angle, apply the Phase 6 per-angle protocol: 10–20 grounded questions, answer what's known, ask the user about gaps via `vscode_askQuestions`, apply the Context Probe rule for implementer artifacts (specs, API references, contracts), and never resolve a choice point unilaterally. The Phase navigation rule governs loop control.
 
 **1. Verifiable acceptance criteria**
 Can every acceptance criterion be independently tested by a developer without ambiguity? Is "done" unambiguous for each item, with no subjective interpretation required? Are criteria specific enough to write automated tests against?
@@ -492,6 +514,18 @@ Apply the same 4 criteria from Phase 2 Step 3. If two or more are met, the story
 - **User refuses to answer a clarifying question**: note it as an unresolved assumption and do not produce output until it is resolved.
 - **Request spans multiple independent user outcomes**: always split into separate vertical-slice stories rather than merging into one broad story.
 - **Diagram cannot be generated**: describe the user journey in a plain-language step-by-step walkthrough. The intent of Phase 5 is to externalize the journey — the medium is secondary.
+
+## Anti-Patterns
+
+- **Mistake:** Producing output while a decision is still open.
+  **Why it happens:** The input already looks detailed enough.
+  **Instead:** Apply the hard gate; resolve it via questions first.
+- **Mistake:** Merging independent user outcomes into one story.
+  **Why it happens:** One story feels simpler than several.
+  **Instead:** Split into independently releasable vertical slices.
+- **Mistake:** Treating a skipped Context Probe as unresolved.
+  **Why it happens:** Missing context feels like an open ambiguity.
+  **Instead:** Record it as "not provided," not a blocker.
 
 ## References
 
