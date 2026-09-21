@@ -5,12 +5,41 @@ description: >
   Activate this skill when the user asks to create, add, or write a new Policy (ADR, BDR, or EDR).
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Guides the creation of a well-structured Policy by following the standards in `_core-adr-policy-001`, consulting `policy-standards` for every core element definition, researching existing policies for conflicts, checking redundancy across related artifacts, and iterating until the document is concise, decision-focused, and clear about when the decision should be used.
+
+### Inputs
+
+#### Required
+
+- A decision topic to document.
+
+#### Optional
+
+- Preferred Policy type, if already known.
+
+### Outputs
+
+#### Contents
+
+- A new Policy file.
+
+#### Changes
+
+- Index entries added in the relevant scope.
+
+### Halt Conditions
+
+- Decision conflicts with an existing Policy, unresolved.
+
+### User Interaction
+
+- Clarifying questions when the decision topic is ambiguous.
 
 ## Instructions
 
@@ -186,6 +215,20 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - MUST prefer links and short references over repeating the same decision content across related documents.
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
+
+## Anti-Patterns
+
+- **Mistake:** Creating a new Policy that duplicates a decision already captured elsewhere instead of extending or linking it.
+  **Why it happens:** Writing a fresh Policy feels faster than researching existing ones in Phase 4.
+  **Instead:** Always research related Policies first; extend or reference an existing decision rather than duplicating it.
+
+- **Mistake:** Using lowercase "must"/"should" for normative requirements instead of uppercase BCP 14 keywords.
+  **Why it happens:** Natural writing style favors lowercase, and the distinction feels pedantic.
+  **Instead:** Use uppercase MUST/SHOULD/MAY for every normative statement in Details and Decision Outcome; verify in Phase 7.
+
+- **Mistake:** Skipping the Phase 0 prerequisites gate for a scope that "obviously" has no follows/extends chain.
+  **Why it happens:** The gate feels unnecessary when the scope looks simple.
+  **Instead:** Always run the prerequisites gate before writing; a missing governance layer produces an unreliable Policy.
 
 ## References
 

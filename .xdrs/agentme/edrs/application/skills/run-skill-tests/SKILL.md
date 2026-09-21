@@ -6,12 +6,34 @@ description: >
   or validate a skill, or before merging a PR that modifies a skill or its SKILL.test.md.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
 
 Loads `SKILL.test.md` from a skill directory, runs each scenario by invoking the target skill with the specified trigger, evaluates every assertion against the output, and produces a structured test report.
+
+### Inputs
+
+#### Required
+- Path to the skill directory to test
+
+#### Optional
+- None
+
+### Outputs
+
+#### Contents
+- Structured PASS/FAIL test report, per scenario and assertion
+
+#### Changes
+- None (read-only; never modifies the skill or test file)
+
+### Halt Conditions
+- Skill path not provided and not inferable from context
+- Skill directory or `SKILL.test.md` not found
+- `SKILL.test.md` has no scenarios
 
 ## Instructions
 
@@ -110,6 +132,18 @@ A scenario passes only when every one of its assertions passes. The overall outc
 - If `SKILL.test.md` contains no scenarios, output `ERROR: SKILL.test.md has no scenarios.` and halt.
 - If the target skill fails to activate (e.g., not registered in VS Code), note this in the report as FAIL with reason "skill could not be activated" and continue to remaining scenarios.
 - If `skill-version` in `SKILL.test.md` does not match `SKILL.md`, emit a WARNING at the top of the report but do not halt.
+
+## Anti-Patterns
+
+- **Mistake:** Modifying the skill or its test file while testing it.
+  **Why it happens:** An obvious bug seen mid-test is tempting to fix right away.
+  **Instead:** Never modify either file; only report the FAIL and evidence.
+- **Mistake:** Treating an INCONCLUSIVE assertion as a pass.
+  **Why it happens:** An ambiguous result can feel close enough to success.
+  **Instead:** Always treat INCONCLUSIVE the same as FAIL, with a reason.
+- **Mistake:** Silently continuing when `skill-version` mismatches `SKILL.md`.
+  **Why it happens:** A version-string mismatch looks cosmetic and unimportant.
+  **Instead:** Emit a visible WARNING at the top of the report.
 
 ## References
 

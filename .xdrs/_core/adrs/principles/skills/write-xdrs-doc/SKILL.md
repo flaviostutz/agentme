@@ -5,12 +5,45 @@ description: >
   Activate this skill when the user asks to create or write any XDRS element.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Routes the request to the appropriate XDRS authoring skill based on the type of document the user wants to create. Reads the target skill at runtime and follows its instructions in full.
+
+### Inputs
+
+#### Required
+
+- A free-form request to write a document.
+
+#### Optional
+
+- None.
+
+### Outputs
+
+#### Contents
+
+- The delegated skill's fully written file.
+
+#### Changes
+
+- Whatever changes the delegated skill makes.
+
+### Halt Conditions
+
+- No document type identifiable even after clarification.
+
+### User Interaction
+
+- A single disambiguation question when type is unclear.
+
+### Runtime Requirements
+
+- Same as the delegated skill's, if any.
 
 ## Instructions
 
@@ -60,3 +93,17 @@ Read the full content of the skill file for the inferred type, then follow all i
 - MUST NOT create documents of a type not listed in the routing table above.
 - When routing to the Policy skill, MUST also read `_core-adr-policy-016` (`.xdrs/_core/adrs/principles/016-policy-subjects.md`) before choosing a subject — it contains the allowed subject list, descriptions, and disambiguation tiebreaker rules.
 - When routing to the Policy skill, MUST also read `_core-adr-policy-017` (`.xdrs/_core/adrs/principles/017-policy-numbering-ranges.md`) before choosing a policy number — it defines the subject-based block ranges that determine valid numbers for each subject.
+
+## Anti-Patterns
+
+- **Mistake:** Authoring the document directly from general knowledge of the target type instead of reading the target skill file.
+  **Why it happens:** The router already knows roughly what a Policy or Skill looks like, so reading the full target skill feels redundant.
+  **Instead:** Always read the full target SKILL.md and follow it phase by phase; this skill is a router, not an author.
+
+- **Mistake:** Guessing the document type without asking when the request is genuinely ambiguous (e.g., could be Research or Article).
+  **Why it happens:** Asking feels like it slows the user down.
+  **Instead:** Ask the single focused disambiguation question in Phase 1 rather than guessing wrong and producing the wrong document type.
+
+- **Mistake:** Creating a document type not present in the routing table (e.g., a generic README) by improvising a new template.
+  **Why it happens:** The user's request doesn't map cleanly onto the six known types.
+  **Instead:** MUST NOT create documents of a type not listed in the routing table; clarify with the user instead.

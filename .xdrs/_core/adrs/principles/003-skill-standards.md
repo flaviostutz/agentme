@@ -73,6 +73,19 @@ Examples:
 - `.xdrs/business-x/edrs/devops/skills/ci-pipeline-debug/SKILL.md`
 - `.xdrs/_local/adrs/principles/skills/my-nice-skill/SKILL.md`
 
+Multiple skills under the same `[subject]/skills/` folder MAY share common instruction modules through a sibling `.assets/` directory placed directly under `skills/` (not inside any individual skill package) — for example `skills/.assets/shared-check.md`, referenced with a relative link from any skill in that folder. This keeps shared procedures DRY without duplicating instructions across skills.
+
+A skill MAY optionally be distributed as a self-contained standalone package (for example, to share it outside this repository) using the bundling mechanism defined in [`_core-adr-policy-021`](021-skill-bundling.md). Bundling is optional; skills that are always consumed as part of the full package do not need it.
+
+**Directory roles**
+
+| Path | Purpose |
+|---|---|
+| `SKILL.md` | Required entry point: frontmatter + instructions. |
+| `scripts/` | Optional executable scripts the agent may run. |
+| `references/` | Optional deep reference material split out of `SKILL.md`. |
+| `.assets/` | Optional images, templates, and other local resource files. |
+
 **Skill naming**
 
 Unlike Policies, Research, Articles, and Initiatives, skill packages are not auto-numbered. A skill is identified by a descriptive name, keeping it compatible with the wider agentskills ecosystem, where clients (including this framework's own agentskills-format consumers) expect a plain descriptive identifier rather than an auto-generated sequence number. The name MAY still contain digits, including as a prefix, when that is simply part of the descriptive name (e.g., `2fa-setup`). Each skill name MUST be unique within its `scope/type/subject/skills/` namespace; check for an existing skill with the same name before creating a new one.
@@ -82,23 +95,51 @@ Unlike Policies, Research, Articles, and Initiatives, skill packages are not aut
 ```
 ---
 name: [skill-name]              # required: matches the folder name exactly; max 64 chars
-description: >            # required: what the skill does AND when to activate it; max 1024 chars
+description: >            # required: what the skill does AND when to activate it; max 1024 chars (SHOULD stay near 250 when the trigger can be stated that tightly)
   Concise explanation of the skill and the situations in which an agent should load it.
 license: <license>        # optional
-metadata:                 # optional: arbitrary key/value pairs
-  author: <team-or-person>
-  version: "1.0"
-compatibility: <env>      # optional: system requirements or intended products
-allowed-tools: <tools>    # optional (experimental): space-delimited pre-approved tools
+metadata:                 # required
+  author: <team-or-person>       # required
+  version: "1.0.0"                # required: full semantic versioning
+  updated: YYYY-MM-DD              # required: date of the last material content change
 ---
 
 ## Overview
 
 Brief description of the skill goal.
 
+### Inputs
+
+#### Required
+- Bare minimum the skill needs to start working, one bullet per item, or "None".
+
+#### Optional
+- Extra helpful context the skill can use if given, one bullet per item, or "None".
+
+### Outputs
+
+#### Contents
+- Generated files or chat-delivered results, one bullet per item, or "None".
+
+#### Changes
+- External system mutations that are part of the skill's main objective, one bullet per item, or "None".
+
+### Halt Conditions
+- Specific triggers that make the skill stop before completing, one bullet per item, or "None".
+
+### User Interaction
+
+Optional section: human-in-the-loop (HITL) exchanges during execution — a clarifying question or
+an approval gate — one bullet per item, or "None". Omit this section entirely when none apply.
+
+### Runtime Requirements
+
+Optional section: tooling, network access, or environment prerequisites beyond the LLM itself,
+one bullet per item. Omit this section entirely when none apply.
+
 ## Instructions
 
-Step-by-step instructions the agent should follow.
+Step-by-step instructions the agent should follow. State one clearly recommended approach first when several are viable; note alternatives briefly afterward.
 
 ## Examples
 
@@ -107,18 +148,57 @@ Concrete input/output examples that illustrate correct behavior.
 ## Edge Cases
 
 Known gotchas and how to handle them.
+
+## Anti-Patterns
+
+At least 3 entries, each grounded in a real observed mistake:
+- **Mistake:** what an agent or author incorrectly did.
+  **Why it happens:** the reasoning or shortcut that leads there.
+  **Instead:** the correct approach.
 ```
 
 Rules:
 - The `name` field MUST match the folder name exactly (e.g., `code-review`). This keeps skill identifiers simple and aligned with the filesystem hierarchy.
 - The directory name and the `name:` field MUST contain only lowercase alphanumeric characters and hyphens (e.g., `code-review`, `2fa-setup`).
-- `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter.
-- `## Instructions` SHOULD include verification steps or acceptance criteria at the end of the task, or at the end of major phases when partial validation matters.
+- `metadata` is REQUIRED. `metadata.version` MUST use full semantic versioning (`MAJOR.MINOR.PATCH`, e.g. `1.0.0`), consistent with [`_core-adr-policy-005`](005-semantic-versioning-for-xdrs-packages.md); `metadata.author` MUST be non-empty; `metadata.updated` MUST be an ISO `YYYY-MM-DD` date, refreshed whenever the skill's content materially changes.
+- `description` SHOULD stay near 250 characters when the activation trigger can be stated that tightly, even though the hard cap remains 1024 characters — it is loaded into context on every activation scan.
+- `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter, and MUST contain nested subsections, in order, for `### Inputs`, `### Outputs`, `### Halt Conditions`, then the optional `### User Interaction` and `### Runtime Requirements`.
+- `### Inputs` MUST contain `#### Required` (the bare minimum needed to invoke the skill) then `#### Optional` (helpful extra context), in that order.
+- `## Instructions` SHOULD state one clearly recommended approach first when multiple are viable, noting alternatives briefly afterward, and SHOULD include verification steps or acceptance criteria at the end of the task or major phases.
+- `## Examples` SHOULD include 2-3 example prompts a user could give as input, alongside a short description of what to expect during execution and as output for each.
+- `### Outputs` covers only end-objective results, not intermediary items, and MUST contain `#### Contents` (generated files or chat-delivered results) then `#### Changes` (external system mutations that are part of the main objective), in that order.
+- `### Halt Conditions` MUST list this skill's specific stop-before-completing triggers, grounded in at least missing required input, dubious/ambiguous input, and insufficient agent confidence — distinct from `## Edge Cases` (activation/boundary conditions) and `## Anti-Patterns` (execution mistakes). A partial or empty result the skill still finishes and returns belongs in `### Outputs`, not `### Halt Conditions`.
+- `### User Interaction` is OPTIONAL: documents human-in-the-loop (HITL) exchanges during execution — a clarifying question or an approval gate — distinct from `### Halt Conditions` (which stop execution rather than pause-and-resume it) and `### Runtime Requirements` (static prerequisites, not an interactive exchange); omit the section entirely when the skill has none.
+- `### Runtime Requirements` is OPTIONAL: free-form bullets for tooling, network, or environment prerequisites beyond the LLM itself; omit the section entirely when none apply.
+- Every bullet in `#### Required`, `#### Optional`, `#### Contents`, `#### Changes`, `### Halt Conditions`, and `### User Interaction` MUST be under 10 words, or the section MUST contain a single "None" bullet instead.
+- `## Anti-Patterns` is REQUIRED with a minimum of 3 entries, each naming a Mistake, Why it happens, and the correct approach Instead, grounded in real observed issues rather than theoretical ones. Keep it distinct from `## Edge Cases`: Edge Cases are activation/boundary conditions, Anti-Patterns are execution mistakes.
+- Key recommendations MAY be tagged `[PROVEN]`, `[RECOMMENDED]`, or `[EXPERIMENTAL]` when a skill offers several viable approaches at different confidence levels.
 - For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
-- Keep `SKILL.md` under 6500 words. Move lengthy reference material to `references/`.
+- `SKILL.md` MUST stay under 7000 words. Move lengthy reference material to `references/`; each `references/*.md` file MUST stay under 4000 words, splitting further when a single file grows unwieldy.
 - Use relative paths for all links; MUST NOT use absolute paths starting with `/`.
 - File names MUST be lowercase.
 - MUST NOT use emojis in skill content.
+
+**Script standards**
+
+When a skill includes `scripts/`:
+- Each script MUST declare its runtime/interpreter at the top (shebang or equivalent header comment).
+- SHOULD use the language already used by the consuming project when known, rather than mandating one language repo-wide.
+- MUST avoid non-essential external dependencies, or document install steps in `SKILL.md` when unavoidable.
+- SHOULD support both human-readable and machine-readable (JSON) output when producing analysis or report output.
+- SHOULD stay single-purpose.
+
+**Quality gate**
+
+Before creating a skill, confirm it removes real ambiguity or repetitive effort compared to not having it. Skills that only restate a Policy, or that handle a one-off task unlikely to recur, SHOULD NOT be created.
+
+**Clarify First**
+
+Generative skills — those producing a deliverable document (Policy, Skill, Article, Research, Initiative, Presentation) — SHOULD list the 2-4 inputs they need confirmed (e.g., topic, scope, audience) and ask the user when any is unknown, stopping once those inputs are confirmed rather than over-interrogating. Skills that route, review, or report instead of authoring a new deliverable do not need this pattern.
+
+**Halt behavior**
+
+Skills MUST halt on missing required input, dubious/ambiguous input, or insufficient agent confidence, unless the user explicitly instructs the agent to proceed anyway. This override applies generally; a skill's own `## Halt Conditions` list does not need to restate it.
 
 **Validation**
 
@@ -134,6 +214,10 @@ skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[skill-name]
   * Reason: Breaks the natural association between a decision (Policy) and the skill that implements it; makes navigation harder.
 * (CHOSEN) **agentskills-compatible packages co-located with XDRS** - Standardized format with scoped discovery and clear ownership.
   * Reason: Reuses proven agentskills tooling, aligns with the existing XDRS scope/subject hierarchy, and keeps skills close to the decisions they implement.
+* (REJECTED) **Fully self-contained skills, no shared assets** - Every skill package repeats any instruction shared with another skill.
+  * Reason: Duplicates maintenance burden across skills and drifts out of sync over time.
+* (CHOSEN) **Shared `.assets/` modules plus optional bundling** - Keep shared instruction modules DRY in-repo, and offer an optional per-skill bundling mechanism for standalone distribution.
+  * Reason: Preserves DRY authoring for the common case while still allowing a single skill to be distributed as a self-contained artifact when needed ([`_core-adr-policy-021`](021-skill-bundling.md)).
 
 ## References
 
@@ -142,4 +226,6 @@ skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[skill-name]
 - [skills-ref validation library](https://github.com/agentskills/agentskills/tree/main/skills-ref)
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
+- [_core-adr-policy-005 - Semantic versioning for XDRS packages](005-semantic-versioning-for-xdrs-packages.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)
+- [_core-adr-policy-021 - Skill bundling](021-skill-bundling.md)

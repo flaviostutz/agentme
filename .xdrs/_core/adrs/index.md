@@ -26,6 +26,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-018](principles/018-external-path-symlinks.md) - **External path symlinks** — How to make XDRS files accessible from paths outside the .xdrs/ root using symlinks
 - [_core-adr-policy-019](principles/019-compiled-scope-type.md) - **compiled scope type** — Defines the `compiled` scope type: scopes whose policies are compiled from external authoritative sources with strict source traceability and no invented content
 - [_core-adr-policy-020](principles/020-media-and-asset-standards.md) - **Media and asset standards** — Canonical diagram format preference order and non-Markdown asset rules for all XDRS document types
+- [_core-adr-policy-021](principles/021-skill-bundling.md) - **Skill bundling** — Optional per-skill Makefile mechanism to stage a self-contained dist/ output for standalone distribution
 
 ## Skills
 

@@ -1,6 +1,6 @@
 ---
 skill: github-connector
-skill-version: "1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios

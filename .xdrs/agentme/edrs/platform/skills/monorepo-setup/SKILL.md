@@ -8,7 +8,8 @@ description: >
   complies with the standard structure.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 ---
 
 ## Overview
@@ -19,6 +20,27 @@ areas, Mise-managed tooling, and Makefiles at every level so any contributor can
 test any part of the monorepo with a single, predictable command.
 
 Related EDRs: [agentme-edr-301](../../301-monorepo-structure.md), [agentme-edr-502](../../../governance/502-contributing-guide-requirements.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md)
+
+### Inputs
+
+#### Required
+- Applications and modules to scaffold or extend
+
+#### Optional
+- Primary language(s), tool versions, target directory
+
+### Outputs
+
+#### Contents
+- Root/app/module Makefiles, READMEs, `.mise.toml`, `.gitignore`
+
+#### Changes
+- None
+
+### Halt Conditions
+- Applications/modules not specified and not inferable from context
+- Cross-application dependency requested (ambiguous boundary)
+- Existing README/Makefile found without explicit confirmation
 
 ## Instructions
 
@@ -338,3 +360,15 @@ test:
 - **Module with no compilable output (e.g., pure scripts):** Still create the Makefile; `build` can be a no-op (`@true`) but the target must exist.
 - **Language not listed above:** Mirror the pattern — `build` produces an artifact, `lint` runs static analysis, `test` runs tests. Adapt commands to the actual toolchain.
 - **Existing files:** Never overwrite existing `README.md`, `CONTRIBUTING.md`, or `Makefile` files without user confirmation. Diff and propose additions instead.
+
+## Anti-Patterns
+
+- **Mistake:** Letting one application import another application's code directly.
+  **Why it happens:** Reaching across app folders feels faster than publishing a shared library.
+  **Instead:** Refuse the direct import and move the shared code into `shared/libs/`.
+- **Mistake:** Silently overwriting an existing `README.md`, `CONTRIBUTING.md`, or `Makefile`.
+  **Why it happens:** Scaffolding logic assumes a clean, empty target directory.
+  **Instead:** Diff against the existing file and propose additions instead of overwriting.
+- **Mistake:** Skipping the `Makefile` for a module with no compilable output.
+  **Why it happens:** A pure-script module seems to need no build step at all.
+  **Instead:** Still create the Makefile with a no-op `build` target (`@true`) for consistency.

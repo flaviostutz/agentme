@@ -1,6 +1,6 @@
 ---
 skill: create-golang-project
-skill-version: "1.0"
+skill-version: "1.1.0"
 ---
 
 ## Test Scenarios

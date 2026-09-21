@@ -6,7 +6,8 @@ description: >
   asks to create, scaffold, or initialize a new Go project, CLI binary, or Go module.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 compatibility: Go 1.21+
 ---
 
@@ -15,6 +16,27 @@ compatibility: Go 1.21+
 Creates a complete Go project from scratch, following the layout from [agentme-edr-102](../../102-golang-project-tooling.md) and [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md). Business logic lives in `app/<feature>/` packages; CLI wiring lives in `adapters/cli/`; outbound integrations live in `adapters/connectors/`; `main.go` is a thin dispatcher. The module root owns its `Makefile`, `README.md`, `dist/`, and `.cache/` folders.
 
 Related EDRs: [agentme-edr-102](../../102-golang-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
+
+### Inputs
+
+#### Required
+- Go module path (e.g. `github.com/<owner>/<project>`)
+
+#### Optional
+- Binary name, description, author, Go version, feature name
+
+### Outputs
+
+#### Contents
+- `go.mod`, `main.go`, Makefile, `.golangci.yml`, `app/<feature>/`, `adapters/cli/`
+
+#### Changes
+- None
+
+### Halt Conditions
+- Module path not specified and not inferable from context
+- Business logic requested inside `main.go` or `adapters/cli/`
+- Unsure whether an `internal/` package is justified
 
 ## Instructions
 
@@ -352,3 +374,34 @@ Fix any compile or lint errors before finishing.
 - All development tasks go through `make` targets. The Makefile recipes call `mise exec -- go ...` and related tools directly.
 - Do not create an `internal/` package unless explicitly justified (importability is preferred).
 - If the project is a reusable library, place consumer examples in a sibling `examples/` folder outside the module root and keep them on the public module import path.
+
+## Examples
+
+**Input:** "Create a Go CLI project called `logscan` for parsing log files"
+- Module `github.com/<owner>/logscan`, binary `logscan`, feature package `parse`
+- Creates `main.go`, `Makefile`, `.mise.toml`, `.golangci.yml`, `go.mod`
+- Creates `app/parse/parse.go` plus test, `adapters/cli/parse.go`
+- Verifies with `make setup && make all`
+
+**Input:** "Scaffold a Go module inside an existing monorepo"
+- Uses the workspace module path plus the project subdirectory as the module name
+- Reuses the monorepo's shared Makefile conventions instead of duplicating them
+
+## Edge Cases
+
+- **Existing files** — skip creation; adapt references to the existing structure.
+- **Library instead of CLI** — omit `adapters/cli/` and `main.go`; place consumer examples in a sibling `examples/` folder.
+- **Multiple features from the start** — scaffold each as its own `app/<feature>/` package; do not merge unrelated logic into one package.
+- **Outbound integration needed** — add `adapters/connectors/<resource>/` rather than calling external services from `app/`.
+
+## Anti-Patterns
+
+- **Mistake:** Putting business logic directly in `main.go` or `adapters/cli/`.
+  **Why it happens:** It is the fastest path to a working binary during scaffolding.
+  **Instead:** Keep `main.go`/CLI adapters thin; put logic in `app/<feature>/`.
+- **Mistake:** Using `fmt.Println` for diagnostic or debug output.
+  **Why it happens:** It is the simplest way to print while writing new code.
+  **Instead:** Log with `logrus` at the appropriate level instead.
+- **Mistake:** Creating an `internal/` package by default.
+  **Why it happens:** It feels like a safe default that blocks unwanted external imports.
+  **Instead:** Keep packages importable unless there is an explicit justification.

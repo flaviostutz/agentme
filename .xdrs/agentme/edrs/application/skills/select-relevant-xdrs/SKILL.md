@@ -7,7 +7,8 @@ description: >
    bootstrap agentme guidance into a repository without manually deciding which records to keep.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 compatibility: Node.js 18+
 ---
 
@@ -16,6 +17,27 @@ compatibility: Node.js 18+
 Installs the full agentme XDR set for a repository through the published CLI, then removes only the
 records that clearly do not fit the target project by passing explicit `--exclude` flags during
 extraction.
+
+### Inputs
+
+#### Required
+- Target repository to install/update agentme XDRs into
+
+#### Optional
+- Explicit list of XDRs to keep or exclude
+
+### Outputs
+
+#### Contents
+- Installed `.xdrs/` tree, minus excluded records
+
+#### Changes
+- Existing `.xdrs/` merged/updated in place
+
+### Halt Conditions
+- Package does not expose enough metadata to enumerate shipped XDRs
+- Extraction would overwrite locally customized agent files
+- Candidate exclusion is debatable (keep instead of guessing)
 
 ## Instructions
 
@@ -130,6 +152,18 @@ Input: "Set up agentme for this repo"
   likely merge points.
 - If the repository is a spike or intentionally minimal experiment, still prefer the smallest preset
    set of workflow artifacts and avoid adding scaffolding that the project will not use.
+
+## Anti-Patterns
+
+- **Mistake:** Excluding an XDR whenever its fit is merely debatable.
+  **Why it happens:** Fewer records feels like a cleaner, more tailored result.
+  **Instead:** Keep the XDR; exclude only records that clearly do not fit.
+- **Mistake:** Overwriting locally customized agent files during extraction.
+  **Why it happens:** Preset extraction defaults to replacing existing files.
+  **Instead:** Warn the user first and describe the likely merge points.
+- **Mistake:** Failing immediately when the CLI cannot list shipped XDRs directly.
+  **Why it happens:** The direct enumeration path is the expected happy path.
+  **Instead:** Fall back to published package metadata or the README inventory.
 
 ## References
 

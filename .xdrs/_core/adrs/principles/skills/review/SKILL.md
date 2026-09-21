@@ -6,12 +6,45 @@ description: >
    Also activate when you identify a need to check compliance with Policies during implementation.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Performs a structured review of code changes or files against the Policies in the repository, categorizing findings by severity and type, and reporting them without modifying any code.
+
+### Inputs
+
+#### Required
+
+- A git diff, file set, or documents to review.
+
+#### Optional
+
+- Specific Policies or scope to focus on.
+
+### Outputs
+
+#### Contents
+
+- Structured ERROR/WARNING findings report in chat.
+
+#### Changes
+
+- None.
+
+### Halt Conditions
+
+- A declared follows scope is missing or unreadable.
+- A declared extends scope is missing or unreadable.
+- A local meta-policy file exists but cannot be read.
+- The declared scope-type has no governance policy.
+
+### Runtime Requirements
+
+- `git` available for diff-scoped reviews.
+- `npx @mermaid-js/mermaid-cli` for Mermaid diagram checks.
 
 ## Instructions
 
@@ -112,10 +145,23 @@ Scope: [scope identifier]
 - If no Policies apply to the scope, output "No applicable Policies found" and skip reporting.
 - If a potential violation is in pre-existing code outside the diff, report it as WARNING only.
 
+## Anti-Patterns
+
+- **Mistake:** Reporting a finding based on general good-practice opinion with no specific Policy citation.
+  **Why it happens:** The reviewer conflates "seems wrong" with "violates a documented rule".
+  **Instead:** Drop any finding that cannot be traced to a specific rule in an Accepted Policy.
+
+- **Mistake:** Skipping the prerequisites gate (follows/extends/local meta-policy checks) when the scope looks simple.
+  **Why it happens:** The gate feels like overhead for a quick review request.
+  **Instead:** Always run the full prerequisites gate first; a silent FAIL on a missing governance layer is safer than an unreliable PASS.
+
+- **Mistake:** Editing the reviewed code directly to "just fix it" instead of only reporting findings.
+  **Why it happens:** Fixing feels faster than describing the fix.
+  **Instead:** This skill MUST NOT edit code; only report findings and suggested actions.
+
 ## References
 
 - [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-002 - Policy standards](../../002-policy-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
 - [_core-adr-policy-020 - Media and asset standards](../../020-media-and-asset-standards.md)
-

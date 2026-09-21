@@ -4,12 +4,41 @@ description: >
    Creates a new article document following XDRS article standards: selects scope, type, subject, and number; then writes a focused synthetic text that combines and links multiple Policies, Research documents, and Skills around a topic. Activate this skill when the user asks to create, add, or write a new article, guide, or overview document within an XDRS project.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Guides the creation of a well-structured article by following `_core-adr-policy-004`, consulting `policy-standards` for every core element definition, researching the Policies, Research documents, and Skills to synthesize, and producing a concise document that serves as a navigable view without duplicating decision content.
+
+### Inputs
+
+#### Required
+
+- A topic for the article.
+
+#### Optional
+
+- Target audience, scope, or XDRS elements to synthesize.
+
+### Outputs
+
+#### Contents
+
+- A new article file.
+
+#### Changes
+
+- Index entry and back-references in synthesized documents.
+
+### Halt Conditions
+
+- No relevant Policies, Research, or Skills exist to synthesize.
+
+### User Interaction
+
+- Clarification of target audience when unspecified.
 
 ## Instructions
 
@@ -150,6 +179,22 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - MUST keep scope `_local` unless the user explicitly states otherwise.
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
 - MUST defer to active and applicable Policies when article synthesis conflicts with them.
+
+## Anti-Patterns
+
+- **Mistake:** Reproducing decision text verbatim from a Policy instead of summarizing and linking to it.
+  **Why it happens:** Copying feels safer/more accurate than paraphrasing.
+  **Instead:** Articles are views, not decisions; summarize and link back to the authoritative Policy.
+
+- **Mistake:** Writing an article that spans multiple unrelated subjects without splitting it into chapters.
+  **Why it happens:** A broad topic feels easier to cover in one long document.
+  **Instead:** Once content approaches ~2000 words or covers distinct sub-topics, split into separate chapter articles per Phase 5/Edge Cases guidance.
+
+- **Mistake:** Skipping Phase 0 clarifying questions (topic/audience/scope) because the request seems clear.
+  **Why it happens:** The request looks self-explanatory, so asking feels like unnecessary friction.
+  **Instead:** Always ask the mandatory Phase 0 questions in a single batch before reading standards; audience in particular is easy to assume wrongly.
+
+## References
 
 - [_core-adr-policy-004 - Article standards](../../004-article-standards.md)
 - [_core-adr-policy-006 - Research standards](../../006-research-standards.md)

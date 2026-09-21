@@ -4,12 +4,49 @@ description: >
   Compiles or updates any scope declaring `scope-type: compiled` from its configured external sources. Reads compilation meta-policies to discover sources, fetches content (git clone, local copy, or web scrape), plans policy changes, migrates policies one at a time with structured format, `## Source` sections, and `**compilation-note:**` markers, then runs lint and review. Documents source inconsistencies without inventing fixes. Activate when the user asks to compile, update, sync, refresh, or recompile a compiled scope.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.0.0"
+  updated: 2026-09-19
 ---
 
 ## Overview
 
 Performs a full compilation cycle for any scope declaring `scope-type: compiled`: discovers compilation meta-policies across all type folders, fetches sources into a temporary directory, plans which policies to create, update, or remove, migrates them one at a time with full source traceability, runs lint and review, and documents any inconsistencies found in the source. Works for both initial compilation and re-compilation (updates). Requires `_core-adr-policy-019-compiled-scope-type` to be present in the workspace.
+
+### Inputs
+
+#### Required
+
+- Name of the compiled scope to sync.
+
+#### Optional
+
+- None.
+
+### Outputs
+
+#### Contents
+
+- Updated compiled scope, linted and reviewed.
+
+#### Changes
+
+- Policy files created, updated, or removed.
+
+### Halt Conditions
+
+- No local meta-policy found in the scope.
+- Scope does not declare scope-type: compiled.
+- A source cannot be fetched or converted.
+
+### User Interaction
+
+- Confirmation of the CREATE/UPDATE/REMOVE plan before migrating.
+
+### Runtime Requirements
+
+- Network/git access for remote sources.
+- `uvx markitdown` for non-Markdown source conversion, if needed.
+- `npx @playwright/cli` as a web-scraping fallback.
 
 ## Instructions
 
@@ -119,3 +156,17 @@ After writing each policy:
    - Inconsistencies documented (with file path).
    - Any sources that could not be fetched.
    - Lint and review pass/fail status.
+
+## Anti-Patterns
+
+- **Mistake:** Inventing content to fill gaps when source material is incomplete or ambiguous.
+  **Why it happens:** The agent wants to produce a "complete" policy and fills gaps with plausible-sounding text.
+  **Instead:** Transcribe faithfully, preserve ambiguities as-is, and record inconsistencies in Phase 7 instead of guessing.
+
+- **Mistake:** Skipping the Phase 2 confirmation and migrating policies before the user approves the CREATE/UPDATE/REMOVE plan.
+  **Why it happens:** Momentum from prior compilations makes the plan feel obviously correct.
+  **Instead:** Always present the TODO list and wait for explicit confirmation before Phase 3.
+
+- **Mistake:** Leaving the temporary `.tmp/compilation-[ts]/` directory behind after a run.
+  **Why it happens:** Phase 8 cleanup is easy to forget once the summary is reported.
+  **Instead:** Always remove the temporary directory as the first Phase 8 step, even on partial failures.

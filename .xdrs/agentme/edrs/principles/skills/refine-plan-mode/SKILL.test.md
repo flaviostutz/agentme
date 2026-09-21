@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.0"
+skill-version: "3.1.0"
 ---
 
 ## Test Scenarios

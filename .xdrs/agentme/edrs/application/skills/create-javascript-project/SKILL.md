@@ -7,7 +7,8 @@ description: >
   package, or similar project structure.
 metadata:
   author: flaviostutz
-  version: "1.0"
+  version: "1.1.0"
+  updated: 2026-09-21
 compatibility: JavaScript/TypeScript, Node.js 18+
 ---
 
@@ -21,6 +22,26 @@ into `.cache/`, and uses Makefiles as the only entry points. Boilerplate is deri
 [filedist](https://github.com/flaviostutz/filedist) project.
 
 Related EDRs: [agentme-edr-101](../../101-javascript-project-tooling.md), [agentme-edr-016](../../../principles/016-cross-language-module-structure.md), [agentme-edr-126](../../126-pragmatic-hexagonal-architecture.md)
+
+### Inputs
+
+#### Required
+- Package name (npm-compatible)
+
+#### Optional
+- Description, author, Node.js version, CLI vs. library
+
+### Outputs
+
+#### Contents
+- Root/`lib`/`examples` Makefiles, `package.json`, `src/`
+
+#### Changes
+- None
+
+### Halt Conditions
+- Package name not specified and not inferable from context
+- Unclear whether the project needs CLI bundling or examples
 
 ## Instructions
 
@@ -446,3 +467,15 @@ All `[package-name]` replaced with `retry-client`.
 - **CLI tool** — add `"bin": "dist/main.js"` to `package.json` and create `lib/src/main.ts` as the CLI entry point; add `esbuild` bundle target in `lib/Makefile`
 - **No examples needed** — omit the `examples/` directory; remove the `examples` delegation from root `Makefile`
 - **Binary bundling (Lambda/browser)** — add an esbuild step to `lib/Makefile`: `pnpm exec esbuild src/main.ts --bundle --platform=node --outfile=dist/bundle.js`
+
+## Anti-Patterns
+
+- **Mistake:** Creating `examples/` even when the user said no examples were needed.
+  **Why it happens:** The scaffolding template always includes an `examples/` folder by default.
+  **Instead:** Omit `examples/` and remove its delegation from the root `Makefile`.
+- **Mistake:** Adding a CLI `bin` entry without an `esbuild` bundle target.
+  **Why it happens:** `package.json`'s `bin` field is easy to add but easy to forget bundling for.
+  **Instead:** Always pair a CLI entry point with an `esbuild` bundle target in `lib/Makefile`.
+- **Mistake:** Leaving `[package-name]` placeholders unreplaced in generated files.
+  **Why it happens:** Placeholders are copied from boilerplate across many files at once.
+  **Instead:** Verify every `[package-name]` occurrence was replaced before finishing.
