@@ -9,7 +9,7 @@
  * Usage:
  *   update-section.js init <file> <pr-number> <pr-link> <auto-summary...>  (raw PR summary from stdin)
  *   update-section.js append-section <file>                               (full "### ..." section from stdin)
- *   update-section.js list <file>
+ *   update-section.js list <file> [--json]
  *   update-section.js get <file> <id> <field>
  *   update-section.js set <file> <id> <field> <value...>
  *   update-section.js set-block <file> <id> <field>   (new value read from stdin)
@@ -44,7 +44,7 @@ function usage() {
   return `Usage:
   update-section.js init <file> <pr-number> <pr-link> <auto-summary...>  (raw PR summary from stdin)
   update-section.js append-section <file>                               (full "### ..." section from stdin)
-  update-section.js list <file>
+  update-section.js list <file> [--json]
   update-section.js get <file> <id> <field>
   update-section.js set <file> <id> <field> <value...>
   update-section.js set-block <file> <id> <field>   (new value read from stdin)
@@ -205,7 +205,9 @@ function main(argv) {
   const lines = original.split('\n');
 
   if (cmd === 'list') {
+    const jsonOutput = rest.includes('--json');
     const idx = headerIndices(lines);
+    const rows = [];
     for (let s = 0; s < idx.length; s++) {
       const start = idx[s];
       const end = s + 1 < idx.length ? idx[s + 1] : lines.length;
@@ -237,9 +239,16 @@ function main(argv) {
       } catch {
         // field absent in a malformed section -- leave blank, never fail `list`
       }
-      // Bullets avoid relying on column/tab alignment, which breaks once field values vary in width.
+      rows.push({ ...row, title: lines[start].slice(4).trim(), 'similar-to': similarTo });
+    }
+    if (jsonOutput) {
+      console.log(JSON.stringify(rows, null, 2));
+      return;
+    }
+    // Bullets avoid relying on column/tab alignment, which breaks once field values vary in width.
+    for (const row of rows) {
       console.log(`- id: ${row.id}`);
-      console.log(`  title: ${lines[start].slice(4).trim()}`);
+      console.log(`  title: ${row.title}`);
       console.log(`  author-raw: ${row['author-raw']}`);
       console.log(`  status: ${row.status}`);
       console.log(`  criticality: ${row.criticality}`);
@@ -247,7 +256,7 @@ function main(argv) {
       console.log(`  action: ${row.action}`);
       console.log(`  pending-reply: ${row['pending-reply']}`);
       console.log(`  resolve-on-apply: ${row['resolve-on-apply']}`);
-      console.log(`  similar-to: ${similarTo}`);
+      console.log(`  similar-to: ${row['similar-to']}`);
     }
     return;
   }

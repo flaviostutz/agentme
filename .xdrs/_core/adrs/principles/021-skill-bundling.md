@@ -43,7 +43,7 @@ When a skill's `build` target embeds another skill as a dependency, `build` MUST
 DEPS := ../shared-skill ../another-skill
 BUILD := dist/build
 
-build:
+build: clean
 	mkdir -p $(BUILD)
 	cp SKILL.md $(BUILD)/
 	@for d in $(DEPS); do \
@@ -74,6 +74,9 @@ The bundling `Makefile` MUST expose `build`, `test`, and `clean` targets, mirror
 
 #### 10-zip-artifact
 `make build` SHOULD also produce a single zip archive of the complete `dist/build/` tree (which already includes every bundled dependency folder from rule `06-recursive-delegation`) as `dist/<skill-name>.zip`. Since `dist/build/` is a subdirectory of `dist/`, the archive naturally cannot include itself: create it directly, for example with `cd dist/build && zip -rq ../<skill-name>.zip .`.
+
+#### 11-build-depends-on-clean
+The `build` target MUST depend on the `clean` target (`build: clean`) so every build starts from a clean `dist/`, instead of duplicating `clean`'s removal logic inline.
 
 ## References
 

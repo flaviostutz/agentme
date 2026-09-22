@@ -321,27 +321,6 @@ Do not start execution to escape planning discomfort — only start when confide
 
 ---
 
-## Anti-Patterns
-
-- **Mistake:** Running Q&A rounds that only confirm the plan against itself.
-  **Why it happens:** Frequent questions look thorough even when they validate rather than challenge.
-  **Instead:** Ask questions that challenge assumptions, not ones that just self-validate.
-- **Mistake:** Letting the plan grow beyond the original request unnoticed.
-  **Why it happens:** Small additions feel harmless one at a time.
-  **Instead:** Flag every addition to the human explicitly.
-- **Mistake:** Answering subjective or domain questions on the agent's own and proceeding.
-  **Why it happens:** It feels faster than waiting for human input.
-  **Instead:** Treat the human as the oracle for domain and subjective decisions.
-- **Mistake:** Treating the agent's own certainty as proof the plan is correct.
-  **Why it happens:** A confident tone feels like validation on its own.
-  **Instead:** Run every check regardless of how confident the agent sounds.
-- **Mistake:** Citing files, APIs, statistics, or sources without verifying they exist.
-  **Why it happens:** Plausible-sounding references are mistaken for confirmed ones.
-  **Instead:** Verify immediately, or list in Unverified References with a first-step check.
-- **Mistake:** Letting the plan accumulate Q&A rounds, gate confirmations, and superseded drafts.
-  **Why it happens:** Process narrative is easy to leave behind when editing in a hurry.
-  **Instead:** Keep the plan a continuously-edited deliverable matching the Final Plan Artifact Template.
-
 ## Re-Plan Triggers
 
 Stop execution and return to Phase 1 if any of the following occur:
@@ -378,6 +357,27 @@ Stop execution and return to Phase 1 if any of the following occur:
 - **Diagram cannot be generated**: Describe the flow in a plain-language walkthrough step by step. The intent of Phase 5 is to externalize the plan's structure — the medium is secondary.
 - **Scope change discovered mid-planning**: If Phase 4 or Phase 6 reveals that the scope must change significantly, restart from Phase 3 with the revised scope. Do not patch the plan incrementally without a full re-check.
 - **Human is unavailable for a step**: Note the unanswered question explicitly in the plan. Do not proceed past that point until the human responds.
+
+## Anti-Patterns
+
+- **Mistake:** Running Q&A rounds that only confirm the plan against itself.
+  **Why it happens:** Frequent questions look thorough even when they validate rather than challenge.
+  **Instead:** Ask questions that challenge assumptions, not ones that just self-validate.
+- **Mistake:** Letting the plan grow beyond the original request unnoticed.
+  **Why it happens:** Small additions feel harmless one at a time.
+  **Instead:** Flag every addition to the human explicitly.
+- **Mistake:** Answering subjective or domain questions on the agent's own and proceeding.
+  **Why it happens:** It feels faster than waiting for human input.
+  **Instead:** Treat the human as the oracle for domain and subjective decisions.
+- **Mistake:** Treating the agent's own certainty as proof the plan is correct.
+  **Why it happens:** A confident tone feels like validation on its own.
+  **Instead:** Run every check regardless of how confident the agent sounds.
+- **Mistake:** Citing files, APIs, statistics, or sources without verifying they exist.
+  **Why it happens:** Plausible-sounding references are mistaken for confirmed ones.
+  **Instead:** Verify immediately, or list in Unverified References with a first-step check.
+- **Mistake:** Letting the plan accumulate Q&A rounds, gate confirmations, and superseded drafts.
+  **Why it happens:** Process narrative is easy to leave behind when editing in a hurry.
+  **Instead:** Keep the plan a continuously-edited deliverable matching the Final Plan Artifact Template.
 
 ## References
 

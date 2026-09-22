@@ -8,7 +8,6 @@ metadata:
   author: flaviostutz
   version: "1.1.0"
   updated: 2026-09-21
-compatibility: Python 3.12+
 ---
 
 ## Overview
@@ -41,6 +40,9 @@ Related EDRs: [agentme-edr-103](../../103-python-project-tooling.md), [agentme-e
 - Package name not specified and not inferable from context
 - Framework-specific request conflicts with the baseline layout
 - Unsure whether the spike/experiment lint exemption applies
+
+### Runtime Requirements
+- Python 3.12+
 
 ## Instructions
 

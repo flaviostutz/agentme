@@ -8,7 +8,6 @@ metadata:
   author: flaviostutz
   version: "1.1.0"
   updated: 2026-09-21
-compatibility: Go 1.21+
 ---
 
 ## Overview
@@ -37,6 +36,9 @@ Related EDRs: [agentme-edr-102](../../102-golang-project-tooling.md), [agentme-e
 - Module path not specified and not inferable from context
 - Business logic requested inside `main.go` or `adapters/cli/`
 - Unsure whether an `internal/` package is justified
+
+### Runtime Requirements
+- Go 1.21+ toolchain
 
 ## Instructions
 
