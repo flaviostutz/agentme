@@ -9,7 +9,6 @@ metadata:
   author: flaviostutz
   version: "1.1.0"
   updated: 2026-09-21
-compatibility: Node.js 18+
 ---
 
 ## Overview
@@ -35,9 +34,12 @@ extraction.
 - Existing `.xdrs/` merged/updated in place
 
 ### Halt Conditions
-- Package does not expose enough metadata to enumerate shipped XDRs
+- Package does not expose enough metadata to enumerate XDRs
 - Extraction would overwrite locally customized agent files
 - Candidate exclusion is debatable (keep instead of guessing)
+
+### Runtime Requirements
+- Node.js 18+ (agentme CLI)
 
 ## Instructions
 

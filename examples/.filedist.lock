@@ -44,7 +44,7 @@ files:
     - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|xdrs-core|0.42.0|file|5fd25f668a47|0
     - .xdrs/_core/index.md|xdrs-core|0.42.0|file|16994d1e7d93|0
     - AGENTS.md|xdrs-core|0.42.0|file|4957a7502eef|0
-    - .xdrs/agentme/edrs/application/skills/select-relevant-xdrs/SKILL.md|agentme|0.0.1|file|69ba49b99527|0
+    - .xdrs/agentme/edrs/application/skills/select-relevant-xdrs/SKILL.md|agentme|0.0.1|file|8b0866d2b91c|0
     - .xdrs/agentme/edrs/application/skills/select-relevant-xdrs/SKILL.test.md|agentme|0.0.1|file|17d5abe42512|0
-checksum: 5f971bfb96d8
+checksum: 7babca12d496
 

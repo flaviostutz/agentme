@@ -62,12 +62,13 @@ When multiple source entries point to the same content (e.g., a web page and its
 
 #### 07-compilation-meta-policy
 
-Before any compilation begins, at least one local meta-policy file named `NNN-core.md` MUST exist in a `[type]/principles/` directory of the target scope (e.g., `adrs/principles/001-core.md`). Compilation tools and agents MUST scan all type folders (`adrs`, `bdrs`, `edrs`) for such meta-policy files; each meta-policy governs compilation for its own type folder.
+Before any compilation begins, at least one local meta-policy file named `NNN-core.md` MUST exist in a `[type]/principles/` directory of the target scope (e.g., `adrs/principles/001-core.md`). Compilation tools and agents MUST scan all type folders (`adrs`, `bdrs`, `edrs`) for such meta-policy files; each meta-policy governs compilation for its own type folder, including every subject compiled under it.
 
 The meta-policy MUST contain the following sections:
 
-- `## Sources` — one bullet per source using the format `- [web] https://...`, `- [git] git@...`, or `- [local] ./path`. Each source entry MAY include an inline description after the URL.
+- `## Sources` — one bullet per source using the format `- [web] name: https://...`, `- [git] name: git@...`, or `- [local] name: ./path`. `name` MUST be a lowercase kebab-case slug (`[a-z0-9-]+`) that meaningfully identifies the source's organisation, project, or content (e.g., `github-official-docs`, `spreadsheet-team-123`). It is used as the folder name under `.assets/sources/` (rule 12) and as the path prefix in `## Source` sections (rule 10). Multiple bullets MAY share the same `name` to list alternate access methods for the same logical source — the preference order in rule 06 picks which one is actually fetched. Each source entry MAY include an inline description after the URL.
 - `## Selectors` — describes which portions of the fetched source to include or exclude, expressed as document sections, filename patterns, topics, or other criteria.
+- `## Sync Settings` — governs re-synchronisation behaviour (rule 13). MUST contain a `Source re-sync period days: N` bullet, where `N` is a positive integer number of days. MAY contain a `Source storage: temporary` bullet; when absent, source storage defaults to persistent (rule 12).
 
 The meta-policy MAY also contain:
 
@@ -85,15 +86,15 @@ There is no fixed position for `compiled`-type scopes in the root `index.md`. Wh
 
 #### 10-source-section
 
-Every compiled policy MUST include a `## Source` section placed after the `## References` section (or after `## Decision Outcome` when no `## References` section is present). The section MUST list the relative file path(s) of the source document(s) used to produce the policy as plain text. Paths MUST NOT be written as markdown links, because the source files exist only inside a temporary local directory that is created during the compilation or review process.
+Every compiled policy MUST include a `## Source` section placed after the `## References` section (or after `## Decision Outcome` when no `## References` section is present). The section MUST list the relative file path(s) of the source document(s) used to produce the policy as plain text, relative to the scope's `.assets/sources/` directory. Paths MUST NOT be written as markdown links: when source storage is temporary, the paths only exist for the duration of the compilation or review process; when source storage is persistent, `.assets/sources/` is exempt from orphan-asset tracking and, per rule 14, MUST NOT be linked to directly — these paths identify compilation inputs, not navigable or citable XDRS resources.
 
 Example:
 
 ```
 ## Source
 
-- source-1/standards/owasp-top-10-2021/A01-broken-access-control.md
-- source-2/docs/security-controls.html
+- owasp-top10/standards/owasp-top-10-2021/A01-broken-access-control.md
+- security-controls-docs/docs/security-controls.html
 ```
 
 #### 11-compilation-notes
@@ -108,6 +109,37 @@ Example:
 All access control implementations MUST enforce the principle of least privilege.
 **compilation-note:** derived from OWASP A01:2021 "How to Prevent", bullet 3 — "Deny by default".
 ```
+
+#### 12-source-storage-and-tracking
+
+Unless a meta-policy declares `Source storage: temporary`, fetched and selected source content (rule 13) MUST be persisted under `[type]/principles/.assets/sources/[name]/`, sibling to the governing meta-policy, where `[name]` is the source's slug from its `## Sources` bullet. This location is shared across every subject compiled under that meta-policy's type folder; it is not duplicated per subject. Persisted source content MUST be committed to version control and MUST NOT be gitignored.
+
+When `Source storage: temporary` is declared, bulk fetched content MUST instead be written only to the ephemeral compilation working directory and removed at the end of the compilation run.
+
+Regardless of storage mode, a tracking file `.assets/sources/[name]/source.md` MUST always be created and kept up to date, with the following format:
+
+```
+# Source
+
+last-fetch-timestamp: YYYY-MM-DD HH:MM:SS
+last-compilation-timestamp: YYYY-MM-DD HH:MM:SS
+```
+
+`last-fetch-timestamp` MUST be updated whenever that source is freshly fetched. `last-compilation-timestamp` MUST be updated only after a compilation cycle consuming that source completes lint and review successfully. If a meta-policy's `Source storage` setting changes between compilation runs, the next compilation MUST reconcile storage accordingly: switching to `temporary` MUST remove any previously persisted bulk content under `.assets/sources/[name]/` while keeping `source.md`; switching away from `temporary` MUST resume persisting bulk content going forward.
+
+#### 13-selective-persistence-and-resync-optimization
+
+Only content matched by `## Selectors` and actually used by at least one compiled policy's `## Source` section MAY be written to `.assets/sources/[name]/`. Content excluded by selectors, or that becomes unused after a re-sync, MUST be removed from persisted storage — `.assets/sources/[name]/` MUST NOT accumulate content beyond what compiled policies currently depend on.
+
+Before fetching, compilation tools and agents MUST evaluate whether a re-sync is necessary: compare the elapsed days since `last-fetch-timestamp` against `Source re-sync period days`, and confirm `last-compilation-timestamp` is not older than `last-fetch-timestamp`. If every source governed by a meta-policy is within its re-sync period and already fully compiled, no fetch or recompilation is required unless explicitly requested. When a re-sync does proceed, newly fetched and selected content MUST be compared against the previous `.assets/sources/[name]/` snapshot (for example, by content hash) to scope which existing compiled policies need re-verification and which can be kept unchanged.
+
+#### 14-source-documents-not-authoritative
+
+By default, content persisted under `.assets/sources/` MUST NOT be treated as a source of truth, cited, or used directly to make architectural, business, or engineering decisions. Only compiled policies — the numbered Policy documents produced from this content — are authoritative for decision-making. Content under `.assets/sources/` exists to support synchronisation, diffing, and recompilation (rules 12 and 13); it is unstructured relative to compiled policies and MAY be misleading, inconsistent, or outdated.
+
+An exception MUST be documented in a dedicated `[type]/principles/NNN-direct-source-usage.md` policy, mirroring the dedicated-file convention of rule 08. That policy MUST explicitly state when and how direct use of source documents is permitted. Absent such a policy, direct use of source documents for decisions is forbidden.
+
+This rule governs reasoning and usage, not the document-link graph. Independently of this rule, and regardless of whether a `NNN-direct-source-usage.md` policy exists, no document MAY hyperlink directly into `.assets/sources/`; that restriction is enforced mechanically and addresses a separate, structural concern.
 
 ## References
 

@@ -9,7 +9,6 @@ metadata:
   author: flaviostutz
   version: "1.1.0"
   updated: 2026-09-21
-compatibility: JavaScript/TypeScript, Node.js 18+
 ---
 
 ## Overview
@@ -42,6 +41,9 @@ Related EDRs: [agentme-edr-101](../../101-javascript-project-tooling.md), [agent
 ### Halt Conditions
 - Package name not specified and not inferable from context
 - Unclear whether the project needs CLI bundling or examples
+
+### Runtime Requirements
+- Node.js 18+ (JavaScript/TypeScript)
 
 ## Instructions
 
