@@ -4,9 +4,7 @@ This index points to all type- and scope-specific XDR indexes. XDRs (Decision Re
 
 ## Scope Indexes
 
-XDRs in scopes listed last override the ones listed first
-
-XDRS scopes listed last override the ones listed first
+XDRS scopes listed last override the ones listed first. `extends:` and `follows:` declarations in individual scope indexes take precedence over this ordering for their respective resolution concerns (see _core-adr-policy-010.36-root-index-ordering-fallback).
 
 ### _core
 

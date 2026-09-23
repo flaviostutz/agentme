@@ -50,7 +50,7 @@ Guides the creation of a well-structured Policy by following the standards in `_
 
 ### Phase 1: Understand the Decision
 
-1. Read the XDRS root `index.md` (default: `.xdrs/index.md`) to discover all active scopes and their canonical indexes.
+1. Read the XDRS root `index.md` (default: `.xdrs/index.md`) to discover all active scopes and their canonical indexes. Skip scopes tagged `disabled`; scopes tagged `extends-only` apply only through an extending scope (see `_core-adr-policy-022.08-agent-resolution`).
 2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full to internalize structure rules, mandatory language, and the XDRS framework elements.
 3. Read `.xdrs/_core/adrs/principles/002-policy-standards.md` in full to internalize the Policy template and document writing rules.
 4. Treat `001-xdrs-standards` as the canonical source for all core XDRS element definitions (type, scope, subject, numbering, placement). Treat `002-policy-standards` as the canonical source for how to write and structure the document itself.
@@ -87,7 +87,7 @@ Choose a title that clearly states the question this Policy answers, not the ans
 
 ### Phase 4: Research Related Policies
 
-1. Read all existing Policies relevant to the topic across all scopes listed in the Policy root `index.md`. **Additionally**, if the target scope declares an `extends:` field in its `index.md`, resolve its full `extends:` chain depth-first (see `_core-adr-policy-010` rule 33) and treat all policy documents from those extended scopes as if they were authored in the target scope — they MUST be included in the research and conflict check just like policies written directly in the scope.
+1. Read all existing Policies relevant to the topic across all active scopes listed in the Policy root `index.md` (not tagged `disabled` or `extends-only`). **Additionally**, if the target scope declares an `extends:` field in its `index.md`, resolve its full `extends:` chain depth-first (see `_core-adr-policy-010` rule 33) and treat all policy documents from those extended scopes as if they were authored in the target scope — they MUST be included in the research and conflict check just like policies written directly in the scope.
 2. Evaluate Policy metadata before treating any decision as a current constraint. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether it fits the current topic, and the decision text defines any remaining boundaries. Treat out-of-window or out-of-scope Policies as background only when assessing overlaps and conflicts.
 3. Identify decisions that already address the topic (full or partial overlap).
 4. Note decisions that might conflict with the intended outcome.
@@ -184,12 +184,12 @@ Check every item before finalizing:
 1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
 2. **Frontmatter**: Are `apply-to:` and `valid-from:` both present? `apply-to:` must describe the applicable context (use `All scopes` when broadly applicable). `valid-from:` must be set (use today's date if the user did not specify one).
 3. **Normative language**: Does every normative requirement in the Details and Decision Outcome sections use uppercase BCP 14 keywords per `_core-adr-policy-001`? Replace any lowercase `must`/`should`/`may` that express requirements, prohibitions, or permissions with MUST/MUST NOT, SHOULD/SHOULD NOT, or MAY/OPTIONAL respectively. Lowercase forms are only acceptable in Context sections, question statements, or when used with their ordinary English meaning.
-3. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
-4. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
-5. **Redundancy**: Is the Policy the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?
-6. **Conflicts section**: Is it present and filled if Phase 3 found any conflicts?
-7. **Index entries**: Will the new Policy be added to `[scope]/[type]/index.md` and the Policy root `index.md`?
-8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `policy`.
+4. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
+5. **Clarity**: Is the chosen option unambiguous? Is the "why" clear in one reading?
+6. **Redundancy**: Is the Policy the primary source for the decision itself, with related documents linked instead of duplicated wherever possible?
+7. **Conflicts section**: Is it present and filled if Phase 3 found any conflicts?
+8. **Index entries**: Will the new Policy be added to `[scope]/[type]/index.md` and the Policy root `index.md`?
+9. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `policy`.
 
 If any check fails, revise and re-run this phase before proceeding.
 
@@ -197,7 +197,7 @@ If any check fails, revise and re-run this phase before proceeding.
 
 1. Create the Policy file at `[xdrs-root]/[scope]/[type]/[subject]/[number]-[short-title].md` (default root: `.xdrs/`).
 2. Add an entry to `[xdrs-root]/[scope]/[type]/index.md` (create the file if it does not exist).
-3. Add or verify the scope entry in the Policy root `index.md`.
+3. Add or verify the scope entry in the Policy root `index.md` (exactly one link per scope; when the scope index declares `extends-only: true`, append the tag `` `extends-only` `` right after the link and make sure the legend line is present, see `_core-adr-policy-022`).
 4. If significant research was produced or already exists, link it from the Policy `## Considered Options` section.
 5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Details` without turning the Policy into a long procedure.
 6. Evaluate whether the scope index at `[xdrs-root]/[scope]/index.md` should be updated to reflect the new content. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.

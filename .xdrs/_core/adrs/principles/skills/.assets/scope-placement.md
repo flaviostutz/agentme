@@ -25,7 +25,7 @@ Determine the appropriate scope-type by matching the content being authored to o
 
 ## Step C — Enumerate and Rank Workspace Scopes
 
-1. Read `.xdrs/index.md` to list all declared scopes.
+1. Read `.xdrs/index.md` to list all declared scopes. Exclude scopes tagged `disabled` or `extends-only` (see `_core-adr-policy-022`) unless the user names them explicitly.
 2. For each scope whose `scope-type` matches the type identified in Step A or B (match if ANY of a scope's declared types fit), read its `index.md` and assess the following signals, in order of weight:
    - **Primary**: Does `apply-to` or `description` describe a domain that covers this content?
    - **Secondary**: Does the scope's `follows:` chain declare a governance relationship relevant to this content area?

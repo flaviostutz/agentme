@@ -203,3 +203,8 @@ After writing each policy:
 - **Mistake:** Reading or citing content under `.assets/sources/` as if it were an authoritative policy, or adding a markdown link to it from another document.
   **Why it happens:** The raw source content is readily available and often more detailed than the compiled policy.
   **Instead:** Treat only compiled policies as authoritative per `_core-adr-policy-019` rule 14; source content exists solely to support fetch/diff/recompilation, and linking to it is also forbidden mechanically by lint.
+
+## References
+
+- [_core-adr-policy-019 - Compiled scope type](../../019-compiled-scope-type.md)
+- [_core-adr-policy-008 - Policy structured standards](../../008-policy-structured-standards.md)

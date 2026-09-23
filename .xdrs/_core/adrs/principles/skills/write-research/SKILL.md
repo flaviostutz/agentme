@@ -86,7 +86,7 @@ Consult `001-xdrs-standards` while making each choice in this phase. The summari
 
 ### Phase 3: Research Existing Artifacts
 
-1. Read relevant Policies across all scopes listed in the Policy root `index.md`.
+1. Read relevant Policies across all scopes listed in the Policy root `index.md`, honouring activation tags (skip `disabled` scopes; use `extends-only` scope policies only through an extending scope, see `_core-adr-policy-022.08-agent-resolution`).
 2. Evaluate Policy metadata before treating any decision as current context. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the intended task context, and the decision text defines any remaining boundaries. Keep out-of-window or out-of-scope Policies as background only.
 3. Read existing research documents in the same or overlapping subjects to avoid duplicating the same study.
 4. Read related skills or articles if they contain context, implementation limits, or terminology that must be reflected.

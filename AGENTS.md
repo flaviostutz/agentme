@@ -18,7 +18,7 @@ This rule has NO exceptions. Simple questions ("which command?", "what pattern?"
    - You MUST search and follow Policies for architecture, engineering and business in the Policy root index (default: [.xdrs/index.md](.xdrs/index.md)) during Informational, Q&A questions, design, plan, implementation, test and review steps etc. This is the source of truth for this agent.
 
 2. **Verify all work with build, tests and linting before completion**
-   - Always run build, lint-fix and test at the end of the implementation when changing code
+   - Always run build, lint and test at the end of the implementation when changing code
    - Fix any issues
 
 3. **Verify if implementation complies with Policies from XDRS**
