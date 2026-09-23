@@ -585,20 +585,23 @@ either provider.
 - **Question content** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a
   short title with option labels ("Choose A or B?") is never enough. Every question -- the
   focus-card action question and every other one (sandbox clone, dirty worktree, missing
-  runtime, validation failure, apply mode, continue-or-stop) -- MUST include:
-  1. **Where**: PR, comment, file/line, or workspace state (linked) and the current state.
-  2. **What**: the finding, conflict, or gap.
-  3. **Why it is a doubt**: why the agent cannot resolve it alone.
-  4. **Options with consequences**: per option, what it does, benefit, cost or risk,
-     effort, reversibility, and what it postpones.
-  5. **Recommendation**: the preferred option with a one-line reason; the human decides.
-  6. **Self-contained**: decidable without scrolling back; batched questions numbered
-     Q1..Qn, each with its own context.
-  7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put
-     items 1-5 in a chat message (the focus card, for comments) right before the call and
-     keep the tool question short, referencing it ("Q1 (see above): ...").
-  8. **Re-explain on request**: when the human asks for clarification instead of choosing,
-     re-ask with expanded context, never the same wording.
+  runtime, validation failure, apply mode, continue-or-stop) -- MUST stay under 140 words
+  and include:
+  1. **Title and context**: a title under 15 words, then a context line under 25 words
+     with the finding and current state.
+  2. **Options with consequences**: 2-4 options, each under 25 words, with its key
+     consequences (benefit, cost or risk, effort, reversibility, what it postpones).
+  3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g.
+     "A: (recommended) ..."); the human decides.
+  4. **Self-contained**: decidable without scrolling back; batched questions numbered
+     Q1..Qn, each with its own context, at most 5 per round.
+  5. **UI fields**: map title, context, and options to the `vscode_askQuestions` question,
+     message, and labels; if a part exceeds ~200 characters, put the full question in a
+     chat message first (the focus card, for comments) and reference it ("Q1 (see
+     above): ...").
+  6. **Phase gates**: gate summaries under 80 words.
+  7. **Re-explain on request**: when the human asks for clarification instead of choosing,
+     re-ask with expanded context, never the same wording, up to twice the caps.
 - **Incremental persistence**: the tracking file is written back to disk immediately after
   every confirmed field change during the walkthrough, not batched until later -- so a
   cancelled or interrupted session always resumes from exactly where it left off, with no

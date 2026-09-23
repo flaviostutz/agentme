@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "4.4.0"
+skill-version: "4.5.0"
 ---
 
 ## Test Scenarios
@@ -34,6 +34,7 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
 - [ ] Skill does not output a story while any area in the identification table (problem, scope, requirements, flow, edge cases, dependencies) has an open question.
 - [ ] Output follows the output template with Title (max 10 words), User Story (As a … I want … so that …), Scope, and Acceptance Criteria sections.
 - [ ] Output contains acceptance criteria items that are verifiable and start with a checkbox `- [ ]`.
+- [ ] Skill shows 2–3 sample notification entries (e.g. direct message, mention, status change) in Phase 5 alongside the diagram and records them under `## Detailed Specs`.
 
 ---
 
@@ -111,7 +112,7 @@ You are an agent with the `refine-user-story` skill loaded. The skill has comple
 2. During the deeper pass, skill surfaces at least one finding not raised in the first run (e.g. a new edge case or a scope item with an unresolved constraint).
 3. Skill asks a question about the new finding using `vscode_askQuestions`.
 4. After the human responds, Phase 4 converges again and the gate is re-presented.
-5. Skill re-presents the Phase 4 gate with "Continue to Phase 5 — Visual Validation" as the recommended option.
+5. Skill re-presents the Phase 4 gate with "Continue to Phase 5 — Visual and Example Validation" as the recommended option.
 
 **Simulated Human Responses**
 1. (Re-run Phase 4: Consistency & Scope Review selected at gate)
@@ -152,8 +153,8 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 - [ ] Skill asks at least one question about the finding using `vscode_askQuestions` before moving to angle 2.
 - [ ] Skill reflects the human's answer in the story scope (loading spinner + success toast added).
 - [ ] Skill does not skip to Phase 8 while any angle has open questions.
-- [ ] Skill states, before asking, where the gap is (story section) and why it cannot decide alone (a UX choice for the user).
-- [ ] Skill describes each feedback option (immediate download, loading indicator, background task) with its consequences and marks one as recommended with a one-line reason.
+- [ ] Skill gives the question a short title and a context line naming the gap (story section).
+- [ ] Skill describes each feedback option (immediate download, loading indicator, background task) with its consequences and prefixes one with "(recommended)".
 
 ---
 
@@ -258,6 +259,7 @@ After Phase 2 Step 1, no API endpoints, no payload structures, no documentation 
 - [ ] Skill does not produce a final story while `## Detailed Specs` remains empty for a story involving an external API.
 - [ ] Phase 8 checklist item for Detailed Specs is checked only after sufficient detail (at minimum a doc link or endpoint) is provided.
 - [ ] Final output's `## Detailed Specs` section contains at least the Stripe API reference and the charge endpoint.
+- [ ] Example entries in `## Detailed Specs` do not satisfy the Detailed Specs checklist item without the Stripe API reference and charge endpoint.
 
 ---
 

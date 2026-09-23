@@ -7,13 +7,13 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "4.4.0"
+  version: "4.5.0"
   updated: 2026-09-23
 ---
 
 ## Overview
 
-Turns a vague request or rough draft into an implementation-ready user story via a structured 9-phase process: initiative context and external information gathering (Phase 1); request analysis and requirements qualification (Phase 2); context research and story drafting (Phase 3); consistency and scope review (Phase 4); visual validation via a user journey diagram (Phase 5); a 9-angle user-perspective challenge (Phase 6); an 8-angle implementer-perspective challenge (Phase 7); final story output with a readiness checklist (Phase 8); and a final readiness re-validation (Phase 9).
+Turns a vague request or rough draft into an implementation-ready user story via a structured 9-phase process: initiative context and external information gathering (Phase 1); request analysis and requirements qualification (Phase 2); context research and story drafting (Phase 3); consistency and scope review (Phase 4); visual and example validation via a user journey diagram and textual examples (Phase 5); a 9-angle user-perspective challenge (Phase 6); an 8-angle implementer-perspective challenge (Phase 7); final story output with a readiness checklist (Phase 8); and a final readiness re-validation (Phase 9).
 
 Activate when:
 - The request is vague, incomplete, or internally inconsistent.
@@ -63,17 +63,20 @@ Activate when:
 
 **Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance. Before each gate, summarize in chat what the phase produced, any open risks or deferred items, and what each gate option will cause next (Question content rule applies).
 
-**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST include:
-1. **Where**: story section, file, or artifact (linked) and the relevant current state.
-2. **What**: the finding, conflict, or gap.
-3. **Why it is a doubt**: why the agent cannot resolve it alone (conflicting sources, missing information, subjective or domain trade-off).
-4. **Options with consequences**: for each option, what it does, benefit, cost or risk, effort, reversibility, and what it postpones.
-5. **Recommendation**: the preferred option with a one-line reason; the user still decides.
-6. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context.
-7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put items 1–5 in a chat message right before the call and keep the tool question short, referencing it ("Q1 (see above): ...").
-8. **Re-explain on request**: when the user asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording.
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay under 140 words and include:
+1. **Title and context**: a title under 15 words, then a context line under 25 words with the finding and current state.
+2. **Options with consequences**: 2–4 options, each under 25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
+3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the user still decides.
+4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
+5. **UI fields**: map title, context, and options to the `vscode_askQuestions` question, message, and labels; if a part exceeds ~200 characters, put the full question in chat first and reference it ("Q1 (see above): ...").
+6. **Phase gates**: gate summaries under 80 words.
+7. **Re-explain on request**: when the user asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording, up to twice the caps.
 
-Example: *"Acceptance criterion 2 says locked accounts can reset their PIN, but the draft's Out of Scope excludes locked accounts. A — keep locked accounts in scope: complete flow, adds an unlock step. B — exclude them: smaller story, locked users stay blocked until a follow-up story. Recommended: A, since locked users are the main reset population."*
+Example:
+> **Q1: Can locked accounts reset their PIN?**
+> AC2 lets locked users reset their PIN, but Out of Scope excludes locked accounts.
+> - A: (recommended) Keep them in scope. Complete flow; adds an unlock step.
+> - B: Exclude them. Smaller story; locked users stay blocked until a follow-up story.
 
 **Context Probe rule**: In every phase, whenever you encounter a gap, uncertainty, or ambiguity that external documentation, specifications, URLs, screenshots, or other artifacts could resolve — ask the user proactively. Tie the ask to the specific gap identified (e.g. *"I need to understand how the current deletion confirmation works — do you have a design spec or screenshot?"*). Never ask generically ("do you have any docs?"). The user can always skip; skipped probes are recorded as "Context: not provided for [topic]" and do **not** count as unresolved decisions under the Hard Gate. Do not re-probe gaps already covered by the Context Summary from Phase 1.
 
@@ -208,8 +211,6 @@ If too large, propose a split into 2–4 vertical slices where each slice delive
 - **"Keep original scope — continue"** — proceed without splitting; note the human explicitly accepted the larger scope.
 - Free text to adjust the proposed slice boundaries before deciding.
 
-If the human accepts the split, restart the entire process from Phase 2 with the new narrower scope.
-
 #### Step 4 — Feature summary and phase gate
 
 Present a brief feature summary — a short bullet list of what will be built or changed, written in plain language the requester can validate at a glance.
@@ -259,13 +260,13 @@ For every item listed under **Scope**, loop through these five checks before mov
 Do **not** advance while any scope item fails a check. If a check reveals a new gap, return to Phase 2 and ask the follow-up question.
 
 After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) with at least these options:
-- **"Continue to Phase 5 — Visual Validation"** (recommended when all items pass all checks)
+- **"Continue to Phase 5 — Visual and Example Validation"** (recommended when all items pass all checks)
 - **"Re-run Phase 4: Consistency & Scope Review — deeper pass"** — repeat all consistency and scope checks with fresh eyes, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 4 treating the comment as additional context, then re-present this gate.
 
 ---
 
-### Phase 5: Visual Validation
+### Phase 5: Visual and Example Validation
 
 1. **Choose a diagram type** that best externalizes the user journey for this story:
    - **Flowchart** — step-by-step user decision flows and happy / error paths
@@ -275,13 +276,15 @@ After all checks converge, use `vscode_askQuestions` (per Phase gate UI rule) wi
 
 2. **Generate the diagram.** The diagram must show at minimum: the actor, the trigger, the main steps, the outcome, and at least one error or edge path.
 
-3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Does this diagram match your mental model of the user journey?" Present at least these options:
-   - **"Continue to Phase 6 — User-Perspective Challenge"** (recommended when the diagram matches)
-   - **"Re-run Phase 5: Visual Validation — try a different diagram type"** — choose a different type or regenerate with a different framing, then re-present this gate.
+3. **Generate textual examples when applicable.** For the 1–3 textual outputs most likely to be misunderstood — user-visible text (messages, screen copy) or data/structure outputs (payloads, exports, templates, dir trees) — show 2–3 short labeled examples each (typical plus at least one edge case); list the rest in one line. Skip with a one-line note when none exist. Examples complement the diagram, never replace it. Synthetic data only — no real personal data or secrets. Confirmed examples are normative and Acceptance Criteria may reference them; mark one *illustrative* when its exact content may change (e.g. UX copy) — illustrative never defers an open decision.
+
+4. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do this diagram and these examples match your mental model of the user journey?" Present at least these options:
+   - **"Continue to Phase 6 — User-Perspective Challenge"** (recommended when the diagram and examples match)
+   - **"Re-run Phase 5: Visual and Example Validation — try a different diagram type or regenerate examples"** — choose a different type, regenerate examples, or reframe, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 5 treating the comment as additional context, then re-present this gate.
 
-4. If the diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
-5. **Save the confirmed diagram.** Write the Mermaid source to `.assets/userstory-NNN-slug-journey.md` inside the initiative's `.assets/` folder (when an initiative doc is active) or to `userstory-journey.md` at the workspace root otherwise. Record this path to include as a diagram attachment in `## Attachments` when Phase 8 writes the story file.
+5. If the diagram or examples reveal gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
+6. **Save the confirmed diagram and examples.** Write the Mermaid source to `.assets/userstory-NNN-slug-journey.md` inside the initiative's `.assets/` folder (when an initiative doc is active) or to `userstory-journey.md` at the workspace root otherwise. When Phase 8 writes the story, link this path in `## Attachments` and add the confirmed examples to `## Detailed Specs`.
 
 ---
 
@@ -332,7 +335,7 @@ After all 9 angles converge, use `vscode_askQuestions` (per Phase gate UI rule) 
 
 ### Phase 7: Implementer-Perspective Challenge
 
-For each angle, apply the Phase 6 per-angle protocol: 10–20 grounded questions, answer what's known, ask the user about gaps via `vscode_askQuestions`, apply the Context Probe rule for implementer artifacts (specs, API references, contracts), and never resolve a choice point unilaterally. The Phase navigation rule governs loop control.
+For each angle, apply the Phase 6 per-angle protocol, probing for implementer artifacts (specs, API references, contracts).
 
 **1. Verifiable acceptance criteria**
 Can every acceptance criterion be independently tested by a developer without ambiguity? Is "done" unambiguous for each item, with no subjective interpretation required? Are criteria specific enough to write automated tests against?
@@ -376,7 +379,7 @@ Before producing the final story, verify ALL items in the checklist below. If an
 - [ ] No contradictions between goal, scope, and acceptance criteria.
 - [ ] Story is either one thin vertical slice or a clean set of split slices, each delivering complete releasable value.
 - [ ] All 9 user-perspective challenge angles (Phase 6) and all 8 implementer-perspective angles (Phase 7) completed with human input received for every ambiguity and subjective decision.
-- [ ] Diagram generated and confirmed by the human.
+- [ ] Diagram and applicable textual examples generated and confirmed by the human.
 - [ ] No unresolved human questions outstanding.
 - [ ] For every in-scope item where integration or interface details exist: `## Detailed Specs` is populated or explicitly marked N/A; the story contains enough detail to begin architecture or implementation without further business clarification.
 
@@ -454,13 +457,14 @@ As a [role], I want to [action], so that [benefit].
 - [constraint]
 
 ## Detailed Specs
-[Required when any API, integration, or data detail was discovered. Mark N/A if none.
- A story lacking sufficient detail here is not ready for implementation.]
+[Required when any API, integration, or data detail was discovered or Phase 5 examples were confirmed. Mark N/A if none.
+ A story lacking sufficient detail here is not ready for implementation. Examples never replace API or data-contract details.]
 - [External API / integration: endpoint, method, payload, auth, behavior]
 - [Data field: type, format, valid values, meaning, constraints]
 - [Doc link: URL or file path — what it covers]
 - [Contact: name/role — what they own or can clarify]
 - [Process rule or business constraint not captured in Constraints above]
+- [Example: what it demonstrates — confirmed Phase 5 sample, verbatim; mark illustrative if not binding]
 
 ## Acceptance Criteria
 [required — max 50 words. Verifiable checklist confirming the story is done.]
@@ -482,7 +486,7 @@ Run two sequential checks. For any item in Check A not met in the final output, 
 
 #### Check A — Readiness double-check
 
-Verify all 14 items against the final story output:
+Verify all 15 items against the final story output:
 
 **Story-level (6 items):**
 1. **Vertical completeness** — story covers everything needed for end-to-end implementation; no half-slices that silently assume separate parallel work.
@@ -544,7 +548,7 @@ Apply the same 4 criteria from Phase 2 Step 3. If two or more are met, the story
   **Instead:** Record it as "not provided," not a blocker.
 - **Mistake:** Asking bare questions like "Choose which option? A or B?".
   **Why it happens:** The agent already holds the context and forgets the user does not.
-  **Instead:** Apply the Question content rule: where, what, why it is a doubt, consequences per option, recommendation.
+  **Instead:** Apply the Question content rule: title with context, options with consequences, "(recommended)" prefix, within the word caps.
 
 ## References
 
