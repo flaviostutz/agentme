@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.3.0"
+skill-version: "3.4.0"
 ---
 
 ## Test Scenarios
@@ -13,14 +13,14 @@ skill-version: "3.3.0"
 
 **Expected Behaviour**
 
-The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 2 (Requirements Qualification) — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 3 (Research, Dependencies, and Draft Plan) until it converges before moving to the next; (4) runs iterative consistency checks in Phase 4, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram in Phase 5 and loops until the human explicitly confirms it; (6) analyzes all 9 challenge angles in Phase 6 applying the Phase navigation rule per angle; (7) verifies the Phase 7 Pre-Execution Readiness checklist before approving execution.
+The skill activates plan mode immediately. Before writing any code or editing any file, it: (1) states the goal and scope in Phase 1; (2) runs Phase 2 (Requirements Qualification) — restates understanding, scans the 6 areas for missing information, loops asking follow-up questions until convergence, then runs the scope item 3-check review; (3) per the Phase navigation rule, loops on each dependency or context item in Phase 3 (Research, Dependencies, and Draft Plan) until it converges before moving to the next; (4) runs iterative consistency checks in Phase 4, each round asking 1–5 questions across one or more checks (a–i), applying the Phase navigation rule convergence signal to stop; (5) generates a diagram and 2–3 sample paginated-response examples in Phase 5 and loops until the human explicitly confirms them; (6) analyzes all 9 challenge angles in Phase 6 applying the Phase navigation rule per angle; (7) verifies the Phase 7 Pre-Execution Readiness checklist before approving execution.
 
 **Simulated Human Responses**
 1. "Yes, goal and scope match exactly."
 2. "Route handler conventions look correct. Database query pattern is right."
 3. "No contradictions. The approach covers the edge cases."
 4. "Confirmed — no new issues."
-5. "The diagram matches my mental model."
+5. "The diagram and examples match my mental model."
 6. "Everything in scope as requested. No security concerns."
 7. "Success means all list responses include a `next` cursor and respect `limit`. Side effects are acceptable."
 8. "The caching layer is the most fragile assumption. The approach is otherwise sound."
@@ -32,7 +32,9 @@ The skill activates plan mode immediately. Before writing any code or editing an
 - [ ] Skill runs Phase 2 (Requirements Qualification) before Phase 3: restates understanding, scans 6 areas, loops asking follow-up questions, and runs scope item 3-check review.
 - [ ] Each human interaction round across all phases contains 1–5 questions grouped together.
 - [ ] Skill applies the Phase navigation rule convergence signal rather than a fixed round cap.
-- [ ] Skill generates a diagram in Phase 5 (Visual Consistency Validation) and loops until the human explicitly confirms it.
+- [ ] Skill generates a diagram in Phase 5 (Visual and Example Consistency Validation) and loops until the human explicitly confirms it.
+- [ ] Skill shows 2–3 textual examples of the paginated response in Phase 5 alongside the diagram.
+- [ ] Confirmed examples appear in a Quality Verification Strategy "Confirmed examples" sub-list, each with an acceptance test case.
 - [ ] All 9 challenge angles in Phase 6 are analyzed; related angles may share a round.
 - [ ] Phase 7 Pre-Execution Readiness checklist is verified before execution is approved.
 
@@ -89,9 +91,9 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Skill explicitly frames the question as a clarifying question, not a confirmation request.
 - [ ] Skill waits for the human's answer before continuing to the next angle.
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
-- [ ] Skill states, before asking, where the choice arose (the angle and plan section) and why it cannot decide alone.
-- [ ] Skill describes each option (single long document vs. quick-reference cards) with its consequences and marks one as recommended with a one-line reason.
-- [ ] Skill places this context in a chat message before the `vscode_askQuestions` call, keeping the tool question short.
+- [ ] Skill gives the question a short title and a context line naming where the choice arose (the angle and plan section).
+- [ ] Skill describes each option (single long document vs. quick-reference cards) with its consequences and prefixes one with "(recommended)".
+- [ ] Skill maps the title, context, and options to the `vscode_askQuestions` fields, or places the full question in a chat message before the call when a part exceeds the field limit.
 
 ### Scenario 5: Feature split — deferred parts saved to TODO.md per agentme-edr-001
 
@@ -130,7 +132,7 @@ Throughout every phase, the plan document is maintained as a single continuously
 **Simulated Human Responses**
 1. "Accept split — start planning [Part 1 name]" (Phase 2 Step 5 scope split)
 2. "Re-run Phase 4: Consistency Checks — deeper pass"
-3. "Continue to Phase 5 — Visual Consistency Validation" (after the re-run converges)
+3. "Continue to Phase 5 — Visual and Example Consistency Validation" (after the re-run converges)
 4. "Hand off to implementation" (Phase 7 final gate)
 
 **Assertions**

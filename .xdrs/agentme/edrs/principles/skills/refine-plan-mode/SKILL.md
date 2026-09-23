@@ -8,27 +8,30 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.3.0"
+  version: "3.4.0"
   updated: 2026-09-23
 ---
 
 ## Overview
 
-Ensures that every plan is deeply validated through iterative consistency checks, visual externalization, and multi-angle challenges before execution starts. The skill is not designed to make human work easier — its purpose is to identify precisely where human experience, feeling, and domain knowledge are irreplaceable, and to demand that input before moving forward.
+Ensures that every plan is deeply validated through iterative consistency checks, visual and example externalization, and multi-angle challenges before execution starts. The skill is not designed to make human work easier — its purpose is to identify precisely where human experience, feeling, and domain knowledge are irreplaceable, and to demand that input before moving forward.
 
 **Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 4 or Phase 6, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
 
-**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST include:
-1. **Where**: file, section, or artifact (linked) and the relevant current state.
-2. **What**: the finding, conflict, or gap.
-3. **Why it is a doubt**: why the agent cannot resolve it alone (conflicting sources, missing information, subjective or domain trade-off).
-4. **Options with consequences**: for each option, what it does, benefit, cost or risk, effort, reversibility, and what it postpones.
-5. **Recommendation**: the preferred option with a one-line reason; the human still decides.
-6. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context.
-7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put items 1–5 in a chat message right before the call and keep the tool question short, referencing it ("Q1 (see above): ...").
-8. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording.
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay under 140 words and include:
+1. **Title and context**: a title under 15 words, then a context line under 25 words with the finding and current state.
+2. **Options with consequences**: 2–4 options, each under 25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
+3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the human still decides.
+4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
+5. **UI fields**: map title, context, and options to the `vscode_askQuestions` question, message, and labels; if a part exceeds ~200 characters, put the full question in chat first and reference it ("Q1 (see above): ...").
+6. **Phase gates**: gate summaries under 80 words.
+7. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording, up to twice the caps.
 
-Example: *"In `xyz.md` concepts X and Y conflict on session lifetime, and nothing marks either as authoritative. A — align both with concept W: fixes X and Y permanently, more complex. B — remove X and Y: simpler, postpones the issue. Recommended: A, since B only defers the conflict."*
+Example:
+> **Q1: Which session lifetime should the plan use?**
+> In `xyz.md`, concepts X and Y conflict on session lifetime, and nothing marks either as authoritative.
+> - A: (recommended) Align both with concept W. Fixes X and Y permanently; more complex.
+> - B: Remove X and Y. Simpler now; postpones the issue.
 
 **Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 4 (consistency checks), create a todo for each check (a–i) before beginning Phase 4 and mark each completed when that check individually converges. For Phase 6 (challenge angles), create a todo for each of the 9 angles before beginning Phase 6 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
 
@@ -70,7 +73,7 @@ The **final artifact** (Phase 7 handoff) uses this exact section order, no compe
 1. **Title/TL;DR** — `## Plan: <title>` plus a short what/why/approach paragraph; embed confirmed Phase 5 diagrams inline here, no separate heading.
 2. **Steps** — ordered, numbered; group into phases (`*Phase A: ...*`) at 5+ steps; annotate `*(depends on step N)*` / `*(parallel with step N)*`; always include the Phase 3 Step 3 test step.
 3. **Relevant files** — flat list: path plus what changes (if not obvious).
-4. **Quality Verification Strategy** — existing checks that must keep passing; new checks (code: tests, linting, type checking, dead code, security/dependency audit, schema/contract validation; documents: proofreading, fact-checking, citation/link validation, policy compliance, peer review, readability) with exact commands and what each verifies; named test scenarios (Phase 6 Scenario-to-test rule) as `<scenario> (<category>)`; an **Unverified References** sub-list, each *"unverified — must verify before use"* with a first-step verification.
+4. **Quality Verification Strategy** — existing checks that must keep passing; new checks (code: tests, linting, type checking, dead code, security/dependency audit, schema/contract validation; documents: proofreading, fact-checking, citation/link validation, policy compliance, peer review, readability) with exact commands and what each verifies; named test scenarios (Phase 6 Scenario-to-test rule) as `<scenario> (<category>)`; an **Unverified References** sub-list, each *"unverified — must verify before use"* with a first-step verification; a **Confirmed examples** sub-list with the Phase 5 examples (labeled, illustrative ones marked), each checked by a test named `<output> matches confirmed example (acceptance)`.
 5. **Decisions** — final facts only; edit a reversed decision in place, never append a contradiction; a Phase 2 Step 5 split adds one bullet naming the chosen part (full detail stays in `TODO.md`).
 6. **Further Considerations** — optional, 1-3 out-of-scope or deferred items.
 
@@ -177,11 +180,11 @@ Checks to run in order:
 - `"Show me a diagram explaining the overall feature structure"`
 
 After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI rule) to present the Phase 4 gate with at least these options:
-- **"Continue to Phase 5 — Visual Consistency Validation"** (recommended when all checks have converged) — advance.
+- **"Continue to Phase 5 — Visual and Example Consistency Validation"** (recommended when all checks have converged) — advance.
 - **"Re-run Phase 4: Consistency Checks — deeper pass"** — restart all checks (a–i) with fresh eyes, prioritising angles and scenarios not yet explored, then re-present this gate.
 - **"Add a comment or correction"** (open box) — re-run Phase 4 in full, treating the comment as additional context and constraints, then re-present this gate.
 
-### Phase 5: Visual Consistency Validation
+### Phase 5: Visual and Example Consistency Validation
 
 1. **Assess the plan's visual complexity** and select 1–5 diagram perspectives to generate. Use the following scale:
    - **1 diagram** — narrow, single-concern plan (one flow, one component, one decision path).
@@ -201,12 +204,14 @@ After all checks (a–i) converge, use `vscode_askQuestions` (per Phase gate UI 
 
 2. **Generate all selected diagrams** in sequence, each with a one-line description of what it is meant to reveal.
 
-3. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do these diagrams match your mental model of the solution? Is any important perspective missing?" Present at least these options:
-   - **"Continue to Phase 6 — 9 Challenge Angles"** (recommended when the diagrams match) — advance.
-   - **"Re-run Phase 5: Visual Consistency Validation — add or replace a diagram"** — add a missing perspective or replace one with a different type, then re-present this gate.
+3. **Generate textual examples when applicable.** For the 1–3 textual outputs most likely to be misunderstood — a changed template (filled-in instances), a file structure (dir tree under the new standard), config, CLI output, API payload, or document/message format — show 2–3 short labeled examples each (typical plus at least one edge case); list the rest in one line. Skip with a one-line note when none exist. Examples complement diagrams, never replace them. Synthetic data only — no real personal data or secrets. Avoid nested triple-backtick fences. Confirmed examples are normative and go into the Quality Verification Strategy's Confirmed examples sub-list; mark one *illustrative* when its exact content may change (e.g. UX copy) — illustrative never defers an open decision.
+
+4. Use `vscode_askQuestions` (per Phase gate UI rule) to ask: "Do these diagrams and examples match your mental model of the solution? Is any perspective or example missing?" Present at least these options:
+   - **"Continue to Phase 6 — 9 Challenge Angles"** (recommended when the diagrams and examples match) — advance.
+   - **"Re-run Phase 5: Visual and Example Consistency Validation — add or replace a diagram or example"** — add a missing perspective or example, or replace one, then re-present this gate.
    - **"Add a comment or correction"** (open box) — re-run Phase 5 in full, treating the comment as additional context and constraints, then re-present this gate.
 
-4. If any diagram reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
+5. If any diagram or example reveals gaps or inconsistencies not yet surfaced, return to Phase 4 before continuing.
 
 ### Phase 6: Challenge from 9 Distinct Angles
 
@@ -284,7 +289,7 @@ Before approving execution, verify ALL items in the checklist below. If any item
 
 - [ ] Consistency rounds converged (convergence signals met — last 2 rounds produced only single-sentence answers with no new issues) (per Phase navigation rule)
 - [ ] All 9 challenge angles completed with human input received for every ambiguity and subjective decision
-- [ ] Diagram generated and confirmed by the human
+- [ ] Diagram(s) and applicable textual examples generated and confirmed by the human
 - [ ] No unresolved human questions outstanding
 - [ ] Scope confirmed by the human with no silent expansions
 - [ ] Any irreversible or high-impact steps have a mitigation or fallback noted
@@ -316,7 +321,7 @@ Before the final gate, add a step to the implementation plan to produce a concis
 
 If the human chooses to save, the implementation plan must include a dedicated step to write the file. The content must be brief and practical — not exhaustive prose — covering only what is most useful for someone revisiting the feature later:
 - One-paragraph description of what the feature does and why it exists.
-- The diagram generated in Phase 5 (the one the human confirmed).
+- The diagram(s) and textual examples confirmed in Phase 5.
 - Key design decisions that are non-obvious (3–6 bullet points max).
 - A short summary of the main API or usage (CLI flags, HTTP endpoints, or equivalent).
 - Links to relevant policies or EDRs consulted.
@@ -351,7 +356,7 @@ Stop execution and return to Phase 1 if any of the following occur:
 - Phase 2: Requirements qualification — problem and value confirmed; scope boundaries explicit; human asked whether internal service calls need a separate bypass mechanism (edge case); all in-scope items pass 3-check review.
 - Phase 3: Discovers existing middleware and an in-progress PR touching the same path. Human asked about each before drafting.
 - Phase 4: Round 1 — check (a) finds the plan references a `RateLimiter` class not yet decided on; human asked to clarify. Round 5 — all checks return trivial answers; convergence reached.
-- Phase 5: Sequence diagram generated. Human confirms it matches their model.
+- Phase 5: Sequence diagram and 2 sample 429 response payloads generated. Human confirms they match their model.
 - Phase 6: Angle 4 (second-order effects) reveals that rate-limiting breaks an existing test suite that sends rapid sequential requests; human decides to add a test bypass header. Angle 5 (steelman) surfaces that Redis dependency adds operational complexity; human accepts the trade-off.
 - Phase 7: All items checked. Execution approved.
 
@@ -394,7 +399,7 @@ Stop execution and return to Phase 1 if any of the following occur:
   **Instead:** Keep the plan a continuously-edited deliverable matching the Final Plan Artifact Template.
 - **Mistake:** Asking bare questions like "Choose which option? A or B?".
   **Why it happens:** The agent already holds the context and forgets the human does not.
-  **Instead:** Apply the Question content rule: where, what, why it is a doubt, consequences per option, recommendation.
+  **Instead:** Apply the Question content rule: title with context, options with consequences, "(recommended)" prefix, within the word caps.
 
 ## References
 
