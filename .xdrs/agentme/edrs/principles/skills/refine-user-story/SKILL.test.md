@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "4.3.0"
+skill-version: "4.4.0"
 ---
 
 ## Test Scenarios
@@ -123,6 +123,7 @@ You are an agent with the `refine-user-story` skill loaded. The skill has comple
 - [ ] Skill asks a question about the new finding before re-presenting the gate.
 - [ ] Skill re-presents the Phase 4 gate after the human responds.
 - [ ] Skill does not advance to Phase 5 until the gate is explicitly confirmed with "Continue".
+- [ ] Skill summarizes in chat, before re-presenting the gate, what the deeper pass found and what each gate option will cause next.
 
 ---
 
@@ -151,6 +152,8 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 - [ ] Skill asks at least one question about the finding using `vscode_askQuestions` before moving to angle 2.
 - [ ] Skill reflects the human's answer in the story scope (loading spinner + success toast added).
 - [ ] Skill does not skip to Phase 8 while any angle has open questions.
+- [ ] Skill states, before asking, where the gap is (story section) and why it cannot decide alone (a UX choice for the user).
+- [ ] Skill describes each feedback option (immediate download, loading indicator, background task) with its consequences and marks one as recommended with a one-line reason.
 
 ---
 

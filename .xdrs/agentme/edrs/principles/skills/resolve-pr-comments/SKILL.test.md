@@ -1,6 +1,6 @@
 ---
 skill: resolve-pr-comments
-skill-version: "4.0.0"
+skill-version: "4.3.0"
 ---
 
 ## Test Scenarios
@@ -58,6 +58,11 @@ requested -- then reports the final summary by action taken and send status.
       Phase 4 asks anything else.
 - [ ] Skill asks about exactly one comment at a time in Phase 4, posting each comment's full
       focus card as its own chat message before the action question.
+- [ ] Skill's focus card shows the comment's location, states why the action needs the
+      human's decision, lists each possible follow-up with its consequence, and shows a
+      `Recommended action` with a one-line reason, while the human still chooses the action.
+- [ ] Skill's Phase 6 apply confirmation states System, Operation, Fields, and Estimated
+      impact before asking.
 - [ ] Skill shows no confirmation question in Phase 4 -- only a one-line FYI outcome after
       each draft is persisted, for both comments.
 - [ ] Skill's Phase 6 renders a numbered consolidated preview table (`#`, `id`, title,

@@ -7,7 +7,7 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "4.3.0"
+  version: "4.4.0"
   updated: 2026-09-23
 ---
 
@@ -61,7 +61,19 @@ Activate when:
 - **Skip**: when the human invokes Skip, stop the loop, record all open items as named Deferred Risks (visible in the story, carried forward), suspend the hard gate for those items, and advance immediately.
 - **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; concerns about the initial request understanding re-route to Phase 2 Step 1 (Classify and restate).
 
-**Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
+**Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance. Before each gate, summarize in chat what the phase produced, any open risks or deferred items, and what each gate option will cause next (Question content rule applies).
+
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST include:
+1. **Where**: story section, file, or artifact (linked) and the relevant current state.
+2. **What**: the finding, conflict, or gap.
+3. **Why it is a doubt**: why the agent cannot resolve it alone (conflicting sources, missing information, subjective or domain trade-off).
+4. **Options with consequences**: for each option, what it does, benefit, cost or risk, effort, reversibility, and what it postpones.
+5. **Recommendation**: the preferred option with a one-line reason; the user still decides.
+6. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context.
+7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put items 1–5 in a chat message right before the call and keep the tool question short, referencing it ("Q1 (see above): ...").
+8. **Re-explain on request**: when the user asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording.
+
+Example: *"Acceptance criterion 2 says locked accounts can reset their PIN, but the draft's Out of Scope excludes locked accounts. A — keep locked accounts in scope: complete flow, adds an unlock step. B — exclude them: smaller story, locked users stay blocked until a follow-up story. Recommended: A, since locked users are the main reset population."*
 
 **Context Probe rule**: In every phase, whenever you encounter a gap, uncertainty, or ambiguity that external documentation, specifications, URLs, screenshots, or other artifacts could resolve — ask the user proactively. Tie the ask to the specific gap identified (e.g. *"I need to understand how the current deletion confirmation works — do you have a design spec or screenshot?"*). Never ask generically ("do you have any docs?"). The user can always skip; skipped probes are recorded as "Context: not provided for [topic]" and do **not** count as unresolved decisions under the Hard Gate. Do not re-probe gaps already covered by the Context Summary from Phase 1.
 
@@ -530,10 +542,14 @@ Apply the same 4 criteria from Phase 2 Step 3. If two or more are met, the story
 - **Mistake:** Treating a skipped Context Probe as unresolved.
   **Why it happens:** Missing context feels like an open ambiguity.
   **Instead:** Record it as "not provided," not a blocker.
+- **Mistake:** Asking bare questions like "Choose which option? A or B?".
+  **Why it happens:** The agent already holds the context and forgets the user does not.
+  **Instead:** Apply the Question content rule: where, what, why it is a doubt, consequences per option, recommendation.
 
 ## References
 
 - [`agentme-edr-001`](../../001-deferred-work-tracking.md) — Deferred work tracking (TODO.md entry format, numbering, and lifecycle)
+- [`agentme-edr-003`](../../003-hitl-question-content.md) — HITL question content
 - [`agentme-edr-012`](../../012-continuous-xdr-enrichment.md) — Continuous XDR enrichment policy
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing mandate
 - [`agentme-bdr-401`](../../../../bdrs/operations/401-plan-epic-feature-story.md) — Epic/feature/user story planning structure (policy source for the inline reference in Phase 1)
