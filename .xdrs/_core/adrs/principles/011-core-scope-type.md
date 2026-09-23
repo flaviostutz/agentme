@@ -65,11 +65,15 @@ A `core`-type scope MAY be distributed to consumers alongside the companion cons
 
 #### 08-unavailable-core-read-only
 
-A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent, the companion scope MUST be treated as READ-ONLY: content in it MUST NOT be added, changed, or removed. The scope lacks the meta governance that defines how its content MUST be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
+A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent or tagged `disabled` in the root index, the companion scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`): content in it MUST NOT be added, changed, or removed. The scope lacks the meta governance that defines how its content MUST be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
 
 #### 09-distribution-advisable
 
 Distributing `-core` scopes alongside their companion consumable scope to downstream consumers SHOULD be done when possible. Having the meta governance available locally allows tools, agents, and contributors to reason about authoring standards, validate content, and apply scope-local conventions correctly. Distribution is not mandatory; the companion scope remains valid and usable in READ-ONLY mode when the `-core` scope is absent (see `08-unavailable-core-read-only`).
+
+#### 10-no-type-combination
+
+A scope is core-type when its resolved scope-type chain, including parent types (see `_core-adr-policy-010.09-def-parent-scope-type`), contains `core`. A core-type scope MUST declare exactly one scope type; combining a core-type with any other type (e.g., `scope-type: core, standard`) is a lint error. Core-type scopes hold meta governance only, so mixing them with consumable types would blur rules 04 and 05.
 
 ## References
 

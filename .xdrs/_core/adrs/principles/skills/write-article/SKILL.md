@@ -94,7 +94,7 @@ If the article spans more than one subject, place it in `principles`.
 
 ### Phase 4: Research Policies and Skills to Synthesize
 
-1. Read all Policies, Research documents, and Skills relevant to the article topic across all scopes listed in the Policy root `index.md`.
+1. Read all Policies, Research documents, and Skills relevant to the article topic across all scopes listed in the Policy root `index.md`, honouring activation tags (skip `disabled` scopes; use `extends-only` scope policies only through an extending scope, see `_core-adr-policy-022.08-agent-resolution`).
 2. Evaluate Policy metadata before synthesizing guidance. All documents present in the collection are considered active. Use `valid-from:` to determine the convergence date for adoption, `apply-to:` to determine whether the decision fits the audience or context being discussed, and the decision text itself for any remaining applicability boundaries.
 3. Identify the key points a reader needs to understand the topic end-to-end.
 4. Collect Policy IDs and file paths for cross-references. Never copy decision text verbatim; link to it.

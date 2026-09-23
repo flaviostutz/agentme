@@ -23,7 +23,7 @@ How should a scope that exists solely as a compiled representation of external s
 
 #### 01-scope-type-name
 
-The scope type defined by this policy is `compiled`. A scope MUST declare it by setting `scope-type: compiled` in its `index.md` YAML frontmatter. The `compiled` type MAY be combined with one or more other scope types using a comma-separated list (e.g., `scope-type: compiled, reference`).
+The scope type defined by this policy is `compiled`. A scope MUST declare it by setting `scope-type: compiled` in its `index.md` YAML frontmatter. The `compiled` type MAY be combined with one or more other scope types except core-type ones (see `_core-adr-policy-011.10-no-type-combination`) using a comma-separated list (e.g., `scope-type: compiled, reference`).
 
 #### 02-when-to-use
 

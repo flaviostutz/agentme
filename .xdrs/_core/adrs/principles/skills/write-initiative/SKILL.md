@@ -84,7 +84,7 @@ Consult `001-xdrs-standards` while making each choice in this phase. The summari
 
 ### Phase 4: Research Related Artifacts
 
-1. Read all Policies, Research documents, Skills, and existing Initiatives relevant to the initiative topic across all scopes listed in the Policy root `index.md`.
+1. Read all Policies, Research documents, Skills, and existing Initiatives relevant to the initiative topic across all scopes listed in the Policy root `index.md`, honouring activation tags (skip `disabled` scopes; use `extends-only` scope policies only through an extending scope, see `_core-adr-policy-022.08-agent-resolution`).
 2. Evaluate Policy metadata before treating any decision as current context. All documents present in the collection are considered active. `valid-from:` determines the convergence date for adoption, `apply-to:` determines whether the decision fits the intended context, and the decision text defines any remaining boundaries.
 3. Identify Decisions that this initiative implements, Research that informs the planning, and any existing Initiatives that overlap.
 4. Collect artifact IDs and file paths for cross-references.
