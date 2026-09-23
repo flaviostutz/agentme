@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.2.0"
+skill-version: "3.3.0"
 ---
 
 ## Test Scenarios
@@ -89,6 +89,9 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Skill explicitly frames the question as a clarifying question, not a confirmation request.
 - [ ] Skill waits for the human's answer before continuing to the next angle.
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
+- [ ] Skill states, before asking, where the choice arose (the angle and plan section) and why it cannot decide alone.
+- [ ] Skill describes each option (single long document vs. quick-reference cards) with its consequences and marks one as recommended with a one-line reason.
+- [ ] Skill places this context in a chat message before the `vscode_askQuestions` call, keeping the tool question short.
 
 ### Scenario 5: Feature split — deferred parts saved to TODO.md per agentme-edr-001
 

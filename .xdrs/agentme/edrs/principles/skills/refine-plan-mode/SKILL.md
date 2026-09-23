@@ -8,7 +8,7 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.2.0"
+  version: "3.3.0"
   updated: 2026-09-23
 ---
 
@@ -18,6 +18,18 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 **Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 4 or Phase 6, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
 
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST include:
+1. **Where**: file, section, or artifact (linked) and the relevant current state.
+2. **What**: the finding, conflict, or gap.
+3. **Why it is a doubt**: why the agent cannot resolve it alone (conflicting sources, missing information, subjective or domain trade-off).
+4. **Options with consequences**: for each option, what it does, benefit, cost or risk, effort, reversibility, and what it postpones.
+5. **Recommendation**: the preferred option with a one-line reason; the human still decides.
+6. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context.
+7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put items 1–5 in a chat message right before the call and keep the tool question short, referencing it ("Q1 (see above): ...").
+8. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording.
+
+Example: *"In `xyz.md` concepts X and Y conflict on session lifetime, and nothing marks either as authoritative. A — align both with concept W: fixes X and Y permanently, more complex. B — remove X and Y: simpler, postpones the issue. Recommended: A, since B only defers the conflict."*
+
 **Task tracking rule**: Use the todo list tool throughout this entire skill. Before starting each phase, create a todo for it and mark it in-progress. Mark it completed immediately when done. For Phase 4 (consistency checks), create a todo for each check (a–i) before beginning Phase 4 and mark each completed when that check individually converges. For Phase 6 (challenge angles), create a todo for each of the 9 angles before beginning Phase 6 and mark each completed after the human responds to any question raised, or immediately if no question was raised for that angle. An angle todo MUST NOT be marked complete if any decision was self-resolved without asking the human (per the Questioning rule) — if this is detected, flag it as a HITL violation, re-open the todo, surface the decision to the human as a clarifying question, and only mark it complete after the human responds. This ensures no check, round, or angle is silently skipped and no decision is self-resolved.
 
 **Phase navigation rule**: Governs loop control, convergence, and phase transitions across all phases:
@@ -26,7 +38,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 - **Skip**: when the human invokes Skip, stop the loop, record all open items as named Deferred Risks (visible in the plan, carried forward), suspend the hard gate for those items, and advance immediately.
 - **Backtracking**: when any finding touches goals, scope, requirements, or assumptions from an earlier phase, explain to the human which phase is affected and why, and re-run that phase's loop focused on the new information; backtracking overrides any prior skip; Phase 1 concerns re-route to Phase 2 Step 1.
 
-**Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance.
+**Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text so the human can provide corrections, ask follow-up questions, or redirect instead. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance. Before each gate, summarize in chat what the phase produced, any open risks or deferred items, and what each gate option will cause next (Question content rule applies).
 
 **Artifact rule**: The plan is a single continuously-edited final artifact, not an append-only log. Process detail — Q&A rounds, phase-gate confirmations, todo-list tracking — never enters the deliverable; todos stay in the agent's todo-list tool. When a later phase reverses an earlier decision or section, edit it in place — never leave the superseded content beside the replacement. The final artifact's structure follows the **Final Plan Artifact Template** below.
 
@@ -380,10 +392,14 @@ Stop execution and return to Phase 1 if any of the following occur:
 - **Mistake:** Letting the plan accumulate Q&A rounds, gate confirmations, and superseded drafts.
   **Why it happens:** Process narrative is easy to leave behind when editing in a hurry.
   **Instead:** Keep the plan a continuously-edited deliverable matching the Final Plan Artifact Template.
+- **Mistake:** Asking bare questions like "Choose which option? A or B?".
+  **Why it happens:** The agent already holds the context and forgets the human does not.
+  **Instead:** Apply the Question content rule: where, what, why it is a doubt, consequences per option, recommendation.
 
 ## References
 
 - [`agentme-edr-001`](../../001-deferred-work-tracking.md) — Deferred work tracking (TODO.md entry format, numbering, and lifecycle)
+- [`agentme-edr-003`](../../003-hitl-question-content.md) — HITL question content
 - [`agentme-edr-012`](../../012-continuous-xdr-enrichment.md) — Continuous XDR enrichment policy
 - [`agentme-edr-501`](../../../governance/501-project-quality-standards.md) — Project quality standards
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing mandate

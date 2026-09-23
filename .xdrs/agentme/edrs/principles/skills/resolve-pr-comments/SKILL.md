@@ -15,8 +15,8 @@ description: >
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.2.0"
-  updated: 2026-09-21
+  version: "4.3.0"
+  updated: 2026-09-23
 ---
 
 ## Overview
@@ -476,8 +476,9 @@ asked; every field keeps this exact label and order every time, even when blank)
 - **Criticality**: <criticality> -- <full rationale, generated fresh, never persisted>
 - **Resolvable**: <"reply-only -- cannot be resolved" note, shown only when can_resolve is false>
 - **Possible follow-ups**:
-  - <candidate next action 1>
-  - <candidate next action 2>
+  - <candidate next action 1> -- <consequence: effect on the PR, effort, what it postpones>
+  - <candidate next action 2> -- <consequence>
+- **Recommended action**: <reply|wontfix|fix> -- <one-line reason; the human still decides>
 - **Similar comments**: <omitted unless similar-to is non-empty and undecided -- "1 of N near-identical -- file:line, file:line, ...">
 - **Open original**: <comment-url>
 
@@ -571,8 +572,9 @@ either provider.
   they choose.
 - **Write confirmation structure**: the confirmation shown before Phase 6 posts anything to
   the provider shows, before asking: System (owner/repo or org/project/repo + PR number),
-  Operation (reply / resolve / post), and Fields (the exact, verbatim text to be posted,
-  including the automated-message suffix). Phase 6's one-by-one path titles each item's
+  Operation (reply / resolve / post), Fields (the exact, verbatim text to be posted,
+  including the automated-message suffix), and Estimated impact (e.g. "reviewer notified,
+  thread closed"). Phase 6's one-by-one path titles each item's
   confirmation `For comment "<short title>" (<author-raw>), reply with "<reply text>"
   (+resolve comment)?` -- the `(+resolve comment)` tag appended only when `resolve-on-apply`
   is true; truncate the title's reply text to ~100 characters plus "..." when longer, the
@@ -580,6 +582,23 @@ either provider.
   into one preview table instead of re-asking per item, but every item's exact text still
   appears there. This is the only mandatory write-confirmation gate in the skill -- Phase 4's
   drafting is always FYI-only (step 4's outcome line; the no-question path's status lines).
+- **Question content** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a
+  short title with option labels ("Choose A or B?") is never enough. Every question -- the
+  focus-card action question and every other one (sandbox clone, dirty worktree, missing
+  runtime, validation failure, apply mode, continue-or-stop) -- MUST include:
+  1. **Where**: PR, comment, file/line, or workspace state (linked) and the current state.
+  2. **What**: the finding, conflict, or gap.
+  3. **Why it is a doubt**: why the agent cannot resolve it alone.
+  4. **Options with consequences**: per option, what it does, benefit, cost or risk,
+     effort, reversibility, and what it postpones.
+  5. **Recommendation**: the preferred option with a one-line reason; the human decides.
+  6. **Self-contained**: decidable without scrolling back; batched questions numbered
+     Q1..Qn, each with its own context.
+  7. **UI length limits**: `vscode_askQuestions` fields reject ~200+ characters, so put
+     items 1-5 in a chat message (the focus card, for comments) right before the call and
+     keep the tool question short, referencing it ("Q1 (see above): ...").
+  8. **Re-explain on request**: when the human asks for clarification instead of choosing,
+     re-ask with expanded context, never the same wording.
 - **Incremental persistence**: the tracking file is written back to disk immediately after
   every confirmed field change during the walkthrough, not batched until later -- so a
   cancelled or interrupted session always resumes from exactly where it left off, with no
@@ -704,3 +723,4 @@ mandatory apply confirmation.
 - [`azure-devops-connector`](../../../application/skills/azure-devops-connector/SKILL.md) -- Azure DevOps read/write connector.
 - [`agentme-edr-127`](../../../application/127-external-system-adapter-skills.md) -- external system adapter rules (HITL-before-write, connector purity).
 - [`agentme-edr-017`](../../017-skill-testing.md) -- skill testing mandate.
+- [`agentme-edr-003`](../../003-hitl-question-content.md) -- HITL question content.
