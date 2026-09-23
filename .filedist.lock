@@ -1,6 +1,6 @@
 version: 1
 packages:
-  git:https://github.com/flaviostutz/xdrs-core.git@main: 32957912dc47
+  git:https://github.com/flaviostutz/xdrs-core.git@main: 04719db42caf
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
     selector: {}
@@ -9,7 +9,6 @@ files:
     - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|https://github.com/flaviostutz/xdrs-core.git|43d3e6cfe88f|file|57c9bbb2af53|0
     - .xdrs/_core/adrs/principles/skills/.assets/lint-verification.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|91abf268e6b3|0
     - .xdrs/_core/adrs/principles/skills/.assets/scope-selection.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|f020fb131ff2|0
-    - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|ddf1c7125b96|0
     - .xdrs/_core/adrs/principles/012-reference-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|f0e4803cbf72|0
     - .xdrs/_core/adrs/principles/013-platform-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|52f86b912acd|0
     - .xdrs/_core/adrs/principles/014-standard-scope-type.md|https://github.com/flaviostutz/xdrs-core.git|a3dc6bc5fabd|file|131bd55ee79f|0
@@ -32,7 +31,6 @@ files:
     - .agents/skills/write-xdrs-doc|https://github.com/flaviostutz/xdrs-core.git|be2173eda139|symlink|e9c26781b910|0
     - .xdrs/_core/adrs/principles/skills/write-presentation/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0905c73e0cd5|file|12598fb009f2|0
     - .xdrs/_core/adrs/principles/skills/write-xdrs-doc/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|0905c73e0cd5|file|77d1d3eae5db|0
-    - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|872b65a034f9|file|93bb3e731319|0
     - .xdrs/_core/adrs/principles/skills/write-skill/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|872b65a034f9|file|7831ed79c8c8|0
     - .xdrs/_core/adrs/principles/021-skill-bundling.md|https://github.com/flaviostutz/xdrs-core.git|ea074dcfb15a|file|558f93591546|0
     - .xdrs/_core/adrs/principles/022-scope-activation.md|https://github.com/flaviostutz/xdrs-core.git|32957912dc47|file|650466258c7e|0
@@ -51,5 +49,7 @@ files:
     - .xdrs/_core/adrs/principles/skills/write-research/SKILL.md|https://github.com/flaviostutz/xdrs-core.git|32957912dc47|file|e293e0342918|0
     - .xdrs/_core/index.md|https://github.com/flaviostutz/xdrs-core.git|32957912dc47|file|70b0129bd1f8|0
     - AGENTS.md|https://github.com/flaviostutz/xdrs-core.git|32957912dc47|file|a5dda68d515c|0
-checksum: 81bc3daa2c0b
+    - .xdrs/_core/adrs/principles/003-skill-standards.md|https://github.com/flaviostutz/xdrs-core.git|04719db42caf|file|c23a438c254d|0
+    - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|https://github.com/flaviostutz/xdrs-core.git|04719db42caf|file|21486c032104|0
+checksum: a35489c8e8d1
 

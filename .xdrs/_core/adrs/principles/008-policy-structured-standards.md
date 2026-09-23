@@ -49,7 +49,7 @@ A rule title SHOULD include a normative keyword when the rule can be stated clea
 
 #### 08-rule-block-must-use-standard-syntax
 
-Each rule MUST be written as a level-4 heading with a two-digit zero-padded sequence number followed by a kebab-case title, and a body paragraph:
+Each rule MUST be written as a level-4 heading with a two-digit zero-padded sequence number followed by a kebab-case title of 12 words or fewer, and a body paragraph:
 
 ```markdown
 #### [NN]-[short-rule-title-in-kebab-case]
