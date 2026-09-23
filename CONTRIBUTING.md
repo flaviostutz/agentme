@@ -12,6 +12,8 @@ Discuss feature ideas in issues before implementing them. Use the issue to align
 
 Contribute fixes and features through pull requests. Create a feature branch from `main`, keep it focused on one topic, and open the pull request back to `main`.
 
+If you track deferred work in a `TODO.md` (see `agentme-edr-001`), it is feature-branch-only — resolve or migrate every entry and remove the file before merging to `main`.
+
 ## Review etiquette
 
 Use [Conventional Comments](https://conventionalcomments.org/) when giving review feedback so intent is explicit and discussion is easier to act on.

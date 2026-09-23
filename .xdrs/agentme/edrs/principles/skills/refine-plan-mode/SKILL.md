@@ -8,8 +8,8 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.1.0"
-  updated: 2026-09-21
+  version: "3.2.0"
+  updated: 2026-09-23
 ---
 
 ## Overview
@@ -285,15 +285,17 @@ Before approving execution, verify ALL items in the checklist below. If any item
 
 Once all items are checked or explicitly marked N/A, present a **brief scenario summary** — a short bulleted list of the most significant scenarios discovered across all phases (aim for 5–10 entries), each showing: the angle or check that surfaced it, what it revealed, and what test case was added to the plan. This makes the depth of analysis visible before handoff.
 
-If any features were placed in the **Deferred Features** list during Phase 2 Step 5 (scope split) or explicitly excluded from scope at any point, present a **Deferred Features summary** — a bulleted list of each deferred part with a one-line description of what it covers and why it was deferred. Then use `vscode_askQuestions` with:
-- **"Save to TODO.md"** (recommended) — append an entry under a `## Deferred Features` heading in `TODO.md` at the workspace root (create the file if it does not exist), using the Group/Part template below, so anyone can pick up the work later without losing context.
-- **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same Group/Part template.
+If any features were placed in the **Deferred Features** list during Phase 2 Step 5 (scope split) or explicitly excluded from scope at any point, present a **Deferred Features summary** — a bulleted list of each deferred part with a one-line description of what it covers and why it was deferred. This is an instance of the general "ask before deferring" rule in `agentme-edr-001` rule 06 — this skill does not own that behavior, it only triggers it. Then use `vscode_askQuestions` with:
+- **"Save to TODO.md"** (recommended) — append an entry to `TODO.md` at the workspace root (create the file if it does not exist), following the entry format and numbering algorithm in `agentme-edr-001` rules 04-05, so anyone can pick up the work later without losing context.
+- **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same entry format.
 - **"Skip — do not save"** — proceed without saving.
 This step is skipped if no features were deferred.
 
-**Deferred Features entry template** — always append a new `### Group:` section per split (never merge with a same-titled prior group); a group can have as few as 1 part:
-- `### Group: [original request title] — deferred [YYYY-MM-DD]` — with **Origin:** `refine-plan-mode — Phase 2 Step 5`, **Original objective:** the one-sentence value of the whole request before splitting, and **Split rationale:** why it was split.
-- One `#### [part title]` subsection per deferred part, each with **Objective:** (this part's specific value), **Scope:** (bullet list of what's included), **Context captured so far:** (bullet list of key decisions/answers/constraints already gathered before deferral), and **Suggested prompt to resume:** (a ready-to-paste prompt naming plan mode and summarizing the objective and known constraints so a future session can resume without re-reading the whole conversation).
+**Field mapping for each deferred part** — populate the `agentme-edr-001` entry fields losslessly from the Phase 2 Step 5 split:
+- `status`: `open` (a freshly split-off part has not been picked up yet).
+- `prompt`: merge this part's Objective, Scope, and Context captured so far, plus a suggested prompt to resume that names plan mode and summarizes the objective and known constraints, so a future session can resume without re-reading the whole conversation.
+- `deferred reason`: the split rationale — why this part was split out (<30 words).
+- `why this is important` / `dev notes`: optional — fill only if distinct content remains after the mapping above.
 
 Before the final gate, add a step to the implementation plan to produce a concise feature documentation file. Use `vscode_askQuestions` to ask:
 - **"Save to README.md"** (recommended) — append the documentation to `README.md` in the feature’s directory (create if absent).
@@ -381,6 +383,7 @@ Stop execution and return to Phase 1 if any of the following occur:
 
 ## References
 
+- [`agentme-edr-001`](../../001-deferred-work-tracking.md) — Deferred work tracking (TODO.md entry format, numbering, and lifecycle)
 - [`agentme-edr-012`](../../012-continuous-xdr-enrichment.md) — Continuous XDR enrichment policy
 - [`agentme-edr-501`](../../../governance/501-project-quality-standards.md) — Project quality standards
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing mandate

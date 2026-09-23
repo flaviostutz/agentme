@@ -7,8 +7,8 @@ description: >
   complete, and ready for implementation.
 metadata:
   author: flaviostutz
-  version: "4.2.0"
-  updated: 2026-09-21
+  version: "4.3.0"
+  updated: 2026-09-23
 ---
 
 ## Overview
@@ -373,18 +373,22 @@ Once all items are checked or explicitly marked N/A, **produce the final result*
 - If the work is too large, output only the split stories using the same template.
 - Acceptance criteria must be a plain checklist.
 
-If any stories or features were placed in the **Deferred Stories** list during Phase 2 Step 3 (scope split), or any items were recorded as named **Deferred Risks** during a Skip, present a **Deferred Items summary** — a bulleted list of each deferred item with a one-line description of what it covers and why it was deferred.
+If any stories or features were placed in the **Deferred Stories** list during Phase 2 Step 3 (scope split), or any items were recorded as named **Deferred Risks** during a Skip, present a **Deferred Items summary** — a bulleted list of each deferred item with a one-line description of what it covers and why it was deferred. This is an instance of the general "ask before deferring" rule in `agentme-edr-001` rule 06 — this skill does not own that behavior, it only triggers it.
 
 **When an XDRS initiative doc is active** (Phase 1 selected or created an initiative): skip this prompt entirely. Deferred slices are handled as placeholder files with task links in the initiative doc by the Initiative document integration section below.
 
 **When no XDRS initiative doc is active**: use `vscode_askQuestions` with:
-- **"Save to TODO.md"** (recommended) — append an entry under a `## Deferred Stories` heading in `TODO.md` at the workspace root (create the file if it does not exist), using the template below.
-- **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same template.
+- **"Save to TODO.md"** (recommended) — append an entry to `TODO.md` at the workspace root (create the file if it does not exist), following the entry format and numbering algorithm in `agentme-edr-001` rules 04-05.
+- **"Save to a different file"** (open box) — human specifies the file path; append there instead using the same entry format.
 - **"Skip — do not save"** — proceed without saving.
 
 This step is skipped if no stories were deferred and no Deferred Risks were recorded.
 
-**Deferred Stories template**: new `### Group: [title] — deferred [YYYY-MM-DD]` per split (1+ parts, never merged) with **Origin**, **Original objective**, **Split rationale**; one `#### [slice title]` per slice with **Objective**, **Scope**, **Context captured so far**, **Suggested prompt to resume**.
+**Field mapping for each deferred story/slice** — populate the `agentme-edr-001` entry fields losslessly from the Phase 2 Step 3 split (or the recorded Deferred Risk):
+- `status`: `open`.
+- `prompt`: merge this slice's Objective, Scope, and Context captured so far, plus a suggested prompt to resume that names user-story refinement and summarizes the objective and known constraints.
+- `deferred reason`: the split rationale, or the reason the risk was skipped (<30 words).
+- `why this is important` / `dev notes`: optional — fill only if distinct content remains after the mapping above.
 
 ### Initiative document integration
 
@@ -407,7 +411,7 @@ After producing the final story output, persist it according to the active initi
 
 **When no XDRS initiative doc is active ("start fresh" or no XDRS scope):**
 - Ask the user where to save the refined story (default: `userstory-NNN-slug.md` at workspace root).
-- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic initiative, create a new epic initiative, or save to `TODO.md` per the template in Phase 8. Apply the chosen action.
+- If split/deferred stories exist, use `vscode_askQuestions` to ask whether to add them to an existing epic initiative, create a new epic initiative, or save to `TODO.md` per `agentme-edr-001` (Phase 8). Apply the chosen action.
 
 ### Output Template
 
@@ -529,6 +533,7 @@ Apply the same 4 criteria from Phase 2 Step 3. If two or more are met, the story
 
 ## References
 
+- [`agentme-edr-001`](../../001-deferred-work-tracking.md) — Deferred work tracking (TODO.md entry format, numbering, and lifecycle)
 - [`agentme-edr-012`](../../012-continuous-xdr-enrichment.md) — Continuous XDR enrichment policy
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing mandate
 - [`agentme-bdr-401`](../../../../bdrs/operations/401-plan-epic-feature-story.md) — Epic/feature/user story planning structure (policy source for the inline reference in Phase 1)

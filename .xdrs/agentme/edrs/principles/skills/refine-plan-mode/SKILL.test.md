@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.1.0"
+skill-version: "3.2.0"
 ---
 
 ## Test Scenarios
@@ -90,7 +90,7 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Skill waits for the human's answer before continuing to the next angle.
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
 
-### Scenario 5: Feature split — deferred parts saved to TODO.md with Group/Part detail
+### Scenario 5: Feature split — deferred parts saved to TODO.md per agentme-edr-001
 
 **Trigger / Input**
 
@@ -98,7 +98,7 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 
 **Expected Behaviour**
 
-Phase 2 Step 4 surfaces roughly 24 distinct in-scope items across the three subsystems. Phase 2 Step 5 judges the request too large — it spans 3 qualitatively different concerns (user management, billing, audit) each needing independent data-model and UI design, and exceeds the ~20-item threshold — and proposes a 3-way split. The human accepts the split and picks "User management" as Part 1. Phases 1–7 run on User management only; the other two parts are recorded in the Deferred Features list. At Phase 7, the skill presents a brief one-line-per-item Deferred Features summary, then uses `vscode_askQuestions` offering "Save to TODO.md" as the recommended option. The human picks it. The skill creates (or appends to) `TODO.md` at the workspace root with a `## Deferred Features` heading containing one `### Group:` section covering both deferred parts (Billing management, Audit log viewer), with Origin/Original objective/Split rationale, and each part as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
+Phase 2 Step 4 surfaces roughly 24 distinct in-scope items across the three subsystems. Phase 2 Step 5 judges the request too large — it spans 3 qualitatively different concerns (user management, billing, audit) each needing independent data-model and UI design, and exceeds the ~20-item threshold — and proposes a 3-way split. The human accepts the split and picks "User management" as Part 1. Phases 1–7 run on User management only; the other two parts are recorded in the Deferred Features list. At Phase 7, the skill presents a brief one-line-per-item Deferred Features summary, then uses `vscode_askQuestions` offering "Save to TODO.md" as the recommended option. The human picks it. The skill creates (or appends to) `TODO.md` at the workspace root and appends one `agentme-edr-001` entry per deferred part (Billing management, Audit log viewer), each with its own `## N- Title (date)` heading, `status: open`, a `prompt` merging that part's Objective/Scope/Context captured so far plus a suggested resume prompt, and `deferred reason` set to the split rationale.
 
 **Simulated Human Responses**
 1. "Accept split — start planning User management"
@@ -110,9 +110,9 @@ Phase 2 Step 4 surfaces roughly 24 distinct in-scope items across the three subs
 - [ ] Only the chosen part (User management) is planned through Phases 1–7; the other two parts are not further elaborated beyond the deferred entry.
 - [ ] Phase 7 presents a Deferred Features summary as brief one-line bullets before asking where to save.
 - [ ] `vscode_askQuestions` offers "Save to TODO.md" as the recommended option.
-- [ ] TODO.md is created (or appended to) at the workspace root with a `## Deferred Features` heading.
-- [ ] A single `### Group:` heading covers both deferred parts, recording Origin, Original objective, and Split rationale.
-- [ ] Each deferred part appears as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
+- [ ] TODO.md is created (or appended to) at the workspace root following the `agentme-edr-001` entry format (no `### Group:`/`#### ` headings).
+- [ ] Each deferred part gets its own numbered entry with `status: open` and a `prompt` merging Objective, Scope, and Context captured so far.
+- [ ] Each entry's `deferred reason` records the split rationale.
 
 ### Scenario 6: Final plan artifact contains no process narrative
 
@@ -136,4 +136,4 @@ Throughout every phase, the plan document is maintained as a single continuously
 - [ ] No decision or section appears twice with one marked as superseding the other — reversed decisions are edited in place.
 - [ ] The final plan's top-level sections match SKILL.md's Final Plan Artifact Template section exactly, with zero additional top-level sections.
 - [ ] Todo-list tracking used during the workflow (per the Task tracking rule) does not appear inside the final plan document.
-- [ ] The Deferred Features entry from the Phase 2 Step 5 split appears only in `TODO.md` (per the existing template), not duplicated inside the main plan body.
+- [ ] The Deferred Features entry from the Phase 2 Step 5 split appears only in `TODO.md` (per `agentme-edr-001`), not duplicated inside the main plan body.

@@ -57,6 +57,10 @@ Project scaffolding skills SHOULD create the file by default when they initializ
 
 The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` into a duplicate of `README.md`.
 
+#### 10-guide-must-document-todo-md-branch-scope
+
+When a project uses `TODO.md` to track deferred work per `agentme-edr-001`, the guide MUST state that `TODO.md` is feature-branch-only and MUST be removed — all non-`[BACKLOG]`-tagged entries resolved, any remaining `[BACKLOG]`-tagged entries migrated to an issue or personal note — before a pull request merges to `main`.
+
 ## Considered Options
 
 * (REJECTED) **Keep contribution rules implicit** - Rely on README text, issue templates, or maintainers explaining the workflow ad hoc.
@@ -66,5 +70,6 @@ The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` int
 
 ## References
 
+- [agentme-edr-001 - Deferred work tracking](../principles/001-deferred-work-tracking.md)
 - [agentme-edr-301 - Monorepo structure](../platform/301-monorepo-structure.md)
 - [monorepo-setup skill](../platform/skills/monorepo-setup/SKILL.md)

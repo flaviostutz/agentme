@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "4.2.0"
+skill-version: "4.3.0"
 ---
 
 ## Test Scenarios
@@ -76,7 +76,7 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
 7. Skill restarts from Phase 1 with the narrower registration scope. The remaining 3 slices are recorded as Deferred Stories.
 8. Phases 1–7 run on the registration slice only. At Phase 8, a Deferred Items summary lists the 3 remaining slices.
 9. Because no initiative doc is active, skill presents `vscode_askQuestions` asking where to save the deferred slices; user picks TODO.md.
-10. Skill outputs one fully refined story (registration) and appends the 3 deferred slices to TODO.md as a single `### Group:` section with one `#### ` subsection per slice.
+10. Skill outputs one fully refined story (registration) and appends the 3 deferred slices to TODO.md as 3 separate `agentme-edr-001` entries (login, password reset, social login), each with its own `## N- Title (date)` heading, `status: open`, and a `prompt` merging that slice's Objective/Scope/Context captured so far.
 
 **Simulated Human Responses**
 1. "Registration: email + password only. Password min 8 chars, at least one digit. Email must be verified before the user can log in."
@@ -267,7 +267,7 @@ You are an agent with the `refine-user-story` skill loaded. Phase 0 detected an 
 1. Phase 0 detects XDRS scope, presents epic initiative list plus "Start fresh" option, user picks "Start fresh".
 2. Phases 1–7 run normally for Slice 1.
 3. At Phase 8, because the context is "start fresh" (no active initiative doc), the two deferred slices trigger a `vscode_askQuestions` prompt: "Where should the deferred story slices go?" with options: add to an existing epic initiative (lists found epics), create a new epic initiative, or save to TODO.md.
-4. Skill applies the chosen action (e.g., creates placeholder files for the two deferred slices and inserts `- [Slice description — pending](.assets/userstory-NNN-slug.md)` task entries in the chosen epic initiative, or appends a Group/Part entry to TODO.md).
+4. Skill applies the chosen action (e.g., creates placeholder files for the two deferred slices and inserts `- [Slice description — pending](.assets/userstory-NNN-slug.md)` task entries in the chosen epic initiative, or appends one `agentme-edr-001` entry per slice to TODO.md).
 
 **Assertions**
 - [ ] Phase 0 presents the XDRS epic initiative list even in "start fresh" mode.
@@ -300,7 +300,7 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
    - **"Save deferred slices to TODO.md"** (recommended)
    - **"Save to a different file"** (open box)
    - **"Skip — do not save"**
-7. User picks "Save deferred slices to TODO.md". Skill appends a single `### Group: [checkout flow] — deferred [date]` section under a `## Deferred Stories` heading in `TODO.md` at the workspace root (creating the file if needed), recording Origin, Original objective, and Split rationale, followed by one `#### ` subsection per deferred slice (Slices 2–6), each with its own Objective, Scope, Context captured so far, and Suggested prompt to resume.
+7. User picks "Save deferred slices to TODO.md". Skill appends 5 separate `agentme-edr-001` entries to `TODO.md` at the workspace root (creating the file if needed), one per deferred slice (Slices 2–6), each with its own `## N- Title (date)` heading, `status: open`, a `prompt` merging that slice's Objective/Scope/Context captured so far plus a suggested prompt to resume, and `deferred reason` set to the split rationale.
 8. Skill outputs the refined story for Slice 1 only.
 
 **Assertions**
@@ -310,9 +310,9 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
 - [ ] Only the user-selected slice (Slice 1) is refined through Phases 1–7.
 - [ ] The remaining slices appear in a Deferred Items summary at Phase 8.
 - [ ] `vscode_askQuestions` is used at Phase 8 to ask where to save deferred slices (not silently appended).
-- [ ] TODO.md is created (or appended to) at the workspace root with a `## Deferred Stories` section containing a single `### Group:` heading for this split.
-- [ ] The Group heading records the origin (refine-user-story, Phase 2 Step 3), the original checkout-flow objective, and the split rationale.
-- [ ] Each of the 5 deferred slices appears as its own `#### ` subsection with Objective, Scope, Context captured so far, and a Suggested prompt to resume.
+- [ ] TODO.md is created (or appended to) at the workspace root following the `agentme-edr-001` entry format (no `### Group:`/`#### ` headings).
+- [ ] Each of the 5 deferred slices appears as its own numbered entry with `status: open`, recording its split rationale as `deferred reason`.
+- [ ] Each entry's `prompt` merges Objective, Scope, Context captured so far, and a Suggested prompt to resume.
 - [ ] The final output contains exactly one refined story (Slice 1), not all slices.
 - [ ] Skill does NOT offer TODO.md for deferred items from an active initiative doc (this scenario has no initiative doc — condition satisfied).
 
