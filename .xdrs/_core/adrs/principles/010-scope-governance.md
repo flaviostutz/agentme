@@ -81,9 +81,9 @@ A scope-type definition policy MAY declare a parent scope type by including a ru
 
 #### 10-def-valid-iff-policy-exists
 
-A `scope-type` value in a scope `index.md` is valid if and only if a policy file whose name ends with `{scope-type}-scope-type` exists in the `principles` subject of any `core`-type scope in the workspace. Tools (such as `xdrs-core lint`) MUST enforce this for every element when `scope-type` is an array.
+A `scope-type` value in a scope `index.md` is valid if and only if a policy file whose name ends with `{scope-type}-scope-type` exists in the `principles` subject of any `core`-type scope in the workspace. When `scope-type` is an array, this applies to every element.
 
-When a scope declares a `scope-type` but any corresponding `{scope-type}-scope-type.md` policy is absent from the workspace or defined only in a `disabled` scope, the scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`). Missing types are a lint error for local scopes.
+When a scope declares a `scope-type` but any corresponding `{scope-type}-scope-type.md` policy is absent from the workspace or defined only in a `disabled` scope, the scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`). Missing or disabled-only types MUST be fixed in local scopes.
 
 #### 11-def-scope-type-must-be-structured
 
@@ -103,7 +103,7 @@ The word `core` as a hyphen-delimited segment in a policy filename title is rese
 
 #### 14-local-placement
 
-Local meta-policy files MUST be placed in the `principles` subject of any type folder within the scope they govern (e.g., `my-team/adrs/principles/001-core.md`). They apply implicitly to that scope — no declaration in `index.md` is required. Local meta-policies MUST NOT be placed in any other subject folder; a file whose title starts with `core` in a non-`principles` subject is a lint error.
+Local meta-policy files MUST be placed in the `principles` subject of any type folder within the scope they govern (e.g., `my-team/adrs/principles/001-core.md`). They apply implicitly to that scope — no declaration in `index.md` is required. Local meta-policies MUST NOT be placed in any other subject folder; a file whose title starts with `core` in a non-`principles` subject is invalid.
 
 #### 15-local-primary-required
 
@@ -180,7 +180,7 @@ When a policy (scope-type definition, local meta-policy, or companion) overrides
 - The policy file where the original rule is defined.
 - A short explanation of why the override is required for this scope or type.
 
-A `## Conflicts` section MAY also document cross-scope-type incompatibilities for informational purposes. Tools and agents MUST detect undeclared conflicts at review time and surface them as errors. Semantic conflict detection is the responsibility of the authoring agent, not the lint tool.
+A `## Conflicts` section MAY also document cross-scope-type incompatibilities for informational purposes. Tools and agents MUST detect undeclared conflicts at review time and surface them as errors. Semantic conflict detection is the responsibility of the authoring agent.
 
 ## References
 
@@ -213,7 +213,7 @@ A scope `extends:` declaration MUST NOT reference the declaring scope itself. To
 
 #### 32-extends-mandatory-presence
 
-Every scope listed in a scope's `extends:` field MUST exist in the workspace with an accessible `index.md`. If any referenced scope is absent or its `index.md` cannot be read, all READ, WRITE, and REVIEW operations on the extending scope MUST fail immediately. Tools MUST surface a clear message naming the missing scope and citing code `_core-adr-policy-010.32-extends-mandatory-presence`.
+Every scope listed in a scope's `extends:` field MUST exist in the workspace with an accessible `index.md`. If any referenced scope is absent or its `index.md` cannot be read, the extending scope MUST be fixed when local and is READ-ONLY when external (`_core-adr-policy-022.06-read-only-dependencies`).
 
 #### 33-extends-content-precedence
 
