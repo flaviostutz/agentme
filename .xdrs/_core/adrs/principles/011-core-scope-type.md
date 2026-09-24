@@ -73,7 +73,7 @@ Distributing `-core` scopes alongside their companion consumable scope to downst
 
 #### 10-no-type-combination
 
-A scope is core-type when its resolved scope-type chain, including parent types (see `_core-adr-policy-010.09-def-parent-scope-type`), contains `core`. A core-type scope MUST declare exactly one scope type; combining a core-type with any other type (e.g., `scope-type: core, standard`) is a lint error. Core-type scopes hold meta governance only, so mixing them with consumable types would blur rules 04 and 05.
+A scope is core-type when its resolved scope-type chain, including parent types (see `_core-adr-policy-010.09-def-parent-scope-type`), contains `core`. A core-type scope MUST declare exactly one scope type; combining a core-type with any other type (e.g., `scope-type: core, standard`) is invalid. Core-type scopes hold meta governance only, so mixing them with consumable types would blur rules 04 and 05.
 
 ## References
 

@@ -75,6 +75,8 @@ Examples:
 
 Multiple skills under the same `[subject]/skills/` folder MAY share common instruction modules through a sibling `.assets/` directory placed directly under `skills/` (not inside any individual skill package) — for example `skills/.assets/shared-check.md`, referenced with a relative link from any skill in that folder. This keeps shared procedures DRY without duplicating instructions across skills.
 
+A skill's own `.assets/` folder and the shared `skills/.assets/` folder are exempt from orphan-asset tracking: their files do not need to be linked from `SKILL.md`, because they may hold scripts, templates, installed dependencies (e.g., `node_modules/`), or other runtime resources used by the skill. When `SKILL.md` does link to an asset, the link MUST point either to the skill's own `.assets/` folder or to the shared `../.assets/` folder.
+
 A skill MAY optionally be distributed as a self-contained standalone package (for example, to share it outside this repository) using the bundling mechanism defined in [`_core-adr-policy-021`](021-skill-bundling.md). Bundling is optional; skills that are always consumed as part of the full package do not need it.
 
 **Directory roles**
@@ -84,7 +86,7 @@ A skill MAY optionally be distributed as a self-contained standalone package (fo
 | `SKILL.md` | Required entry point: frontmatter + instructions. |
 | `scripts/` | Optional executable scripts the agent may run. |
 | `references/` | Optional deep reference material split out of `SKILL.md`. |
-| `.assets/` | Optional images, templates, and other local resource files. |
+| `.assets/` | Optional images, templates, scripts, dependencies, and other local resource files. Not subject to orphan-asset tracking. |
 
 **Skill naming**
 

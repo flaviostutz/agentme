@@ -138,7 +138,7 @@ After writing each policy:
 ### Phase 6: Lint
 
 1. Run `npx xdrs-core lint` from the workspace root (or `make lint` if a `Makefile` is present with a `lint` target).
-2. Review all reported errors and warnings.
+2. Review all reported errors.
 3. Fix only mechanical and structural errors (missing required frontmatter fields, naming violations, index link mismatches). Do NOT invent content to satisfy content-level findings.
 4. Re-run lint after fixes until it passes or only unfixable findings remain.
 
