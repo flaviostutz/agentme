@@ -11,7 +11,7 @@ const { execFileSync } = require('node:child_process');
 const SCRIPT = path.join(__dirname, 'post-replies-azure-devops.js');
 const { parsePrUrl, joinReplyDraft } = require('./post-replies-azure-devops.js');
 
-const PR_URL = 'https://dev.azure.com/nn-bank/mortgage-loan/_git/mortgage-loan/pullrequest/43556';
+const PR_URL = 'https://dev.azure.com/example-org/example-project/_git/example-project/pullrequest/43556';
 
 // Fake `az` used via AZ_BIN: reads/writes a JSON file (FAKE_ADO_STATE) to simulate thread
 // state, so tests never touch the network. Supports the same `rest --method GET|POST|PATCH
@@ -133,7 +133,7 @@ function getField(file, id, field) {
 }
 
 test('parsePrUrl extracts org/project/repo/pr from a modern dev.azure.com URL', () => {
-  assert.deepEqual(parsePrUrl(PR_URL), { org: 'nn-bank', project: 'mortgage-loan', repo: 'mortgage-loan', pr: '43556' });
+  assert.deepEqual(parsePrUrl(PR_URL), { org: 'example-org', project: 'example-project', repo: 'example-project', pr: '43556' });
 });
 
 test('parsePrUrl extracts org/project/repo/pr from a legacy *.visualstudio.com URL', () => {

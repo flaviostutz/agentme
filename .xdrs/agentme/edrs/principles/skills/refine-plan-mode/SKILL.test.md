@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.4.0"
+skill-version: "3.5.0"
 ---
 
 ## Test Scenarios
@@ -93,7 +93,7 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
 - [ ] Skill gives the question a short title and a context line naming where the choice arose (the angle and plan section).
 - [ ] Skill describes each option (single long document vs. quick-reference cards) with its consequences and prefixes one with "(recommended)".
-- [ ] Skill maps the title, context, and options to the `vscode_askQuestions` fields, or places the full question in a chat message before the call when a part exceeds the field limit.
+- [ ] Skill fills the `vscode_askQuestions` header, question, message, option labels, and option descriptions with the title, context, options, and consequences, and does not reduce the UI to a bare "see above" reference even when the full question is also in chat.
 
 ### Scenario 5: Feature split — deferred parts saved to TODO.md per agentme-edr-001
 

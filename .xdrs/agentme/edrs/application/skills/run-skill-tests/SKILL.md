@@ -6,8 +6,8 @@ description: >
   or validate a skill, or before merging a PR that modifies a skill or its SKILL.test.md.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-21
+  version: "1.2.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -36,6 +36,20 @@ Loads `SKILL.test.md` from a skill directory, runs each scenario by invoking the
 - `SKILL.test.md` has no scenarios
 
 ## Instructions
+
+### Question Checklist
+
+Every question to the human MUST follow [`agentme-edr-003`](../../../principles/003-hitl-question-content.md):
+
+- [ ] **01**: Title, then one context line stating what was found and the current state.
+- [ ] **03**: 2-4 options, each stating what it does and its main consequence.
+- [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
+- [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
+- [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in under 80 words.
+- [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
+- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question under 140 words. Never apply a recommendation without the human's answer.
+
+Pure information requests (e.g. the skill path) MAY skip options and the recommendation. Questions asked by the skill under test are answered from its `**Simulated Human Responses**`, not by this checklist.
 
 ### Phase 1: Locate and Validate SKILL.test.md
 

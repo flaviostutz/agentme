@@ -1,6 +1,6 @@
 ---
 skill: github-connector
-skill-version: "1.2.0"
+skill-version: "1.3.0"
 ---
 
 ## Test Scenarios
@@ -52,6 +52,9 @@ confirmation.
 - [ ] Connector shows the mandatory confirmation (System, Operation, Fields, Estimated
       impact) before posting.
 - [ ] Connector does not post before receiving explicit human confirmation.
+- [ ] Connector's confirmation question has a context line, states each option's
+      consequence, prefixes one option with "(recommended)", and fills the question-UI
+      fields (question, message, option labels, option descriptions), not a bare "see above".
 
 ### Scenario 3: Permission-denied write degrades to reply-only, no silent retry
 

@@ -8,8 +8,8 @@ description: >
   DevOps.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-21
+  version: "1.3.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -44,6 +44,19 @@ data and normalizes it to the shape consumed by
 - Only a non-`az` HTTP fallback is available
 
 ## Instructions
+
+### Question Checklist
+
+Every question to the human (install prompt, write confirmation) MUST follow [`agentme-edr-003`](../../../principles/003-hitl-question-content.md):
+
+- [ ] **01**: Title, then one context line stating what was found and the current state.
+- [ ] **03**: 2-4 options, each stating what it does and its main consequence.
+- [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
+- [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
+- [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in under 80 words.
+- [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
+- [ ] **09**: Write confirmations also show System, Operation, Fields, and Estimated impact (see Writing data).
+- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question under 140 words. Never apply a recommendation without the human's answer.
 
 ### Authentication check
 

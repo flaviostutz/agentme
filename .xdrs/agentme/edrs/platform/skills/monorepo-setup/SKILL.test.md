@@ -1,6 +1,6 @@
 ---
 skill: monorepo-setup
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -78,3 +78,6 @@ existing file against the standard layout and proposes additions instead.
       user confirmation.
 - [ ] Output presents a diff or a proposed set of additions rather than replacing the file
       silently.
+- [ ] Output's overwrite question has a context line naming the existing file, states each
+      option's consequence, prefixes one option with "(recommended)", and fills the
+      question-UI fields (question, message, option labels, option descriptions).

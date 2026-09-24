@@ -15,8 +15,8 @@ description: >
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.3.0"
-  updated: 2026-09-23
+  version: "4.4.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -595,10 +595,11 @@ either provider.
      "A: (recommended) ..."); the human decides.
   4. **Self-contained**: decidable without scrolling back; batched questions numbered
      Q1..Qn, each with its own context, at most 5 per round.
-  5. **UI fields**: map title, context, and options to the `vscode_askQuestions` question,
-     message, and labels; if a part exceeds ~200 characters, put the full question in a
-     chat message first (the focus card, for comments) and reference it ("Q1 (see
-     above): ...").
+  5. **UI fields**: fill the `vscode_askQuestions` header, question, message, option
+     labels, and option descriptions (consequences) with as much as fits each
+     ~200-character limit; condense before truncating. If anything was cut, also put the
+     full question in a chat message first (the focus card, for comments); never reduce
+     the UI to "see above".
   6. **Phase gates**: gate summaries under 80 words.
   7. **Re-explain on request**: when the human asks for clarification instead of choosing,
      re-ask with expanded context, never the same wording, up to twice the caps.

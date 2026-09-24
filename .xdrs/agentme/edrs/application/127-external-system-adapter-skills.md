@@ -17,7 +17,7 @@ How should agents approach external system interaction, and how should that know
 
 Use a priority-ordered integration approach — always leveraging the user's existing session context — and encode system-specific interaction knowledge as business-logic-free adapter skills.
 
-Rules 01–04 govern **runtime behavior** (an agent executing a task against an external system). Rule 05 governs **authoring** (a skill author writing an adapter skill).
+Rules 01–04 govern **runtime behavior** (an agent executing a task against an external system). Rules 05–07 govern **authoring** (a skill author writing an adapter skill).
 
 ### Details
 
@@ -26,7 +26,7 @@ Rules 01–04 govern **runtime behavior** (an agent executing a task against an 
 Agents MUST attempt the following approaches in order, stopping at the first that is feasible:
 
 1. **API via curl** — If the system exposes an API, interact with it directly using the `curl` CLI. Another HTTP client MAY be used only when `curl` is insufficient for the specific operation (e.g. streaming, binary upload).
-2. **Playwright UI scraping** — If no API is available or the user cannot provide an API credential, use the `playwright` CLI (via `npx -y --package=@playwright/cli@latest playwright-cli`) to interact with the system's UI using the user's existing browser profile (see rule 03). Another browser automation tool MUST NOT be used.
+2. **Browser scraping** — If no API is usable, scrape the UI following [agentme-edr-128](128-browser-automation-foundation.md).
 3. **Git clone** — If the target data is read-only and lives in a git repository, clone the repository locally and read from the local path. For private repositories, follow [agentme-edr-124](124-secrets-management.md) to retrieve the PAT or SSH key from the native keychain.
 4. **Local folder** — As a last resort, ask the user to provide a path to a local folder containing the relevant data.
 
@@ -38,14 +38,7 @@ API credentials (keys, tokens, passwords) MUST be stored and retrieved using the
 
 #### 03-playwright-browser-config
 
-When using Playwright, agents MUST run the `playwright` CLI via `npx -y --package=@playwright/cli@latest playwright-cli` and MUST use the user's existing browser profile to preserve SSO sessions, CA certificates, cookies, and extensions that the target system depends on.
-
-- MUST use `--user-data-dir` pointing to the user's active browser profile directory, or attach to a running browser instance via CDP.
-- MUST NOT launch a blank, incognito, or freshly provisioned profile.
-- MUST keep the browser window visible throughout the interaction so the user can follow and intervene.
-- SHOULD prefer CDP attachment to an already-running browser over launching a new instance, when the browser is already open.
-
-When the `playwright` CLI is technically insufficient for a required integration capability (e.g., network response interception, which the CLI does not expose), the Playwright Node.js API MAY be used instead. The justification MUST be documented in a `## Conflicts` section within the adapter skill, following the same format used in Policy conflict declarations (citing the policy rule being overridden, the reason, and the mitigations applied).
+Browser-based scraping MUST follow [agentme-edr-128](128-browser-automation-foundation.md).
 
 #### 04-human-in-the-loop-before-mutations
 

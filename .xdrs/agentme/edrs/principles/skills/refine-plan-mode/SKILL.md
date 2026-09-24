@@ -8,8 +8,8 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.4.0"
-  updated: 2026-09-23
+  version: "3.5.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -23,7 +23,7 @@ Ensures that every plan is deeply validated through iterative consistency checks
 2. **Options with consequences**: 2–4 options, each under 25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
 3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the human still decides.
 4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
-5. **UI fields**: map title, context, and options to the `vscode_askQuestions` question, message, and labels; if a part exceeds ~200 characters, put the full question in chat first and reference it ("Q1 (see above): ...").
+5. **UI fields**: fill the `vscode_askQuestions` header, question, message, option labels, and option descriptions (consequences) with as much as fits each ~200-character limit; condense before truncating. If anything was cut, also put the full question in chat first; never reduce the UI to "see above".
 6. **Phase gates**: gate summaries under 80 words.
 7. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording, up to twice the caps.
 
