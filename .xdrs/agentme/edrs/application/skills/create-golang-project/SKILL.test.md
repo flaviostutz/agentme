@@ -1,6 +1,6 @@
 ---
 skill: create-golang-project
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -34,6 +34,9 @@ skill-version: "1.1.0"
       `.cache/` and defines `build`, `lint`, and `test` targets.
 - [ ] Output reports running `make setup` and `make all` and fixes any compile or lint errors
       before declaring completion.
+- [ ] Skill's target-directory confirmation has a context line, states each option's
+      consequence, prefixes the workspace-root default with "(recommended)", and fills the
+      question-UI fields (question, message, option labels, option descriptions).
 
 ### Scenario 2: Business logic requested inside main.go is redirected to app/
 

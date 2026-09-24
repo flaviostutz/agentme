@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "4.5.0"
+skill-version: "4.6.0"
 ---
 
 ## Test Scenarios
@@ -155,6 +155,7 @@ Phases 1–5 are complete. The skill is running Phase 6, angle 1 (User journey c
 - [ ] Skill does not skip to Phase 8 while any angle has open questions.
 - [ ] Skill gives the question a short title and a context line naming the gap (story section).
 - [ ] Skill describes each feedback option (immediate download, loading indicator, background task) with its consequences and prefixes one with "(recommended)".
+- [ ] Skill fills the `vscode_askQuestions` question, message, option labels, and option descriptions with the title, context, options, and consequences, not a bare "see above" reference.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 skill: azure-devops-connector
-skill-version: "1.2.0"
+skill-version: "1.3.0"
 ---
 
 ## Test Scenarios
@@ -67,6 +67,9 @@ No dedicated `az repos pr` subcommand is used for this operation.
 
 - [ ] Connector shows the mandatory confirmation before issuing the PATCH call.
 - [ ] Connector does not issue the PATCH call before explicit human confirmation.
+- [ ] Connector's confirmation question has a context line, states each option's
+      consequence, prefixes one option with "(recommended)", and fills the question-UI
+      fields (question, message, option labels, option descriptions), not a bare "see above".
 - [ ] Connector uses `az rest` rather than a nonexistent dedicated thread-status subcommand.
 
 ### Scenario 4: Legacy visualstudio.com URL parses the same as a modern dev.azure.com URL

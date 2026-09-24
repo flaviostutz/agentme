@@ -1,6 +1,6 @@
 ---
 skill: create-python-project
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -39,6 +39,9 @@ skill-version: "1.1.0"
       package rather than reaching into `lib/src/` with a relative import.
 - [ ] Output reports running `make lint-fix`, `make test`, and `make build` and fixes any
       failures before declaring completion.
+- [ ] Skill's target-directory confirmation has a context line, states each option's
+      consequence, prefixes the workspace-root default with "(recommended)", and fills the
+      question-UI fields (question, message, option labels, option descriptions).
 
 ### Scenario 2: CLI package request adds an entry point, not a new baseline
 

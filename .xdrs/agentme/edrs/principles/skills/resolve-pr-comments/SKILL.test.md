@@ -1,6 +1,6 @@
 ---
 skill: resolve-pr-comments
-skill-version: "4.3.0"
+skill-version: "4.4.0"
 ---
 
 ## Test Scenarios
@@ -61,6 +61,9 @@ requested -- then reports the final summary by action taken and send status.
 - [ ] Skill's focus card shows the comment's location, states why the action needs the
       human's decision, lists each possible follow-up with its consequence, and shows a
       `Recommended action` with a one-line reason, while the human still chooses the action.
+- [ ] Skill's action question fills the `vscode_askQuestions` question, message, option
+      labels, and option descriptions with the title, context, actions, and consequences,
+      not a bare "see above" reference to the focus card.
 - [ ] Skill's Phase 6 apply confirmation states System, Operation, Fields, and Estimated
       impact before asking.
 - [ ] Skill shows no confirmation question in Phase 4 -- only a one-line FYI outcome after

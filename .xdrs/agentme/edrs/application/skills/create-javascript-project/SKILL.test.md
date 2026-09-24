@@ -1,6 +1,6 @@
 ---
 skill: create-javascript-project
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -35,6 +35,9 @@ skill-version: "1.1.0"
       the ESLint entry point.
 - [ ] Output replaces every `[package-name]` placeholder with `retry-client` across the generated
       files.
+- [ ] Skill's target-directory confirmation has a context line, states each option's
+      consequence, prefixes the workspace-root default with "(recommended)", and fills the
+      question-UI fields (question, message, option labels, option descriptions).
 
 ### Scenario 2: CLI tool request adds a bin entry and bundling step
 
