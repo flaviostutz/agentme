@@ -5,8 +5,8 @@ description: >
   Activate this skill when the user asks to create slides, a presentation, or a slide deck for an XDRS document.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -46,6 +46,8 @@ Guides the creation of a Marp Markdown slide presentation that supports an exist
 - Marp-compatible viewer for visual rendering (optional).
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Prerequisites Gate — MUST complete before writing
 
@@ -135,7 +137,7 @@ Rules:
 - The first line of YAML frontmatter must be `marp: true`. Additional Marp keys (`theme`, `paginate`, `header`, `footer`) may be added after.
 - Use `---` as the slide separator (standard Marp syntax).
 - The last slide must contain links back to the parent document and any other related documents.
-- Minimize text per slide. Prefer visual elements and short statements.
+- Minimize text per slide: each slide <80 words. Prefer visual elements and short statements.
 - Stress central questions, answers, doubts, decisions, and risks from the parent document.
 - No emojis.
 - Use relative paths for all links.

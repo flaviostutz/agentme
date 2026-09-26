@@ -5,8 +5,8 @@ description: >
   Activate this skill when the user asks to create or write any XDRS element.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -46,6 +46,8 @@ Routes the request to the appropriate XDRS authoring skill based on the type of 
 - Same as the delegated skill's, if any.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 1: Infer Document Type
 

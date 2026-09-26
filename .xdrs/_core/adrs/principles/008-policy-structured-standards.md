@@ -53,7 +53,7 @@ Each rule MUST be written as a level-4 heading with a two-digit zero-padded sequ
 
 ```markdown
 #### [NN]-[short-rule-title-in-kebab-case]
-[Rule body using normative language per _core-adr-policy-001. Under 500 words.]
+[Rule body using normative language per _core-adr-policy-001. <500 words.]
 ```
 
 #### 09-citations-must-use-dot-notation

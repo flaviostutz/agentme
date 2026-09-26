@@ -121,7 +121,7 @@ Brief description of the skill goal.
 ### Outputs
 
 #### Contents
-- Generated files or chat-delivered results, one bullet per item, or "None".
+- Generated files or chat-delivered results, one bullet per item, or "None" (e.g., `Release notes (<300 words)`).
 
 #### Changes
 - External system mutations that are part of the skill's main objective, one bullet per item, or "None".
@@ -172,7 +172,7 @@ Rules:
 - `### Halt Conditions` MUST list this skill's specific stop-before-completing triggers, grounded in at least missing required input, dubious/ambiguous input, and insufficient agent confidence — distinct from `## Edge Cases` (activation/boundary conditions) and `## Anti-Patterns` (execution mistakes). A partial or empty result the skill still finishes and returns belongs in `### Outputs`, not `### Halt Conditions`.
 - `### User Interaction` is OPTIONAL: documents human-in-the-loop (HITL) exchanges during execution — a clarifying question or an approval gate — distinct from `### Halt Conditions` (which stop execution rather than pause-and-resume it) and `### Runtime Requirements` (static prerequisites, not an interactive exchange); omit the section entirely when the skill has none.
 - `### Runtime Requirements` is OPTIONAL: free-form bullets for tooling, network, or environment prerequisites beyond the LLM itself; omit the section entirely when none apply.
-- Every bullet in `#### Required`, `#### Optional`, `#### Contents`, `#### Changes`, `### Halt Conditions`, and `### User Interaction` MUST be under 10 words, or the section MUST contain a single "None" bullet instead.
+- Every bullet in `#### Required`, `#### Optional`, `#### Contents`, `#### Changes`, `### Halt Conditions`, and `### User Interaction` MUST be under 20 words, or the section MUST contain a single "None" bullet instead.
 - `## Anti-Patterns` is REQUIRED with a minimum of 3 entries, each naming a Mistake, Why it happens, and the correct approach Instead, grounded in real observed issues rather than theoretical ones. Keep it distinct from `## Edge Cases`: Edge Cases are activation/boundary conditions, Anti-Patterns are execution mistakes.
 - Key recommendations MAY be tagged `[PROVEN]`, `[RECOMMENDED]`, or `[EXPERIMENTAL]` when a skill offers several viable approaches at different confidence levels.
 - For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
@@ -201,6 +201,17 @@ Generative skills — those producing a deliverable document (Policy, Skill, Art
 **Halt behavior**
 
 Skills MUST halt on missing required input, dubious/ambiguous input, or insufficient agent confidence, unless the user explicitly instructs the agent to proceed anyway. This override applies generally; a skill's own `## Halt Conditions` list does not need to restate it.
+
+**Generated content caps**
+
+Every natural-language content a skill generates MUST declare a hard word cap written exactly as `<N words`, whether a human or an agent executes the skill. This covers files, templates, reports, intermediate chat messages, HITL questions, final summaries, and text posted to external systems (e.g., PR comments, commit messages).
+- Exempt, with no marker: code (including its comments), structured data (JSON, YAML, tracking files), verbatim copies, and frontmatter fields already limited in characters by a spec or Policy.
+- Caps MUST be in words; other limits MAY coexist but never replace them.
+- Declare each cap once: in the template placeholder (including templates in `references/` or `.assets/`), else in the Instructions step producing the content, else in its `#### Contents` bullet.
+- A blanket statement MAY cover a content class (e.g., all intermediate messages); a more specific cap overrides it.
+- Write the number inline; a Policy reference is optional.
+- Content whose size cannot be bounded MUST be marked `(uncapped: <reason>)`, the reason explaining why.
+- Caps are hard: condense, or split into another item only where the skill allows it; never split one logical item across messages. An explicit user request lifts the cap for that item only.
 
 **Validation**
 

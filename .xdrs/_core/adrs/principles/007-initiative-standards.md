@@ -66,39 +66,39 @@ All initiatives MUST follow this template:
 
 ## Executive Summary
 
-[Required. A summary of all sections below using bullet points, focused on the most important items. Under 500 words.]
+[Required. A summary of all sections below using bullet points, focused on the most important items. <500 words.]
 
 ## Context and Problem Statement
 
-[Required. Describe clearly why we are executing this initiative. What is the impact? Who is impacted? Why is this important? Under 200 words.
+[Required. Describe clearly why we are executing this initiative. What is the impact? Who is impacted? Why is this important? <200 words.
 E.g.: Our checkout abandon rate is 50%, and it's increasing over time.]
 
 ## Proposed Solution
 
-[Required. What we expect to achieve to solve the problem described above. Under 200 words.
+[Required. What we expect to achieve to solve the problem described above. <200 words.
 E.g.: Reduce payment time in our App by 30% and fix the 3 most impactful bugs.]
 
 Expected end date: YYYY-MM-DD
 
 ## Acceptance Criteria
 
-[Optional. Used to make it clear what the expected result is and to create a way to verify when the goal is achieved. May include a short checklist. Under 100 words.]
+[Optional. Used to make it clear what the expected result is and to create a way to verify when the goal is achieved. May include a short checklist. <100 words.]
 
 ## Approach
 
-[Optional. High level description about how to achieve the result and the strategy used, including how to engage people, projects, organize the work, how to learn unknowns, deal with risks, and distribute workload. May include a WBS with the hierarchy of the work. Under 300 words.]
+[Optional. High level description about how to achieve the result and the strategy used, including how to engage people, projects, organize the work, how to learn unknowns, deal with risks, and distribute workload. May include a WBS with the hierarchy of the work. <300 words.]
 
 ## Key Deliverables
 
-[Optional. List of the main features, goods, artifacts, data, articles, skills, decisions, training, programs, events etc that will be important to achieve the expected result. Under 300 words.]
+[Optional. List of the main features, goods, artifacts, data, articles, skills, decisions, training, programs, events etc that will be important to achieve the expected result. <300 words.]
 
 ## Key Resources
 
-[Optional. List of equipment, people, other project results, budget, areas or dependencies that need to be engaged or allocated for this initiative to be implemented. Under 100 words.]
+[Optional. List of equipment, people, other project results, budget, areas or dependencies that need to be engaged or allocated for this initiative to be implemented. <100 words.]
 
 ## Milestones
 
-[Optional. List of goals to be followed along with an optional acceptance criteria, owner and due date. Each milestone may have a checklist used as acceptance criteria verification. Key tasks and risks can be listed as part of a milestone. Under 1000 words per milestone.]
+[Optional. List of goals to be followed along with an optional acceptance criteria, owner and due date. Each milestone may have a checklist used as acceptance criteria verification. Key tasks and risks can be listed as part of a milestone. <1000 words per milestone.]
 
 ### Milestone 1: [Title]
 Owner: [name or team]
@@ -118,7 +118,7 @@ Due date: YYYY-MM-DD
 
 ## Risks Identified
 
-[Optional. List of risks along with a short description and mitigation strategy. Under 1000 words.]
+[Optional. List of risks along with a short description and mitigation strategy. <1000 words.]
 
 ## References
 

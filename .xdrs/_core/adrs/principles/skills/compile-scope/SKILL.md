@@ -4,8 +4,8 @@ description: >
   Compiles or updates any scope declaring `scope-type: compiled` from its configured external sources. Reads compilation meta-policies to discover sources, fetches content (git clone, local copy, or web scrape), plans policy changes, migrates policies one at a time with structured format, `## Source` sections, and `**compilation-note:**` markers, then runs lint and review. Documents source inconsistencies without inventing fixes. Activate when the user asks to compile, update, sync, refresh, or recompile a compiled scope.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -50,6 +50,8 @@ Performs a full compilation cycle for any scope declaring `scope-type: compiled`
 
 ## Instructions
 
+Keep every question and intermediate message <100 words and the final summary <150 words.
+
 ### Phase 0: Prerequisites Gate
 
 1. Identify the target scope. Verify its `index.md` declares `scope-type: compiled` (alone or combined with other types). If not, output: `FAIL — [scope-name] does not declare scope-type: compiled. This skill only applies to compiled scopes.`
@@ -93,7 +95,7 @@ Performs a full compilation cycle for any scope declaring `scope-type: compiled`
 1. For each type folder governed by a meta-policy (from Phase 0), apply the `## Selectors` rules to the fetched staging content to determine which portions to include.
 2. List all existing policies in the scope under each governed type folder.
 3. If `.assets/sources/[name]/` already holds a previous persisted snapshot, diff the newly selected staging content against it (for example, by content hash per file) to pre-seed which policies are likely unaffected.
-4. Analyse the selected content and produce a TODO list showing for each expected policy:
+4. Analyse the selected content and produce a TODO list (uncapped: one line per expected policy; each line <30 words) showing for each expected policy:
    - **CREATE** — new policy to be compiled from source (does not yet exist in scope)
    - **UPDATE** — existing policy whose source content has changed
    - **REMOVE** — existing policy whose source content no longer exists or is excluded by selectors
@@ -104,12 +106,12 @@ Performs a full compilation cycle for any scope declaring `scope-type: compiled`
 
 For each TODO item marked CREATE or UPDATE, in sequence:
 
-1. **Write the policy file** following `_core-adr-policy-019` and `_core-adr-policy-008`:
-   - Use standard policy frontmatter: `name`, `description`, `apply-to`, `valid-from`. Generate these from the source text; they are exempt from the no-invented-content rule per policy-019 rule 05.
+1. **Write the policy file** (<2600 words, per `_core-adr-policy-002`) following `_core-adr-policy-019` and `_core-adr-policy-008`:
+   - Use standard policy frontmatter: `name`, `description`, `apply-to` (<40 words), `valid-from`. Generate these from the source text; they are exempt from the no-invented-content rule per policy-019 rule 05.
    - Use structured numbered rule blocks for all claims (per `_core-adr-policy-008`).
    - Transcribe source content faithfully. Do NOT invent, infer beyond what the source states, or fill gaps. Preserve ambiguities as-is.
 
-2. **Add a `**compilation-note:**` marker** inside a rule body only when the mapping from source to rule is not obvious — for example: indirect references, conclusions drawn by connecting multiple source sections, interpretations that required judgment, or cases where the same source passage could be read differently. Do NOT add a marker when the rule is a direct, literal transcription of a single source statement. Place the marker as a new sentence at the end of the rule body. Example:
+2. **Add a `**compilation-note:**` marker** inside a rule body only when the mapping from source to rule is not obvious — for example: indirect references, conclusions drawn by connecting multiple source sections, interpretations that required judgment, or cases where the same source passage could be read differently. Do NOT add a marker when the rule is a direct, literal transcription of a single source statement. Place the marker as a new sentence at the end of the rule body and keep it <60 words. Example:
    ```
    All API keys MUST be rotated every 90 days. **compilation-note:** derived from [api-guidelines/security/api-guidelines.md section 4.2] — "Keys should be invalidated and replaced quarterly"; frequency inferred as 90 days from the term "quarterly".
    ```
@@ -154,7 +156,7 @@ After writing each policy:
 1. Collect all inconsistencies noted during Phases 4, 5, and 7.
 2. If any inconsistencies exist:
    - Determine the next available policy number in the `001–100` principles block for the relevant type folder.
-   - Create or update `[type]/principles/NNN-inconsistencies-from-source.md` in the scope.
+   - Create or update `[type]/principles/NNN-inconsistencies-from-source.md` (<2600 words) in the scope.
    - The policy `name` field MUST be `[scope]-[type]-policy-NNN-inconsistencies-from-source`.
    - List each inconsistency with: source file path, affected compiled policy, and a description of the inconsistency.
    - Do NOT propose or include fixes.

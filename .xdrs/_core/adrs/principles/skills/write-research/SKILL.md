@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a research document that backs a decision.
 metadata:
   author: flaviostutz
-  version: "1.4.0"
-  updated: 2026-09-19
+  version: "1.5.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -30,7 +30,7 @@ This skill is interactive by design. Ask clarifying questions to the user at eac
 
 #### Contents
 
-- A standalone IMRAD research document.
+- A standalone IMRAD research document (<5000 words).
 
 #### Changes
 
@@ -49,6 +49,8 @@ This skill is interactive by design. Ask clarifying questions to the user at eac
 - Python 3 for the optional ratio-check script.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
@@ -129,39 +131,39 @@ Use the mandatory template from `006-research-standards`:
 
 ## Abstract
 
-[Single paragraph summarizing the goal, methods, results, and conclusion. Goal: let a quick technical reader understand the question, method, main result, and takeaway. Under 200 words.]
+[Single paragraph summarizing the goal, methods, results, and conclusion. Goal: let a quick technical reader understand the question, method, main result, and takeaway. <200 words.]
 
 ## Introduction
 
 [Describe the problem, context, constraints, known facts, experiences, gaps, assumptions, and objectives.
-Use visuals, bullets, graphs, or diagrams when helpful. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. Under 700 words.]
+Use visuals, bullets, graphs, or diagrams when helpful. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. <700 words.]
 
 Question: [Central question of the research]?
 
 ## Methods
 
 [Explain how the study was conducted, including design, tools, data sources, and test conditions.
-Include enough detail for an experienced professional to reproduce the relevant parts. Goal: make the important parts of the study reproducible. Under 1200 words.]
+Include enough detail for an experienced professional to reproduce the relevant parts. Goal: make the important parts of the study reproducible. <1200 words.]
 
 ## Results
 
 [Report findings, data, trends, quantitative results, code artifacts, and option comparisons.
-Use figures, tables, or bullets when useful. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. Under 1800 words.]
+Use figures, tables, or bullets when useful. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. <1800 words.]
 
 ## Discussion
 
-[Interpret the results, explain significance, trade-offs, performance considerations, limitations, and implications. Goal: interpret the findings for technical readers. Keep this section technically engaged and under 1000 words.]
+[Interpret the results, explain significance, trade-offs, performance considerations, limitations, and implications. Goal: interpret the findings for technical readers. Keep this section technically engaged. <1000 words.]
 
 ## Conclusion
 
-[Summarize the main findings, practical takeaway, applicability boundaries, and important open questions. Goal: summarize the main findings and what they mean in practice. Under 400 words.]
+[Summarize the main findings, practical takeaway, applicability boundaries, and important open questions. Goal: summarize the main findings and what they mean in practice. <400 words.]
 
 ## References
 
 [A list of all cited literature, websites, tutorials, documentation, discussions, and related artifacts. Goal: make all cited sources and supporting artifacts traceable.]
 
-- [Related Policy or artifact](relative/path.md) - Why it matters
-- [Another related Policy if this research informed multiple decisions](relative/path.md) - Why it matters
+- [Related Policy or artifact](relative/path.md) - Why it matters (<15 words)
+- [Another related Policy if this research informed multiple decisions](relative/path.md) - Why it matters (<15 words)
 ```
 
 Rules:
@@ -175,13 +177,13 @@ Rules:
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists and bullet points first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the research genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/researches/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
-- Keep section word limits within the standard and keep the document under 5000 words total unless the introduction explicitly states that a very detailed analysis is required.
+- Keep every section within its template cap; exceed the document cap only when the introduction explicitly states that a very detailed analysis is required.
 
 ### Phase 8: Check Section Goals
 
 Before the final review, verify each section against its specific goal:
 
-1. **Abstract goal**: Does it let a quick technical reader understand the question, method, main result, and takeaway, in one paragraph and under 200 words?
+1. **Abstract goal**: Does it let a quick technical reader understand the question, method, main result, and takeaway, in one paragraph and within its cap?
 2. **Introduction goal**: Does it explain the investigated problem and context, stay within scope, and end with `Question: ...?`?
 3. **Methods goal**: Could an experienced professional reproduce the important parts that materially affect the conclusion?
 4. **Results goal**: Are the findings concrete and minimally interpreted, with comparisons and pros/cons when multiple options exist?
@@ -279,8 +281,8 @@ If any check fails, revise before continuing.
 ### Phase 11: Write Files
 
 1. Create the research file at `.xdrs/[scope]/[type]/[subject]/researches/[number]-[short-title].md`.
-2. Add an entry to `.xdrs/[scope]/[type]/index.md`.
-3. Add back-references from the related Policy, article, or skill when the relationship is important for discovery.
+2. Add an entry to `.xdrs/[scope]/[type]/index.md`, with a description <15 words.
+3. Add back-references (<15 words each) from the related Policy, article, or skill when the relationship is important for discovery.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new research. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 
 ### Phase 12: Verify with Lint
