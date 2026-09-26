@@ -108,6 +108,19 @@ test('list --json renders one JSON object per section with the same fields', () 
   assert.equal(rows[1]['similar-to'], 'review-comment/333');
 });
 
+test('get --joined rejoins wrapped block lines and keeps paragraph breaks', () => {
+  const wrapped = FIXTURE.replace(
+    'reply-draft: |\n\n### Naming',
+    'reply-draft: |\n  Thanks, this is a long\n  wrapped reply.\n\n  Second paragraph.\n\n### Naming',
+  );
+  const file = writeFixture(wrapped);
+  const { status, stdout } = run(['get', file, 'issue-comment/111', 'reply-draft', '--joined']);
+  assert.equal(status, 0);
+  assert.equal(stdout, 'Thanks, this is a long wrapped reply.\n\nSecond paragraph.\n');
+  const raw = run(['get', file, 'issue-comment/111', 'reply-draft']);
+  assert.match(raw.stdout, /long\nwrapped/);
+});
+
 test('get returns a scalar field value', () => {
   const file = writeFixture();
   const { status, stdout } = run(['get', file, 'review-comment/222', 'status']);

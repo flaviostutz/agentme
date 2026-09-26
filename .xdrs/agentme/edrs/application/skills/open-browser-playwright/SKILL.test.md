@@ -1,6 +1,6 @@
 ---
 skill: open-browser-playwright
-skill-version: "1.0.0"
+skill-version: "1.0.1"
 ---
 
 ## Test Scenarios
@@ -22,21 +22,21 @@ The agent runs `SKIP_SSO=true node scripts/open-browser.js example https://examp
 - [ ] Agent attaches to the printed endpoint with a separate `<session>-attach` session.
 - [ ] Agent ends with `tidy <session>` and `detach`, and never runs `close` or `browser.close()`.
 
-### Scenario 2: Connector with its own CDP port attaches to the foundation
+### Scenario 2: Contents skill with its own CDP port attaches to the foundation
 
 **Trigger / Input**
 
-A connector skill declares `cdp-port: "9231"` in its metadata and needs the SSO-protected page `https://tickets.example.com/queue`. The user is already signed in to Edge.
+A `get-tickets-contents` skill declares `cdp-port: "9231"` in its metadata and needs the SSO-protected page `https://tickets.example.com/queue`. The user is already signed in to Edge.
 
 **Expected Behaviour**
 
-The connector runs `node scripts/open-browser.js tickets https://tickets.example.com/queue --cdp-port=9231`. The script confirms the Entra ID user, opens the target, prints `RESULT: authenticated` and `CDP: http://127.0.0.1:9231`, and exits 0. The connector's own script then calls `chromium.connectOverCDP('http://127.0.0.1:9231')`, opens its own page, extracts the data and closes only that page.
+The contents skill runs `node scripts/open-browser.js tickets https://tickets.example.com/queue --cdp-port=9231`. The script confirms the Entra ID user, opens the target, prints `RESULT: authenticated` and `CDP: http://127.0.0.1:9231`, and exits 0. The contents skill's own script then calls `chromium.connectOverCDP('http://127.0.0.1:9231')`, opens its own page, extracts the data and closes only that page.
 
 **Assertions**
 
-- [ ] Connector passes exactly its declared `--cdp-port=9231` to the foundation script.
-- [ ] Connector attaches to the printed `CDP:` endpoint and never launches a browser, copies a profile or calls `playwright-cli open`.
-- [ ] Connector closes only the pages it opened and never closes the browser.
+- [ ] Contents skill passes exactly its declared `--cdp-port=9231` to the foundation script.
+- [ ] Contents skill attaches to the printed `CDP:` endpoint and never launches a browser, copies a profile or calls `playwright-cli open`.
+- [ ] Contents skill closes only the pages it opened and never closes the browser.
 
 ### Scenario 3: No user found on the Entra page (exit 11)
 

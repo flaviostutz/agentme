@@ -1,6 +1,6 @@
 ---
 skill: resolve-pr-comments
-skill-version: "4.4.0"
+skill-version: "4.5.0"
 ---
 
 ## Test Scenarios
@@ -14,14 +14,14 @@ date local clone of `acme/widgets`, which has 2 open comments).
 
 **Expected Behaviour**
 
-The skill: (1) parses the URL host as `github.com` and activates `github-connector`; (2)
+The skill: (1) parses the URL host as `github.com` and activates `get-github-contents`; (2)
 Phase 1 fetches PR #482 metadata and every comment, then confirms the local repo matches
 `acme/widgets` and offers to check out the PR branch; (3) Phase 2 calls `init` to write
 `.tmp/review-pr-482.md`'s header before analysing anything, then computes each comment's
 fields and calls `append-section` to write its section immediately, one comment at a time --
 rendering each section's `source` field as a clickable markdown link to the matching file in
 the local checkout (never a provider URL), `source-lines` with the commented line(s) plus
-padding, `diff-hunk-raw`/`author-raw`/`comment-url` verbatim from the connector,
+padding, `diff-hunk-raw`/`author-raw`/`comment-url` verbatim from the read skill,
 `possible-user-intention` (an under-20-word, silently generated read of the author's likely
 concern), and `possible-follow-ups` (2-4 candidate next actions); (4) Phase 3 renders the
 2-row summary table and asks the literal numbered 4-way automation-level question -- the
@@ -46,7 +46,7 @@ requested -- then reports the final summary by action taken and send status.
 
 **Assertions**
 
-- [ ] Skill activates `github-connector` because the URL host is `github.com`.
+- [ ] Skill activates `get-github-contents` because the URL host is `github.com`.
 - [ ] Skill calls `init` to write the tracking file's header before analysing any comment,
       then calls `append-section` once per comment, immediately, one at a time -- never
       accumulating every section in memory until the end.
@@ -74,6 +74,9 @@ requested -- then reports the final summary by action taken and send status.
       its reply text before applying, persisting the change immediately.
 - [ ] Skill applies both comments' drafts together in a single apply-all batch confirmation
       in Phase 6, resolving comment 1's thread as requested.
+- [ ] Skill runs skill `change-github-contents` once with one JSON batch holding both
+      replies and comment 1's resolve item, and marks each item applied only after a
+      `verified` or `already-present` result.
 - [ ] Skill suffixes both comment 1's reply (accepted as drafted) and comment 2's reply
       (changed at Phase 6) with the identical `(resolve-pr-comments - guided)` literal --
       no distinction between the two cases.

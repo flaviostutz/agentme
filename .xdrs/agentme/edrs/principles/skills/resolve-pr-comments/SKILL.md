@@ -9,14 +9,14 @@ description: >
   always stays its own explicitly confirmed step regardless of that choice. This is NOT a
   code-review skill -- it never critiques someone else's PR; it is a hands-on, mutating
   workflow for the PR's own author (or a delegated maintainer) to answer feedback and land
-  fixes. Delegates provider reads/writes to a connector skill chosen by the PR URL's host
-  (github-connector or azure-devops-connector). Activate when the PR's owner asks to work
+  fixes. Delegates provider reads to get-<provider>-contents and writes to
+  change-<provider>-contents, chosen by the PR URL's host (GitHub or Azure DevOps). Activate when the PR's owner asks to work
   through, address, or respond to feedback on their own PR, or gives a PR URL they authored
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.4.0"
-  updated: 2026-09-24
+  version: "4.5.0"
+  updated: 2026-09-26
 ---
 
 ## Overview
@@ -26,11 +26,9 @@ comment left by OTHER people on it, without leaving the editor: fetch, track loc
 by relevance and action, draft replies, implement requested fixes, and sync back to the
 provider. Requires a PR URL and a local git repository related to that PR.
 
-**This is not a code-review skill.** It never reads a PR to critique, approve, or request
-changes on someone else's code. It runs in the opposite direction: the PR's own author
-invokes it to answer feedback already left by reviewers and make the PR mergeable -- a
-hands-on, mutating session (replying, implementing changes, committing, pushing), not a
-read-mostly critique pass.
+**This is not a code-review skill.** It never critiques, approves or requests changes on
+someone else's code; the PR's own author runs it to answer reviewer feedback and make the PR
+mergeable (replying, fixing, committing, pushing).
 
 This skill is a helper, not a decision-maker: it never writes to the PR or marks a comment
 resolved without the human explicitly confirming that step. It mirrors the phase-gate style
@@ -39,14 +37,12 @@ at most 4-5 tightly related questions per call, never self-resolve a subjective 
 one exception is pure bookkeeping with no external effect: the tracking file's one-line PR
 summary is auto-generated, and comments already resolved/closed are never recorded at all.
 
-This is a Human-in-the-loop (HITL) write, single-system skill: every
-run targets exactly one provider (chosen from the PR URL), and every write is approved by the
-human at the step it happens, never in bulk upfront.
+This is a Human-in-the-loop (HITL) write skill: one provider per run (from the PR URL), and
+every write is approved when it happens, never in bulk upfront.
 
-**Core purpose**: create awareness, one comment at a time. Every comment's full context --
-the code it refers to, what its author likely means, its criticality and type, and possible
-follow-ups -- is always shown before the human decides anything, and the exact reply/action
-text is always shown before it is ever sent to the provider.
+**Core purpose**: awareness, one comment at a time. Each comment's full context (code, likely
+intent, criticality, type, follow-ups) is shown before any decision, and the exact reply text
+before anything is sent.
 
 ### Inputs
 
@@ -78,27 +74,28 @@ text is always shown before it is ever sent to the provider.
 
 ### Provider selection (runs before Phase 1)
 
-Parse the given PR URL's host to select the connector for this run:
-- `github.com` -> activate `github-connector`.
-- `dev.azure.com` or any `*.visualstudio.com` host -> activate `azure-devops-connector`.
-- Any other host -> ask the human whether a connector exists for this provider; do not guess.
+Parse the given PR URL's host to select the contents skills for this run (the *read skill*
+for Phases 1-2, the *write skill* for Phase 6):
+- `github.com` -> [`get-github-contents`](../../../application/skills/get-github-contents/SKILL.md) and [`change-github-contents`](../../../application/skills/change-github-contents/SKILL.md).
+- `dev.azure.com` or any `*.visualstudio.com` host -> [`get-azure-devops-contents`](../../../application/skills/get-azure-devops-contents/SKILL.md) and [`change-azure-devops-contents`](../../../application/skills/change-azure-devops-contents/SKILL.md).
+- Any other host -> ask the human whether contents skills exist for this provider; do not guess.
 
-Every comment record returned by the active connector has this normalized shape, regardless
+Every comment record returned by the read skill has this normalized shape, regardless
 of provider:
 
 ```
 {
-  id,            // "<kind>/<numeric-id>", kind is a connector-defined display label
+  id,            // "<kind>/<numeric-id>", kind is a read-skill-defined display label
   kind,          // shown to the human, e.g. "review-comment"; NEVER branch on this value
-  status,        // "open" | "resolved" | "wontfix" | "closed", normalized by the connector
+  status,        // "open" | "resolved" | "wontfix" | "closed", normalized by the read skill
   can_reply,     // bool
   can_resolve,   // bool
   path, line,    // nullable -- present for file/line-specific comments
   content,
   author,
-  in_reply_to,   // nullable, pre-resolved by the connector to the root/top-level comment id
+  in_reply_to,   // nullable, pre-resolved by the read skill to the root/top-level comment id
   diff_hunk,     // nullable -- original review diff hunk, file/line-scoped comments only;
-                 // connector-synthesized where the provider has no native equivalent
+                 // read-skill-synthesized where the provider has no native equivalent
   url,           // permalink to the comment on the provider's web UI; best-effort
                  // synthesized when not natively returned
 }
@@ -115,7 +112,7 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    to identify the provider and the exact repository).
 2. Validate the URL resolves to a pull request, not an issue; if it resolves to an issue,
    report a clear error and stop.
-3. Using the active connector's read commands, fetch PR metadata (title, body, base branch,
+3. Run the read skill's `pr-metadata-get` and `pr-comments-list` to fetch PR metadata (title, body, base branch,
    head branch, linked issues) and every comment. The PR objective for later criticality
    reasoning is derived from title + body + linked issues -- no separate fetch needed.
 
@@ -182,7 +179,7 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    rule 3; silently drop the section for any tracked comment now resolved/closed/vanished (no
    manual override, no archive, nothing retained); preserve existing triage on still-open
    comments; surface queued `reply-draft` values into a pending-sync list for Phase 6.
-   `replies-raw` and `status` always refresh to the connector's current state.
+   `replies-raw` and `status` always refresh to the read skill's current state.
    `source-lines`, `type`, `possible-user-intention`, `possible-follow-ups`, `suggested-fix`,
    `suggested-fix-assessment`, `automation-suggestion`, and `similar-to` recompute fresh too,
    but only while a comment is still at `pending-reply: none` -- a human edit to these is not
@@ -190,7 +187,7 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    stood (a decided comment is silently skipped/advanced at Phase 4 step 1, never shown a
    full card again). `author-raw`, `comment-raw`, `diff-hunk-raw`, and `comment-url` are set
    once at creation and never recomputed.
-5. A section manually deleted while the connector still reports it open is re-added on sync
+5. A section manually deleted while the read skill still reports it open is re-added on sync
    -- never silently lose track of open feedback.
 6. A malformed/unparseable section is flagged inline for manual review, never discarded.
    Cosmetic-only residue that doesn't block parsing (a stray block-scalar marker, a missing
@@ -214,14 +211,14 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
     line no longer resolves -> `(source unavailable -- file or line changed since the
     comment was made)`; file binary/unreadable -> `(source unavailable -- binary or
     unreadable file)`.
-11. Render `diff-hunk-raw` verbatim from the connector's `diff_hunk` (the original review
+11. Render `diff-hunk-raw` verbatim from the read skill's `diff_hunk` (the original review
     diff hunk), fenced like `source-lines`; `(PR conversation)` when not file/line-scoped.
-    Unlike `source-lines`, this comes from the connector, not the checkout, so none of rule
+    Unlike `source-lines`, this comes from the read skill, not the checkout, so none of rule
     10's three unavailable cases apply -- always available. Set once at creation, never
     recomputed.
-12. Render `author-raw` verbatim from the connector's `author`, or `unknown` when null/empty
+12. Render `author-raw` verbatim from the read skill's `author`, or `unknown` when null/empty
     (e.g. a deleted account). Set once at creation, never recomputed.
-13. Render `comment-url` verbatim from the connector's `url` (a permalink to the provider's
+13. Render `comment-url` verbatim from the read skill's `url` (a permalink to the provider's
     web UI). Set once at creation, never recomputed.
 14. Render `possible-user-intention`: an AI-authored, under-20-word inference of why the
     author raised this and what they may be worried about, reasoned from `comment-raw` plus
@@ -269,7 +266,7 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
     "no comments to review yet" and exit cleanly.
 
 Fields suffixed `-raw` (`comment-raw`, `replies-raw`, `author-raw`, `diff-hunk-raw`) hold data
-exactly as the connector returned it, never altered by this skill's reasoning. `comment-url`
+exactly as the read skill returned it, never altered by this skill's reasoning. `comment-url`
 is the one exception to "never a provider URL" elsewhere in this skill, so the human can open
 the original comment directly. Unsuffixed inferred fields (`type`, `possible-user-intention`,
 `criticality`, `possible-follow-ups`, `suggested-fix-assessment`, `automation-suggestion`,
@@ -295,7 +292,7 @@ source: [<file>:<line-start>-<line-end>](../<file>#L<line-start>-L<line-end>)
 source-lines: |
   <fenced code block, line-numbered, language tag inferred from the file extension>
 diff-hunk-raw: |
-  <original review diff hunk verbatim from the connector, or "(PR conversation)">
+  <original review diff hunk verbatim from the read skill, or "(PR conversation)">
 suggested-fix: |
   <verbatim code from a fenced suggestion block, or "(none)" if none found>
 author-raw: <comment author, verbatim, or "unknown">
@@ -520,7 +517,7 @@ The only phase that ever posts to the provider -- Phase 4 only drafts and confir
    of how it was originally drafted, persisted immediately like any other field change.
    "Apply all" never silently includes the `drafted-unverified` bucket -- applying any of
    those requires the one-by-one path or an explicit free-text override naming them.
-4. Apply: the batch path posts every gathered item via the active connector (resolving
+4. Apply: the batch path runs the write skill once for all gathered items (resolving
    threads where `resolve-on-apply` was set), persisting each result as it completes so a
    mid-batch failure never loses already-applied progress, then reports a per-item outcome.
    The one-by-one path re-shows each item's exact confirmation (the question-title template
@@ -540,14 +537,13 @@ The only phase that ever posts to the provider -- Phase 4 only drafts and confir
    - Skipped: L comments left at `pending-reply: none`.
    - A titled list of every still-drafted-and-deferred, unverified, and skipped comment.
 
-**Applying replies via script**: prefer `scripts/post-replies-azure-devops.js --pr-url
-<url> <tracking-file>` (Azure DevOps) or `scripts/post-replies-github.js --pr-url <url>
-<tracking-file>` (GitHub) for step 4's batch-apply -- both verify each write via a fresh
-read before marking `pending-reply: applied` (`az rest` can exit 0 without persisting; see
-azure-devops-connector's Known Issues). Both also only ever apply items still at
-`pending-reply: drafted` by default, naturally excluding the `drafted-unverified` bucket
-unless a human explicitly overrides with `--only <id>`. Manual apply remains supported for
-either provider.
+**Applying via the write skill**: step 4 runs skill `change-<provider>-contents` once with a
+JSON batch: per item, a reply (`prUrl`, `commentId` = section `id`, `body` = output of
+`update-section.js get <file> <id> reply-draft --joined`), plus a resolve item when
+`resolve-on-apply: true` and `can_resolve: true`. Phase 4 (or Phase 3's level for fully-auto
+items) is its stage 1 and step 3 its stage 2, so it asks nothing again. Set `pending-reply:
+applied` only after a `verified`/`already-present` reply, and `status: resolved` only after the
+same for the resolve. Leave `error`/`unverified` items `drafted` and report them.
 
 ### Cross-cutting rules
 
@@ -630,7 +626,7 @@ either provider.
 
 **Input**: `https://github.com/acme/widgets/pull/482` (run by the PR's own author)
 
-Selects `github-connector` (host `github.com`), fetches PR #482 and its comments, checks
+Selects `get-github-contents` (host `github.com`), fetches PR #482 and its comments, checks
 out a related local branch, and populates `.tmp/review-pr-482.md` one comment at a time (via
 `init`/`append-section`) before asking anything. Phase 3 shows the summary table and the
 human picks option 3. Phase 4 opens with a one-time estimate, then walks the
@@ -688,14 +684,14 @@ mandatory apply confirmation.
 - **Zero open comments, or all resolved/closed** (at fetch time or on a later sync): report
   "no comments to review yet" and exit cleanly (zero at all), or drop the section silently
   with no confirmation or archive (resolved mid-session) -- either way, nothing to review.
-- **A connector reports `can_resolve: false`** for a comment (e.g. a GitHub review-summary,
+- **The read skill reports `can_resolve: false`** for a comment (e.g. a GitHub review-summary,
   or a permission-denied resolve call): never offer the resolve option for that comment;
   reply-only remains available.
 - **Source unavailable**: no local file to link (a general, non-file-scoped comment), the
   local repo isn't checked out to the PR's head branch, or the file/line is deleted, shifted,
   binary, or otherwise unreadable -- render a clear unavailable note for `source`/
   `source-lines` instead of misrepresenting the code. `diff-hunk-raw` is unaffected in every
-  case -- it comes from the connector, not the local checkout.
+  case -- it comes from the read skill, not the local checkout.
 - **A `possible-user-intention` inference has nothing worth surfacing** (e.g. a
   `praise`-type comment with no real concern): leave it blank or a minimal neutral note
   rather than inventing a speculative worry.
@@ -723,8 +719,9 @@ mandatory apply confirmation.
 ## References
 
 - [`refine-user-story`](../refine-user-story/SKILL.md) -- sibling HITL phase-gate style.
-- [`github-connector`](../../../application/skills/github-connector/SKILL.md) -- GitHub read/write connector.
-- [`azure-devops-connector`](../../../application/skills/azure-devops-connector/SKILL.md) -- Azure DevOps read/write connector.
-- [`agentme-edr-127`](../../../application/127-external-system-adapter-skills.md) -- external system adapter rules (HITL-before-write, connector purity).
+- [`get-github-contents`](../../../application/skills/get-github-contents/SKILL.md) / [`change-github-contents`](../../../application/skills/change-github-contents/SKILL.md) -- GitHub reads / writes.
+- [`get-azure-devops-contents`](../../../application/skills/get-azure-devops-contents/SKILL.md) / [`change-azure-devops-contents`](../../../application/skills/change-azure-devops-contents/SKILL.md) -- Azure DevOps reads / writes.
+- [`agentme-edr-127`](../../../application/127-external-system-adapter-skills.md) -- external system adapter rules (two-stage confirmation, contents skill purity).
+- [`agentme-edr-005`](../../005-skill-composition.md) -- skill composition.
 - [`agentme-edr-017`](../../017-skill-testing.md) -- skill testing mandate.
 - [`agentme-edr-003`](../../003-hitl-question-content.md) -- HITL question content.

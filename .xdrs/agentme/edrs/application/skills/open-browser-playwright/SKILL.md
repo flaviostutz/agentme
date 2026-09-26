@@ -5,12 +5,12 @@ description: >
   window on a per-session copy of the user's signed-in profile, confirms the SSO user (or skips the
   check with SKIP_SSO=true for public sites), opens the target page and prints a localhost CDP
   endpoint that callers attach to with Playwright. Use whenever a user or skill needs to open, show,
-  browse, scrape or automate any web page, SSO-protected or public, and before any connector skill
+  browse, scrape or automate any web page, SSO-protected or public, and before any contents skill
   drives a browser.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-24
+  version: "1.0.1"
+  updated: 2026-09-26
 ---
 
 ## Overview
@@ -19,7 +19,7 @@ Browser automation on company sites fails with blank or incognito profiles: devi
 
 The script opens one visible Edge window with remote debugging bound to `127.0.0.1`. It checks that a user is signed in on the Entra ID My Account page (`https://myaccount.microsoft.com/?ref=MeControl`) or on `SSO_CHECK_URL`, opens the target page, and prints the result with the CDP endpoint. With `SKIP_SSO=true` it skips the sign-in check for public sites. The same script also reports sign-in problems, waits for a manual sign-in (`wait`) and closes leftover task tabs (`tidy`).
 
-This skill is the only allowed way to open a browser for automation ([agentme-edr-128](../../128-browser-automation-foundation.md)). Connector skills run Step 1 with the port from their own `metadata.cdp-port`, then attach to the printed endpoint (Step 3) and run their own scripts. Ad-hoc use (a user asking to see a page, or a skill without a declared port) passes no port, and the script picks a free one in 9390-9399. Each session has its own profile copy and state file, so sessions with different names run side by side.
+This skill is the only allowed way to open a browser for automation ([agentme-edr-128](../../128-browser-automation-foundation.md)). `get-<system>-contents` skills run Step 1 with the port from their own `metadata.cdp-port`, then attach to the printed endpoint (Step 3) and run their own scripts. Ad-hoc use (a user asking to see a page, or a skill without a declared port) passes no port, and the script picks a free one in 9390-9399. Each session has its own profile copy and state file, so sessions with different names run side by side.
 
 ### Inputs
 
@@ -31,7 +31,7 @@ This skill is the only allowed way to open a browser for automation ([agentme-ed
 
 - `session`: session name (default: site name)
 - `size`: `WIDTHxHEIGHT` (default `1300x900`)
-- `--cdp-port`: caller's `metadata.cdp-port`, connectors only
+- `--cdp-port`: caller's `metadata.cdp-port`, contents skills only
 - `SKIP_SSO=true`: public sites without sign-in
 - `SSO_CHECK_URL`: https page showing the signed-in email
 - `SSO_WAIT_SECONDS`: sign-in check timeout (default 45)
@@ -88,7 +88,7 @@ Every question to the human MUST follow [`agentme-edr-003`](../../../principles/
 node scripts/open-browser.js <session> <url> [WIDTHxHEIGHT] [--cdp-port=<port>]
 ```
 
-- Pass `--cdp-port` only from a connector, with its own `metadata.cdp-port` (9230-9389, [agentme-edr-128](../../128-browser-automation-foundation.md) rule 05). Without it, the script picks the lowest free port in 9390-9399.
+- Pass `--cdp-port` only from a contents skill, with its own `metadata.cdp-port` (9230-9389, [agentme-edr-128](../../128-browser-automation-foundation.md) rule 05). Without it, the script picks the lowest free port in 9390-9399.
 - Prefix `SKIP_SSO=true` only for public sites that need no sign-in. Any other value keeps SSO mode.
 - Session names match `[A-Za-z0-9_-]{1,32}`; `wait` and `tidy` are reserved.
 
@@ -162,7 +162,7 @@ If the endpoint stops answering, rerun Step 1 with the same session name and por
 
 ### Step 4: Finish
 
-At the end of the whole task, the top-level agent tidies the session and detaches. Connectors called by it skip this step.
+At the end of the whole task, the top-level agent tidies the session and detaches. Contents skills called by it skip this step.
 
 ```sh
 node scripts/open-browser.js tidy <session>
@@ -175,7 +175,7 @@ npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 
 - "Show me https://example.com" → `SKIP_SSO=true node scripts/open-browser.js example https://example.com`; report the `PAGE` line, then `tidy example` and `detach`.
 - "Open our internal wiki page" → `node scripts/open-browser.js wiki https://wiki.example.com/start`; on exit 10, ask the user to sign in and run `wait wiki https://wiki.example.com/start`.
-- A connector with `cdp-port: "9231"` runs `node scripts/open-browser.js tickets https://tickets.example.com --cdp-port=9231`, then its own script calls `chromium.connectOverCDP('http://127.0.0.1:9231')`.
+- A contents skill with `cdp-port: "9231"` runs `node scripts/open-browser.js tickets https://tickets.example.com --cdp-port=9231`, then its own script calls `chromium.connectOverCDP('http://127.0.0.1:9231')`.
 
 ## Edge Cases
 
@@ -195,9 +195,9 @@ npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 
 ## Anti-Patterns
 
-- **Mistake:** A connector launching its own browser, copying the profile or calling `playwright-cli open`.
+- **Mistake:** A contents skill launching its own browser, copying the profile or calling `playwright-cli open`.
   **Why it happens:** Owning the browser looks simpler than depending on another skill.
-  **Instead:** Run Step 1 with the connector's port, then attach in Step 3 ([agentme-edr-128](../../128-browser-automation-foundation.md) rules 02-03).
+  **Instead:** Run Step 1 with the contents skill's port, then attach in Step 3 ([agentme-edr-128](../../128-browser-automation-foundation.md) rules 02-03).
 - **Mistake:** Pointing a browser at the real Edge profile directory.
   **Why it happens:** The real profile already holds the SSO cookies, so a copy looks redundant.
   **Instead:** Use the script's scratch copy. Chromium refuses CDP on the real profile.

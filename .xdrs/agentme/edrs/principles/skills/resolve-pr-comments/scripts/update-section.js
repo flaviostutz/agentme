@@ -10,7 +10,7 @@
  *   update-section.js init <file> <pr-number> <pr-link> <auto-summary...>  (raw PR summary from stdin)
  *   update-section.js append-section <file>                               (full "### ..." section from stdin)
  *   update-section.js list <file> [--json]
- *   update-section.js get <file> <id> <field>
+ *   update-section.js get <file> <id> <field> [--joined]  (--joined: rejoin wrapped block paragraphs)
  *   update-section.js set <file> <id> <field> <value...>
  *   update-section.js set-block <file> <id> <field>   (new value read from stdin)
  *   update-section.js set-list <file> <id> <field>    (new items read from stdin, one per line)
@@ -45,7 +45,7 @@ function usage() {
   update-section.js init <file> <pr-number> <pr-link> <auto-summary...>  (raw PR summary from stdin)
   update-section.js append-section <file>                               (full "### ..." section from stdin)
   update-section.js list <file> [--json]
-  update-section.js get <file> <id> <field>
+  update-section.js get <file> <id> <field> [--joined]  (--joined: rejoin wrapped block paragraphs)
   update-section.js set <file> <id> <field> <value...>
   update-section.js set-block <file> <id> <field>   (new value read from stdin)
   update-section.js set-list <file> <id> <field>    (new items read from stdin, one per line)
@@ -121,6 +121,23 @@ function findField(lines, start, end, field) {
     kind = 'scalar';
   }
   return { lineIdx, kind, suffix, contentStart: lineIdx + 1, contentEnd };
+}
+
+// Rejoins hand-wrapped lines within a paragraph into one logical line, preserving genuine
+// blank-line paragraph breaks -- tolerant of drafts written either wrapped or unwrapped.
+function joinParagraphs(text) {
+  const paragraphs = [];
+  let cur = [];
+  for (const line of text.split('\n')) {
+    if (line.trim() === '') {
+      if (cur.length) paragraphs.push(cur.join(' '));
+      cur = [];
+    } else {
+      cur.push(line.trim());
+    }
+  }
+  if (cur.length) paragraphs.push(cur.join(' '));
+  return paragraphs.join('\n\n');
 }
 
 function requireKind(field, expectedKind, fieldSet, cmdHint) {
@@ -274,12 +291,11 @@ function main(argv) {
     if (f.kind === 'scalar') {
       console.log(f.suffix);
     } else if (f.kind === 'block') {
-      console.log(
-        lines
-          .slice(f.contentStart, f.contentEnd)
-          .map((l) => (l.startsWith('  ') ? l.slice(2) : l))
-          .join('\n'),
-      );
+      const block = lines
+        .slice(f.contentStart, f.contentEnd)
+        .map((l) => (l.startsWith('  ') ? l.slice(2) : l))
+        .join('\n');
+      console.log(valueParts.includes('--joined') ? joinParagraphs(block) : block);
     } else {
       console.log(
         lines
