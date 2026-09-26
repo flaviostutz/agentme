@@ -111,7 +111,7 @@ All Policies MUST follow this template
 ---
 name: [scope]-[type]-policy-[number]-[short-title]
 description: [What this decision is about and when to use it]
-apply-to: [Required. Contexts this decision applies to, under 40 words. Use "All scopes" when broadly applicable.]
+apply-to: [Required. Contexts this decision applies to, <40 words. Use "All scopes" when broadly applicable.]
 valid-from: [Required. ISO date YYYY-MM-DD from when enforcement begins. Defaults to creation date.]
 license: [Optional. SPDX license expression]
 metadata:

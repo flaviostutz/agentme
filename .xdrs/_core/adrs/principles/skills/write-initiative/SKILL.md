@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write an initiative, plan, project plan, roadmap, or execution plan within an XDRS project.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -43,6 +43,8 @@ Guides the creation of a well-structured initiative document by following `_core
 - Clarifying questions about stakeholders and constraints, one batch.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
@@ -98,45 +100,45 @@ Use the mandatory template from `007-initiative-standards`:
 
 ## Executive Summary
 
-[Required. Bullet points summarizing all sections below. Under 500 words.]
+[Required. Bullet points summarizing all sections below. <500 words.]
 
 ## Context and Problem Statement
 
-[Required. Why are we executing this initiative? What is the impact? Who is impacted? Under 200 words.]
+[Required. Why are we executing this initiative? What is the impact? Who is impacted? <200 words.]
 
 ## Proposed Solution
 
-[Required. What we expect to achieve. Under 200 words.]
+[Required. What we expect to achieve. <200 words.]
 
 Expected end date: YYYY-MM-DD
 
 ## Acceptance Criteria
 
-[Optional. Expected result and how to verify the goal is achieved. Under 100 words.]
+[Optional. Expected result and how to verify the goal is achieved. <100 words.]
 
 ## Approach
 
-[Optional. Strategy and high-level how. Under 300 words.]
+[Optional. Strategy and high-level how. <300 words.]
 
 ## Key Deliverables
 
-[Optional. Main outputs needed. Under 300 words.]
+[Optional. Main outputs needed. <300 words.]
 
 ## Key Resources
 
-[Optional. Equipment, people, budget, dependencies. Under 100 words.]
+[Optional. Equipment, people, budget, dependencies. <100 words.]
 
 ## Milestones
 
-[Optional. Goals with acceptance criteria, owners, and due dates. Under 1000 words per milestone.]
+[Optional. Goals with acceptance criteria, owners, and due dates. <1000 words per milestone.]
 
 ## Risks Identified
 
-[Optional. Risks with description and mitigation strategy. Under 1000 words.]
+[Optional. Risks with description and mitigation strategy. <1000 words.]
 
 ## References
 
-- [Related Policy or artifact](relative/path.md) - Brief description of relevance
+- [Related Policy or artifact](relative/path.md) - Brief description of relevance (<15 words)
 ```
 
 Rules to apply while drafting:
@@ -154,8 +156,8 @@ Rules to apply while drafting:
 ### Phase 6: Place and Register
 
 1. Save the file at `.xdrs/[scope]/[type]/[subject]/initiatives/[number]-[short-title].md`.
-2. Add a link to the initiative in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`).
-3. Add back-references in the Policies, Research documents, and Skills that the initiative relates to, under their `## References` section.
+2. Add a link to the initiative in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`), with a description <15 words.
+3. Add back-references (<15 words each) in the Policies, Research documents, and Skills that the initiative relates to, under their `## References` section.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new initiative. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 5. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `initiative`.
 

@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -28,7 +28,7 @@ Guides the creation of a well-structured skill package by following `_core-adr-p
 
 #### Contents
 
-- A complete SKILL.md file
+- A complete SKILL.md file (<7000 words)
 
 #### Changes
 
@@ -47,6 +47,8 @@ Guides the creation of a well-structured skill package by following `_core-adr-p
 - Write access to the target scope.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
@@ -109,29 +111,29 @@ metadata:
 
 #### Required
 
-[Bare-minimum bullets needed to invoke the skill, or a single "None" bullet. Each under 10 words.]
+[Bare-minimum bullets needed to invoke the skill, or a single "None" bullet. Each <20 words.]
 
 #### Optional
 
-[Extra helpful-context bullets, or a single "None" bullet. Each under 10 words.]
+[Extra helpful-context bullets, or a single "None" bullet. Each <20 words.]
 
 ### Outputs
 
 #### Contents
 
-[End-objective files/chat text produced, or a single "None" bullet. Each under 10 words.]
+[End-objective files/chat text produced, or a single "None" bullet. Each <20 words. Append "(<N words)" or "(uncapped: <reason>)" to natural-language items not capped in a template or step, e.g. "Release notes (<300 words)". Code and structured data get no marker.]
 
 #### Changes
 
-[End-objective external system mutations, or a single "None" bullet. Each under 10 words.]
+[End-objective external system mutations, or a single "None" bullet. Each <20 words.]
 
 ### Halt Conditions
 
-[This skill's specific stop-before-completing triggers, or a single "None" bullet. Each under 10 words.]
+[This skill's specific stop-before-completing triggers, or a single "None" bullet. Each <20 words.]
 
 ### User Interaction
 
-[Optional. Human-in-the-loop exchanges during execution: clarifying questions or approval gates, or a single "None" bullet. Each under 10 words. Omit the whole section if none apply.]
+[Optional. Human-in-the-loop exchanges during execution: clarifying questions or approval gates, or a single "None" bullet. Each <20 words. Omit the whole section if none apply.]
 
 ### Runtime Requirements
 
@@ -139,8 +141,10 @@ metadata:
 
 ## Instructions
 
+[Blanket cap line, e.g. "Keep every question and intermediate message <100 words and the final summary <150 words."]
+
 ### Phase 1: …
-[Step-by-step agent instructions organized into named phases. Use imperative language and include verification or acceptance criteria at the end of the task or major phases.]
+[Step-by-step agent instructions organized into named phases. Use imperative language and include verification or acceptance criteria at the end of the task or major phases. State "<N words" in each step that produces natural-language content not covered by the blanket line or a template.]
 
 ## Examples
 
@@ -166,13 +170,14 @@ Rules:
 - The `description` field must state both *what* the skill does and *when* to activate it.
 - Keep the skill task-oriented. It should have a clear starting trigger and a concrete ending result.
 - Mention tools or prerequisites when they are required to complete the task reliably.
+- Declare a "<N words" cap, or "(uncapped: <reason>)", exactly once for every natural-language content the skill generates, per **Generated content caps** in `_core-adr-policy-003`.
 - Do not duplicate content from referenced Policies — link instead.
 - Do not present the skill itself as policy; mandatory behavior must come from referenced Policies or other policy artifacts.
 - When the skill depends on Policies, make the activation logic and instructions consistent with the Policy metadata so the skill does not operationalize inactive or out-of-scope decisions.
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If `SKILL.md` genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/skills/[skill-name]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
-- No emojis. Lowercase filenames. Target under 7000 words.
+- No emojis. Lowercase filenames.
 
 ### Phase 5: Review the Draft
 
@@ -180,12 +185,13 @@ Before writing files, verify:
 
 1. **Activation criteria**: Is it unambiguous when this skill loads vs. when it should not?
 2. **Completeness**: Does every phase have actionable steps?
-3. **Length**: Under 7000 words? Trim verbose explanations.
+3. **Length**: Within the SKILL.md word cap? Trim verbose explanations.
 4. **Duplication**: Does this overlap an existing skill? If yes, revise.
 5. **References**: Are all related XDRs and skills linked, including the cases where the skill operationalizes multiple XDRs?
 6. **Anti-Patterns**: Does the skill include at least 3 genuine, domain-specific `## Anti-Patterns` entries (not generic filler)?
-7. **Required sections**: Does `## Overview` contain nested `### Inputs` (Required/Optional bullets), `### Outputs` (Contents/Changes bullets), and `### Halt Conditions` listing this skill's specific stop triggers — each bullet under 10 words or a single "None"?
+7. **Required sections**: Does `## Overview` contain nested `### Inputs` (Required/Optional bullets), `### Outputs` (Contents/Changes bullets), and `### Halt Conditions` listing this skill's specific stop triggers — each bullet under 20 words or a single "None"?
 8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `skill`.
+9. **Output caps**: Does every natural-language content the skill generates (files, messages, questions, summaries, external posts) have exactly one "<N words" cap or "(uncapped: <reason>)" marker, with code and structured data unmarked?
 
 If any check fails, revise before continuing.
 
@@ -212,6 +218,8 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - MUST NOT create documents in external scopes (scopes whose files appear in the workspace root `.filedist.lock`).
 - MUST include a References section linking to `003-skill-standards`.
 - MUST include nested `### Inputs`, `### Outputs`, and `### Halt Conditions` subsections inside `## Overview` with skill-specific content.
+
+## Examples
 
 **Input**: "Create a skill to help debug CI pipelines"
 - Type: EDR (engineering workflow)

@@ -9,7 +9,7 @@ const SKILL_PORT_MIN = 9230;
 const SKILL_PORT_MAX = 9389;
 const AUTO_PORT_MIN = 9390;
 const AUTO_PORT_MAX = 9399;
-const DEFAULT_SIZE = '1300x900';
+const DEFAULT_SIZE = '1200x900';
 const DEFAULT_CHECK_URL = 'https://myaccount.microsoft.com/?ref=MeControl';
 const DEFAULT_SSO_WAIT_SECONDS = 45;
 const DEFAULT_WAIT_SECONDS = 300;
@@ -82,7 +82,7 @@ function parsePositiveInt(value, name) {
 
 function parseSize(value) {
   const match = /^([0-9]{2,5})x([0-9]{2,5})$/.exec(value);
-  if (!match) throw usageError('window size must look like 1300x900');
+  if (!match) throw usageError('window size must look like 1200x900');
   return { width: Number(match[1]), height: Number(match[2]) };
 }
 

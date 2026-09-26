@@ -6,8 +6,8 @@ description: >
    Also activate when you identify a need to check compliance with Policies during implementation.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -28,7 +28,7 @@ Performs a structured review of code changes or files against the Policies in th
 
 #### Contents
 
-- Structured ERROR/WARNING findings report in chat.
+- Findings report in chat (uncapped: one per finding).
 
 #### Changes
 
@@ -47,6 +47,8 @@ Performs a structured review of code changes or files against the Policies in th
 - `npx @mermaid-js/mermaid-cli` for Mermaid diagram checks.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words.
 
 ### Phase 1: Code Gathering
 
@@ -113,18 +115,18 @@ Performs a structured review of code changes or files against the Policies in th
 
 ### Phase 6: Reporting
 
-**Report template**
+**Report template** (keep `## Summary` <50 words)
 ```text
 ### Code Review Against Policies
 Scope: [scope identifier]
 
 ## Findings
 ### 1. [ERROR|WARNING] - [filename:line_number](filename:line_number)
-- Title of the finding (<=15 words)
+- Title of the finding (<15 words)
 - Policy reference: [policy-file:line_number](policy-file:line_number)
-- Why: Brief description of the issue in 20 words
-- Fix: Specific action to fix this issue in 15 words
-- Relevance: Why this matters / What to watch for in 15 words
+- Why: Brief description of the issue (<20 words)
+- Fix: Specific action to fix this issue (<15 words)
+- Relevance: Why this matters / What to watch for (<15 words)
 
 ### 2. [second finding etc]
 

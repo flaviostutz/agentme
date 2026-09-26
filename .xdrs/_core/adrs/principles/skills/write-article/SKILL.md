@@ -4,8 +4,8 @@ description: >
    Creates a new article document following XDRS article standards: selects scope, type, subject, and number; then writes a focused synthetic text that combines and links multiple Policies, Research documents, and Skills around a topic. Activate this skill when the user asks to create, add, or write a new article, guide, or overview document within an XDRS project.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -41,6 +41,8 @@ Guides the creation of a well-structured article by following `_core-adr-policy-
 - Clarification of target audience when unspecified.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Clarify Intent
 
@@ -108,16 +110,16 @@ Use the mandatory template from `004-article-standards`:
 
 ## Overview
 
-[Brief description of what this article covers and its intended audience. Under 40 words.]
+[Brief description of what this article covers and its intended audience. <40 words.]
 
 ## Content
 
 [Synthetic text combining and explaining the topic. Use links to Policies, Research documents, and Skills
-when referencing information from those documents. Keep under 1950 words total.]
+when referencing information from those documents. <1950 words total.]
 
 ## References
 
-- [Policy id or Skill name](relative/path/to/file.md) - Brief description of relevance
+- [Policy id or Skill name](relative/path/to/file.md) - Brief description of relevance (<15 words)
 ```
 
 Rules to apply while drafting:
@@ -130,15 +132,15 @@ Rules to apply while drafting:
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the article genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/articles/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
-- Target under 1950 words for best reader engagement (SHOULD). If content grows beyond that, break it into separate chapter articles rather than expanding a single file. The hard limit is 8000 words.
+- When content would exceed the Content cap, break it into separate chapter articles rather than expanding a single file.
 - Use lowercase file names. Never use emojis.
 - If a conflict exists between the article and a Policy, note it and defer to the Policy.
 
 ### Phase 6: Place and Register
 
 1. Save the file at `.xdrs/[scope]/[type]/[subject]/articles/[number]-[short-title].md`.
-2. Add a link to the article in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`).
-3. Add back-references in the Policies, Research documents, and Skills that the article synthesizes, under their `## References`
+2. Add a link to the article in the canonical index for that scope+type (`.xdrs/[scope]/[type]/index.md`), with a description <15 words.
+3. Add back-references (<15 words each) in the Policies, Research documents, and Skills that the article synthesizes, under their `## References`
    section.
 4. Evaluate whether the scope index at `.xdrs/[scope]/index.md` should be updated to reflect the new article. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 5. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `article`.
@@ -169,7 +171,7 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 - **Cross-subject topic** — place the article in `principles`, not in any single subject folder.
 - **No existing articles folder** — create it; it is optional in the folder layout.
 - **Conflicting information found** — note the conflict in the article and always defer to the Policy.
-- **Article approaches 2000 words** — split the content into separate chapter articles (e.g., `001-topic-overview.md`, `002-topic-deep-dive.md`) so each can be read and understood independently. Move detailed content to a Research, Skill, or Policy and link back. The hard ceiling is 8000 words; never exceed it.
+- **Article would exceed the Content cap** — split the content into separate chapter articles (e.g., `001-topic-overview.md`, `002-topic-deep-dive.md`) so each can be read and understood independently. Move detailed content to a Research, Skill, or Policy and link back.
 - **Article is part of a series** — add the series position line immediately after the heading (e.g., `_This is article 2/4 of the "Engineering Practices" series. | Previous: ... | Next: ..._`) and link to the adjacent articles. When creating a new article that splits an existing one, update the neighbouring articles to reflect the new total and add or correct their navigation links.
 
 ## Constraints
@@ -188,7 +190,7 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 
 - **Mistake:** Writing an article that spans multiple unrelated subjects without splitting it into chapters.
   **Why it happens:** A broad topic feels easier to cover in one long document.
-  **Instead:** Once content approaches ~2000 words or covers distinct sub-topics, split into separate chapter articles per Phase 5/Edge Cases guidance.
+  **Instead:** Once content approaches the Content cap or covers distinct sub-topics, split into separate chapter articles per Phase 5/Edge Cases guidance.
 
 - **Mistake:** Skipping Phase 0 clarifying questions (topic/audience/scope) because the request seems clear.
   **Why it happens:** The request looks self-explanatory, so asking feels like unnecessary friction.

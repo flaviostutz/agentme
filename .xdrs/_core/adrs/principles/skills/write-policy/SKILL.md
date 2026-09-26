@@ -5,8 +5,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new Policy (ADR, BDR, or EDR).
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-09-19
+  version: "1.1.0"
+  updated: 2026-09-24
 ---
 
 ## Overview
@@ -27,7 +27,7 @@ Guides the creation of a well-structured Policy by following the standards in `_
 
 #### Contents
 
-- A new Policy file.
+- A new Policy file (<1300 words; complex <2600).
 
 #### Changes
 
@@ -42,6 +42,8 @@ Guides the creation of a well-structured Policy by following the standards in `_
 - Clarifying questions when the decision topic is ambiguous.
 
 ## Instructions
+
+Keep every question and intermediate message <100 words and the final summary <150 words.
 
 ### Phase 0: Scope Placement and Prerequisites Gate — MUST complete before writing
 
@@ -137,22 +139,22 @@ Refer to `_core-adr-policy-008-policy-structured-standards` for full requirement
 ---
 name: [scope]-[type]-[number]-[short-title]
 description: [What this decision is about and when to use it]
-apply-to: [Required. Contexts this decision applies to, under 40 words. Use "All scopes" when broadly applicable.]
+apply-to: [Required. Contexts this decision applies to, <40 words. Use "All scopes" when broadly applicable.]
 valid-from: [Required. ISO date YYYY-MM-DD. Defaults to today's date when not specified by the user.]
 ---
 
 # [scope]-[type]-[number]: [Short Title]
 
 ## Context and Problem Statement
-[background, who is impacted, and the explicit question being answered - under 40 words]
+[background, who is impacted, and the explicit question being answered - <40 words]
 
 ## Decision Outcome
 
 **[Chosen Option Title]**
-[One sentence: what is the decision - under 30 words]
+[One sentence: what is the decision - <30 words]
 
 ### Details
-[Rules, applicability boundaries, concise examples, and optional do/don't guidance — under 1300 words]
+[Rules, applicability boundaries, concise examples, and optional do/don't guidance — <1300 words]
 
 ## Considered Options (only if the user explicitly indicated multiple options)
 
@@ -164,7 +166,7 @@ valid-from: [Required. ISO date YYYY-MM-DD. Defaults to today's date when not sp
 Mandatory rules to apply while drafting:
 - Always include frontmatter `apply-to:`. Use `All scopes` when the decision applies broadly, or a more specific description when the decision is narrowly scoped.
 - Always include frontmatter `valid-from:`. Use today's date in `YYYY-MM-DD` format when the user does not specify a date.
-- Keep `apply-to:` under 40 words and use `valid-from:` only with `YYYY-MM-DD` ISO format.
+- Use `valid-from:` only with `YYYY-MM-DD` ISO format.
 - When frontmatter metadata is present, write it so a reader can decide whether the Policy should be used for the current case without guessing. `valid-from:` sets a convergence date for adoption, `apply-to:` narrows the contexts where the decision applies, and the decision text defines any remaining boundaries.
 - Use mandatory language ("must", "always", "never") only for hard requirements; use advisory language ("should", "recommended") for guidance.
 - Do not duplicate content already in referenced Policies — link instead.
@@ -175,13 +177,12 @@ Mandatory rules to apply while drafting:
 - If the Policy genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
 - No emojis. Lowercase filenames.
-- Target under 1300 words total; under 2600 words for complex decisions.
 
 ### Phase 7: Review the Draft
 
 Check every item before finalizing:
 
-1. **Length**: Is it under 1300 words? Trim verbose explanations. Move detailed skills to a separate file and link.
+1. **Length**: Is it within the Policy file cap and every template section cap? Trim verbose explanations. Move detailed skills to a separate file and link.
 2. **Frontmatter**: Are `apply-to:` and `valid-from:` both present? `apply-to:` must describe the applicable context (use `All scopes` when broadly applicable). `valid-from:` must be set (use today's date if the user did not specify one).
 3. **Normative language**: Does every normative requirement in the Details and Decision Outcome sections use uppercase BCP 14 keywords per `_core-adr-policy-001`? Replace any lowercase `must`/`should`/`may` that express requirements, prohibitions, or permissions with MUST/MUST NOT, SHOULD/SHOULD NOT, or MAY/OPTIONAL respectively. Lowercase forms are only acceptable in Context sections, question statements, or when used with their ordinary English meaning.
 4. **Originality**: Does every sentence add value that cannot be found in a generic web search? Remove obvious advice. Keep only the project-specific decision.
@@ -196,7 +197,7 @@ If any check fails, revise and re-run this phase before proceeding.
 ### Phase 8: Write Files
 
 1. Create the Policy file at `[xdrs-root]/[scope]/[type]/[subject]/[number]-[short-title].md` (default root: `.xdrs/`).
-2. Add an entry to `[xdrs-root]/[scope]/[type]/index.md` (create the file if it does not exist).
+2. Add an entry to `[xdrs-root]/[scope]/[type]/index.md` (create the file if it does not exist); keep its description <15 words.
 3. Add or verify the scope entry in the Policy root `index.md` (exactly one link per scope; when the scope index declares `extends-only: true`, append the tag `` `extends-only` `` right after the link and make sure the legend line is present, see `_core-adr-policy-022`).
 4. If significant research was produced or already exists, link it from the Policy `## Considered Options` section.
 5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Details` without turning the Policy into a long procedure.

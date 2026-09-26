@@ -86,32 +86,32 @@ All research documents MUST follow this template:
 
 ## Abstract
 
-[Single paragraph summarizing the goal, methods, results, and conclusion. Goal: let a quick technical reader understand the question, method, main result, and takeaway. Under 200 words.]
+[Single paragraph summarizing the goal, methods, results, and conclusion. Goal: let a quick technical reader understand the question, method, main result, and takeaway. <200 words.]
 
 ## Introduction
 
 [Describe the problem, context, constraints, known facts, experiences, gaps, assumptions, and objectives.
-Prefer markdown structures (bullets, tables, headings) first; for diagrams see _core-adr-policy-020. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. Under 700 words.]
+Prefer markdown structures (bullets, tables, headings) first; for diagrams see _core-adr-policy-020. Goal: explain the investigated problem, operating context, constraints, and why the subject matters. <700 words.]
 
 Question: [Central question of the research]?
 
 ## Methods
 
 [Explain how the study was conducted, including design, tools, data sources, and test conditions.
-Include enough detail for an experienced professional to reproduce the relevant parts. Goal: make the important parts of the study reproducible. Under 1200 words.]
+Include enough detail for an experienced professional to reproduce the relevant parts. Goal: make the important parts of the study reproducible. <1200 words.]
 
 ## Results
 
 [Report findings, data, trends, quantitative results, code artifacts, and option comparisons.
-Prefer tables and bullet lists for simple comparisons; for diagrams see _core-adr-policy-020. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. Under 1800 words.]
+Prefer tables and bullet lists for simple comparisons; for diagrams see _core-adr-policy-020. If multiple options solve the same problem, add comparison tables and explicit pros and cons for each option. Focus on raw findings, not interpretation. Goal: present the raw findings with minimal interpretation. <1800 words.]
 
 ## Discussion
 
-[Interpret the results, explain significance, trade-offs, performance considerations, limitations, and implications. Goal: interpret the findings for technical readers. Keep this section technically engaged and under 1000 words.]
+[Interpret the results, explain significance, trade-offs, performance considerations, limitations, and implications. Goal: interpret the findings for technical readers. Keep this section technically engaged. <1000 words.]
 
 ## Conclusion
 
-[Summarize the main findings, practical takeaway, applicability boundaries, and important open questions. Goal: summarize the main findings and what they mean in practice. Under 400 words.]
+[Summarize the main findings, practical takeaway, applicability boundaries, and important open questions. Goal: summarize the main findings and what they mean in practice. <400 words.]
 
 ## References
 
