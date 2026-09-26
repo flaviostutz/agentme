@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 MISE := mise exec --
 
-# Bundling dependencies per _core-adr-policy-021 (skill-bundling): connector skills
+# Bundling dependencies per _core-adr-policy-021 (skill-bundling): contents skills
 # activated at runtime that must be resolvable from a standalone distribution.
-DEPS := ../../../application/skills/github-connector ../../../application/skills/azure-devops-connector
+DEPS := ../../../application/skills/get-github-contents ../../../application/skills/change-github-contents ../../../application/skills/get-azure-devops-contents ../../../application/skills/change-azure-devops-contents
 BUILD := dist/build
 
 .PHONY: build test clean
