@@ -104,8 +104,8 @@ and ask it together with the category.
 
 ## Hidden spending map
 
-Write `.tmp/<id>/hidden.json` with the titles that hide what was bought, and pass it with
-`stats.py insights --hidden .tmp/<id>/hidden.json`:
+Write `.tmp/<id>/.work/hidden.json` with the titles that hide what was bought, and pass it with
+`stats.py insights --hidden .tmp/<id>/.work/hidden.json`:
 
 ```json
 {"ATM Centrum": "cash", "Card Settlement": "card", "PayPal": "provider", "Account Fee": "fees"}

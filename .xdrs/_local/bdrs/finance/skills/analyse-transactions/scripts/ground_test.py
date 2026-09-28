@@ -32,7 +32,7 @@ def normalized(work, capsys, name, data, *sets):
     normalize.main(["stage", "inbox", "--id", "g"])
     normalize.main(["run", name, "--id", "g", *sets])
     capsys.readouterr()
-    return f".tmp/g/normalized/{name.replace('.', '-')}.md"
+    return f".tmp/g/.work/normalized/{name.replace('.', '-')}.md"
 
 
 def test_n26_grounded(work, capsys):
@@ -40,7 +40,7 @@ def test_n26_grounded(work, capsys):
     code, out, _ = run(capsys, path)
     assert code == 0
     assert "2/2 rows grounded, 0 unmatched" in out and "balance True" in out and "module check ok" in out
-    saved = json.loads((work / ".tmp/g/normalized/n-pdf.grounding.json").read_text())
+    saved = json.loads((work / ".tmp/g/.work/normalized/n-pdf.grounding.json").read_text())
     assert saved["matched-by"] == {"line": 2} and len(saved["sample"]) == 2
 
 

@@ -3,12 +3,13 @@
 # requires-python = ">=3.10"
 # dependencies = ["pdfplumber>=0.11", "openpyxl>=3.1"]
 # ///
-"""Stage, discover and normalize source files of one analysis (.tmp/<id>/).
+"""Stage, discover and normalize source files of one analysis (working files in .tmp/<id>/.work/).
 
 Subcommands:
-  stage <input> --id ID      copy a file, folder or zip into .tmp/<id>/sources/ (tree kept, duplicates skipped)
+  stage <input> --id ID      copy a file, folder or zip into .tmp/<id>/.work/sources/ (tree kept, duplicates skipped)
   discover --id ID           per file: module, text layer, account, period; groups, conflicts, gaps, period proposal
-  run <source> --id ID       write .tmp/<id>/normalized/<name>-<ext>.md with an institution module or --mapping
+  rename --id ID --to NEW    move .tmp/<id>/ to .tmp/<new>/ (before any file is normalized)
+  run <source> --id ID       write .tmp/<id>/.work/normalized/<name>-<ext>.md with an institution module or --mapping
 Sources are never modified. Exit codes: 0 ok, 2 invalid input or no known format (use the LLM path).
 """
 
@@ -37,10 +38,14 @@ LLM_ROWS_LIMIT = 200
 PERIOD_MONTHS = 12
 
 
-def run_dir(cwd: Path, run_id: str) -> Path:
+def analysis_dir(cwd: Path, run_id: str) -> Path:
     if not ID_RE.match(run_id):
         raise LedgerError(f"--id must match {ID_RE.pattern}: {run_id!r}")
     return (cwd / ".tmp" / run_id).resolve()
+
+
+def run_dir(cwd: Path, run_id: str) -> Path:
+    return analysis_dir(cwd, run_id) / ".work"
 
 
 def sha256(data: bytes) -> str:
@@ -64,7 +69,7 @@ class Stager:
 
     def add(self, origin: str, rel_parts: list, data: bytes) -> None:
         name = rel_parts[-1]
-        if name.startswith(".") or "__MACOSX" in rel_parts:
+        if any(p.startswith(".") for p in rel_parts) or "__MACOSX" in rel_parts:
             self.skipped.append({"path": origin, "reason": "hidden or system file"})
             return
         if ARTIFACT.search(name):
@@ -114,7 +119,7 @@ def cmd_stage(args, cwd: Path) -> dict:
         raise LedgerError(f"input does not exist: {source}")
     root = run_dir(cwd, args.id)
     dest = root / "sources"
-    if source == root or root in source.parents:
+    if source == root.parent or root.parent in source.parents:
         raise LedgerError("input must not be inside the analysis folder")
     stager = Stager(dest)
     files = [source] if source.is_file() else sorted(p for p in source.rglob("*") if p.is_file())
@@ -159,7 +164,8 @@ def describe(path: Path, rel: str) -> dict:
     except LedgerError as err:
         return {**info, "status": "error", "message": str(err)}
     dates = sorted(r.date for r in rows)
-    info.update(bank=meta.get("bank"), account=meta.get("iban", "unknown"), rows=len(rows), notes=notes,
+    info.update(bank=meta.get("bank"), account=meta.get("iban", "unknown"),
+                holder=meta.get("account-holder", "unknown"), rows=len(rows), notes=notes,
                 period=meta.get("period") or (f"{dates[0]}..{dates[-1]}" if dates else "unknown"))
     return info
 
@@ -231,6 +237,18 @@ def cmd_discover(args, cwd: Path) -> dict:
             "proposed-period": proposed, "not-covered": not_covered}
 
 
+def cmd_rename(args, cwd: Path) -> dict:
+    old, new = analysis_dir(cwd, args.id), analysis_dir(cwd, args.to)
+    if not old.is_dir():
+        raise LedgerError(f"analysis folder does not exist: {old}")
+    if new.exists():
+        raise LedgerError(f"analysis folder already exists: {new}")
+    if (old / ".work" / "normalized").exists():
+        raise LedgerError("rename before normalizing; normalized files keep the source path")
+    old.rename(new)
+    return {"id": args.to, "folder": str(new.relative_to(cwd.resolve()))}
+
+
 def output_for(root: Path, rel: Path) -> Path:
     stem = "-".join(slug(p) for p in rel.with_suffix("").parts)
     return root / "normalized" / f"{stem}-{rel.suffix.lower().lstrip('.')}.md"
@@ -299,20 +317,23 @@ def unknown_hint(doc) -> str:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="cmd", required=True)
-    p = sub.add_parser("stage", help="copy input files into .tmp/<id>/sources/")
+    p = sub.add_parser("stage", help="copy input files into .tmp/<id>/.work/sources/")
     p.add_argument("input", help="file, folder or zip (read only)")
     p = sub.add_parser("discover", help="describe staged files and propose the analysis period")
+    p = sub.add_parser("rename", help="move the analysis folder to a new id (before normalizing)")
+    p.add_argument("--to", required=True, help="new analysis id, e.g. transactions-2026-09-28-jane-doe")
     p = sub.add_parser("run", help="normalize one staged file")
-    p.add_argument("source", help="path relative to .tmp/<id>/sources/")
+    p.add_argument("source", help="path relative to .tmp/<id>/.work/sources/")
     p.add_argument("--module", help="force an institution module by name")
     p.add_argument("--mapping", help="mapping JSON inside .tmp/ for unknown tables")
     p.add_argument("--set", action="append", default=[], metavar="KEY=VALUE", help="override a header field")
     p.add_argument("--force", action="store_true", help="overwrite an existing normalized file")
     for p in sub.choices.values():
-        p.add_argument("--id", required=True, help="analysis id, e.g. transactions-2026-09-28")
+        p.add_argument("--id", required=True, help="analysis id, e.g. transactions-2026-09-28-jane-doe")
     args = parser.parse_args(argv)
     try:
-        result = {"stage": cmd_stage, "discover": cmd_discover, "run": cmd_run}[args.cmd](args, Path.cwd())
+        result = {"stage": cmd_stage, "discover": cmd_discover, "rename": cmd_rename,
+                  "run": cmd_run}[args.cmd](args, Path.cwd())
     except (LedgerError, OSError, KeyError, json.JSONDecodeError) as err:
         print(f"error: {err}", file=sys.stderr)
         return 2

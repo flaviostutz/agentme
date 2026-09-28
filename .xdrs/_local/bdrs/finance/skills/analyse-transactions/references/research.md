@@ -2,7 +2,7 @@
 
 Research finds out what an unclear counterparty is (for example that "Sancy Tres" is a restaurant), so that
 fewer rows go to the user. It uses the agent's own web search or fetch tool. `research.py` makes no network
-calls: it only keeps the cache in `.tmp/<id>/research/cache.json`, and rejects search terms that contain
+calls: it only keeps the cache in `.tmp/<id>/.work/research/cache.json`, and rejects search terms that contain
 private data.
 
 ## When to research
@@ -39,7 +39,7 @@ research in Phase 1, skip this phase and ask the user instead.
 Store each finding right away, also when the answer is "not found":
 
 ```bash
-uv run --script <skill-dir>/scripts/research.py add --cache .tmp/<id>/research/cache.json \
+uv run --script <skill-dir>/scripts/research.py add --cache .tmp/<id>/.work/research/cache.json \
   --name "Sancy Tres" --city "Amsterdam" --url "https://example.org/sancy-tres" \
   --finding "Restaurant in Amsterdam-Zuid." --category-hint "Eating Out"
 ```

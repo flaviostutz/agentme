@@ -1,6 +1,6 @@
 # Normalized format
 
-Every source file becomes one normalized file at `.tmp/<id>/normalized/<name>-<ext>.md`. `<name>` is the
+Every source file becomes one normalized file at `.tmp/<id>/.work/normalized/<name>-<ext>.md`. `<name>` is the
 source path below `sources/`, with each folder and the file stem slugged (lowercase, `a-z0-9._-`) and joined
 with `-`. For example, `sources/2025/ABN Jan.pdf` becomes `normalized/2025-abn-jan-pdf.md`. Scripts write the
 file when an institution module or a mapping reads the source; the LLM writes it by hand only on the LLM path,
@@ -11,7 +11,7 @@ using the same name.
 ```markdown
 # Transactions: <name>-<ext>
 
-source: .tmp/<id>/sources/<relative path>
+source: .tmp/<id>/.work/sources/<relative path>
 normalizer: module:<name> | mapping | llm | llm-image
 bank: <bank name or unknown>
 account-type: current | savings | credit-card | pseudo | unknown
@@ -66,7 +66,7 @@ the user supplies an image or `xls`/`ods` file.
 
 ## Mapping for unknown tables
 
-For a CSV, TXT, TAB or XLSX export that no module reads, write `.tmp/<id>/mappings/<name>.json` after reading
+For a CSV, TXT, TAB or XLSX export that no module reads, write `.tmp/<id>/.work/mappings/<name>.json` after reading
 the header and a few rows, and pass it with `normalize.py run <source> --id <id> --mapping <file>`.
 
 | Key | Required | Meaning |
@@ -101,6 +101,9 @@ the row number, so fix the mapping instead of editing the output. When 2 or more
 
 ## Working folder
 
+`.tmp/<id>/` holds only `report.md` (written by the LLM) and `.work/`. Nothing is deleted after the run. Paths
+below are relative to `.tmp/<id>/.work/`:
+
 | Path | Written by | Content |
 |---|---|---|
 | `sources/` | `normalize.py stage` | Read-only copies of the inputs, with the folder tree kept |
@@ -113,4 +116,3 @@ the row number, so fix the mapping instead of editing the output. When 2 or more
 | `hidden.json` | LLM | Title to hidden-spending kind map for `stats.py insights` |
 | `answers.json` | `answers.py export` | The user's answers, reusable by later analyses |
 | `research/cache.json` | `research.py add` | Web findings about counterparties |
-| `report.md` | LLM | Final report |

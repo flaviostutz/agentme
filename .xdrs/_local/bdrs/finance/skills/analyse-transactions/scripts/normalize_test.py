@@ -23,6 +23,8 @@ def inbox(work):
     (src / "shared.csv").write_text(SPLITWISE_CSV, encoding="utf-8")
     (src / "unknown.csv").write_text("When;What;How much\n02-01-2026;Shop;-1,00\n", encoding="utf-8")
     (src / ".DS_Store").write_bytes(b"x")
+    (src / ".work").mkdir()
+    (src / ".work" / "old.csv").write_text("a,b\n1,2\n", encoding="utf-8")
     (src / "notes.docx").write_bytes(b"x")
     (src / "x.snapshot.json").write_text("{}", encoding="utf-8")
     (src / "z-copy.csv").write_text(SPLITWISE_CSV, encoding="utf-8")
@@ -34,9 +36,9 @@ def test_stage_folder(work, capsys):
     assert code == 0
     assert sorted(s["path"] for s in result["staged"]) == ["bank/jan-2026.pdf", "shared.csv", "unknown.csv"]
     reasons = sorted(s["reason"].split(" ")[0] for s in result["skipped"])
-    assert reasons == ["artifact", "duplicate", "hidden", "unsupported"]
+    assert reasons == ["artifact", "duplicate", "hidden", "hidden", "unsupported"]
     code, again = call(capsys, "stage", "inbox", *RUN)
-    assert again["staged"] == [] and len(json.loads((work / ".tmp/t1/staging.json").read_text())) == 2
+    assert again["staged"] == [] and len(json.loads((work / ".tmp/t1/.work/staging.json").read_text())) == 2
 
 
 def test_stage_zip(work, capsys):
@@ -77,8 +79,9 @@ def test_stage_name_clash(work, capsys):
     (("stage", ".tmp", "--id", "Bad Id"), "--id must match"),
     (("stage", ".tmp/t1", *RUN), "must not be inside"),
     (("discover", *RUN), "nothing staged"),
-    (("run", "none.csv", *RUN), "source not found"),
-])
+    (("run", "none.csv", *RUN), "source not found"),    (("rename", "--id", "none", "--to", "t2"), "does not exist"),
+    (("rename", *RUN, "--to", "t1"), "already exists"),
+    (("rename", *RUN, "--to", "Bad Id"), "--id must match"),])
 def test_invalid_input(work, capsys, argv, message):
     (work / ".tmp/t1").mkdir()
     code, err = call(capsys, *argv)
@@ -93,6 +96,7 @@ def test_discover(work, capsys):
     pdf = by_path["bank/jan-2026.pdf"]
     assert (pdf["status"], pdf["module"], pdf["rows"], pdf["period"]) == ("module", "n26", 2,
                                                                           "2026-01-01..2026-01-31")
+    assert pdf["holder"] != "unknown"
     assert by_path["shared.csv"]["period"] == "2026-01-03..2026-01-10"
     assert by_path["unknown.csv"]["status"] == "mapping"
     assert by_path["unknown.csv"]["header"] == ["When", "What", "How much"]
@@ -101,7 +105,7 @@ def test_discover(work, capsys):
 
 
 def test_discover_conflicts_gaps_statuses(work, capsys):
-    src = work / ".tmp/t1/sources"
+    src = work / ".tmp/t1/.work/sources"
     src.mkdir(parents=True)
     feb = [[*N26_PAGES[0][:2], (50, 772, "01.03.2026 until 31.03.2026"), *N26_PAGES[0][3:]], N26_PAGES[1]]
     (src / "jan.pdf").write_bytes(make_pdf(N26_PAGES))
@@ -128,14 +132,23 @@ def test_propose_period():
     assert normalize.propose_period({"a": [{"period": "2025-01-01..2026-06-15"}]}) == "2025-06-01..2026-05-31"
 
 
+def test_rename(work, capsys):
+    call(capsys, "stage", str(inbox(work)), *RUN)
+    code, result = call(capsys, "rename", *RUN, "--to", "jane-t1")
+    assert code == 0 and result["folder"] == ".tmp/jane-t1"
+    assert (work / ".tmp/jane-t1/.work/sources/shared.csv").is_file() and not (work / ".tmp/t1").exists()
+    call(capsys, "run", "shared.csv", "--id", "jane-t1", "--set", f"account-holder={HOLDER}")
+    assert "rename before normalizing" in call(capsys, "rename", "--id", "jane-t1", "--to", "t3")[1]
+
+
 def test_run_module_and_force(work, capsys):
     call(capsys, "stage", str(inbox(work)), *RUN)
     code, result = call(capsys, "run", "bank/jan-2026.pdf", *RUN)
     assert code == 0
-    assert result["output"] == ".tmp/t1/normalized/bank-jan-2026-pdf.md"
+    assert result["output"] == ".tmp/t1/.work/normalized/bank-jan-2026-pdf.md"
     assert (result["normalizer"], result["rows"], result["sum"]) == ("module:n26", 2, "+40.00")
     led = ledger.read(work / result["output"])
-    assert led.meta["source"] == ".tmp/t1/sources/bank/jan-2026.pdf"
+    assert led.meta["source"] == ".tmp/t1/.work/sources/bank/jan-2026.pdf"
     assert "exists" in call(capsys, "run", "bank/jan-2026.pdf", *RUN)[1]
     code, result = call(capsys, "run", "bank/jan-2026.pdf", *RUN, "--force", "--set", "account-type=savings")
     assert code == 0 and result["meta"]["account-type"] == "savings"
@@ -161,7 +174,7 @@ def test_run_mapping_and_hints(work, capsys):
 
 
 def test_run_hints_and_errors(work, capsys):
-    src = work / ".tmp/t1/sources"
+    src = work / ".tmp/t1/.work/sources"
     src.mkdir(parents=True)
     files = {"p.png": b"x", "o.ods": b"x", "scan.pdf": make_pdf([[]]), "t.pdf": make_pdf([[(50, 800, "Hello")]]),
              "bad.pdf": b"x"}
@@ -177,7 +190,7 @@ def test_run_hints_and_errors(work, capsys):
 def test_run_encrypted(work, capsys, monkeypatch):
     import sourcedoc
 
-    src = work / ".tmp/t1/sources"
+    src = work / ".tmp/t1/.work/sources"
     src.mkdir(parents=True)
     (src / "x.pdf").write_bytes(b"x")
     monkeypatch.setattr(sourcedoc, "load", lambda p: sourcedoc.Doc(p, "pdf", encrypted=True))
@@ -187,7 +200,7 @@ def test_run_encrypted(work, capsys, monkeypatch):
 def test_run_unexpected_parser_error(work, capsys, monkeypatch):
     import sourcedoc
 
-    src = work / ".tmp/t1/sources"
+    src = work / ".tmp/t1/.work/sources"
     src.mkdir(parents=True)
     (src / "x.pdf").write_bytes(b"x")
 

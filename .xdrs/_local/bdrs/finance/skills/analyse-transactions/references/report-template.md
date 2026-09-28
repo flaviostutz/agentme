@@ -64,7 +64,8 @@ Rules:
 - Research: titles classified from web findings, with their source URLs.
 - Assumptions and rows the user marked Unknown.
 
-## Retention
-The analysis files are in `.tmp/<id>/` (copies of the statements, normalized files, answers, research cache,
-this report). Delete the folder when done; keep `answers.json` and `research/cache.json` to reuse them later.
+## Working files
+The analysis files are kept in `.tmp/<id>/.work/` (copies of the statements, normalized files, answers,
+research cache) for follow-up questions. Delete the folder when done; keep `.work/answers.json` and
+`.work/research/cache.json` to reuse them later.
 ```
