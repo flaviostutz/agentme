@@ -5,4 +5,4 @@ dist
 .mypy_cache
 .tmp/
 .DS_Store
-__pycache__.playwright-cli/
+__pycache__
