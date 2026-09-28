@@ -7,5 +7,5 @@ Overrides all other scopes for project-internal business rules and product conte
 
 Personal finance analysis.
 
-- [analyse-transactions](finance/skills/analyse-transactions/SKILL.md) - **Analyse transactions** — Normalizes, grounds and classifies bank, card and shared-expense statements from any bank and period, then reports money flow, hidden and recurring spending, and costed actions *(skill)*
+- [analyse-account-transactions](finance/skills/analyse-account-transactions/SKILL.md) - **Analyse transactions** — Normalizes, grounds and classifies bank, card and shared-expense statements from any bank and period, then reports money flow, hidden and recurring spending, and costed actions *(skill)*
 
