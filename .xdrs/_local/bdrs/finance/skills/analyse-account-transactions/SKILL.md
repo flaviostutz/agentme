@@ -1,5 +1,5 @@
 ---
-name: analyse-transactions
+name: analyse-account-transactions
 description: >
   Analyses bank, card and shared-expense statements (PDF, CSV, XLSX, OFX, images and more, from any bank,
   account and period) for one analysis period: normalizes every file into signed transaction tables, grounds
