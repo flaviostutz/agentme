@@ -200,12 +200,7 @@ The root `Makefile` is the only contract for CI and contributors. It delegates l
 
 The root `Makefile` MUST remain the only contract for CI and contributors, in line with [agentme-edr-303](../platform/303-common-targets.md).
 
-## Considered Options
-
-* (REJECTED) **Mixed Python tooling** - Separate tools and config files such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, and `mypy`.
-  * Reason: Increases cognitive load, duplicates configuration, and weakens the standard command surface across projects.
-* (CHOSEN) **uv + `lib/` package layout + Ruff/ty/Pytest toolchain** - One dependency manager, package internals isolated under `lib/`, consumer examples under `examples/`, and one root Makefile contract.
-  * Reason: Keeps packaging, dependency locking, static analysis, security auditing, and test execution consistent while aligning Python repositories with the established JavaScript layout.
+Python projects MUST NOT mix tooling such as `pip`, `requirements.txt`, `setup.cfg`, `flake8`, or `mypy`; use the `uv` + `lib/` layout + Ruff/ty/Pytest toolchain defined above.
 
 ## References
 

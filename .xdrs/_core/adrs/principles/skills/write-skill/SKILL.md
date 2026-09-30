@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.2.0"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -172,6 +172,7 @@ Rules:
 - Mention tools or prerequisites when they are required to complete the task reliably.
 - Declare a "<N words" cap, or "(uncapped: <reason>)", exactly once for every natural-language content the skill generates, per **Generated content caps** in `_core-adr-policy-003`.
 - Do not duplicate content from referenced Policies — link instead.
+- If the skill creates files at runtime (outputs, intermediate files, ad-hoc scripts), restate in `## Instructions`, next to the steps writing them, the parts of **Work files** in `_core-adr-policy-003` it uses: `.tmp/[skill-name]-[YYYYMMDDHHMMSS]/`, `.work/`, `.work/scripts/`, and the final `results-path:` line. This restatement is the one exception to the no-duplication rule, so the skill runs standalone.
 - Do not present the skill itself as policy; mandatory behavior must come from referenced Policies or other policy artifacts.
 - When the skill depends on Policies, make the activation logic and instructions consistent with the Policy metadata so the skill does not operationalize inactive or out-of-scope decisions.
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
@@ -192,6 +193,7 @@ Before writing files, verify:
 7. **Required sections**: Does `## Overview` contain nested `### Inputs` (Required/Optional bullets), `### Outputs` (Contents/Changes bullets), and `### Halt Conditions` listing this skill's specific stop triggers — each bullet under 20 words or a single "None"?
 8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `skill`.
 9. **Output caps**: Does every natural-language content the skill generates (files, messages, questions, summaries, external posts) have exactly one "<N words" cap or "(uncapped: <reason>)" marker, with code and structured data unmarked?
+10. **Work files**: If the skill creates files at runtime, do its Instructions restate the default execution dir, `.work/`, `.work/scripts/`, and `results-path:` line from `_core-adr-policy-003`, or an explicit alternative location?
 
 If any check fails, revise before continuing.
 

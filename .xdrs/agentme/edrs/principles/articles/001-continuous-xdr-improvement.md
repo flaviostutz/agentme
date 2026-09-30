@@ -60,7 +60,7 @@ Use this checklist:
 3. Pick the subject folder that best matches the topic.
 4. Write the context as a problem statement ending with a clear question.
 5. State one chosen outcome and the concrete implementation details.
-6. Add considered options only when the alternatives matter.
+6. Put option analysis in a related Research and link it from `## Related Researches`; state forbidden options as ordinary rules.
 7. Link to related XDRs, skills, and discussions instead of duplicating long instructions.
 
 ### Promote it into shared documentation

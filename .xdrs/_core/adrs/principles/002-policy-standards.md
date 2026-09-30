@@ -78,7 +78,9 @@ Policy documents are the authoritative source of truth for their scope, type, an
 - Conflict handling applies to Policy documents:
   - For cross-scope and cross-scope-type overrides, document the decision conflict in the Policy `## Conflicts` section of the Policy that overrides another scope or scope-type policy. Local meta-policies (`NNN-core.md` and companion files) and scope-type definition policies MAY include a `## Conflicts` section for this purpose. See `_core-adr-policy-010` rule 26-conflict-declarations for the required structure.
   - **Within-scope conflicts:** Policies within the same type+scope MUST NOT conflict. If two Policies appear to conflict, one SHOULD be updated, removed, or the conflict resolved through a new Policy.
-- When research exists for a decision, the Policy SHOULD mention the related research documents after the `## Considered Options` list.
+- Policies MUST NOT contain a `## Considered Options` section.
+- When a Research document backs the decision, the Policy SHOULD list it in a `## Related Researches` section. Each entry MUST be a single list item with a link to the research, a ` - ` separator, and a summary of fewer than 20 words (see the template below).
+- Options that MUST NOT be used, with or without a backing Research, MUST be stated as ordinary rules in the Policy (for example in `### Details`), like any other rule.
 - MUST NOT use emojis in contents.
 - File names MUST be lowercase.
 - For diagram and asset rules in Policy documents, see [`_core-adr-policy-020`](020-media-and-asset-standards.md). Rule `02-policy-diagram-restrictions` below summarises the overall stance; the detailed rules are in policy 020.
@@ -129,8 +131,8 @@ Question: In the end, state explicitly the question that needs to be answered. E
 
 ## Decision Outcome
 
-**[Chosen Option Title]**
-[Very short description of what is the decision, aligned with the titles on the Considered Options section]
+**[Decision Title]**
+[Very short description of what is the decision]
 
 [Short description of implementation details for the chosen path]
 
@@ -138,11 +140,11 @@ Question: In the end, state explicitly the question that needs to be answered. E
 
 [Optional section with implementation specifics, applicability boundaries, rules, concise examples, or do/don't guidance. This is the answer to the question in the "Context and Problem Statement". (<1300 words)]
 
-## Considered Options 
-[this section is present ONLY if the user explicitely indicated that there were multiple options to choose from while making this decision or have a backing research document]
+## Related Researches
 
-[Related research, if any]
-- [Research document title](researches/001-example.md) - Brief description of what it informed
+[Optional section, present ONLY if a Research document backs this decision]
+
+- [Research document title](researches/001-example.md) - Brief summary of what it informed (<20 words)
 
 ## Conflicts
 

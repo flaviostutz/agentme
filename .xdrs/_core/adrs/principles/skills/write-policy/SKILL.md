@@ -5,8 +5,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new Policy (ADR, BDR, or EDR).
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.2.0"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -156,7 +156,7 @@ valid-from: [Required. ISO date YYYY-MM-DD. Defaults to today's date when not sp
 ### Details
 [Rules, applicability boundaries, concise examples, and optional do/don't guidance — <1300 words]
 
-## Considered Options (only if the user explicitly indicated multiple options)
+## Related Researches (only if a backing Research exists; one list item per Research: link + summary <20 words)
 
 ## Conflicts (mandatory if conflicts found in Phase 3)
 
@@ -172,7 +172,7 @@ Mandatory rules to apply while drafting:
 - Do not duplicate content already in referenced Policies — link instead.
 - Keep the decision itself authoritative in the Policy. Supporting artifacts may elaborate, but they should not restate the full decision when a short reference is enough.
 - Make clear when the decision applies and any important exception boundaries.
-- Keep exploratory option analysis in a related Research document when it would distract from the final decision text.
+- Keep exploratory option analysis in a related Research document; never add a `## Considered Options` section. State options that must not be used as ordinary rules in the Policy.
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
 - If the Policy genuinely needs local images or supporting files, store them in `.xdrs/[scope]/[type]/[subject]/.assets/` and link them using a same-folder relative path (e.g., `.assets/image.png`).
 - Use relative paths for all links; never use absolute paths starting with `/`.
@@ -199,7 +199,7 @@ If any check fails, revise and re-run this phase before proceeding.
 1. Create the Policy file at `[xdrs-root]/[scope]/[type]/[subject]/[number]-[short-title].md` (default root: `.xdrs/`).
 2. Add an entry to `[xdrs-root]/[scope]/[type]/index.md` (create the file if it does not exist); keep its description <15 words.
 3. Add or verify the scope entry in the Policy root `index.md` (exactly one link per scope; when the scope index declares `extends-only: true`, append the tag `` `extends-only` `` right after the link and make sure the legend line is present, see `_core-adr-policy-022`).
-4. If significant research was produced or already exists, link it from the Policy `## Considered Options` section.
+4. If significant research was produced or already exists, link it from the Policy `## Related Researches` section with a summary under 20 words.
 5. If concise rules, examples, or do/don't bullets help readers apply the decision correctly, add them inside `### Details` without turning the Policy into a long procedure.
 6. Evaluate whether the scope index at `[xdrs-root]/[scope]/index.md` should be updated to reflect the new content. If the scope index does not exist, create it following article standards and the scope index rules in `_core-adr-policy-001`.
 

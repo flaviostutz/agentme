@@ -49,12 +49,7 @@ Disallowed:
 - CI running `npm run build` when the project already defines `make build`
 - `package.json` scripts that chain multiple operations instead of forwarding to one Make target
 
-## Considered Options
-
-* (REJECTED) **Runner-agnostic command entry points** - Allow Makefiles, package-manager scripts, shell wrappers, and task runners as equivalent project entry points.
-  * Reason: Preserves multiple abstraction layers and weakens the guarantee that developers and CI execute the same visible commands.
-* (CHOSEN) **Makefile-first Mise-managed execution** - Standardize on Makefiles for entry points and require targets to run the underlying commands through `mise exec --`.
-  * Reason: Keeps the command surface small, readable, and consistent across languages while ensuring the pinned tool versions from `.mise.toml` are always used.
+Makefiles, package-manager scripts, shell wrappers, and task runners MUST NOT be treated as equivalent project entry points; Makefiles are the only entry point.
 
 ## References
 

@@ -1,6 +1,6 @@
 ---
 name: _core-adr-policy-003-skill-standards
-description: Defines skill package standards including structure, SKILL.md format, and co-location with XDRS packages. Use when creating or reviewing skills.
+description: Defines skill package standards including structure, SKILL.md format, co-location with XDRS packages, and default placement of runtime work files. Use when creating or reviewing skills.
 apply-to: All skill packages
 valid-from: 2025-01-01
 ---
@@ -124,7 +124,7 @@ Brief description of the skill goal.
 - Generated files or chat-delivered results, one bullet per item, or "None" (e.g., `Release notes (<300 words)`).
 
 #### Changes
-- External system mutations that are part of the skill's main objective, one bullet per item, or "None".
+- External system mutations or persistent workspace files changed by the main objective, one bullet per item, or "None". Never list work files under `.tmp/`.
 
 ### Halt Conditions
 - Specific triggers that make the skill stop before completing, one bullet per item, or "None".
@@ -168,7 +168,7 @@ Rules:
 - `### Inputs` MUST contain `#### Required` (the bare minimum needed to invoke the skill) then `#### Optional` (helpful extra context), in that order.
 - `## Instructions` is REQUIRED. It SHOULD state one clearly recommended approach first when multiple are viable, noting alternatives briefly afterward, and SHOULD include verification steps or acceptance criteria at the end of the task or major phases.
 - `## Examples` SHOULD include 2-3 example prompts a user could give as input, alongside a short description of what to expect during execution and as output for each.
-- `### Outputs` covers only end-objective results, not intermediary items, and MUST contain `#### Contents` (generated files or chat-delivered results) then `#### Changes` (external system mutations that are part of the main objective), in that order.
+- `### Outputs` covers only end-objective results, not intermediary items, and MUST contain `#### Contents` (generated files or chat-delivered results) then `#### Changes` (external system mutations or persistent workspace files changed by the main objective, never `.tmp/` work files), in that order. Chat-only skills MUST declare "None".
 - `### Halt Conditions` MUST list this skill's specific stop-before-completing triggers, grounded in at least missing required input, dubious/ambiguous input, and insufficient agent confidence — distinct from `## Edge Cases` (activation/boundary conditions) and `## Anti-Patterns` (execution mistakes). A partial or empty result the skill still finishes and returns belongs in `### Outputs`, not `### Halt Conditions`.
 - `### User Interaction` is OPTIONAL: documents human-in-the-loop (HITL) exchanges during execution — a clarifying question or an approval gate — distinct from `### Halt Conditions` (which stop execution rather than pause-and-resume it) and `### Runtime Requirements` (static prerequisites, not an interactive exchange); omit the section entirely when the skill has none.
 - `### Runtime Requirements` is OPTIONAL: free-form bullets for tooling, network, or environment prerequisites beyond the LLM itself; omit the section entirely when none apply.
@@ -189,6 +189,17 @@ When a skill includes `scripts/`:
 - MUST avoid non-essential external dependencies, or document install steps in `SKILL.md` when unavoidable.
 - SHOULD support both human-readable and machine-readable (JSON) output when producing analysis or report output.
 - SHOULD stay single-purpose.
+
+**Work files**
+
+Files a skill creates while running MUST follow this default unless the skill or user sets another location:
+- `.tmp/[skill-name]-[YYYYMMDDHHMMSS]/` at the workspace root (local start time), created lazily, suffixed `-2`, `-3`... if taken, holds final outputs.
+- Its `.work/` holds intermediate files (caches, staging); `.work/scripts/` holds ad-hoc scripts generated at runtime.
+- Keep it after the run. Workspaces SHOULD gitignore `.tmp/`; skills MUST NOT edit `.gitignore` for it.
+- MUST NOT write secrets there; use environment or harness, or the OS temp dir (deleted after use) when a file is unavoidable.
+- On a read-only workspace, use the same layout under the OS temp dir.
+- When the dir was created, even on halt or failure, end the final chat message with `results-path: [dir]/`.
+- Skills that create files MUST restate the parts of this layout they use in their own `## Instructions`, to run standalone.
 
 **Quality gate**
 
@@ -220,17 +231,6 @@ Use the [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills
 ```
 skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[skill-name]
 ```
-
-## Considered Options
-
-* (REJECTED) **Top-level `skills/` directory separate from XDRS** - Decouples skills from the decisions that govern them.
-  * Reason: Breaks the natural association between a decision (Policy) and the skill that implements it; makes navigation harder.
-* (CHOSEN) **agentskills-compatible packages co-located with XDRS** - Standardized format with scoped discovery and clear ownership.
-  * Reason: Reuses proven agentskills tooling, aligns with the existing XDRS scope/subject hierarchy, and keeps skills close to the decisions they implement.
-* (REJECTED) **Fully self-contained skills, no shared assets** - Every skill package repeats any instruction shared with another skill.
-  * Reason: Duplicates maintenance burden across skills and drifts out of sync over time.
-* (CHOSEN) **Shared `.assets/` modules plus optional bundling** - Keep shared instruction modules DRY in-repo, and offer an optional per-skill bundling mechanism for standalone distribution.
-  * Reason: Preserves DRY authoring for the common case while still allowing a single skill to be distributed as a self-contained artifact when needed ([`_core-adr-policy-021`](021-skill-bundling.md)).
 
 ## References
 

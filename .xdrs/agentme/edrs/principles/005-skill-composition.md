@@ -29,9 +29,9 @@ A bundling-enabled skill MUST list every skill it activates in its `DEPS` per [_
 
 A skill's scripts MUST NOT execute, `require`/`import`, or read another skill's scripts or files, including by relative path, and MUST NOT depend on another skill's folder layout. Helpers needed by two skills MUST be copied into each skill's own `scripts/` folder, containing only what that skill uses.
 
-## Considered Options
+#### 03-no-shared-script-library
 
-- **Shared script library across skills** - rejected because a rename or partial distribution breaks every caller, and callers skip the owning skill's checks.
+A shared script library across skills MUST NOT be used: a rename or partial distribution breaks every caller, and callers skip the owning skill's checks.
 
 ## References
 

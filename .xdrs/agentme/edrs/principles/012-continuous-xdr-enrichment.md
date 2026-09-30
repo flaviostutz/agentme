@@ -49,12 +49,9 @@ It is good practice to ask the coding agent which missing XDRs made the task har
 
 In SDD, specifications describe the feature being built; XDRs describe reusable decisions and guardrails that MUST survive beyond one feature. Do not keep durable engineering policy only inside feature specs.
 
-## Considered Options
+#### 08-do-not-force-local-scopes-first
 
-* (REJECTED) **Force all decisions into local scopes first** - Safer for a single repository but weak for reuse.
-  * Reason: It overuses `_local`, reduces cross-team discussion, and turns shared practices into isolated variants.
-* (CHOSEN) **Promote reusable development guidance into shared XDRs while keeping truly specific decisions local** - Balance exploration with convergence.
-  * Reason: It preserves local autonomy for application-specific needs while making reusable practices discussable, reviewable, and distributable.
+Teams MUST NOT force all decisions into local scopes first; reusable guidance goes to shared XDRs while truly specific decisions stay local.
 
 ## References
 

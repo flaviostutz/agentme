@@ -92,14 +92,7 @@ it("returns ERROR when the database checker fails", async () => {
 });
 ```
 
-## Considered Options
-
-* (REJECTED) **No health checks** — detect failures through request errors
-  * Reason: Reactive; customer-visible failures occur before detection; no degraded-state visibility
-* (REJECTED) **Simple ping returning 200** — no dependency validation
-  * Reason: A service can appear healthy while critical dependencies are down
-* (CHOSEN) **Standardized `/health` with dependency validation** — single aggregated endpoint
-  * Reason: Actionable health info without exposing internals; enables infrastructure automation; balances operational visibility with security
+Services MUST NOT omit health checks, and MUST NOT expose a simple ping returning 200 without dependency validation; use the standardized `/health` endpoint with dependency validation.
 
 ## References
 

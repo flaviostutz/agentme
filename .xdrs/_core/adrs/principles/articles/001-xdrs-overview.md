@@ -85,7 +85,7 @@ The framework is easiest to understand as a lifecycle rather than a static folde
   later support more than one decision record.
 2. **Decide** — Once a direction is chosen, a Policy captures the final answer in concise,
   authoritative form. The Policy should make clear when the decision applies, and may link back to
-  the Research that informed its considered options.
+  the Research that informed it.
 3. **Execute** — If the decision affects daily work, a Skill explains how to apply it in practice.
    The Skill operationalizes the decision without turning the Policy into a procedure manual.
 4. **Explain** — When the topic becomes broad or cross-cutting, an Article synthesizes the Policy,

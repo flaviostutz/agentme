@@ -74,11 +74,11 @@ Rules:
 Use the `run-skill-tests` skill to execute the file, or run each scenario manually when automation is not available.
 
 
-## Considered Options
+#### 04-forbidden-test-placements
 
-- **Inline test section in SKILL.md** — rejected because it mixes specification and verification, inflating file size past the 6500-word limit and making test-only changes noisy in diffs.
-- **External test registry** — rejected because co-location is the simplest discoverability model and matches the skill folder convention already established by `_core-adr-policy-003`.
-- **Required only for new skills** — rejected because existing skills carry the same regression risk after every edit.
+- Tests MUST NOT be inline in `SKILL.md`; it mixes specification and verification and inflates file size.
+- An external test registry MUST NOT be used; tests are co-located in the skill folder.
+- Tests MUST NOT be required only for new skills; existing skills carry the same regression risk.
 
 ## References
 

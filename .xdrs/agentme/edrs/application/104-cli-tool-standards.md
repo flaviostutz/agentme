@@ -89,12 +89,7 @@ This keeps the user-facing command predictable while preserving a clean library 
 - Do not hard-code a second version string that can drift from the published package version.
 - Language-specific project structure and packaging rules still apply and SHOULD be combined with this XDR, especially [agentme-edr-101](101-javascript-project-tooling.md), [agentme-edr-102](102-golang-project-tooling.md), and [agentme-edr-103](103-python-project-tooling.md).
 
-## Considered Options
-
-* (REJECTED) **Ad hoc CLIs with embedded business logic** - Keep parsing, processing, config loading, and output formatting inside a single entry point.
-  * Reason: Makes the tool hard to test, hard to reuse programmatically, and inconsistent across commands.
-* (CHOSEN) **Thin CLI adapter over action-oriented application APIs** - Keep the CLI responsible for user interaction and the application layer responsible for the actual behavior.
-  * Reason: Preserves a clean programmatic API, keeps command behavior discoverable, and makes the CLI-to-application mapping easy to maintain.
+CLIs MUST NOT embed business logic (parsing, processing, config loading, output formatting) in a single entry point; keep the CLI a thin adapter over action-oriented application APIs.
 
 ## References
 
