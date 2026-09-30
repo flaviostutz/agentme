@@ -21,6 +21,7 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 
 ### Details
 
+- Articles MUST NOT be kept in a documentation repository separate from the Policies they reference.
 **Human-first writing**
 
 - The primary objective of an article is to make information available and accessible to humans. Good copywriting style, storytelling, clear organization, and clustering of related information are essential. Avoid repetitive content; each sentence SHOULD add new value.
@@ -88,13 +89,6 @@ when referencing an information from those documents.]
 
 - [Policy id or Skill name](relative/path/to/file.md) - Brief description of relevance
 ```
-
-## Considered Options
-
-* (REJECTED) **Separate documentation repository** - Removes drift risk but decouples docs from decisions.
-  * Reason: Increases maintenance burden and makes it easy for articles to go stale relative to the Policies they reference.
-* (CHOSEN) **Subject-level articles folder co-located with Policies** - Keeps articles alongside the policies and skills they reference, with `principles` as the fallback for cross-subject articles.
-  * Reason: Easy to discover, consistent with where skills are placed, and clearly distinct from the policies themselves.
 
 ## References
 

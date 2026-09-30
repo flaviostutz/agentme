@@ -6,8 +6,8 @@ description: >
    Also activate when you identify a need to check compliance with Policies during implementation.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.2.0"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -81,12 +81,12 @@ Keep every question and intermediate message <100 words.
 ### Phase 3: Diagram Validation
 
 1. For every file in scope, scan for fenced ` ```mermaid ` code blocks.
-2. For each diagram found, extract the content to a temporary `.mmd` file and run:
+2. For each diagram found, extract the content to a `.mmd` file in `.tmp/review-[YYYYMMDDHHMMSS]/.work/` at the workspace root (local start time; create it only when the first diagram is found, append `-2`, `-3`... if it exists, and use the same layout under the OS temp dir if the workspace is read-only) and run:
    ```bash
-   npx -y @mermaid-js/mermaid-cli -i <tempfile>.mmd --quiet 2>&1
+   npx -y @mermaid-js/mermaid-cli -i <file>.mmd --quiet 2>&1
    ```
 3. For each diagram that fails validation, report as ERROR: include the file path, approximate location (heading or surrounding text), and the error message from `mmdc`.
-4. Delete all temporary files created in this step.
+4. Keep the extracted files after the run; if this step created the dir, fill the `results-path` line of the report template.
 
 ### Phase 4: Policy Review
 
@@ -134,6 +134,8 @@ Scope: [scope identifier]
 - Errors: [count]
 - Warnings: [count]
 - Outcome: [PASS|FAIL]
+
+results-path: [.tmp/review-[ts]/ actual dir; include this line only when Phase 3 created it]
 ```
 
 ### Constraints

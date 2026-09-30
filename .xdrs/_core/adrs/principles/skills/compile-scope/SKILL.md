@@ -4,13 +4,13 @@ description: >
   Compiles or updates any scope declaring `scope-type: compiled` from its configured external sources. Reads compilation meta-policies to discover sources, fetches content (git clone, local copy, or web scrape), plans policy changes, migrates policies one at a time with structured format, `## Source` sections, and `**compilation-note:**` markers, then runs lint and review. Documents source inconsistencies without inventing fixes. Activate when the user asks to compile, update, sync, refresh, or recompile a compiled scope.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.2.0"
+  updated: 2026-09-30
 ---
 
 ## Overview
 
-Performs a full compilation cycle for any scope declaring `scope-type: compiled`: discovers compilation meta-policies across all type folders, checks whether each governed source is already in sync before doing any work, fetches due sources into a temporary staging directory, plans which policies to create, update, or remove, migrates them one at a time with full source traceability, runs lint and review, persists selected source content and updates sync tracking, and documents any inconsistencies found in the source. Works for both initial compilation and re-compilation (updates). By default, fetched source content used to compile policies is persisted under `.assets/sources/[name]/` in the scope (see `_core-adr-policy-019` rules 12–13); this content is never authoritative for decisions (rule 14). Requires `_core-adr-policy-019-compiled-scope-type` to be present in the workspace.
+Performs a full compilation cycle for any scope declaring `scope-type: compiled`: discovers compilation meta-policies across all type folders, checks whether each governed source is already in sync before doing any work, fetches due sources into a staging directory under `.tmp/`, plans which policies to create, update, or remove, migrates them one at a time with full source traceability, runs lint and review, persists selected source content and updates sync tracking, and documents any inconsistencies found in the source. Works for both initial compilation and re-compilation (updates). By default, fetched source content used to compile policies is persisted under `.assets/sources/[name]/` in the scope (see `_core-adr-policy-019` rules 12–13); this content is never authoritative for decisions (rule 14). Requires `_core-adr-policy-019-compiled-scope-type` to be present in the workspace.
 
 ### Inputs
 
@@ -76,11 +76,11 @@ Keep every question and intermediate message <100 words and the final summary <1
 
 ### Phase 2: Fetch Sources
 
-1. Create a temporary directory `.tmp/compilation-[YYYYMMDDHHMMSS]/staging/` in the workspace root.
+1. Create the execution dir `.tmp/compile-scope-[YYYYMMDDHHMMSS]/` at the workspace root (local start time; append `-2`, `-3`... if it exists) with a `.work/staging/` folder. Put any other intermediate file in `.work/` and any ad-hoc script you generate in `.work/scripts/`; never write secrets there (pass them via environment, or use the OS temp dir and delete the file after use). If the workspace is read-only, use the same layout under the OS temp dir. Keep the dir after the run.
 2. For each due source (from Phase 1), fetch in the following preference order (first available wins; if all equivalent URLs are listed, try each in order):
-   - **Git URL** (`- [git] ...`): run `git clone --depth=1 [url] .tmp/compilation-[ts]/staging/[name]/`. If `git` is not available or the clone fails, fall back to the next option.
-   - **Local folder** (`- [local] ...`): copy the folder contents to `.tmp/compilation-[ts]/staging/[name]/`.
-   - **Web URL** (`- [web] ...`): before scraping, search the workspace for a skill specialized in fetching content from this URL or website domain (e.g., a skill whose description or name references the domain, the product, or the content type). Some websites require special handling — SSO, client certificates, shadow DOM, iframes, CAPTCHAs, or other quirks. If a specialized fetch skill is found, follow it to retrieve the content. If no specialized skill exists, fall back to `npx --package=@playwright/cli@latest playwright-cli`; run with `--help` to confirm available commands and save output as `.html` file(s) in `.tmp/compilation-[ts]/staging/[name]/`.
+   - **Git URL** (`- [git] ...`): run `git clone --depth=1 [url] .tmp/compile-scope-[ts]/.work/staging/[name]/`. If `git` is not available or the clone fails, fall back to the next option.
+   - **Local folder** (`- [local] ...`): copy the folder contents to `.tmp/compile-scope-[ts]/.work/staging/[name]/`.
+   - **Web URL** (`- [web] ...`): before scraping, search the workspace for a skill specialized in fetching content from this URL or website domain (e.g., a skill whose description or name references the domain, the product, or the content type). Some websites require special handling — SSO, client certificates, shadow DOM, iframes, CAPTCHAs, or other quirks. If a specialized fetch skill is found, follow it to retrieve the content. If no specialized skill exists, fall back to `npx --package=@playwright/cli@latest playwright-cli`; run with `--help` to confirm available commands and save output as `.html` file(s) in `.tmp/compile-scope-[ts]/.work/staging/[name]/`.
 3. If any source cannot be fetched via any listed option, report the failure and continue with remaining sources. Do not abort the entire compilation for a single failed source.
 4. Immediately after a source is fetched successfully, create `.assets/sources/[name]/source.md` if absent and update its `last-fetch-timestamp` to the current time — this happens regardless of the `Source storage` setting, since the tracking file always persists per `_core-adr-policy-019` rule 12.
 5. Convert non-markdown documents found in the fetched source directories. Use only the format converters actually needed:
@@ -170,15 +170,15 @@ After writing each policy:
 4. For every source processed in this run, update `.assets/sources/[name]/source.md`'s `last-compilation-timestamp` to the current time — this step only runs after Phase 6 (Lint) and Phase 7 (Review) both pass for the policies depending on that source.
 5. If a source's `Source storage` setting changed since its last run, reconcile per `_core-adr-policy-019` rule 12: switching to `temporary` removes previously persisted bulk content (keeping `source.md`); switching away from `temporary` begins persisting bulk content from this run onward.
 
-### Phase 10: Cleanup
+### Phase 10: Report
 
-1. Remove the temporary staging directory `.tmp/compilation-[ts]/` created in Phase 2. Never remove or modify persisted content under `.assets/sources/` — that is governed solely by Phase 9.
-2. Report a compilation summary:
+1. Report a compilation summary:
    - Policies created, updated, removed.
    - Inconsistencies documented (with file path).
    - Any sources that could not be fetched.
    - Lint and review pass/fail status.
    - Sources persisted, kept temporary, or skipped as already in sync.
+2. Whenever the execution dir was created, including when halting in an earlier phase, end the final message with `results-path: .tmp/compile-scope-[ts]/` (the actual dir).
 
 ## Anti-Patterns
 
@@ -189,10 +189,6 @@ After writing each policy:
 - **Mistake:** Skipping the Phase 3 confirmation and migrating policies before the user approves the CREATE/UPDATE/REMOVE plan.
   **Why it happens:** Momentum from prior compilations makes the plan feel obviously correct.
   **Instead:** Always present the TODO list and wait for explicit confirmation before Phase 4.
-
-- **Mistake:** Leaving the temporary `.tmp/compilation-[ts]/` directory behind after a run.
-  **Why it happens:** Phase 10 cleanup is easy to forget once the summary is reported.
-  **Instead:** Always remove the temporary directory as the first Phase 10 step, even on partial failures.
 
 - **Mistake:** Persisting every fetched file under `.assets/sources/[name]/`, including content excluded by selectors or no longer used by any compiled policy.
   **Why it happens:** It feels safer to keep everything "just in case" rather than compute what is actually still used.

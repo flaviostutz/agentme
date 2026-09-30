@@ -114,7 +114,7 @@ All access control implementations MUST enforce the principle of least privilege
 
 Unless a meta-policy declares `Source storage: temporary`, fetched and selected source content (rule 13) MUST be persisted under `[type]/principles/.assets/sources/[name]/`, sibling to the governing meta-policy, where `[name]` is the source's slug from its `## Sources` bullet. This location is shared across every subject compiled under that meta-policy's type folder; it is not duplicated per subject. Persisted source content MUST be committed to version control and MUST NOT be gitignored.
 
-When `Source storage: temporary` is declared, bulk fetched content MUST instead be written only to the ephemeral compilation working directory and removed at the end of the compilation run.
+When `Source storage: temporary` is declared, bulk fetched content MUST instead be written only to the compilation execution dir's `.work/staging/` (see Work files in `_core-adr-policy-003`) and MUST NOT be persisted under `.assets/sources/`.
 
 Regardless of storage mode, a tracking file `.assets/sources/[name]/source.md` MUST always be created and kept up to date, with the following format:
 

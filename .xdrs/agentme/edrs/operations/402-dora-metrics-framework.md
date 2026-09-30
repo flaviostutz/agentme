@@ -59,14 +59,11 @@ Roles SHOULD consult these metrics at the cadence below when carrying out their 
 | PjM | As-needed | Investigates cross-team blockers when Lead Time or Change Failure Rate issues trace to cross-team dependencies |
 | PM / Leadership | Quarterly | Reads the tier distribution from rule `06`, never a company-wide average |
 
-## Considered Options
+#### 09-forbidden-aggregations
 
-* (REJECTED) **Single composite delivery score** — blend all four metrics into one number
-  * Reason: Hides which metric needs attention; contradicts DORA's own guidance against "one metric to rule them all"
-* (REJECTED) **Company-wide averaged maturity score** — one blended number across all teams
-  * Reason: Masks teams that need help; contradicts DORA's guidance against disparate comparisons and siloed competition
-* (REJECTED) **Strict-composition redesign for Deployment Frequency and Change Failure Rate** — force all sub-metrics to sum to the parent value
-  * Reason: Would require dropping batch size (an orthogonal dimension) and escaped-defect-rate (different attribution lag) to force a clean sum
+- A single composite delivery score blending all four metrics MUST NOT be used.
+- A company-wide averaged maturity score across teams MUST NOT be used.
+- Deployment Frequency and Change Failure Rate sub-metrics MUST NOT be forced to sum to the parent value.
 
 ## References
 

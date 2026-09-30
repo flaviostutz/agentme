@@ -21,6 +21,7 @@ Research documents are Markdown files placed inside a subject folder alongside p
 
 ### Details
 
+- Research MUST NOT be written inline inside a Policy; Policies only link to it.
 - Research is evidence and exploration, not the adopted decision. When a research document and a Policy disagree, the Policy takes precedence.
 - `Research` is the artifact name. `researches/` is only the folder name used alongside `skills/` and `articles/`.
 - Research documents MUST live under `researches/` inside the relevant subject folder:
@@ -120,15 +121,6 @@ Prefer tables and bullet lists for simple comparisons; for diagrams see _core-ad
 - [Related Policy or artifact](relative/path.md) - Why it matters
 - [Another related Policy if this research informed multiple decisions](relative/path.md) - Why it matters
 ```
-
-## Considered Options
-
-- Related research: `001-research-and-decision-lifecycle` (workspace-local research)
-
-* (REJECTED) **Inline long-form analysis inside the Policy** - Put all research and decision text in one file.
-  * Reason: Makes Policies too long, mixes evidence with the adopted rule set, and hurts fast retrieval by humans and AI agents.
-* (CHOSEN) **IMRAD-based subject-level research beside XDRS** - Keep exploratory material beside the decisions, skills, and articles it informs, using an IMRAD-inspired structure adapted to company work.
-  * Reason: Preserves lifecycle context, keeps the Policy concise, gives readers a predictable structure, and raises evidence quality without demanding full academic rigor.
 
 ## References
 

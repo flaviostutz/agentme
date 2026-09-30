@@ -238,16 +238,10 @@ dev-mlflow:
 	open http://localhost:5000/
 ```
 
-## Considered Options
+#### 10-forbidden-entry-points
 
-* (REJECTED) **Language-native entry points only** - Use `npm run`, `python -m`, `go run`, and similar tool-specific commands directly as the standard surface
-  * Reason: Ties CI pipelines and developer muscle memory to language-specific tooling; breaks the abstraction when the underlying tool changes; target names vary per ecosystem
-
-* (REJECTED) **Runner-agnostic targets with multiple primary runners** - Keep the target names standard but allow Makefile, npm scripts, shell wrappers, or other runners as equivalent first-class entry points
-	* Reason: Preserves naming consistency but still spreads behavior across multiple scripting systems, which hides the real command path and weakens CI standardization.
-
-* (CHOSEN) **Standardized Makefile targets with Mise-managed explicit tool execution** - Use `make <target>` as the only routine entry point, keep target names standard, and run the actual underlying tool commands through `mise exec --`
-	* Reason: This keeps names, execution flow, and tool versions equally predictable while avoiding script indirection.
+- Language-native entry points (`npm run`, `python -m`, `go run`) MUST NOT be the standard command surface.
+- Runners other than Makefile (npm scripts, shell wrappers, task runners) MUST NOT be equivalent first-class entry points.
 
 ## References
 

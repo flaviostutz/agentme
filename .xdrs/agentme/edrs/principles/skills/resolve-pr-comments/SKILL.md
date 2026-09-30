@@ -15,8 +15,8 @@ description: >
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.5.0"
-  updated: 2026-09-26
+  version: "4.6.0"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -135,15 +135,10 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
    human declines the offer, stop -- there is no other override. Once created, this sandbox
    becomes the local repo root for the rest of the run (Phase 2 onward), including where
    `.tmp/review-pr-<N>.md` is written.
-4. Before this run writes anything under `.tmp/` for the first time in a given repo root (the
-   sandbox clone above, or Phase 2's tracking file), check whether that repo root's
-   `.gitignore` already contains a `.tmp` entry. If missing, ask the human whether to add one
-   now, to avoid ever accidentally committing these working files -- add it only on explicit
-   "yes"; never add it silently, and never block the rest of the run on a "no" (just proceed
-   without the ignore entry). Ask at most once per repo root per run. If the current directory
-   is itself an unrelated git repo hosting the sandbox clone as a subfolder, ask about *that*
-   outer `.gitignore` separately, for the same reason: the sandbox clone must never show up as
-   trackable content there either.
+4. Never edit `.gitignore` for `.tmp/`. Before this run first writes under `.tmp/` in a given
+   repo root (the sandbox clone above, or Phase 2's tracking file), if that root's `.gitignore`
+   lacks a `.tmp` entry, tell the human once that adding one is recommended to avoid committing
+   these working files, then proceed.
 5. If related and the worktree is clean, offer to check out the PR branch; confirm first.
 6. If related but the worktree is dirty or on the wrong branch, ask the human to choose
    explicitly: stash and check out / commit first / skip checkout and stay read-only / abort.
@@ -640,7 +635,7 @@ is not a checkout of `acme/widgets`
 
 Phase 1's Workspace & Repo Validation detects the mismatch and offers to clone
 `acme/widgets` into `.tmp/widgets` as a standalone sandbox; on confirmation it clones, checks
-out the PR branch, offers to add a `.tmp` `.gitignore` entry, then treats `.tmp/widgets` as
+out the PR branch, then treats `.tmp/widgets` as
 the local repo root -- so `.tmp/review-pr-482.md` lands there too.
 
 **Input**: the human cancels the session partway through Phase 4, then re-invokes the skill

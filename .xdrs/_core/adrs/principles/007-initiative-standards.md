@@ -21,6 +21,7 @@ Initiatives are Markdown documents placed inside a subject folder alongside poli
 
 ### Details
 
+- Initiatives MUST NOT be embedded inside Policies.
 - Initiatives describe a problem (why), what we will do to solve the problem, and the approach and activities needed to solve it (how).
 - Initiatives are NOT the source of truth. When an initiative and a Policy disagree, the Policy takes precedence.
 - Initiatives are ephemeral. They MUST be deleted after full implementation. The lasting outputs of an initiative are actual actions or Decisions, Skills, Articles, Research documents, and other artifacts that result from execution.
@@ -124,13 +125,6 @@ Due date: YYYY-MM-DD
 
 - [Related Policy or artifact](relative/path.md) - Brief description of relevance
 ```
-
-## Considered Options
-
-* (REJECTED) **Inline planning in Policies** — Embed planning details inside policies.
-  * Reason: Initiatives are ephemeral execution documents while Policies are lasting decisions. Mixing them bloats Policies and creates confusion about what to delete after execution.
-* (CHOSEN) **Subject-level initiatives folder co-located with Policies** — Keeps initiatives alongside the decisions they implement, with clear lifecycle expectations.
-  * Reason: Consistent with how skills, articles, and research are organized. The explicit deletion requirement after implementation keeps the document base clean.
 
 ## References
 

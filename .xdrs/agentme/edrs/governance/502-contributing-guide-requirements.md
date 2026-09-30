@@ -61,12 +61,9 @@ The content SHOULD stay concise and practical; do not turn `CONTRIBUTING.md` int
 
 When a project uses `TODO.md` to track deferred work per `agentme-edr-001`, the guide MUST state that `TODO.md` is feature-branch-only and MUST be removed — all non-`[BACKLOG]`-tagged entries resolved, any remaining `[BACKLOG]`-tagged entries migrated to an issue or personal note — before a pull request merges to `main`.
 
-## Considered Options
+#### 11-contribution-rules-must-not-be-implicit
 
-* (REJECTED) **Keep contribution rules implicit** - Rely on README text, issue templates, or maintainers explaining the workflow ad hoc.
-  * Reason: Inconsistent contributor behavior and avoidable review overhead.
-* (CHOSEN) **Require a dedicated CONTRIBUTING.md** - Publish a short, explicit contribution workflow in a predictable location.
-  * Reason: Easy to discover, simple to scaffold, and clear enough for both humans and agents.
+Contribution rules MUST NOT be left implicit in README text, issue templates, or ad hoc maintainer explanations; they MUST be published in `CONTRIBUTING.md`.
 
 ## References
 
