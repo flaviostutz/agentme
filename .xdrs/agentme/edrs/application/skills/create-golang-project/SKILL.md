@@ -6,8 +6,8 @@ description: >
   asks to create, scaffold, or initialize a new Go project, CLI binary, or Go module.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-24
+  version: "1.2.1"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -30,7 +30,7 @@ Related EDRs: [agentme-edr-102](../../102-golang-project-tooling.md), [agentme-e
 - `go.mod`, `main.go`, Makefile, `.golangci.yml`, `app/<feature>/`, `adapters/cli/`
 
 #### Changes
-- None
+- Project files created in the target directory
 
 ### Halt Conditions
 - Module path not specified and not inferable from context

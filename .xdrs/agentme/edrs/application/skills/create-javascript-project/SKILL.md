@@ -7,8 +7,8 @@ description: >
   package, or similar project structure.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-24
+  version: "1.2.1"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -36,7 +36,7 @@ Related EDRs: [agentme-edr-101](../../101-javascript-project-tooling.md), [agent
 - Root/`lib`/`examples` Makefiles, `package.json`, `src/`
 
 #### Changes
-- None
+- Project files created in the target directory
 
 ### Halt Conditions
 - Package name not specified and not inferable from context

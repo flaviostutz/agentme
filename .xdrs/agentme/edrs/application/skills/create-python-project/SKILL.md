@@ -6,8 +6,8 @@ description: >
   scaffold, or initialize a new Python package, CLI, or similar project structure.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-24
+  version: "1.2.1"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -34,7 +34,7 @@ Related EDRs: [agentme-edr-103](../../103-python-project-tooling.md), [agentme-e
 - Root/`lib/` Makefiles, `pyproject.toml`, `src/`, `tests/`, examples
 
 #### Changes
-- None
+- Project files created in the target directory
 
 ### Halt Conditions
 - Package name not specified and not inferable from context

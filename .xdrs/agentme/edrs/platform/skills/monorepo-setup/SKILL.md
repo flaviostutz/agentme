@@ -8,8 +8,8 @@ description: >
   complies with the standard structure.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-24
+  version: "1.2.1"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -35,7 +35,7 @@ Related EDRs: [agentme-edr-301](../../301-monorepo-structure.md), [agentme-edr-5
 - Root/app/module Makefiles, READMEs, `.mise.toml`, `.gitignore`
 
 #### Changes
-- None
+- Monorepo files created or extended in the target directory
 
 ### Halt Conditions
 - Applications/modules not specified and not inferable from context
