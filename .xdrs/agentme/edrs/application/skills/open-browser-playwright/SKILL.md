@@ -9,8 +9,8 @@ description: >
   drives a browser.
 metadata:
   author: flaviostutz
-  version: "1.0.1"
-  updated: 2026-09-26
+  version: "1.0.2"
+  updated: 2026-09-30
 ---
 
 ## Overview
@@ -47,7 +47,6 @@ This skill is the only allowed way to open a browser for automation ([agentme-ed
 #### Changes
 
 - One visible Edge window left open
-- Per-session profile copy and state file (OS temp)
 
 ### Halt Conditions
 
@@ -179,7 +178,7 @@ npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 
 ## Edge Cases
 
-- **Why a profile copy**: Chromium refuses remote debugging on its real default user-data dir. The script copies `Default/` and `Local State` from the Edge user-data dir to `<tmp>/playwright-browser-<session>-profile`. It skips caches, `Service Worker`, `WebStorage`, lock files and session-restore files. Old copies MAY be deleted by hand when their session is closed.
+- **Why a profile copy**: Chromium refuses remote debugging on its real default user-data dir. The script copies `Default/` and `Local State` from the Edge user-data dir to `<tmp>/playwright-browser-<session>-profile`. It skips caches, `Service Worker`, `WebStorage`, lock files and session-restore files. The copy holds signed-in cookies, so it stays only in the OS temp dir (never under `.tmp/`). When the user says the session is finished or its window is closed, delete it with `rm -rf <tmp>/playwright-browser-<session>-profile <tmp>/playwright-browser-<session>.state`.
 - **Profile reuse and recovery**: an existing copy is reused as-is. The script re-creates it only when the browser fails to open on it, or the SSO check fails on it, and then retries once.
 - **Restored tabs (security)**: session-restore files are never copied and are removed from the copy before each launch. Otherwise the user's real tabs, which hold live tokens, would reopen in the automation window. If an unrelated tab ever shows up, close it and delete `.playwright-cli/` snapshots captured while it was open.
 - **Transient redirects**: SSO sites pass through `Sign In` and `Loading ...` pages before they land. The script keeps polling instead of judging the first title, and re-navigates every 5s while the tab is stuck on the check page.

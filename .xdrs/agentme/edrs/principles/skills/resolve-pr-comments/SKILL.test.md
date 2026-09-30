@@ -1,6 +1,6 @@
 ---
 skill: resolve-pr-comments
-skill-version: "4.5.0"
+skill-version: "4.6.0"
 ---
 
 ## Test Scenarios

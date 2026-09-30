@@ -1,6 +1,6 @@
 ---
 skill: open-browser-playwright
-skill-version: "1.0.1"
+skill-version: "1.0.2"
 ---
 
 ## Test Scenarios

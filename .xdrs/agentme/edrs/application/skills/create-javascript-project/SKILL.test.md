@@ -1,6 +1,6 @@
 ---
 skill: create-javascript-project
-skill-version: "1.2.0"
+skill-version: "1.2.1"
 ---
 
 ## Test Scenarios

@@ -57,7 +57,6 @@ before anything is sent.
 ### Outputs
 
 #### Contents
-- Tracking file at `.tmp/review-pr-<N>.md`, updated per comment
 - Per-comment triage summary shown in chat
 
 #### Changes
