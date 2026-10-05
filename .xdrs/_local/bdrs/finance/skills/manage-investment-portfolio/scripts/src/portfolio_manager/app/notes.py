@@ -39,17 +39,16 @@ def period_notes(rows: list) -> list:
         if r.get("partial")
     ]
     inception = next((r for r in rows if r["label"] == "inception"), None)
-    if inception and _dec(inception["xirr"]) is not None and _dec(inception["twr"]) is not None:
-        x, t = _dec(inception["xirr"]), _dec(inception["twr"])
-        if x != t:
-            key = "xirr_above" if x > t else "xirr_below"
-            out.append(
-                TEMPLATES[key].format(
-                    label="inception",
-                    xirr=pct(x, inception["xirr_status"]),
-                    twr=pct(t, inception["twr_status"]),
-                )
+    x, t = (_dec(inception["xirr"]), _dec(inception["twr"])) if inception else (None, None)
+    if inception and x is not None and t is not None and x != t:
+        key = "xirr_above" if x > t else "xirr_below"
+        out.append(
+            TEMPLATES[key].format(
+                label="inception",
+                xirr=pct(x, inception["xirr_status"]),
+                twr=pct(t, inception["twr_status"]),
             )
+        )
     missing = sum(r["twr"] is None for r in rows)
     if missing:
         out.append(TEMPLATES["unavailable"].format(n=missing, m=len(rows)))

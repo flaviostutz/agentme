@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 
 from portfolio_manager.adapters.cli import pm
+from portfolio_manager.app import analyze, export_pp, import_pp, ppcsv
+from portfolio_manager.app.fx import Rates
 from samples_test import (
     ISIN_A,
     bb_informe,
@@ -337,6 +339,90 @@ def test_check_input_reports_coverage_and_accepts_a_note_for_a_gap(cwd, sources,
 def test_report_requires_ingested_data(cwd):
     run(cwd, "init", "--name", "t")
     assert run(cwd, "report", "--name", "t", "--offline")[0] == 2
+
+
+def export_files(cwd, name="t") -> dict:
+    folder = work(cwd, name) / "exports" / "portfolio-performance"
+    return {p.name: p.read_text(encoding="utf-8") for p in sorted(folder.iterdir())}
+
+
+def clean_ingest(cwd):
+    """The synthetic statements leave unresolved items or ingest errors; export is only exit 0 when none remain."""
+    (work(cwd) / "data" / "unresolved.json").write_text("[]", encoding="utf-8")
+    ingest = read(cwd, "data/ingest.json")
+    ingest["errors"] = []
+    (work(cwd) / "data" / "ingest.json").write_text(json.dumps(ingest), encoding="utf-8")
+
+
+def test_export_writes_files_that_rebuild_the_ledger_and_the_same_analysis(cwd, sources):
+    run(cwd, "run", "--name", "t", "--offline", "--source", ".tmp/src")
+    clean_ingest(cwd)
+    code, text = run(cwd, "export", "--name", "t")
+    assert code == 0, text
+    assert text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio-t/"
+    assert "upvest-5731" in text and "bb-1930" in text
+    files = export_files(cwd)
+    assert sorted(files) == [
+        "README.txt",
+        "account-transactions.csv",
+        "accounts.csv",
+        "portfolio-transactions.csv",
+        "references.csv",
+        "securities.csv",
+        "snapshots.csv",
+    ]
+    ledger = {k: read(cwd, f"data/{k}.json") for k in ("accounts", "events", "snapshots", "references")}
+    rebuilt = import_pp.read(files)
+    assert rebuilt == ledger
+    assert analyze.analyze(rebuilt, Rates()) == analyze.analyze(ledger, Rates())
+
+
+def test_export_is_byte_identical_on_rerun_and_removes_stale_files(cwd, sources):
+    run(cwd, "run", "--name", "t", "--offline", "--source", ".tmp/src")
+    clean_ingest(cwd)
+    run(cwd, "export", "--name", "t")
+    before = export_files(cwd)
+    stale = work(cwd) / "exports" / "portfolio-performance" / "old.csv"
+    stale.write_text("x", encoding="utf-8")
+    assert run(cwd, "export", "--name", "t")[0] == 0
+    assert export_files(cwd) == before and not stale.exists()
+
+
+def test_export_with_unresolved_records_still_writes_files_but_exits_1(cwd, sources):
+    run(cwd, "run", "--name", "t", "--offline", "--source", ".tmp/src")
+    clean_ingest(cwd)
+    pending = [{"id": "u1", "kind": "unknown-transaction", "text": "x", "where": "", "question": "?"}]
+    (work(cwd) / "data" / "unresolved.json").write_text(json.dumps(pending), encoding="utf-8")
+    code, text = run(cwd, "export", "--name", "t")
+    assert code == 1 and "WARNING: 1 unresolved" in text and "ERROR" not in text
+    assert "portfolio-transactions.csv" in export_files(cwd)
+
+
+def test_export_decimal_comma_flag_writes_comma_decimals_in_portfolio_performance_columns(cwd, sources):
+    run(cwd, "run", "--name", "t", "--offline", "--source", ".tmp/src")
+    clean_ingest(cwd)
+    assert run(cwd, "export", "--name", "t", "--decimal-comma")[0] == 0
+    files = export_files(cwd)
+    assert any("," in r["Value"] for r in ppcsv.loads(files["account-transactions.csv"]))
+    assert import_pp.read(files) == {
+        k: read(cwd, f"data/{k}.json") for k in ("accounts", "events", "snapshots", "references")
+    }
+
+
+def test_export_requires_ingested_data_and_a_valid_portfolio(cwd):
+    assert run(cwd, "export", "--name", "t")[0] == 2
+    run(cwd, "init", "--name", "t")
+    code, text = run(cwd, "export", "--name", "t")
+    assert code == 2 and "nothing ingested" in text
+    assert run(cwd, "export", "--name", "../evil")[0] == 2
+
+
+def test_export_reports_a_mismatch_between_files_and_ledger(cwd, sources, monkeypatch):
+    run(cwd, "run", "--name", "t", "--offline", "--source", ".tmp/src")
+    clean_ingest(cwd)
+    monkeypatch.setattr(export_pp, "verify", lambda *_: ["events read back from the CSV files differ from the ledger"])
+    code, text = run(cwd, "export", "--name", "t")
+    assert code == 1 and "ERROR: events read back" in text and "do not use these files" in text
 
 
 def test_cli_help_smoke(capsys):

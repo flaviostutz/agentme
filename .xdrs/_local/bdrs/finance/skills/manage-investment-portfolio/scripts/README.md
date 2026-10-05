@@ -17,7 +17,9 @@ One CLI, `pm`, with these subcommands (all take `--name <work-name>`):
 | `analyze` | ECB FX, accounting, reconciliation and performance |
 | `classify` | Write the classification queue or import researched classifications |
 | `report` | Analyze and write markdown reports and `.mmd` graphs |
-| `run` | `init`, `ingest` and `report` in one step |
+| `export` | Write Portfolio Performance CSV files to `exports/portfolio-performance/`; `--decimal-comma` for a German number format |
+| `export` | Write the ledger as Portfolio Performance CSV files in `exports/portfolio-performance/` and verify they read back into the same ledger |
+| `run` | `init`, `ingest` and `report` in one step (does not export) |
 | `validate` | Check hashes, rejected files, errors and failed checks |
 
 Run it without installing anything, using the package folder as the source:

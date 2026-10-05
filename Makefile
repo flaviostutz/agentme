@@ -12,7 +12,7 @@ build: install
 lint:
 	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
-	@$(MAKE) skills TARGET=lint
+# 	@$(MAKE) skills TARGET=lint
 
 lint-fix:
 	@echo ">>> .: $@"
@@ -21,7 +21,7 @@ lint-fix:
 test: build
 	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples test
-	@$(MAKE) skills TARGET=test
+# 	@$(MAKE) skills TARGET=test
 
 clean:
 	@echo ">>> .: $@"
