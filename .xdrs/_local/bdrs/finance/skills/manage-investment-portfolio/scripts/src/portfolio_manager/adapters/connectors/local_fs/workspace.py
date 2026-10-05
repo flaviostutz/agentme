@@ -13,7 +13,7 @@ import yaml
 from portfolio_manager.shared.errors import PmError
 from portfolio_manager.shared.values import dumps, sha256_file, sha256_text
 
-SUBDIRS = ("raw", "data", "cache", "derived", "reports", "graphs", "logs")
+SUBDIRS = ("raw", "data", "cache", "derived", "reports", "graphs", "exports/portfolio-performance", "logs")
 DEFAULT_CONFIG = {
     "base_currency": "EUR",
     "tolerances": {"money": "0.01", "quantity": "0.000001"},

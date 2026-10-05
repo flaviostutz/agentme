@@ -31,13 +31,6 @@
 - deferred reason: Needs a change in the upstream xdrs-core package.
 - why this is important: Keeps the lint output clean so real findings are not hidden.
 
-## [BACKLOG] 2- Generate Portfolio Performance import files from the portfolio ledger (2026-09-30)
-
-- status: open
-- prompt: Implement an export command in `.xdrs/_local/bdrs/finance/skills/manage-investment-portfolio/scripts/` (for example `pm export`) that writes Portfolio Performance importable CSV files (accounts, securities, transactions) from `data/events.json` and `data/accounts.json`. Acceptance: importing the files into Portfolio Performance reproduces the ledger's cash and positions; the export is deterministic and has offline tests with fictitious data.
-- deferred reason: Out of scope for the first version of the skill.
-- why this is important: Lets the user cross-check the results in an established tool.
-
 ## [BACKLOG] 1- ETF look-through exposure for the manage-investment-portfolio skill (2026-09-30)
 
 - status: open

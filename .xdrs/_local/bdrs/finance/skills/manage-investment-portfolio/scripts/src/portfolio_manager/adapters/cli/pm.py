@@ -1,6 +1,6 @@
 """Portfolio manager CLI.
 
-Commands: portfolio-name, init, inspect, ingest, check-input, answer, analyze, classify, report, run, validate.
+Commands: portfolio-name, init, inspect, ingest, check-input, answer, analyze, classify, report, export, run, validate.
 
 Exit codes: 0 ok, 1 validation failures found, 2 invalid input.
 Successful runs end with `results-path: ...`; errors print `error: ...`.
@@ -18,8 +18,8 @@ from portfolio_manager.adapters.connectors.institutions import default_registry
 from portfolio_manager.adapters.connectors.local_fs.workspace import Workspace, collect_sources, resolve_tmp, work_dir
 from portfolio_manager.adapters.connectors.pdf.pdf_reader import read_pdf
 from portfolio_manager.app import classify as classify_mod
+from portfolio_manager.app import export_pp, inputcheck, inspector, workflow
 from portfolio_manager.app import ingest as ingest_mod
-from portfolio_manager.app import inputcheck, inspector, workflow
 from portfolio_manager.app import portfolio_name as portfolio_name_mod
 from portfolio_manager.app import report as report_mod
 from portfolio_manager.app.fx import Rates
@@ -34,11 +34,13 @@ WORK_COMMANDS = (
     "analyze",
     "classify",
     "report",
+    "export",
     "run",
     "validate",
 )
 COMMANDS = ("portfolio-name", *WORK_COMMANDS)
 DEFAULT_PORTFOLIO = "main"
+EXPORT_DIR = "exports/portfolio-performance"
 SET_FIELDS = classify_mod.FIELDS
 Result = tuple[int, str]
 
@@ -242,6 +244,35 @@ def cmd_report(args: argparse.Namespace, cwd: Path) -> Result:
         return _report_result(ws, offline=args.offline)
 
 
+def cmd_export(args: argparse.Namespace, cwd: Path) -> Result:
+    ws = _ws(args, cwd)
+    _need(ws)
+    with ws.lock():
+        data = {k: ws.read(f"data/{k}.json") for k in workflow.LEDGER_FILES}
+        if any(v is None for v in data.values()):
+            msg = "nothing ingested yet: run `pm ingest` first"
+            raise PmError(msg)
+        unresolved = ws.read("data/unresolved.json", [])
+        errors = ws.read("data/ingest.json", {}).get("errors", [])
+        files = export_pp.build(data, decimal_comma=args.decimal_comma)
+        problems = export_pp.verify(data, files)
+        ws.clean_outputs(EXPORT_DIR, "*", {f"{EXPORT_DIR}/{name}" for name in files})
+        for name, text in files.items():
+            ws.write_text(f"{EXPORT_DIR}/{name}", text)
+    modes = {a["id"]: a["mode"] for a in data["accounts"]["accounts"]}
+    skipped = sorted(k for k, mode in modes.items() if mode != "transactions")
+    lines = [f"Exported {len(data['events'])} event(s) as {len(files)} file(s) to {EXPORT_DIR}/."]
+    if skipped:
+        lines.append(f"Value-only accounts (snapshots, no transactions): {', '.join(skipped)}.")
+    if unresolved or errors:
+        lines.append(
+            f"WARNING: {len(unresolved)} unresolved record(s) and {len(errors)} ingest error(s): "
+            "the export is incomplete; resolve them and export again."
+        )
+    lines += [f"ERROR: {p}; do not use these files." for p in problems]
+    return (1 if unresolved or errors or problems else 0), _summary(ws, lines)
+
+
 def cmd_run(args: argparse.Namespace, cwd: Path) -> Result:
     ws = _ws(args, cwd)
     if not ws.exists():
@@ -264,6 +295,7 @@ HANDLERS = {
     "analyze": cmd_analyze,
     "classify": cmd_classify,
     "report": cmd_report,
+    "export": cmd_export,
     "run": cmd_run,
 }
 
@@ -293,6 +325,12 @@ def build_parser() -> argparse.ArgumentParser:
                 "--offline",
                 action="store_true",
                 help="do not download ECB rates; use the cache and statement rates only",
+            )
+        if name == "export":
+            sp.add_argument(
+                "--decimal-comma",
+                action="store_true",
+                help="write ',' decimals in Value, Shares, Fees, Taxes and Gross Amount (German number format)",
             )
         if name == "classify":
             sp.add_argument(

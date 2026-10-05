@@ -1,6 +1,6 @@
 ---
 skill: manage-investment-portfolio
-skill-version: "2.0.0"
+skill-version: "2.1.0"
 ---
 
 ## Test Scenarios
@@ -19,7 +19,7 @@ available. The user declines web research of classifications.
 1. Phase 1 checks `uv`, asks for no name (the folder is given), and runs `pm init`.
 2. Phase 2 runs `pm ingest --source .tmp/statements` and relays the summary.
 3. Phase 4 runs `pm report` and `pm validate`, and relays wealth, TWR, checks and unresolved count.
-4. Phase 6 states the opening-position caveat and ends with `results-path:`.
+4. Phase 7 states the opening-position caveat and ends with `results-path:`.
 
 **Simulated Human Responses**
 1. "No web research."
@@ -102,3 +102,29 @@ attempt cannot download ECB rates and fails with a non-zero exit.
       itself.
 - [ ] Skill states which accounts were excluded for lack of an exchange rate, and does not value them at
       zero.
+
+### Scenario 4: Export to Portfolio Performance
+
+**Trigger / Input**
+
+"I want to load this portfolio into Portfolio Performance." The work dir `main` was already ingested; one
+account (Banco do Brasil, ending 1930) is value-only, and 2 unresolved records remain.
+
+**Expected Behaviour**
+
+1. Skill runs `pm export --name main` (no ingest or report needed first) and relays the summary, which exits
+   1 with a warning that 2 unresolved records make the export incomplete.
+2. Skill offers to resolve the records (Phase 3) and export again, and points to
+   `exports/portfolio-performance/README.txt` for the import steps.
+
+**Simulated Human Responses**
+1. "Resolve them first."
+
+**Assertions**
+
+- [ ] Skill runs `pm export` and does not convert statement or ledger data to CSV itself.
+- [ ] Skill tells the user the export is incomplete because of the unresolved records, and offers to resolve
+      them before exporting again.
+- [ ] Skill says the value-only account `1930` appears only as snapshots, not as transactions.
+- [ ] Skill does not edit any file in `exports/portfolio-performance/`.
+- [ ] Skill's last line is `results-path:` followed by a path under `.tmp/`.

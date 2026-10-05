@@ -3,7 +3,7 @@
 from decimal import Decimal
 
 from portfolio_manager.app import classify as classify_mod
-from portfolio_manager.app import concepts, notes, trust
+from portfolio_manager.app import notes, trust
 from portfolio_manager.app.fmt import mark, money, pct, table
 
 LEGEND = "Legend: `~` approximate or interpolated, `n/a` unavailable (never 0), `partial` incomplete cost basis."
@@ -397,6 +397,17 @@ def graphs(analysis: dict) -> dict:
         out["wealth-bridge.mmd"] = _mmd_chart(
             "Wealth bridge since inception (EUR)", [k for k, _ in bridge], [f"{v:.2f}" for _, v in bridge], "bar", "EUR"
         )
+    return out
+
+
+def embedded_charts(analysis: dict) -> list:
+    """Markdown lines with every graph embedded as a Mermaid block (the .mmd files hold the same text)."""
+    charts = graphs(analysis)
+    if not charts:
+        return []
+    out = ["## Charts", ""]
+    for name, text in charts.items():
+        out += [f"**{name.removesuffix('.mmd')}**", "", "```mermaid", text.rstrip(), "```", ""]
     return out
 
 
