@@ -1,0 +1,85 @@
+# Package metadata and tool configuration for the manage-investment-portfolio skill scripts (agentme-edr-103, agentme-edr-126)
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "manage-investment-portfolio-scripts"
+version = "2.0.0"
+description = "Ingest statement PDFs, reconcile, analyse and report investment portfolios for the manage-investment-portfolio skill"
+requires-python = ">=3.11"
+dependencies = ["pymupdf>=1.24", "pyyaml>=6"]
+
+[project.scripts]
+pm = "portfolio_manager.adapters.cli.pm:main"
+
+[dependency-groups]
+dev = ["ruff", "ty", "pytest", "pytest-cov", "pip-audit"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/portfolio_manager"]
+
+[tool.pytest.ini_options]
+cache_dir = ".cache/pytest"
+python_files = "*_test.py"
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "--import-mode=importlib --cov=portfolio_manager --cov-branch --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+data_file = ".cache/.coverage"
+
+[tool.coverage.html]
+directory = ".cache/coverage-html"
+
+[tool.uv]
+cache-dir = ".cache/uv"
+
+[tool.ty.environment]
+extra-paths = ["src", "tests"]
+
+# Ported parsers rely on regex matches guarded by try/except and on loosely typed analysis dicts.
+[[tool.ty.overrides]]
+include = ["src/portfolio_manager/adapters/connectors/institutions/**", "src/portfolio_manager/app/analyze.py"]
+
+[tool.ty.overrides.rules]
+unresolved-attribute = "ignore"
+unsupported-operator = "ignore"
+invalid-argument-type = "ignore"
+
+[[tool.ty.overrides]]
+include = ["tests/**"]
+
+[tool.ty.overrides.rules]
+unresolved-attribute = "ignore"
+invalid-method-override = "ignore"
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
+output-format = "grouped"
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+task-tags = ["TODO"]
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/portfolio_manager/adapters/cli/*" = ["T201"]
+"src/portfolio_manager/app/**" = ["E501", "ANN001", "ANN202", "PLR2004", "PLR0913", "PLR0917", "PERF401", "SLF001", "FBT001", "FBT002"]
+"src/portfolio_manager/adapters/connectors/**" = ["E501", "ANN001", "ANN201", "ANN202", "PLR2004", "PLR0913", "PLR0917", "PLR0911", "PLR0912", "PLR0915", "C901", "PERF401", "ARG001"]
+"tests/**" = ["S106", "SLF001", "FBT001", "S101", "S108", "D", "ANN", "PLR2004", "INP001", "ARG001", "PT006", "PT007", "PT018", "RUF001", "RUF043", "E501", "PLC0415", "PLR0913", "PLR0917", "PLW2901", "N818", "EM101", "TRY003", "B905", "PERF403", "FBT002", "C901"]
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true

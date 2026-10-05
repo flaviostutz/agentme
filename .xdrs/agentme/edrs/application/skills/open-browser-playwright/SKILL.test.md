@@ -1,6 +1,6 @@
 ---
 skill: open-browser-playwright
-skill-version: "1.0.2"
+skill-version: "1.1.0"
 ---
 
 ## Test Scenarios
@@ -13,11 +13,11 @@ skill-version: "1.0.2"
 
 **Expected Behaviour**
 
-The agent runs `SKIP_SSO=true node scripts/open-browser.js example https://example.com` without `--cdp-port`. The script launches Edge on the scratch profile copy, skips the SSO check, and prints `RESULT: opened`, `USER: skipped` and `CDP: http://127.0.0.1:9390`, exiting 0. The agent attaches with `playwright-cli -s=example-attach attach --cdp=http://127.0.0.1:9390`, reads the heading from a snapshot, then runs `tidy example` followed by `detach`.
+The agent runs `SKIP_SSO=true npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts example https://example.com` without `--cdp-port`. The script launches Edge on the scratch profile copy, skips the SSO check, and prints `RESULT: opened`, `USER: skipped` and `CDP: http://127.0.0.1:9390`, exiting 0. The agent attaches with `playwright-cli -s=example-attach attach --cdp=http://127.0.0.1:9390`, reads the heading from a snapshot, then runs `tidy example` followed by `detach`.
 
 **Assertions**
 
-- [ ] Agent calls `scripts/open-browser.js` with `SKIP_SSO=true` and no `--cdp-port`.
+- [ ] Agent calls `scripts/src/adapters/cli/open-browser.ts` with `SKIP_SSO=true` and no `--cdp-port`.
 - [ ] Script prints a `CDP:` endpoint on `127.0.0.1` with a port in 9390-9399.
 - [ ] Agent attaches to the printed endpoint with a separate `<session>-attach` session.
 - [ ] Agent ends with `tidy <session>` and `detach`, and never runs `close` or `browser.close()`.
@@ -30,7 +30,7 @@ A `get-tickets-contents` skill declares `cdp-port: "9231"` in its metadata and n
 
 **Expected Behaviour**
 
-The contents skill runs `node scripts/open-browser.js tickets https://tickets.example.com/queue --cdp-port=9231`. The script confirms the Entra ID user, opens the target, prints `RESULT: authenticated` and `CDP: http://127.0.0.1:9231`, and exits 0. The contents skill's own script then calls `chromium.connectOverCDP('http://127.0.0.1:9231')`, opens its own page, extracts the data and closes only that page.
+The contents skill runs `npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts tickets https://tickets.example.com/queue --cdp-port=9231`. The script confirms the Entra ID user, opens the target, prints `RESULT: authenticated` and `CDP: http://127.0.0.1:9231`, and exits 0. The contents skill's own script then calls `chromium.connectOverCDP('http://127.0.0.1:9231')`, opens its own page, extracts the data and closes only that page.
 
 **Assertions**
 

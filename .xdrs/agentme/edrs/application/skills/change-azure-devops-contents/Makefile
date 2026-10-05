@@ -1,17 +1,18 @@
 SHELL := /bin/bash
 MISE := mise exec --
+TSX := npx -y tsx@4.23.15
 
 # Bundling dependencies per _core-adr-policy-021 (skill-bundling): skills activated in prose.
 DEPS := ../get-azure-devops-contents
 BUILD := dist/build
 
-.PHONY: build test clean
+.PHONY: build lint test clean
 
 build: clean
 	@echo ">>> .xdrs/agentme/edrs/application/skills/change-azure-devops-contents: $@"
 	mkdir -p $(BUILD)/scripts
 	cp SKILL.md $(BUILD)/
-	find scripts -maxdepth 1 -name '*.js' ! -name '*.test.js' -exec cp {} $(BUILD)/scripts/ \;
+	cd scripts && find src -name '*.ts' ! -name '*.test.ts' ! -name '*_mock.ts' -exec sh -c 'mkdir -p ../$(BUILD)/scripts/$$(dirname {}) && cp {} ../$(BUILD)/scripts/{}' \;
 	@for d in $(DEPS); do \
 		name=$$(basename $$d); \
 		mkdir -p $(BUILD)/dist/$$name; \
@@ -25,11 +26,17 @@ build: clean
 	done
 	cd $(BUILD) && zip -rq ../change-azure-devops-contents.zip .
 
+lint:
+	@echo ">>> .xdrs/agentme/edrs/application/skills/change-azure-devops-contents: $@"
+	$(MAKE) -C scripts lint
+
 test: build
 	@echo ">>> .xdrs/agentme/edrs/application/skills/change-azure-devops-contents: $@"
-	$(MISE) node --test --experimental-test-coverage --test-coverage-include=scripts/azure-devops-lib.js --test-coverage-lines=80 --test-coverage-branches=80 scripts/*.test.js
-	@echo '[]' | $(MISE) node $(BUILD)/scripts/pr-comment-reply.js > /dev/null 2>&1; rc=$$?; \
+	$(MAKE) -C scripts test
+	@echo '[]' | $(MISE) $(TSX) $(BUILD)/scripts/src/adapters/cli/pr-comment-reply.ts > /dev/null 2>&1; rc=$$?; \
 		if [ $$rc -ne 0 ]; then echo "bundled runner: expected exit 0, got $$rc"; exit 1; fi
 
 clean:
+	@echo ">>> .xdrs/agentme/edrs/application/skills/change-azure-devops-contents: $@"
 	rm -rf dist
+	$(MAKE) -C scripts clean

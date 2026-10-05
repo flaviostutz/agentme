@@ -1,7 +1,7 @@
 # Counterparty research
 
 Research finds out what an unclear counterparty is (for example that "Sancy Tres" is a restaurant), so that
-fewer rows go to the user. It uses the agent's own web search or fetch tool. `research.py` makes no network
+fewer rows go to the user. It uses the agent's own web search or fetch tool. `aat-research` makes no network
 calls: it only keeps the cache in `.tmp/<id>/.work/research/cache.json`, and rejects search terms that contain
 private data.
 
@@ -12,7 +12,7 @@ Research a title only when all of these hold:
 - the category is unclear from the title, the description, the country file and earlier answers;
 - the title looks like a business: a trade name, a legal suffix, a shop or venue word, a processor prefix in
   the description (`SumUp *`, `Zettle_*`, `CCV*`), or a card payment at a terminal;
-- `research.py lookup <title> --cache <cache>` finds nothing (exit 1).
+- `aat-research lookup <title> --cache <cache>` finds nothing (exit 1).
 
 Research at most 25 titles per round, largest total first. When no web tool is available, or the user declines
 research in Phase 1, skip this phase and ask the user instead.
@@ -39,7 +39,7 @@ research in Phase 1, skip this phase and ask the user instead.
 Store each finding right away, also when the answer is "not found":
 
 ```bash
-uv run --script <skill-dir>/scripts/research.py add --cache .tmp/<id>/.work/research/cache.json \
+uvx --from <skill-dir>/scripts aat-research add --cache .tmp/<id>/.work/research/cache.json \
   --name "Sancy Tres" --city "Amsterdam" --url "https://example.org/sancy-tres" \
   --finding "Restaurant in Amsterdam-Zuid." --category-hint "Eating Out"
 ```
@@ -48,7 +48,7 @@ uv run --script <skill-dir>/scripts/research.py add --cache .tmp/<id>/.work/rese
 - `--category-hint`: one of the fixed categories, or leave it out. The LLM still decides the category.
 - For "not found", use the search page URL and the finding `No public business found.` so it is not searched
   again, and ask the user about the title.
-- Before researching, run `research.py import` with the caches of earlier analyses the user agreed to reuse.
+- Before researching, run `aat-research import` with the caches of earlier analyses the user agreed to reuse.
 
 ## Using findings
 

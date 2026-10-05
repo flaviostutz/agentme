@@ -9,13 +9,13 @@ description: >
   drives a browser.
 metadata:
   author: flaviostutz
-  version: "1.0.2"
+  version: "1.1.0"
   updated: 2026-09-30
 ---
 
 ## Overview
 
-Browser automation on company sites fails with blank or incognito profiles: device-compliance checks (e.g. Intune Conditional Access) and SSO need the user's real signed-in Edge profile. Chromium refuses remote debugging on the real profile, so the script [scripts/open-browser.js](scripts/open-browser.js) works on a scratch copy of it, one per session name, created on first use and reused afterwards.
+Browser automation on company sites fails with blank or incognito profiles: device-compliance checks (e.g. Intune Conditional Access) and SSO need the user's real signed-in Edge profile. Chromium refuses remote debugging on the real profile, so the TypeScript entry point [scripts/src/adapters/cli/open-browser.ts](scripts/src/adapters/cli/open-browser.ts) works on a scratch copy of it, one per session name, created on first use and reused afterwards.
 
 The script opens one visible Edge window with remote debugging bound to `127.0.0.1`. It checks that a user is signed in on the Entra ID My Account page (`https://myaccount.microsoft.com/?ref=MeControl`) or on `SSO_CHECK_URL`, opens the target page, and prints the result with the CDP endpoint. With `SKIP_SSO=true` it skips the sign-in check for public sites. The same script also reports sign-in problems, waits for a manual sign-in (`wait`) and closes leftover task tabs (`tidy`).
 
@@ -84,7 +84,7 @@ Every question to the human MUST follow [`agentme-edr-003`](../../../principles/
 ### Step 1: Open the browser
 
 ```sh
-node scripts/open-browser.js <session> <url> [WIDTHxHEIGHT] [--cdp-port=<port>]
+npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts <session> <url> [WIDTHxHEIGHT] [--cdp-port=<port>]
 ```
 
 - Pass `--cdp-port` only from a contents skill, with its own `metadata.cdp-port` (9230-9389, [agentme-edr-128](../../128-browser-automation-foundation.md) rule 05). Without it, the script picks the lowest free port in 9390-9399.
@@ -121,7 +121,7 @@ If the session is already open on the same port (or no port was requested), the 
 **Exit 10**: tell the user which window and site need a sign-in, and ask them to sign in there. Do NOT close or relaunch the window. Then run:
 
 ```sh
-node scripts/open-browser.js wait <session> <url> [seconds]
+npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts wait <session> <url> [seconds]
 ```
 
 `wait` polls for the signed-in user (default 300s), then opens the target, keeping the session's port. It prints the same lines.
@@ -135,7 +135,7 @@ The browser opened, but no signed-in Entra ID user was found on the Microsoft ac
 - B: Give a page of <site> that shows your signed-in email. The skill checks that page instead, for this run only.
 ```
 
-For A, run `wait <session> <url>`. For B, run `SSO_CHECK_URL=<https page> node scripts/open-browser.js wait <session> <url>`. The URL is not saved anywhere.
+For A, run `wait <session> <url>`. For B, run `SSO_CHECK_URL=<https page> npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts wait <session> <url>`. The URL is not saved anywhere.
 
 ### Step 3: Attach and run the task
 
@@ -164,7 +164,7 @@ If the endpoint stops answering, rerun Step 1 with the same session name and por
 At the end of the whole task, the top-level agent tidies the session and detaches. Contents skills called by it skip this step.
 
 ```sh
-node scripts/open-browser.js tidy <session>
+npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts tidy <session>
 npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 ```
 
@@ -172,9 +172,9 @@ npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 
 ## Examples
 
-- "Show me https://example.com" → `SKIP_SSO=true node scripts/open-browser.js example https://example.com`; report the `PAGE` line, then `tidy example` and `detach`.
-- "Open our internal wiki page" → `node scripts/open-browser.js wiki https://wiki.example.com/start`; on exit 10, ask the user to sign in and run `wait wiki https://wiki.example.com/start`.
-- A contents skill with `cdp-port: "9231"` runs `node scripts/open-browser.js tickets https://tickets.example.com --cdp-port=9231`, then its own script calls `chromium.connectOverCDP('http://127.0.0.1:9231')`.
+- "Show me https://example.com" → `SKIP_SSO=true npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts example https://example.com`; report the `PAGE` line, then `tidy example` and `detach`.
+- "Open our internal wiki page" → `npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts wiki https://wiki.example.com/start`; on exit 10, ask the user to sign in and run `wait wiki https://wiki.example.com/start`.
+- A contents skill with `cdp-port: "9231"` runs `npx -y tsx@4.23.15 scripts/src/adapters/cli/open-browser.ts tickets https://tickets.example.com --cdp-port=9231`, then its own script calls `chromium.connectOverCDP('http://127.0.0.1:9231')`.
 
 ## Edge Cases
 
@@ -212,7 +212,7 @@ npx --package=@playwright/cli@latest playwright-cli -s=<session>-attach detach
 
 ## References
 
-- [scripts/open-browser.js](scripts/open-browser.js) - opens the browser, checks SSO, waits and tidies tabs
+- [scripts/src/adapters/cli/open-browser.ts](scripts/src/adapters/cli/open-browser.ts) - opens the browser, checks SSO, waits and tidies tabs
 - [agentme-edr-128](../../128-browser-automation-foundation.md) - browser automation foundation
 - [agentme-edr-127](../../127-external-system-adapter-skills.md) - external system adapter skills
 - [agentme-edr-003](../../../principles/003-hitl-question-content.md) - question content

@@ -15,8 +15,8 @@ description: >
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.6.0"
-  updated: 2026-09-30
+  version: "4.6.1"
+  updated: 2026-10-04
 ---
 
 ## Overview
@@ -716,6 +716,6 @@ mandatory apply confirmation.
 - [`get-github-contents`](../../../application/skills/get-github-contents/SKILL.md) / [`change-github-contents`](../../../application/skills/change-github-contents/SKILL.md) -- GitHub reads / writes.
 - [`get-azure-devops-contents`](../../../application/skills/get-azure-devops-contents/SKILL.md) / [`change-azure-devops-contents`](../../../application/skills/change-azure-devops-contents/SKILL.md) -- Azure DevOps reads / writes.
 - [`agentme-edr-127`](../../../application/127-external-system-adapter-skills.md) -- external system adapter rules (two-stage confirmation, contents skill purity).
-- [`agentme-edr-005`](../../005-skill-composition.md) -- skill composition.
+- [`agentme-edr-005`](../../005-skill-scripts-and-composition.md) -- skill composition.
 - [`agentme-edr-017`](../../017-skill-testing.md) -- skill testing mandate.
 - [`agentme-edr-003`](../../003-hitl-question-content.md) -- HITL question content.

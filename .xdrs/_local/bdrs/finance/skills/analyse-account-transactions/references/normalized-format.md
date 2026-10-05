@@ -47,13 +47,13 @@ Row rules:
   also applies to credit card statements, where a purchase is negative and a card settlement is positive.
 - `description`: the full source text of the row, on one line, at most 399 characters (cut with `...`).
   Pipes are escaped as `\|`.
-- The last 4 columns stay empty until classification. `validate.py --phase convert` rejects filled cells.
+- The last 4 columns stay empty until classification. `aat-validate --phase convert` rejects filled cells.
 - One row per booked transaction, in source order. Leave out pending or reserved lines, balance lines, page
   headers and footers.
 
 ## LLM path
 
-Use it when `normalize.py run` prints a hint instead of writing the file (no module and no table), or when
+Use it when `aat-normalize run` prints a hint instead of writing the file (no module and no table), or when
 the user supplies an image or `xls`/`ods` file.
 
 1. Read the source with your own tools (`read_file` for text, a PDF or image viewer for the rest).
@@ -61,13 +61,13 @@ the user supplies an image or `xls`/`ods` file.
    a scan without a text layer.
 3. Copy every value exactly as printed, and turn it into the signed 2-decimal form. Never compute a value.
 4. Write the balances only when the source prints them.
-5. Run `ground.py` on the file. `llm-image` files cannot be grounded, and the report lists their rows as
+5. Run `aat-ground` on the file. `llm-image` files cannot be grounded, and the report lists their rows as
    unverified.
 
 ## Mapping for unknown tables
 
 For a CSV, TXT, TAB or XLSX export that no module reads, write `.tmp/<id>/.work/mappings/<name>.json` after reading
-the header and a few rows, and pass it with `normalize.py run <source> --id <id> --mapping <file>`.
+the header and a few rows, and pass it with `aat-normalize run <source> --id <id> --mapping <file>`.
 
 | Key | Required | Meaning |
 |---|---|---|
@@ -106,13 +106,13 @@ below are relative to `.tmp/<id>/.work/`:
 
 | Path | Written by | Content |
 |---|---|---|
-| `sources/` | `normalize.py stage` | Read-only copies of the inputs, with the folder tree kept |
-| `staging.json` | `normalize.py stage` | Origin, copy, hash and skip reason for every input file |
+| `sources/` | `aat-normalize stage` | Read-only copies of the inputs, with the folder tree kept |
+| `staging.json` | `aat-normalize stage` | Origin, copy, hash and skip reason for every input file |
 | `mappings/` | LLM | Mapping files for unknown tables |
-| `normalized/*.md` | `normalize.py run` or LLM | Normalized files, later classified in place |
-| `normalized/*.grounding.json` | `ground.py` | Grounding result per file |
-| `normalized/*.snapshot.json` | `validate.py --phase convert` | Row keys, sum and user answers, used to detect changed values |
-| `plans/*.json` | LLM | Classification plans for `ledger.py apply` |
-| `hidden.json` | LLM | Title to hidden-spending kind map for `stats.py insights` |
-| `answers.json` | `answers.py export` | The user's answers, reusable by later analyses |
-| `research/cache.json` | `research.py add` | Web findings about counterparties |
+| `normalized/*.md` | `aat-normalize run` or LLM | Normalized files, later classified in place |
+| `normalized/*.grounding.json` | `aat-ground` | Grounding result per file |
+| `normalized/*.snapshot.json` | `aat-validate --phase convert` | Row keys, sum and user answers, used to detect changed values |
+| `plans/*.json` | LLM | Classification plans for `aat-ledger apply` |
+| `hidden.json` | LLM | Title to hidden-spending kind map for `aat-stats insights` |
+| `answers.json` | `aat-answers export` | The user's answers, reusable by later analyses |
+| `research/cache.json` | `aat-research add` | Web findings about counterparties |

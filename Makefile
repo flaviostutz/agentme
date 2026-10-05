@@ -1,27 +1,42 @@
 MISE := mise exec --
 
+# skill Makefiles of every scope except _core (agentme-edr-005)
+SKILL_DIRS := $(patsubst %/Makefile,%,$(filter-out .xdrs/_core/%,$(wildcard .xdrs/*/*/*/skills/*/Makefile)))
+
 all: build lint test
 
 build: install
 	@echo ">>> .: $@"
-	$(MISE) pnpm pack --pack-destination=./dist
+	$(MISE) npm pack --pack-destination=./dist
 
 lint:
 	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
+	@$(MAKE) skills TARGET=lint
 
 lint-fix:
 	@echo ">>> .: $@"
 	$(MISE) pnpm exec xdrs-core lint .
+
 test: build
 	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples test
+	@$(MAKE) skills TARGET=test
 
 clean:
 	@echo ">>> .: $@"
 	rm -rf dist node_modules
 	@echo ">>> ./examples: $@"
 	$(MAKE) -C examples clean
+	@$(MAKE) skills TARGET=clean
+
+# runs TARGET sequentially (never make -j) in every skill Makefile, stopping at the first failure
+skills:
+	@echo ">>> .: skills $(TARGET)"
+	@for d in $(SKILL_DIRS); do \
+		if grep -q "^$(TARGET):" $$d/Makefile; then $(MAKE) -C $$d $(TARGET) || exit 1; \
+		else echo ">>> $$d: no $(TARGET) target, skipped"; fi; \
+	done
 
 setup:
 	@echo ">>> .: $@"

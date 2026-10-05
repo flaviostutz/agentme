@@ -6,7 +6,7 @@ MISE := mise exec --
 DEPS := ../../../application/skills/get-github-contents ../../../application/skills/change-github-contents ../../../application/skills/get-azure-devops-contents ../../../application/skills/change-azure-devops-contents
 BUILD := dist/build
 
-.PHONY: build test clean
+.PHONY: build lint test clean
 
 build: clean
 	@echo ">>> .xdrs/agentme/edrs/principles/skills/resolve-pr-comments: $@"
@@ -26,9 +26,15 @@ build: clean
 	done
 	cd $(BUILD) && zip -rq ../resolve-pr-comments.zip .
 
+lint:
+	@echo ">>> .xdrs/agentme/edrs/principles/skills/resolve-pr-comments: $@"
+	$(MAKE) -C scripts lint
+
 test: build
 	@echo ">>> .xdrs/agentme/edrs/principles/skills/resolve-pr-comments: $@"
-	$(MISE) node --test scripts/*.test.js
+	$(MAKE) -C scripts test
 
 clean:
+	@echo ">>> .xdrs/agentme/edrs/principles/skills/resolve-pr-comments: $@"
 	rm -rf dist
+	$(MAKE) -C scripts clean

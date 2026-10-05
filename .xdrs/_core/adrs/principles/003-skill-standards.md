@@ -184,7 +184,6 @@ Rules:
 **Script standards**
 
 When a skill includes `scripts/`:
-- Each script MUST declare its runtime/interpreter at the top (shebang or equivalent header comment).
 - SHOULD use the language already used by the consuming project when known, rather than mandating one language repo-wide.
 - MUST avoid non-essential external dependencies, or document install steps in `SKILL.md` when unavoidable.
 - SHOULD support both human-readable and machine-readable (JSON) output when producing analysis or report output.

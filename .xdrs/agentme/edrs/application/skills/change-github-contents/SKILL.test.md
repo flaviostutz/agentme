@@ -1,6 +1,6 @@
 ---
 skill: change-github-contents
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -16,7 +16,7 @@ comment 12 is itself a reply to root comment 10.
 
 The skill runs `get-github-contents` Session setup first, shows stage 1 (System, Operation,
 Fields, Estimated impact), shows stage 2 with the final item, then runs
-`scripts/pr-comment-reply.js`, which posts with `in_reply_to=10` and returns `verified`.
+`scripts/pr-comment-reply.ts`, which posts with `in_reply_to=10` and returns `verified`.
 
 **Assertions**
 
@@ -30,7 +30,7 @@ Fields, Estimated impact), shows stage 2 with the final item, then runs
 
 **Trigger / Input**
 
-`pr-thread-resolve.js` returns `status: "error"` with `HTTP 403: Resource not accessible` for
+`pr-thread-resolve.ts` returns `status: "error"` with `HTTP 403: Resource not accessible` for
 one item of a two-item batch.
 
 **Expected Behaviour**
@@ -53,7 +53,7 @@ skill with exactly those three items.
 
 **Expected Behaviour**
 
-The skill runs Session setup, runs `pr-comment-reply.js` once with all three items and
+The skill runs Session setup, runs `pr-comment-reply.ts` once with all three items and
 returns the per-item results without asking again.
 
 **Assertions**

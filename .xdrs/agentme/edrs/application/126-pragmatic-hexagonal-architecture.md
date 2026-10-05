@@ -109,8 +109,8 @@ mysystem/
 
 #### 07-minimum-complexity-threshold
 
-- Trivial scripts and single-purpose tools (fewer than ~300 lines with a single I/O boundary) MAY skip this layering
-- All other projects MUST use this structure from the start
+- Trivial scripts and single-purpose tools (fewer than ~400 non-blank, non-test lines in total with a single I/O boundary) MAY skip this layering
+- All other projects, including skill scripts at or above that size, MUST use this structure from the start
 
 #### 09-unit-testing-and-mocking-strategy
 

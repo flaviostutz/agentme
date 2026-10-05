@@ -1,21 +1,28 @@
 SHELL := /bin/bash
 MISE := mise exec --
 BUILD := dist/build
+TSX := npx -y tsx@4.23.15
 
-.PHONY: build test clean
+.PHONY: build lint test clean
 
 build: clean
 	@echo ">>> .xdrs/agentme/edrs/application/skills/open-browser-playwright: $@"
 	mkdir -p $(BUILD)/scripts
 	cp SKILL.md $(BUILD)/
-	find scripts -maxdepth 1 -name '*.js' ! -name '*.test.js' -exec cp {} $(BUILD)/scripts/ \;
+	cd scripts && find src -name '*.ts' ! -name '*.test.ts' ! -name '*_mock.ts' -exec sh -c 'mkdir -p ../$(BUILD)/scripts/$$(dirname {}) && cp {} ../$(BUILD)/scripts/{}' \;
 	cd $(BUILD) && zip -rq ../open-browser-playwright.zip .
+
+lint:
+	@echo ">>> .xdrs/agentme/edrs/application/skills/open-browser-playwright: $@"
+	$(MAKE) -C scripts lint
 
 test: build
 	@echo ">>> .xdrs/agentme/edrs/application/skills/open-browser-playwright: $@"
-	$(MISE) node --test --experimental-test-coverage --test-coverage-include=scripts/open-browser-lib.js --test-coverage-lines=80 --test-coverage-branches=80 scripts/*.test.js
-	@$(MISE) node $(BUILD)/scripts/open-browser.js > /dev/null 2>&1; rc=$$?; \
+	$(MAKE) -C scripts test
+	@$(MISE) $(TSX) $(BUILD)/scripts/src/adapters/cli/open-browser.ts > /dev/null 2>&1; rc=$$?; \
 		if [ $$rc -ne 64 ]; then echo "bundled runner: expected exit 64, got $$rc"; exit 1; fi
 
 clean:
+	@echo ">>> .xdrs/agentme/edrs/application/skills/open-browser-playwright: $@"
 	rm -rf dist
+	$(MAKE) -C scripts clean
