@@ -1,6 +1,6 @@
 ---
 skill: get-azure-devops-contents
-skill-version: "1.0.0"
+skill-version: "1.1.0"
 ---
 
 ## Test Scenarios
@@ -15,30 +15,37 @@ system vote comment.
 
 **Expected Behaviour**
 
-The skill checks `az account show`, runs `scripts/pr-comments-list.js --pr-url <url>` and
+The skill checks `az account show`, runs `scripts/src/adapters/cli/pr-comments-list.ts --pr-url <url>` and
 returns one JSON array in the shared record shape.
 
 **Assertions**
 
-- [ ] Skill runs `pr-comments-list.js` instead of composing raw `az rest` reads by hand.
+- [ ] Skill runs `pr-comments-list.ts` instead of composing raw `az rest` reads by hand.
 - [ ] Output marks both file-thread comments `status: "resolved"` with the reply's `in_reply_to` set to the root id.
 - [ ] Output sets `path: null` for the general thread comment.
 - [ ] Output omits the system vote comment and never emits a `review-summary` kind.
 
-### Scenario 2: Legacy visualstudio.com URL
+### Scenario 2: Read a work item with a legacy URL, attachments and links
 
 **Trigger / Input**
 
-Read metadata of `https://contoso.visualstudio.com/Widgets/_git/widgets-api/pullrequest/7`.
+Read `https://contoso.visualstudio.com/My%20Project/_workitems/edit/321`, a User Story with an
+HTML description that mentions `https://wiki.example.com/spec`, one attachment that downloads
+and one that returns HTTP 403.
 
 **Expected Behaviour**
 
-The skill runs `pr-metadata-get.js`, which reads through `https://dev.azure.com/contoso`.
+The skill runs `work-item-get.ts --work-item-url <url>` after Session setup and returns the work
+item JSON read through `https://dev.azure.com/contoso`.
 
 **Assertions**
 
 - [ ] Skill accepts the legacy URL without asking the human to convert it.
-- [ ] Output returns `number: 7` and the base and head branch names without `refs/heads/`.
+- [ ] Skill runs `work-item-get.ts` instead of composing `az rest` or `curl` reads by hand.
+- [ ] Output returns `project: "My Project"`, `rev` and `projectVisibility`.
+- [ ] Output lists the downloaded file with a `path` under `.tmp/work-item-attachments/` and the failed one with an `error`.
+- [ ] Output `links` contains the wiki URL.
+- [ ] Skill rejects a PR URL for `work-item-get` with a usage error.
 
 ### Scenario 3: No session never triggers a curl or scrape fallback
 

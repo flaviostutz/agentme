@@ -1,6 +1,6 @@
 ---
 skill: change-azure-devops-contents
-skill-version: "1.1.0"
+skill-version: "1.2.0"
 ---
 
 ## Test Scenarios
@@ -15,14 +15,14 @@ Reply "Fixed" to `thread-comment/12.1` on
 **Expected Behaviour**
 
 The skill runs `get-azure-devops-contents` Session setup first, shows stage 1 (System,
-Operation, Fields, Estimated impact), shows stage 2, then runs `pr-comment-reply.js` and
-`pr-thread-status-set.js` with `"status": "fixed"`, and reports both results.
+Operation, Fields, Estimated impact), shows stage 2, then runs `pr-comment-reply.ts` and
+`pr-thread-status-set.ts` with `"status": "fixed"`, and reports both results.
 
 **Assertions**
 
 - [ ] Skill activates `get-azure-devops-contents` in prose before any write.
 - [ ] Skill shows stage 1 and stage 2 confirmations and waits for each answer.
-- [ ] Skill resolves the thread with `pr-thread-status-set.js` and status `fixed`.
+- [ ] Skill resolves the thread with `pr-thread-status-set.ts` and status `fixed`.
 - [ ] Skill's confirmation question has a context line, states each option's consequence,
       prefixes one option with "(recommended)", and fills the question-UI fields.
 
@@ -30,7 +30,7 @@ Operation, Fields, Estimated impact), shows stage 2, then runs `pr-comment-reply
 
 **Trigger / Input**
 
-`pr-comment-reply.js` returns `status: "error"` with "missing on read-back" and exit code 1,
+`pr-comment-reply.ts` returns `status: "error"` with "missing on read-back" and exit code 1,
 after `az rest` exited 0.
 
 **Expected Behaviour**
@@ -51,7 +51,7 @@ skill with exactly those items.
 
 **Expected Behaviour**
 
-The skill runs Session setup, runs `pr-comment-reply.js` once with both items and returns the
+The skill runs Session setup, runs `pr-comment-reply.ts` once with both items and returns the
 per-item results without asking again.
 
 **Assertions**

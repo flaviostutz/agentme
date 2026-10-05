@@ -1,0 +1,73 @@
+# Package metadata and tool configuration for the analyse-account-transactions skill scripts (agentme-edr-103, agentme-edr-126)
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "analyse-account-transactions-scripts"
+version = "1.0.0"
+description = "Normalize, ground, classify, validate and calculate over bank statements for the analyse-account-transactions skill"
+requires-python = ">=3.11"
+dependencies = ["pdfplumber>=0.11", "openpyxl>=3.1"]
+
+[project.scripts]
+aat-normalize = "analyse_account_transactions.adapters.cli.normalize:main"
+aat-ground = "analyse_account_transactions.adapters.cli.ground:main"
+aat-ledger = "analyse_account_transactions.adapters.cli.ledger:main"
+aat-validate = "analyse_account_transactions.adapters.cli.validate:main"
+aat-answers = "analyse_account_transactions.adapters.cli.answers:main"
+aat-research = "analyse_account_transactions.adapters.cli.research:main"
+aat-stats = "analyse_account_transactions.adapters.cli.stats:main"
+
+[dependency-groups]
+dev = ["ruff", "ty", "pytest", "pytest-cov", "pip-audit"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/analyse_account_transactions"]
+
+[tool.pytest.ini_options]
+cache_dir = ".cache/pytest"
+python_files = "*_test.py"
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "--import-mode=importlib --cov=analyse_account_transactions --cov-branch --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+data_file = ".cache/.coverage"
+
+[tool.coverage.html]
+directory = ".cache/coverage-html"
+
+[tool.uv]
+cache-dir = ".cache/uv"
+
+[tool.ty.environment]
+extra-paths = ["src", "tests"]
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
+output-format = "grouped"
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+task-tags = ["TODO"]
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/analyse_account_transactions/adapters/cli/*" = ["T201"]
+"tests/**" = ["S101", "S108", "D", "ANN", "PLR2004", "INP001", "ARG001", "PT006", "PT007", "PT018", "RUF001", "RUF043", "E501", "PLC0415", "PLR0913", "PLR0917", "PLW2901", "N818", "EM101", "TRY003", "B905", "PERF403", "FBT002", "C901"]
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true

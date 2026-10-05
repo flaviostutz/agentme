@@ -1,0 +1,71 @@
+# Package metadata and tool configuration for the analyse-cvs skill scripts (agentme-edr-103, agentme-edr-126)
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "analyse-cvs-scripts"
+version = "1.1.0"
+description = "Staging, organising, redaction, slug, scoring, checking, ranking and sources commands for the analyse-cvs skill"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+cvs-stage = "analyse_cvs.adapters.cli.stage:main"
+cvs-organise = "analyse_cvs.adapters.cli.organise:main"
+cvs-redact = "analyse_cvs.adapters.cli.redact:main"
+cvs-slug = "analyse_cvs.adapters.cli.slug:main"
+cvs-score = "analyse_cvs.adapters.cli.score:main"
+cvs-check = "analyse_cvs.adapters.cli.check:main"
+cvs-rank = "analyse_cvs.adapters.cli.rank:main"
+cvs-sources = "analyse_cvs.adapters.cli.sources:main"
+
+[dependency-groups]
+dev = ["ruff", "ty", "pytest", "pytest-cov", "pip-audit"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/analyse_cvs"]
+
+[tool.pytest.ini_options]
+cache_dir = ".cache/pytest"
+python_files = "*_test.py"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--import-mode=importlib --cov=analyse_cvs --cov-branch --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+data_file = ".cache/.coverage"
+
+[tool.coverage.html]
+directory = ".cache/coverage-html"
+
+[tool.uv]
+cache-dir = ".cache/uv"
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
+output-format = "grouped"
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+task-tags = ["TODO"]
+select = ["ERA", "FAST", "ANN", "ASYNC", "S", "BLE", "FBT", "B", "A", "COM",
+  "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FIX", "INT", "ISC", "ICN", "LOG", "G",
+  "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "SLOT", "TID",
+  "TC", "ARG", "PTH", "FLY", "I", "C90", "NPY", "PD", "N", "PERF", "E", "W",
+  "D", "F", "PGH", "PL", "UP", "FURB", "RUF", "TRY"]
+ignore = ["ANN002", "ANN003", "ANN401", "D100", "D101", "D102", "D103", "D104",
+  "D105", "D106", "D107", "COM812", "D203", "D213", "D400", "D401", "D404", "D415", "FIX002"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/analyse_cvs/adapters/cli/*" = ["T201"]
+"tests/**" = ["S101", "S108", "D", "ANN", "PLR2004", "INP001", "ARG001", "PT006", "PT007", "RUF001", "E501", "PLR0913", "PLR0917"]
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true

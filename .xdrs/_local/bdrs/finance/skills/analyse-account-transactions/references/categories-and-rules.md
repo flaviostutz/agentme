@@ -1,7 +1,7 @@
 # Categories and rules
 
 Every row gets exactly one category, one flow, and (for Expenditure rows) one relevance. The LLM decides them
-and writes them with `ledger.py apply`; `validate.py` enforces the rules below. Scripts never change a row's
+and writes them with `aat-ledger apply`; `aat-validate` enforces the rules below. Scripts never change a row's
 timestamp, value or description.
 
 ## Categories
@@ -35,7 +35,7 @@ per-row exception.
 | The other debit categories | Expenditure |
 | Unknown | Expenditure when negative, Income when positive |
 
-`stats.py flow` checks that Income = Savings + Expenditures, where Savings is put aside (minus the sum of the
+`aat-stats flow` checks that Income = Savings + Expenditures, where Savings is put aside (minus the sum of the
 Savings rows) plus kept in accounts (the sum of all rows). Transfers between two analysed accounts are Savings on
 both sides and cancel out. A credit card settlement is Savings on both sides when the card statement is
 analysed too, and Expenditure (hidden spending) when it is not.
@@ -78,7 +78,7 @@ and ask it together with the category.
 - `rename` unifies titles before the map is applied. `map` classifies by title. `rows` holds per-row exceptions,
   by 1-based row number.
 - Entry keys: `category`, `flow`, `relevance`, `needs` (`yes` or `no`), `title`.
-- Run `ledger.py apply <file> --input <plan> --dry-run` first, then without `--dry-run`. Use `--source user`
+- Run `aat-ledger apply <file> --input <plan> --dry-run` first, then without `--dry-run`. Use `--source user`
   only for answers the user gave.
 
 ## Validation rules
@@ -105,7 +105,7 @@ and ask it together with the category.
 ## Hidden spending map
 
 Write `.tmp/<id>/.work/hidden.json` with the titles that hide what was bought, and pass it with
-`stats.py insights --hidden .tmp/<id>/.work/hidden.json`:
+`aat-stats insights --hidden .tmp/<id>/.work/hidden.json`:
 
 ```json
 {"ATM Centrum": "cash", "Card Settlement": "card", "PayPal": "provider", "Account Fee": "fees"}
@@ -117,7 +117,7 @@ listed under `hidden_titles_not_found`; fix their spelling and run again.
 
 ## Thresholds
 
-Amounts are in the analysis currency. Override them with `stats.py insights --threshold key=value` when the
+Amounts are in the analysis currency. Override them with `aat-stats insights --threshold key=value` when the
 currency or income level makes the defaults wrong (for example `small-row=1500` for JPY), and say so in the
 report.
 

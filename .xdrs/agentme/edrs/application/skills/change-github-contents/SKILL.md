@@ -1,20 +1,20 @@
 ---
 name: change-github-contents
 description: >
-  Mutates GitHub pull request contents through the gh CLI: reply to PR comments, post new
-  general PR comments and resolve review threads, each idempotent and verified by read-back.
-  Pure I/O, no business decisions, two-stage human confirmation before every write.
-  Integration approach: first-party CLI (gh). Activate when an agent or skill needs to write
-  to a GitHub PR.
+  Mutates GitHub contents through the gh CLI: reply to PR comments, post PR or issue comments,
+  resolve review threads, update an issue title and body (with a stale guard) and create issues,
+  each idempotent and verified by read-back. Pure I/O, no business decisions, two-stage human
+  confirmation before every write. Integration approach: first-party CLI (gh). Activate when an
+  agent or skill needs to write to a GitHub PR or issue.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-30
+  version: "1.2.0"
+  updated: 2026-10-05
 ---
 
 ## Overview
 
-Mutation contents skill for GitHub pull requests, per
+Mutation contents skill for GitHub pull requests and issues, per
 [agentme-edr-127](../../127-external-system-adapter-skills.md). Session setup and reads live in
 [`get-github-contents`](../get-github-contents/SKILL.md), which this skill activates first (rule
 06). Holds no business logic (rule 08): the caller decides what to write.
@@ -22,8 +22,8 @@ Mutation contents skill for GitHub pull requests, per
 ### Inputs
 
 #### Required
-- GitHub PR URL
-- Items to write (comment id, body)
+- GitHub PR, issue or repository URL
+- Items to write (comment id, title, body)
 
 #### Optional
 - Caller-confirmed flag for already-approved batches
@@ -34,7 +34,7 @@ Mutation contents skill for GitHub pull requests, per
 - One JSON result per item
 
 #### Changes
-- PR comments posted or review threads resolved
+- PR or issue comments posted, review threads resolved, issues updated or created
 
 ### Halt Conditions
 - `get-github-contents` session setup fails
@@ -99,7 +99,7 @@ Report every non-`verified` result to the human; never retry silently.
 Items: `{ "prUrl", "commentId", "body" }`, with `commentId` from `get-github-contents`.
 
 ```sh
-node <skill-dir>/scripts/pr-comment-reply.js --input <items.json>
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/pr-comment-reply.ts --input <items.json>
 ```
 
 A `review-comment` reply is anchored to the thread root, even when `commentId` is a reply.
@@ -110,7 +110,7 @@ A `review-comment` reply is anchored to the thread root, even when `commentId` i
 Items: `{ "prUrl", "body" }`. Posts a new general PR comment.
 
 ```sh
-node <skill-dir>/scripts/pr-comment-create.js --input <items.json>
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/pr-comment-create.ts --input <items.json>
 ```
 
 ### pr-thread-resolve
@@ -118,10 +118,45 @@ node <skill-dir>/scripts/pr-comment-create.js --input <items.json>
 Items: `{ "prUrl", "commentId" }`, any `review-comment` in the thread.
 
 ```sh
-node <skill-dir>/scripts/pr-thread-resolve.js --input <items.json>
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/pr-thread-resolve.ts --input <items.json>
 ```
 
 Only records with `can_resolve: true` can be resolved.
+
+### issue-comment-create
+
+Items: `{ "issueUrl", "body" }`. Posts a new comment on an issue (a PR URL is rejected).
+
+```sh
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/issue-comment-create.ts --input <items.json>
+```
+
+### issue-update
+
+Items: `{ "issueUrl", "expectedUpdatedAt", "title"?, "body"? }`, with at least one of `title` and
+`body` and `expectedUpdatedAt` copied from `updatedAt` of `get-github-contents` `issue-get`.
+
+```sh
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/issue-update.ts --input <items.json>
+```
+
+Compares the issue's current `updated_at` with `expectedUpdatedAt` and refuses with
+`status: "error"` (message starts with `stale`) when the issue changed after it was read; read it
+again and ask the human before retrying. Identical content returns `already-present`. A
+`verified` result carries the new `updatedAt`.
+
+### issue-create
+
+Items: `{ "repoUrl", "title", "body" }` with `repoUrl` as `https://github.com/<owner>/<repo>`.
+
+```sh
+npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/issue-create.ts --input <items.json>
+```
+
+Searches the repository for an issue (not a PR) with exactly the same title first and returns
+`already-present` with its `url` and `number`, so a rerun never duplicates. A `verified` result
+carries `url` and `number`. Labels, assignees and milestones are never set. Any title convention
+(e.g. a prefix) is the caller's choice.
 
 ## Examples
 
@@ -130,26 +165,35 @@ Only records with `can_resolve: true` can be resolved.
 
 Runs `get-github-contents` Session setup, shows stage 1, writes
 `[{"prUrl":"https://github.com/acme/widgets/pull/482","commentId":"review-comment/12","body":"Fixed in abc123"}]`,
-shows stage 2, runs `pr-comment-reply.js` then `pr-thread-resolve.js` with the same file, and
+shows stage 2, runs `pr-comment-reply.ts` then `pr-thread-resolve.ts` with the same file, and
 reports both `verified` results.
 
 ## Edge Cases
 
 - **Same reply run twice**: the second run returns `already-present` and posts nothing.
-- **Thread already resolved**: `pr-thread-resolve.js` returns `already-present`.
+- **Thread already resolved**: `pr-thread-resolve.ts` returns `already-present`.
 - **Partial batch failure**: other items still run; exit code is 1.
 
 ## Known Issues
 
 - **Symptom:** resolving fails with `Could not resolve to a node` or a type error.
   **Cause:** `resolveReviewThread` needs the thread's GraphQL node id, not a REST comment id.
-  **Fix:** use `pr-thread-resolve.js`, which looks up the node id from the comment id.
+  **Fix:** use `pr-thread-resolve.ts`, which looks up the node id from the comment id.
 - **Symptom:** a resolve or reply returns HTTP 403 `Resource not accessible`.
   **Cause:** the account lacks write or triage permission on the repository.
   **Fix:** report the permission gap, keep reply-only for that item, never retry the same call.
+- **Symptom:** `issue-update` returns `stale: the issue changed after it was read`.
+  **Cause:** someone edited the issue after `issue-get`; `updated_at` also moves on comments and labels.
+  **Fix:** read again with `issue-get`, show the human what changed, and write only after a new confirmation.
+- **Symptom:** `issue-create` creates a duplicate of an issue that exists.
+  **Cause:** GitHub search indexes new issues with a delay of seconds to minutes, so a very recent twin is not found.
+  **Fix:** wait and rerun, or ask the human to check the repository before a second create.
+- **Symptom:** an issue write returns HTTP 403 or 404 on a repository the human can read.
+  **Cause:** the account lacks write access, or the repository is archived or locked.
+  **Fix:** report it as is; never retry the same call.
 - **Symptom:** a reply to a reply fails with HTTP 422.
   **Cause:** GitHub accepts review replies only on the thread root.
-  **Fix:** use `pr-comment-reply.js`, which resolves the root before posting.
+  **Fix:** use `pr-comment-reply.ts`, which resolves the root before posting.
 
 ## Anti-Patterns
 
@@ -167,4 +211,4 @@ reports both `verified` results.
 
 - [`get-github-contents`](../get-github-contents/SKILL.md) -- session setup and reads; activated first.
 - [`agentme-edr-127`](../../127-external-system-adapter-skills.md) -- contents skill rules.
-- [`agentme-edr-005`](../../../principles/005-skill-composition.md) -- skill composition.
+- [`agentme-edr-005`](../../../principles/005-skill-scripts-and-composition.md) -- skill composition.

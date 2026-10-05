@@ -69,7 +69,7 @@ Every integrated system MUST have one `get-<system>-contents` skill holding all 
 
 #### 06-get-owns-session-change-activates-get
 
-The `get-` skill MUST own authentication, session setup, navigation, read-side known issues and local-only actions (e.g. a git checkout). The `change-` skill MUST activate its `get-` skill in a prose step first, per [agentme-edr-005](../principles/005-skill-composition.md), and MUST contain only mutation steps.
+The `get-` skill MUST own authentication, session setup, navigation, read-side known issues and local-only actions (e.g. a git checkout). The `change-` skill MUST activate its `get-` skill in a prose step first, per [agentme-edr-005](../principles/005-skill-scripts-and-composition.md), and MUST contain only mutation steps.
 
 #### 07-scripts-per-resource-action
 
@@ -133,7 +133,7 @@ Document the chosen integration approach (rule 01) in each skill's frontmatter d
 
 ## References
 
-- [agentme-edr-005](../principles/005-skill-composition.md) - skill composition through prose activation
+- [agentme-edr-005](../principles/005-skill-scripts-and-composition.md) - skill composition through prose activation
 - [agentme-edr-128](128-browser-automation-foundation.md) - browser automation foundation
 - [agentme-edr-124](124-secrets-management.md) - secrets management
 - [agentme-edr-003](../principles/003-hitl-question-content.md) - HITL question content

@@ -121,7 +121,7 @@ class document_workflow_state(TypedDict):
 
     # "payment" group — all fields related to the payment entity
     payment_status: str
-    payment_amount: float
+    payment_amount: Decimal  # exact type for money, see agentme-edr-105
 
     # "evaluate" group — judge verdicts
     evaluate_invoice_verdict: JudgeVerdict

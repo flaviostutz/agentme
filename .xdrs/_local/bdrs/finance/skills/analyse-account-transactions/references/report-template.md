@@ -1,8 +1,8 @@
 # Report template
 
-Write the report to `.tmp/<id>/report.md` in the user's language. Every number comes from a `stats.py`,
-`validate.py` or `ground.py` output; never compute totals by hand. Show money as `1,234.56 <currency>`, with
-the currency from the `currency` field of the `stats.py` output, and the number format of the user's language.
+Write the report to `.tmp/<id>/report.md` in the user's language. Every number comes from a `aat-stats`,
+`aat-validate` or `aat-ground` output; never compute totals by hand. Show money as `1,234.56 <currency>`, with
+the currency from the `currency` field of the `aat-stats` output, and the number format of the user's language.
 Show IBANs and account numbers as the last 4 digits only. Name private persons only when the user did.
 
 ```markdown
@@ -19,7 +19,7 @@ months of the period an account does not cover.
 3 to 5 bullets: income, expenditures, savings rate (savings / income), biggest driver, one main action.
 
 ## Money flow
-Income = Savings + Expenditures, with the numbers from `stats.py flow`.
+Income = Savings + Expenditures, with the numbers from `aat-stats flow`.
 | Flow | Amount | Share of income |
 Savings split: put aside (Savings rows) and kept in accounts (balance change). Refunds: rows and total.
 
@@ -27,14 +27,14 @@ Savings split: put aside (Savings rows) and kept in accounts (balance change). R
 ### Relevance breakdown
 | Relevance | Amount | % of expenditures | Top 6 titles |
 ### Small but adds up
-Titles whose debits are all small but whose total is large (`stats.py insights`).
+Titles whose debits are all small but whose total is large (`aat-stats insights`).
 ### Hidden spending
 Cash, card settlements, payment providers, fees, small subscriptions, price rises, trials that became paid.
 ### Actions
-3 to 6 actions tailored to the user's context, each with a yearly estimate from `stats.py estimate`.
+3 to 6 actions tailored to the user's context, each with a yearly estimate from `aat-stats estimate`.
 
 ## Recurring charges
-Source: `stats.py recurring` (add `--assign '{"Title": "Yearly"}'` for known one-off subscriptions).
+Source: `aat-stats recurring` (add `--assign '{"Title": "Yearly"}'` for known one-off subscriptions).
 Totals line: <active> active charges, <active_per_year> per year (<active_per_month> per month);
 <stopped> stopped charges, <stopped_paid_in_period> paid before they stopped.
 ### Active

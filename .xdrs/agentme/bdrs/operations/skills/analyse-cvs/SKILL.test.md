@@ -1,6 +1,6 @@
 ---
 skill: analyse-cvs
-skill-version: "2.0"
+skill-version: "2.2"
 ---
 
 ## Test Scenarios
@@ -18,20 +18,22 @@ report exists for `business-analyst-ai`, and `uv` is installed.
 
 **Expected Behaviour**
 
-1. Phase 1 validates the folder, derives the slug `business-analyst-ai`, and asks for team
+1. Phase 1 validates the folder, derives the slug `business-analyst-ai` with `cvs-slug`, and asks for team
    context, which the human skips. It then uses the AI BA spec from agentme-bdr-404 and a
    composition model from agentme-bdr-403.
 2. Phase 2 proposes 3 aspects and 6-12 criteria with weights adding up to 100 and anchors for
    1, 4, 7, and 10, runs the consistency check, derives S1-S3 without asking, and asks for
    confirmation before writing the report.
 3. Phase 3 stages the 5 files as `doc-01`..`doc-05`, with the 2 subfolder files in group
-   `g-01`, converts them with markitdown, and runs `redact.py` and the free-text redaction pass.
+   `g-01`, converts them with markitdown, and runs `cvs-redact` and the free-text redaction pass.
 4. Phase 4 assigns `letter.docx` to Roger Mathias through its folder, without asking.
-5. Phase 5 runs `organise.py`: it renames the subfolder to `roger-mathias/` and moves each
-   loose CV into its candidate folder, posts a summary without a question, renames the
-   converted files to `<candidate-slug>-<doc-type>.md`, fills Sources, and adds 4 rows.
-6. Phase 6 flags Carla's GPT-4 claim as `!`. Phases 7-9 score, dry-run, and ground every row,
-   and Phases 10-11 rank the candidates and append and show the interview list.
+5. Phase 5 runs `cvs-organise`: it renames the subfolder to `roger-mathias/` and moves each
+   loose CV into its candidate folder, posts a summary without a question, then runs
+   `cvs-sources` with a `docs.json` of slugs, which renames the converted files to
+   `<candidate-slug>-<doc-type>.md`, fills Sources, and adds 4 rows.
+6. Phase 6 flags Carla's GPT-4 claim as `!`. Phases 7-9 score, run `cvs-score dryrun` and
+   `cvs-score overall`, check the rows with `cvs-check`, and ground every row. Phases 10-11
+   run `cvs-rank --write`, fill the interview list, check it, and show it.
 
 **Simulated Human Responses**
 1. "B: skip team context."
@@ -79,6 +81,16 @@ report exists for `business-analyst-ai`, and `uv` is installed.
       (2-3), Investigate (2-4, covering every `!` and `?` claim item), and 2-3 Questions, states
       that a human decides, and shows it in chat with the revision count.
 - [ ] Skill writes nothing outside `.tmp/`.
+- [ ] Skill runs `cvs-slug` for the role slug and the candidate slugs, `cvs-sources` to rename
+      converted files and fill the Sources and Candidates tables, and does not derive slugs,
+      run `mv` for converted files, or write those table rows by hand.
+- [ ] Skill runs `cvs-score dryrun` for every candidate with the scenario adjustments as JSON
+      and writes the printed aspect scores and Base, runs `cvs-score overall` for every
+      Overall, and does not do that arithmetic or rounding in chat.
+- [ ] Skill runs `cvs-check` with the stages criteria, scores, scenarios, and interview, and
+      fixes every reported error before moving on.
+- [ ] Skill runs `cvs-rank --write` to sort the Candidates table and create the interview list
+      skeleton, and does not sort rows or count invited candidates by hand.
 
 ### Scenario 2: Hostile and broken inputs
 
@@ -99,7 +111,7 @@ After scoring, Lisa has Base 5.0 and Credibility 5.5, and Tom has Base 5.0 and C
 
 **Expected Behaviour**
 
-1. Phase 3 runs `stage.py`. `old.doc` comes back as `unsupported` and the human skips it. The
+1. Phase 3 runs `cvs-stage`. `old.doc` comes back as `unsupported` and the human skips it. The
    hostile filename is staged as a `doc-NN.pdf` name.
 2. The conversion of `scan.pdf` has fewer than 300 characters, so the skill asks, and the human
    skips it.
@@ -134,6 +146,10 @@ After scoring, Lisa has Base 5.0 and Credibility 5.5, and Tom has Base 5.0 and C
       counts invited candidates in `Invited: <n> of <m>`.
 - [ ] Skill writes the organised path `mia-jansen/$(rm -rf ~).pdf` literally in the Sources
       table, and the table still renders with 3 columns.
+- [ ] Skill runs `cvs-score overall` for Lisa and Tom and takes the invite decision from its
+      output (Tom invited, Lisa not), rather than comparing the numbers in chat.
+- [ ] Skill passes only candidate slugs, never candidate names or original filenames, as
+      arguments of `cvs-score`, `cvs-check`, and `cvs-sources` (inside `docs.json`, also slugs).
 
 ### Scenario 3: Resume with redaction and contradictory role info
 
@@ -185,3 +201,7 @@ After scoring, Nina has Base 4.6 and Credibility 5.5, and Omar has Base 5.0 and 
 - [ ] Skill's resume question mentions, in its context line, that the new role text differs
       from the report's Inputs, and keeps the confirmed criteria unchanged after the human
       chooses resume.
+- [ ] Skill's `cvs-sources` call decides only the 2 new documents (the 3 known sources are not
+      in `docs.json`) and adds exactly 2 Candidates rows, and `cvs-rank --write` recomputes and
+      re-ranks all 5 rows instead of the skill sorting them by hand.
+- [ ] Skill runs `cvs-score dryrun` only for Nina and Omar, never for the 3 existing rows.

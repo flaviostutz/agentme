@@ -63,6 +63,7 @@ Rules:
 - Each scenario MUST have at least two assertions.
 - Assertions MUST be falsifiable (a pass/fail determination must be possible without ambiguity).
 - Assertion text MUST start with a verb ("Output contains …", "Skill asks …", "Review reports …").
+- Each scenario that exercises a step owned by a script ([agentme-edr-005 rule `11`](005-skill-scripts-and-composition.md)) MUST include an assertion that the skill runs that command and does not compute the result in chat.
 - MUST NOT duplicate SKILL.md content; reference phases by name only when needed.
 - `skill-version` in frontmatter MUST be updated whenever `version` in SKILL.md changes.
 - **Simulated Human Responses** is optional. Include it when the skill has human-in-the-loop pause points and automated testing is needed. Responses are injected in order at each pause; if responses are exhausted before the skill finishes, the runner captures the remaining output as-is.
