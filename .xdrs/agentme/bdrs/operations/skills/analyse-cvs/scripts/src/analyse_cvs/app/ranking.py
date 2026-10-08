@@ -9,8 +9,6 @@ from analyse_cvs.app.scoring import is_invited, overall_exact
 from analyse_cvs.shared.constants import INTERVIEW_CLOSING, INTERVIEW_HEADING, NONE_INVITED, PLACEHOLDER
 from analyse_cvs.shared.decimals import parse_decimal, round_one_fraction, show
 
-_BULLETS = ("Why invite", "Investigate", "Questions")
-
 
 @dataclass(frozen=True)
 class Ranked:
@@ -51,14 +49,14 @@ def rank_table(table: Table) -> list[Ranked]:
 
 
 def interview_section(ranked: list[Ranked]) -> list[str]:
-    """Return the interview list section with one heading per invited candidate and empty bullets."""
+    """Return the interview list section with one heading per invited candidate and an unfilled Chart bullet."""
     invited = [r for r in ranked if r.invited]
     lines = [INTERVIEW_HEADING, f"Invited: {len(invited)} of {len(ranked)}", ""]
     if not invited:
         lines += [NONE_INVITED, ""]
     for position, r in enumerate(invited, start=1):
         lines.append(f"### {position}. {r.name} (Overall {show(r.overall)}, Credibility {r.credibility})")
-        lines += [f"- {label}: {PLACEHOLDER}" for label in _BULLETS]
+        lines.append(f"- Chart: {PLACEHOLDER}")
         lines.append("")
     lines.append(INTERVIEW_CLOSING)
     return lines
@@ -99,7 +97,7 @@ def check_interview(lines: list[str], ranked: list[Ranked]) -> list[str]:
         if want not in section
     ]
     if any(PLACEHOLDER in line for line in section):
-        errors.append("interview list still has unfilled bullets")
+        errors.append("interview list still has unfilled Chart links")
     if INTERVIEW_CLOSING not in section:
         errors.append("closing recommendation sentence is missing")
     invited_lines = [line for line in section if line.startswith("### ")]

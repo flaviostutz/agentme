@@ -48,7 +48,7 @@ The agent MUST fill every field with as much decision-relevant content as fits i
 
 #### 07-phase-gates-must-summarize-outcome
 
-A phase-gate question (continue, re-run, add a comment) MUST summarize what the phase produced, any open risks or deferred items, and what each gate option will cause next. The summary SHOULD stay under 80 words or 5 bullets.
+A phase-gate question (continue, re-run, add a comment) MUST summarize what the phase produced, any open risks or deferred items, and what each gate option will cause next. The summary SHOULD stay <80 words or 5 bullets.
 
 #### 08-requests-for-more-context-must-be-re-explained
 
@@ -64,7 +64,7 @@ A skill with HITL questions MUST embed rules 01, 03, 05-08, and 11 as a checklis
 
 #### 11-questions-must-follow-compact-template
 
-Every decision question MUST use the template below and MUST stay under 140 words in total (title, context, and all options):
+Every decision question MUST use the template below and MUST stay <140 words in total (title, context, and all options). Caps are written as `<N words` per [`_core-adr-policy-023`](../../../_core/adrs/principles/023-skill-runtime-standards.md), in the skill that asks the question:
 
 ```text
 Q<n>: <title>
@@ -77,10 +77,10 @@ Each part SHOULD respect its cap:
 
 | Part | Cap |
 |---|---|
-| Title | under 15 words |
-| Context | under 25 words |
+| Title | <15 words |
+| Context | <25 words |
 | Options | 2-4 per question |
-| Each option, with its consequences | under 25 words |
+| Each option, with its consequences | <25 words |
 
 When one option is preferable, the agent SHOULD prefix it with "(recommended)" right after its letter; a separate recommendation line or reason is not needed. The human MUST still make the decision; a recommendation MUST NOT be applied without the human's answer.
 
@@ -113,3 +113,4 @@ The same question in `vscode_askQuestions` fields (rule 06). Every part fits, so
 
 - [`agentme-edr-017`](017-skill-testing.md) - Skill testing
 - [`agentme-edr-127`](../application/127-external-system-adapter-skills.md) - External system adapter skills
+- [`_core-adr-policy-023`](../../../_core/adrs/principles/023-skill-runtime-standards.md) - Skill runtime standards (word cap format)

@@ -6,8 +6,8 @@ description: >
    Also activate when you identify a need to check compliance with Policies during implementation.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-30
+  version: "1.3.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -81,12 +81,12 @@ Keep every question and intermediate message <100 words.
 ### Phase 3: Diagram Validation
 
 1. For every file in scope, scan for fenced ` ```mermaid ` code blocks.
-2. For each diagram found, extract the content to a `.mmd` file in `.tmp/review-[YYYYMMDDHHMMSS]/.work/` at the workspace root (local start time; create it only when the first diagram is found, append `-2`, `-3`... if it exists, and use the same layout under the OS temp dir if the workspace is read-only) and run:
+2. For each diagram found, extract the content to a `.mmd` file in a temporary folder under the OS temp dir (create it only when the first diagram is found) and run:
    ```bash
    npx -y @mermaid-js/mermaid-cli -i <file>.mmd --quiet 2>&1
    ```
 3. For each diagram that fails validation, report as ERROR: include the file path, approximate location (heading or surrounding text), and the error message from `mmdc`.
-4. Keep the extracted files after the run; if this step created the dir, fill the `results-path` line of the report template.
+4. Delete the temporary folder and its `.mmd` files when the review ends, including when halting.
 
 ### Phase 4: Policy Review
 
@@ -134,8 +134,6 @@ Scope: [scope identifier]
 - Errors: [count]
 - Warnings: [count]
 - Outcome: [PASS|FAIL]
-
-results-path: [.tmp/review-[ts]/ actual dir; include this line only when Phase 3 created it]
 ```
 
 ### Constraints
@@ -170,3 +168,4 @@ results-path: [.tmp/review-[ts]/ actual dir; include this line only when Phase 3
 - [_core-adr-policy-002 - Policy standards](../../002-policy-standards.md)
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
 - [_core-adr-policy-020 - Media and asset standards](../../020-media-and-asset-standards.md)
+- [_core-adr-policy-023 - Skill runtime standards](../../023-skill-runtime-standards.md)

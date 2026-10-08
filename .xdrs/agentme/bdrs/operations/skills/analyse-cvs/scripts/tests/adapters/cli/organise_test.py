@@ -5,166 +5,193 @@ import pytest
 
 from analyse_cvs.adapters.cli import organise, stage
 
+RUN = ".tmp/analyse-cvs/cvs"
+
 
 @pytest.fixture
-def workdir(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    folder = tmp_path / ".tmp" / "cvs"
+def source(workdir):
+    folder = workdir / ".tmp" / "cvs"
     folder.mkdir(parents=True)
     return folder
 
 
-def write(path, content=b"x"):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(content)
+def make(source, files):
+    for rel, content in files.items():
+        (source / rel).parent.mkdir(parents=True, exist_ok=True)
+        (source / rel).write_bytes(content)
 
 
-def run(workdir, capsys, plan):
-    assert stage.main([".tmp/cvs", "--json"]) == 0
+def snapshot(folder):
+    return {p.relative_to(folder).as_posix(): p.read_bytes() for p in sorted(folder.rglob("*")) if p.is_file()}
+
+
+def stage_all(capsys):
+    assert stage.main([".tmp/cvs", "--run", RUN, "--json"]) == 0
     manifest = json.loads(capsys.readouterr().out)
-    plan_file = workdir / "md" / ".staging" / "plan.json"
-    plan_file.write_text(json.dumps(plan))
-    code = organise.main([".tmp/cvs", str(plan_file), "--json"])
-    captured = capsys.readouterr()
-    return code, manifest, (json.loads(captured.out) if code == 0 else captured.err)
+    return {f["source"]: f["id"] for f in manifest["files"]}
 
 
-def tree(folder):
-    rels = (p.relative_to(folder) for p in folder.rglob("*"))
-    return sorted(r.as_posix() for r in rels if r.parts[0] != "md")
+def plan_file(workdir, plan):
+    path = workdir / "plan.json"
+    path.write_text(json.dumps(plan))
+    return str(path)
 
 
-def test_group_folder_renamed(workdir, capsys):
-    write(workdir / "Roger Mathias - CV 2026 (1)" / "cv.pdf")
-    write(workdir / "Roger Mathias - CV 2026 (1)" / "letter.docx")
-    code, _, result = run(workdir, capsys, {"folders": {"g-01": "roger-mathias"}})
-    assert code == 0
-    assert tree(workdir) == ["roger-mathias", "roger-mathias/cv.pdf", "roger-mathias/letter.docx"]
-    assert result["renamed"] == [
-        {"group": "g-01", "from": "Roger Mathias - CV 2026 (1)", "to": "roger-mathias", "merged": False}
+def run_json(capsys, workdir, plan):
+    assert organise.main([RUN, plan_file(workdir, plan), "--json"]) == 0
+    return json.loads(capsys.readouterr().out)
+
+
+def sources_dir(workdir):
+    return workdir / ".tmp" / "analyse-cvs" / "cvs" / ".work" / "sources"
+
+
+def test_group_documents_are_copied_keeping_subpaths(source, workdir, capsys):
+    make(source, {"Roger M/cv.pdf": b"a", "Roger M/extra/letter.docx": b"b", "Roger M/photo.jpg": b"c"})
+    stage_all(capsys)
+    before = snapshot(source)
+    result = run_json(capsys, workdir, {"folders": {"g-01": "roger-mathias"}})
+    base = sources_dir(workdir) / "roger-mathias"
+    assert snapshot(base) == {"cv.pdf": b"a", "extra/letter.docx": b"b", "photo.jpg": b"c"}
+    assert result["slugs"] == ["roger-mathias"]
+    assert result["organised"]["doc-01"] == ".work/sources/roger-mathias/cv.pdf"
+    assert snapshot(source) == before
+
+
+def test_files_entry_overrides_group_and_uses_the_file_name(source, workdir, capsys):
+    make(source, {"Mixed/anna.pdf": b"a", "Mixed/roger/cv.pdf": b"b"})
+    ids = stage_all(capsys)
+    run_json(capsys, workdir, {"folders": {"g-01": "roger-mathias"}, "files": {ids["Mixed/anna.pdf"]: "anna-silva"}})
+    assert snapshot(sources_dir(workdir)) == {"anna-silva/anna.pdf": b"a", "roger-mathias/roger/cv.pdf": b"b"}
+
+
+def test_top_level_file_is_organised_with_a_files_entry(source, workdir, capsys):
+    make(source, {"anna.txt": b"a"})
+    ids = stage_all(capsys)
+    result = run_json(capsys, workdir, {"files": {ids["anna.txt"]: "anna-silva"}})
+    assert (sources_dir(workdir) / "anna-silva" / "anna.txt").read_bytes() == b"a"
+    assert result["unassigned"] == []
+
+
+def test_two_groups_merged_into_one_slug_suffix_clashes(source, workdir, capsys):
+    make(source, {"Roger 1/cv.pdf": b"one", "Roger 2/cv.pdf": b"two", "Roger 2/letter.pdf": b"L"})
+    stage_all(capsys)
+    run_json(capsys, workdir, {"folders": {"g-01": "roger", "g-02": "roger"}})
+    assert snapshot(sources_dir(workdir) / "roger") == {"cv.pdf": b"one", "cv-2.pdf": b"two", "letter.pdf": b"L"}
+
+
+def test_rerun_reuses_identical_copies(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"one"})
+    stage_all(capsys)
+    plan = {"folders": {"g-01": "roger"}}
+    run_json(capsys, workdir, plan)
+    result = run_json(capsys, workdir, plan)
+    assert snapshot(sources_dir(workdir) / "roger") == {"cv.pdf": b"one"}
+    assert result["organised"]["doc-01"] == ".work/sources/roger/cv.pdf"
+
+
+def test_changed_source_on_rerun_gets_a_new_name(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"one"})
+    stage_all(capsys)
+    plan = {"folders": {"g-01": "roger"}}
+    run_json(capsys, workdir, plan)
+    (source / "Roger" / "cv.pdf").write_bytes(b"newer")
+    run_json(capsys, workdir, plan)
+    assert snapshot(sources_dir(workdir) / "roger") == {"cv.pdf": b"one", "cv-2.pdf": b"newer"}
+
+
+def test_manifest_records_organised_paths(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"a", "Roger/old.doc": b"b"})
+    stage_all(capsys)
+    run_json(capsys, workdir, {"folders": {"g-01": "roger"}})
+    manifest = json.loads((workdir / ".tmp" / "analyse-cvs" / "cvs" / ".work" / "staging" / "manifest.json").read_text())
+    assert [(f["source"], f["organised"]) for f in manifest["files"]] == [
+        ("Roger/cv.pdf", ".work/sources/roger/cv.pdf"),
+        ("Roger/old.doc", ".work/sources/roger/old.doc"),
     ]
-    assert result["sources"] == {"doc-01": "roger-mathias/cv.pdf", "doc-02": "roger-mathias/letter.docx"}
 
 
-def test_case_only_rename(workdir, capsys):
-    write(workdir / "Roger" / "cv.pdf")
-    code, _, _ = run(workdir, capsys, {"folders": {"g-01": "roger"}})
-    assert code == 0
-    assert [p.name for p in workdir.iterdir() if p.name != "md"] == ["roger"]
+def test_unplanned_documents_are_reported_as_unassigned(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"a", "stray.pdf": b"b"})
+    stage_all(capsys)
+    result = run_json(capsys, workdir, {"folders": {"g-01": "roger"}})
+    assert result["unassigned"] == ["doc-02"]
+    assert list(snapshot(sources_dir(workdir))) == ["roger/cv.pdf"]
 
 
-def test_merge_into_existing_folder_with_clash_suffix(workdir, capsys):
-    write(workdir / "roger-mathias" / "cv.pdf", b"old")
-    write(workdir / "Roger M" / "cv.pdf", b"new")
-    write(workdir / "Roger M" / "sub" / "cert.txt")
-    code, _, result = run(workdir, capsys, {"folders": {"g-01": "roger-mathias"}})
-    assert code == 0
-    assert tree(workdir) == [
-        "roger-mathias",
-        "roger-mathias/cv-2.pdf",
-        "roger-mathias/cv.pdf",
-        "roger-mathias/sub",
-        "roger-mathias/sub/cert.txt",
-    ]
-    assert (workdir / "roger-mathias" / "cv-2.pdf").read_bytes() == b"new"
-    assert result["renamed"][0]["merged"] is True
-    assert "Roger M" in result["removed"]
+@pytest.mark.parametrize("name", ["$(rm -rf ~).pdf", "a'b\".docx", "`id`.txt"])
+def test_unsafe_filenames_are_copied_without_a_shell(source, workdir, capsys, name):
+    make(source, {f"Roger/{name}": b"content"})
+    stage_all(capsys)
+    run_json(capsys, workdir, {"folders": {"g-01": "roger"}})
+    assert snapshot(sources_dir(workdir) / "roger") == {name: b"content"}
 
 
-def test_loose_file_moved_into_candidate_folder(workdir, capsys):
-    write(workdir / "anna silva cv.pdf")
-    code, _, result = run(workdir, capsys, {"files": {"doc-01": "anna-silva"}})
-    assert code == 0
-    assert tree(workdir) == ["anna-silva", "anna-silva/anna silva cv.pdf"]
-    assert result["sources"] == {"doc-01": "anna-silva/anna silva cv.pdf"}
+@pytest.mark.parametrize(
+    ("plan", "message"),
+    [
+        ({"rename": {}}, "unknown plan keys"),
+        ({"folders": {"g-09": "x"}}, "unknown folders id"),
+        ({"files": {"doc-09": "x"}}, "unknown files id"),
+        ({"folders": {"g-01": "../escape"}}, "invalid candidate slug"),
+        ({"folders": {"g-01": "Roger M"}}, "invalid candidate slug"),
+        ({"folders": {"g-01": 7}}, "invalid candidate slug"),
+    ],
+)
+def test_invalid_plans_change_nothing(source, workdir, capsys, plan, message):
+    make(source, {"Roger/cv.pdf": b"a"})
+    stage_all(capsys)
+    assert organise.main([RUN, plan_file(workdir, plan)]) == 1
+    assert message in capsys.readouterr().err
+    assert not sources_dir(workdir).exists()
 
 
-def test_container_emptied_and_removed(workdir, capsys):
-    write(workdir / "batch" / "a.pdf")
-    write(workdir / "batch" / "nested" / "b.pdf")
-    write(workdir / "batch" / ".DS_Store")
-    code, _, result = run(workdir, capsys, {"files": {"doc-01": "anna-silva", "doc-02": "bob-jones"}})
-    assert code == 0
-    assert tree(workdir) == ["anna-silva", "anna-silva/a.pdf", "bob-jones", "bob-jones/b.pdf"]
-    assert result["removed"] == ["batch", "batch/nested"]
+def test_target_that_is_a_file_is_rejected(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"a"})
+    stage_all(capsys)
+    sources_dir(workdir).mkdir(parents=True)
+    (sources_dir(workdir) / "roger").write_text("file")
+    assert organise.main([RUN, plan_file(workdir, {"folders": {"g-01": "roger"}})]) == 1
+    assert "not a folder" in capsys.readouterr().err
 
 
-def test_container_with_unsupported_leftover_kept(workdir, capsys):
-    write(workdir / "batch" / "a.pdf")
-    write(workdir / "batch" / "photo.jpg")
-    code, _, result = run(workdir, capsys, {"files": {"doc-01": "anna-silva"}})
-    assert code == 0
-    assert tree(workdir) == ["anna-silva", "anna-silva/a.pdf", "batch", "batch/photo.jpg"]
-    assert result["removed"] == []
+def test_missing_source_file_changes_nothing(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"a", "Roger/letter.pdf": b"b"})
+    stage_all(capsys)
+    (source / "Roger" / "letter.pdf").unlink()
+    assert organise.main([RUN, plan_file(workdir, {"folders": {"g-01": "roger"}})]) == 1
+    assert "source file missing" in capsys.readouterr().err
+    assert not sources_dir(workdir).exists()
 
 
-def test_group_rename_then_file_moved_out(workdir, capsys):
-    write(workdir / "Roger stuff" / "cv.pdf")
-    write(workdir / "Roger stuff" / "other-person.pdf")
-    plan = {"folders": {"g-01": "roger-mathias"}, "files": {"doc-02": "anna-silva"}}
-    code, _, result = run(workdir, capsys, plan)
-    assert code == 0
-    assert result["sources"] == {"doc-01": "roger-mathias/cv.pdf", "doc-02": "anna-silva/other-person.pdf"}
-
-
-@pytest.mark.parametrize("slug", ["../x", "Roger", "md", "a b", "", "a--b", 3])
-def test_invalid_slug_rejected_without_changes(workdir, capsys, slug):
-    write(workdir / "Roger" / "cv.pdf")
-    code, _, err = run(workdir, capsys, {"folders": {"g-01": slug}})
-    assert code == 1
-    assert "invalid candidate slug" in err
-    assert tree(workdir) == ["Roger", "Roger/cv.pdf"]
-
-
-@pytest.mark.parametrize("plan", [{"folders": {"g-09": "x"}}, {"files": {"doc-09": "x"}}, {"other": {}}])
-def test_unknown_ids_rejected(workdir, capsys, plan):
-    write(workdir / "Roger" / "cv.pdf")
-    code, _, err = run(workdir, capsys, plan)
-    assert code == 1
-    assert "unknown" in err
-
-
-def test_target_is_a_file_rejected(workdir, capsys):
-    write(workdir / "roger")
-    write(workdir / "Roger CV" / "cv.pdf")
-    code, _, err = run(workdir, capsys, {"folders": {"g-01": "roger"}})
-    assert code == 1
-    assert "not a folder" in err
-
-
-def test_folder_outside_tmp_rejected(workdir, capsys, tmp_path):
-    (tmp_path / "plan.json").write_text("{}")
-    assert organise.main(["elsewhere", str(tmp_path / "plan.json")]) == 1
-    assert "must be inside" in capsys.readouterr().err
-
-
-def test_missing_manifest_rejected(workdir, capsys, tmp_path):
-    (tmp_path / "plan.json").write_text("{}")
-    assert organise.main([".tmp/cvs", str(tmp_path / "plan.json")]) == 1
+def test_manifest_is_required(source, workdir, capsys):
+    (workdir / ".tmp" / "analyse-cvs" / "cvs").mkdir(parents=True)
+    assert organise.main([RUN, plan_file(workdir, {})]) == 1
     assert "run cvs-stage first" in capsys.readouterr().err
 
 
-def test_rerun_is_noop(workdir, capsys):
-    write(workdir / "Roger M" / "cv.pdf")
-    write(workdir / "anna.pdf")
-    plan = {"folders": {"g-01": "roger-mathias"}, "files": {"doc-02": "anna-silva"}}
-    code, _, _ = run(workdir, capsys, plan)
-    assert code == 0
-    before = tree(workdir)
-    plan_file = workdir / "md" / ".staging" / "plan.json"
-    assert organise.main([".tmp/cvs", str(plan_file), "--json"]) == 0
-    result = json.loads(capsys.readouterr().out)
-    assert result["renamed"] == []
-    assert result["removed"] == []
-    assert tree(workdir) == before
+@pytest.mark.parametrize("run", ["elsewhere", ".tmp", ".tmp/missing"])
+def test_run_must_be_an_existing_folder_inside_tmp(workdir, capsys, run):
+    assert organise.main([run, plan_file(workdir, {})]) == 1
+    assert "run folder" in capsys.readouterr().err
 
 
-def test_human_readable_output(workdir, capsys):
-    write(workdir / "Roger M" / "cv.pdf")
-    assert stage.main([".tmp/cvs"]) == 0
-    plan_file = workdir / "md" / ".staging" / "plan.json"
-    plan_file.write_text(json.dumps({"folders": {"g-01": "roger-mathias"}}))
-    capsys.readouterr()
-    assert organise.main([".tmp/cvs", str(plan_file)]) == 0
+def test_manifest_source_root_outside_tmp_is_rejected(source, workdir, capsys, tmp_path):
+    make(source, {"Roger/cv.pdf": b"a"})
+    stage_all(capsys)
+    manifest_path = workdir / ".tmp" / "analyse-cvs" / "cvs" / ".work" / "staging" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["source_root"] = str(tmp_path)
+    manifest_path.write_text(json.dumps(manifest))
+    assert organise.main([RUN, plan_file(workdir, {"folders": {"g-01": "roger"}})]) == 1
+    assert "must be inside" in capsys.readouterr().err
+
+
+def test_text_output(source, workdir, capsys):
+    make(source, {"Roger/cv.pdf": b"a", "stray.pdf": b"b"})
+    stage_all(capsys)
+    assert organise.main([RUN, plan_file(workdir, {"folders": {"g-01": "roger"}})]) == 0
     out = capsys.readouterr().out
-    assert "renamed 'Roger M' -> roger-mathias" in out
+    assert "'doc-01' -> .work/sources/roger/cv.pdf" in out
+    assert "unassigned doc-02" in out
+    assert "1 file(s) copied for 1 candidate folder(s)" in out

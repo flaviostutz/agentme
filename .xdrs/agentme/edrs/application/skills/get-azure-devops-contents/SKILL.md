@@ -9,8 +9,8 @@ description: >
   change-azure-devops-contents runs.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-10-05
+  version: "1.2.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -33,20 +33,25 @@ logic (rule 08).
 ### Outputs
 
 #### Contents
-- Work item JSON with comments, attachments and links
-- PR metadata JSON
-- Normalized comment records JSON array
+- Work item JSON with comments, attachments and links (uncapped: verbatim Azure DevOps data)
+- PR metadata JSON (uncapped: verbatim Azure DevOps data)
+- Normalized comment records JSON array (uncapped: verbatim Azure DevOps data)
+- Downloaded work item attachments in the run folder `.tmp/get-azure-devops-contents/<org>-<id>/` (work-item-get only; uncapped: downloaded files)
+- `results-path: <run folder>/` ending the final message when attachments were downloaded (<40 words of summary before it)
 
 #### Changes
 - Local branch checkout (checkout action only)
-- Downloaded work item attachments under `.tmp/work-item-attachments/` (work-item-get only)
 
 ### Halt Conditions
 - `az` missing and install declined
 - No `az login` session and no stored PAT
 - Only a non-`az` fallback is available
+- The URL is malformed or ambiguous (not exactly one work item or PR)
+- Confidence is too low that the data read matches the requested resource
 
 ## Instructions
+
+Run folder layout: files go to `.tmp/get-azure-devops-contents/<run-name>/`, where `<run-name>` is `<org>-<id>`; never directly in `.tmp/get-azure-devops-contents/`. Throwaway scripts go in the OS temp dir.
 
 ### Question Checklist
 
@@ -56,9 +61,9 @@ Every question to the human (install prompt, login prompt) MUST follow [`agentme
 - [ ] **03**: 2-4 options, each stating what it does and its main consequence.
 - [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
 - [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
-- [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in under 80 words.
+- [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in <80 words.
 - [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
-- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question under 140 words. Never apply a recommendation without the human's answer.
+- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question <140 words. Never apply a recommendation without the human's answer.
 
 ### Session setup
 
@@ -110,7 +115,7 @@ one JSON object:
 | `links` | hyperlink relations plus other `http(s)` URLs found in the text, de-duplicated |
 
 Attachments are `AttachedFile` relations and inline images. They are downloaded with
-`az rest --output-file` into `.tmp/work-item-attachments/<org>-<id>/` (override with
+`az rest --output-file` into `.tmp/get-azure-devops-contents/<org>-<id>/` (override with
 `--download-dir`, skip with `--no-download`). Only attachment URLs of the same organization are
 requested because `az rest` sends the Azure DevOps token; each file is capped at 10 MB and at
 most 20 files are fetched. A file that cannot be downloaded is reported in `error`; it never

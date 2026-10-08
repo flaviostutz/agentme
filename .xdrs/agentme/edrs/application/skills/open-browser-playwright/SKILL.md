@@ -9,8 +9,8 @@ description: >
   drives a browser.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-30
+  version: "1.2.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -53,6 +53,8 @@ This skill is the only allowed way to open a browser for automation ([agentme-ed
 - No target URL can be derived from the request
 - Microsoft Edge or its profile not found
 - User does not sign in within the wait
+- The target page is dubious (unexpected domain or content) and the human does not confirm it
+- Confidence is too low that the opened page is the one requested
 
 ### User Interaction
 
@@ -77,9 +79,9 @@ Every question to the human MUST follow [`agentme-edr-003`](../../../principles/
 - [ ] **03**: 2-4 options, each stating what it does and its main consequence.
 - [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
 - [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
-- [ ] **07**: Phase gates summarise what was produced, open risks, and what each option causes next, in under 80 words.
+- [ ] **07**: Phase gates summarise what was produced, open risks, and what each option causes next, in <80 words.
 - [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
-- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question under 140 words. Never apply a recommendation without the human's answer.
+- [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question <140 words. Never apply a recommendation without the human's answer.
 
 ### Step 1: Open the browser
 

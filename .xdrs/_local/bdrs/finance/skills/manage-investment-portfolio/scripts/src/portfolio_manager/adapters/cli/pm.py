@@ -1,8 +1,10 @@
 """Portfolio manager CLI.
 
-Commands: portfolio-name, init, inspect, ingest, check-input, answer, analyze, classify, report, export, run, validate.
+Commands: portfolio-name, init, inspect, ingest, check-input, answer, accept, analyze, classify, report,
+export, run, validate.
 
-Exit codes: 0 ok, 1 validation failures found, 2 invalid input.
+Reports and exports are refused (exit 1, nothing written) while a coverage finding is open or a record is unresolved.
+Exit codes: 0 ok, 1 validation failures found or output refused, 2 invalid input.
 Successful runs end with `results-path: ...`; errors print `error: ...`.
 """
 
@@ -17,8 +19,8 @@ from portfolio_manager.adapters.connectors.ecb.ecb_rates import download_ecb, lo
 from portfolio_manager.adapters.connectors.institutions import default_registry
 from portfolio_manager.adapters.connectors.local_fs.workspace import Workspace, collect_sources, resolve_tmp, work_dir
 from portfolio_manager.adapters.connectors.pdf.pdf_reader import read_pdf
+from portfolio_manager.app import acceptance, export_pp, inputcheck, inspector, workflow
 from portfolio_manager.app import classify as classify_mod
-from portfolio_manager.app import export_pp, inputcheck, inspector, workflow
 from portfolio_manager.app import ingest as ingest_mod
 from portfolio_manager.app import portfolio_name as portfolio_name_mod
 from portfolio_manager.app import report as report_mod
@@ -31,6 +33,7 @@ WORK_COMMANDS = (
     "ingest",
     "check-input",
     "answer",
+    "accept",
     "analyze",
     "classify",
     "report",
@@ -141,10 +144,24 @@ def cmd_answer(args: argparse.Namespace, cwd: Path) -> Result:
     return 0, _summary(ws, [f"Answer saved. Unresolved remaining: {len(data['unresolved'])}."])
 
 
+def cmd_accept(args: argparse.Namespace, cwd: Path) -> Result:
+    ws = _ws(args, cwd)
+    _need(ws)
+    with ws.lock():
+        count = workflow.record_acceptances(ws, args.id, args.reason, args.note)
+        remaining = len(inputcheck.open_findings(workflow.current_check(ws)))
+    return 0, _summary(ws, [f"Accepted {count} finding(s). Open findings remaining: {remaining}."])
+
+
 def cmd_validate(args: argparse.Namespace, cwd: Path) -> Result:
     ws = _ws(args, cwd)
     _need(ws)
     findings = ingest_mod.validate(ws)
+    if ws.manifest()["status"] != "empty":
+        findings += [
+            {"level": "warn", "message": f"open {f['kind']} {f['account']} {f['message']} (id {f['id']})"}
+            for f in inputcheck.open_findings(workflow.current_check(ws))
+        ]
     errors = [f for f in findings if f["level"] == "error"]
     warns = [f for f in findings if f["level"] == "warn"]
     lines = [f"Validation: {len(errors)} error(s), {len(warns)} warning(s)."]
@@ -155,18 +172,13 @@ def cmd_validate(args: argparse.Namespace, cwd: Path) -> Result:
 def cmd_check_input(args: argparse.Namespace, cwd: Path) -> Result:
     ws = _ws(args, cwd)
     _need(ws)
-    if ws.manifest()["status"] == "empty":
-        msg = "nothing ingested yet: run `pm ingest` first"
-        raise PmError(msg)
-    result = inputcheck.check(
-        ws.read("data/ingest.json", {}),
-        ws.read("data/accounts.json", {}).get("accounts", []),
-        ws.read("data/snapshots.json", []),
-        ws.read("data/unresolved.json", []),
-        ws.read("answers.json", {"answers": {}}),
-    )
+    if args.start:
+        with ws.lock():
+            workflow.set_expected_start(ws, args.start)
+    result = workflow.current_check(ws)
     ws.write("derived/input-check.json", result)
-    return 0, _summary(ws, inputcheck.render(result))
+    pending = inputcheck.open_findings(result) or result["unresolved"]
+    return (1 if pending else 0), _summary(ws, inputcheck.render(result))
 
 
 def cmd_analyze(args: argparse.Namespace, cwd: Path) -> Result:
@@ -232,6 +244,8 @@ def cmd_classify(args: argparse.Namespace, cwd: Path) -> Result:
 
 
 def _report_result(ws: Workspace, *, offline: bool) -> Result:
+    if refusal := workflow.blocked(ws, "Report"):
+        return 1, _summary(ws, [refusal])
     analysis, files, unresolved = workflow.run_report(ws, _rates_loader(ws, offline=offline))
     lines = report_mod.summary(analysis, unresolved, len(files), f".tmp/{ws.root.name}/")
     return (1 if analysis["errors"] else 0), _summary(ws, lines)
@@ -248,6 +262,8 @@ def cmd_export(args: argparse.Namespace, cwd: Path) -> Result:
     ws = _ws(args, cwd)
     _need(ws)
     with ws.lock():
+        if refusal := workflow.blocked(ws, "Export"):
+            return 1, _summary(ws, [refusal])
         data = {k: ws.read(f"data/{k}.json") for k in workflow.LEDGER_FILES}
         if any(v is None for v in data.values()):
             msg = "nothing ingested yet: run `pm ingest` first"
@@ -290,6 +306,7 @@ HANDLERS = {
     "inspect": cmd_inspect,
     "ingest": cmd_ingest,
     "answer": cmd_answer,
+    "accept": cmd_accept,
     "validate": cmd_validate,
     "check-input": cmd_check_input,
     "analyze": cmd_analyze,
@@ -300,51 +317,88 @@ HANDLERS = {
 }
 
 
+def _portfolio_arg(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--portfolio",
+        "--name",
+        dest="portfolio",
+        default=DEFAULT_PORTFOLIO,
+        help=(
+            "portfolio name (alias --name); work dir .tmp/manage-investment-portfolio-<name>/ "
+            f"(default {DEFAULT_PORTFOLIO})"
+        ),
+    )
+
+
+def _source_arg(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--source", help="file or folder with statement PDFs, inside .tmp/")
+
+
+def _offline_arg(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--offline", action="store_true", help="do not download ECB rates; use the cache and statement rates only"
+    )
+
+
+def _export_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--decimal-comma",
+        action="store_true",
+        help="write ',' decimals in Value, Shares, Fees, Taxes and Gross Amount (German number format)",
+    )
+
+
+def _classify_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--import", dest="import_file", help="JSON list of researched classifications, inside .tmp/")
+    for field in SET_FIELDS:
+        flag = "--asset-name" if field == "name" else f"--{field.replace('_', '-')}"  # --name is the portfolio alias
+        sp.add_argument(flag, dest=field, help=f"classification {field} for --isin")
+
+
+def _answer_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--id", help="unresolved record id")
+    sp.add_argument("--value", help="the user's answer")
+    sp.add_argument("--accept-file", help="sha256 prefix of a rejected file to load anyway")
+
+
+def _check_input_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--from", dest="start", help="first day the user expects the statements to cover (YYYY-MM-DD)")
+
+
+def _accept_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--id", action="append", help="finding id from `pm check-input`; repeat for several")
+    sp.add_argument("--reason", help="one of: " + ", ".join(acceptance.EVERY_REASON))
+    sp.add_argument("--note", help=f"the user's own words, one line of at most {acceptance.MAX_NOTE} characters")
+
+
+def _portfolio_name_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--source", required=True, help="file or folder with statement PDFs, inside .tmp/")
+
+
+EXTRA_ARGS = {
+    "portfolio-name": [_portfolio_name_args],
+    "inspect": [_source_arg],
+    "ingest": [_source_arg],
+    "run": [_source_arg, _offline_arg],
+    "analyze": [_offline_arg],
+    "report": [_offline_arg],
+    "export": [_export_args],
+    "classify": [_classify_args],
+    "answer": [_answer_args],
+    "check-input": [_check_input_args],
+    "accept": [_accept_args],
+}
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="pm", description=(__doc__ or "").splitlines()[0])
     sub = p.add_subparsers(dest="command", required=True)
     for name in COMMANDS:
         sp = sub.add_parser(name, help=f"{name} the portfolio work dir")
         if name in WORK_COMMANDS:
-            sp.add_argument(
-                "--portfolio",
-                "--name",
-                dest="portfolio",
-                default=DEFAULT_PORTFOLIO,
-                help=(
-                    "portfolio name (alias --name); work dir .tmp/manage-investment-portfolio-<name>/ "
-                    f"(default {DEFAULT_PORTFOLIO})"
-                ),
-            )
-        if name == "portfolio-name":
-            sp.add_argument("--source", required=True, help="file or folder with statement PDFs, inside .tmp/")
-        if name in ("inspect", "ingest", "run"):
-            sp.add_argument("--source", help="file or folder with statement PDFs, inside .tmp/")
-        if name in ("analyze", "run", "report"):
-            sp.add_argument(
-                "--offline",
-                action="store_true",
-                help="do not download ECB rates; use the cache and statement rates only",
-            )
-        if name == "export":
-            sp.add_argument(
-                "--decimal-comma",
-                action="store_true",
-                help="write ',' decimals in Value, Shares, Fees, Taxes and Gross Amount (German number format)",
-            )
-        if name == "classify":
-            sp.add_argument(
-                "--import", dest="import_file", help="JSON list of researched classifications, inside .tmp/"
-            )
-            for field in SET_FIELDS:
-                flag = (
-                    "--asset-name" if field == "name" else f"--{field.replace('_', '-')}"
-                )  # --name is the portfolio alias
-                sp.add_argument(flag, dest=field, help=f"classification {field} for --isin")
-        if name == "answer":
-            sp.add_argument("--id", help="unresolved record id")
-            sp.add_argument("--value", help="the user's answer")
-            sp.add_argument("--accept-file", help="sha256 prefix of a rejected file to load anyway")
+            _portfolio_arg(sp)
+        for add in EXTRA_ARGS.get(name, []):
+            add(sp)
     return p
 
 

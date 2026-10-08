@@ -32,26 +32,26 @@ After producing the final story output, persist it according to the active initi
 **Story ID:** userstory-NNN-slug
 
 ## Title
-[required — max 10 words, outcome-focused, e.g. "Add fraud-check endpoint for payment processing"]
+[required — <10 words, outcome-focused, e.g. "Add fraud-check endpoint for payment processing"]
 
 ## User Story
-[required — max 50 words]
+[required — <50 words]
 As a [role], I want to [action], so that [benefit].
 
 ## Scope
-[required — max 200 words. List features, behaviors, screens, or services in scope with key characteristics and points of attention.]
+[required — <200 words. List features, behaviors, screens, or services in scope with key characteristics and points of attention.]
 - [feature or behavior — characteristic / point of attention]
 
 ## Edge Cases
-[optional — max 50 words. Known edge cases and how each should be handled.]
+[optional — <50 words. Known edge cases and how each should be handled.]
 - [edge case — expected handling]
 
 ## Out of Scope
-[optional — max 30 words. What will not be touched; deferred to later or handled elsewhere.]
+[optional — <30 words. What will not be touched; deferred to later or handled elsewhere.]
 - [out-of-scope item]
 
 ## Constraints
-[optional — max 30 words. Any rule, technology, regulatory, or business constraint that must be respected.]
+[optional — <30 words. Any rule, technology, regulatory, or business constraint that must be respected.]
 - [constraint]
 
 ## Detailed Specs
@@ -65,7 +65,7 @@ As a [role], I want to [action], so that [benefit].
 - [Example: what it demonstrates — confirmed Phase 5 sample, verbatim; mark illustrative if not binding]
 
 ## Acceptance Criteria
-[required — max 50 words. Verifiable checklist confirming the story is done.]
+[required — <50 words. Verifiable checklist confirming the story is done.]
 - [ ] [verifiable outcome]
 
 ## Attachments

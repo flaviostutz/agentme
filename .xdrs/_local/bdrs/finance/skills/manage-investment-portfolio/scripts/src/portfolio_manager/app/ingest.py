@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol
 
 from portfolio_manager.app import ledger
+from portfolio_manager.app.acceptance import FILE as ACCEPTANCES_FILE
 from portfolio_manager.app.records import unresolved
 from portfolio_manager.shared.errors import PmError
 from portfolio_manager.shared.models import Doc
@@ -24,7 +25,7 @@ class Adapters(Protocol):
 
 
 DATA_FILES = ("accounts", "events", "snapshots", "references", "unresolved", "ingest")
-TRACKED_INPUTS = ("answers.json", "data/classifications.json")
+TRACKED_INPUTS = ("answers.json", ACCEPTANCES_FILE, "data/classifications.json")
 AI_ADDRESSED = re.compile(
     r"(?i)\b(ignore (all |any )?(previous|prior|above) (instructions|prompts?)|system prompt|"
     r"as an? (ai|language model|assistant)|you (must|should) (now )?(tell|reply|respond|answer)|"

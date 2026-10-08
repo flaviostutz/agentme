@@ -3,7 +3,7 @@
 
 /**
  * Safe read/update helper for a resolve-pr-comments tracking file
- * (.tmp/review-pr-<N>.md), keyed by each section's stable `id:` value
+ * (`<run>/review-pr-<N>.md`, under `.tmp/resolve-pr-comments/<run-name>/`), keyed by each section's stable `id:` value
  * instead of its title text. See SKILL.md's "Editing the tracking file" note.
  *
  * Usage:

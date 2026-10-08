@@ -5,8 +5,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "analyse-cvs-scripts"
-version = "1.1.0"
-description = "Staging, organising, redaction, slug, scoring, checking, ranking and sources commands for the analyse-cvs skill"
+version = "2.0.0"
+description = "Staging, organising, publishing, redaction, slug, scoring, checking, ranking and sources commands for the analyse-cvs skill"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -19,6 +19,7 @@ cvs-score = "analyse_cvs.adapters.cli.score:main"
 cvs-check = "analyse_cvs.adapters.cli.check:main"
 cvs-rank = "analyse_cvs.adapters.cli.rank:main"
 cvs-sources = "analyse_cvs.adapters.cli.sources:main"
+cvs-publish = "analyse_cvs.adapters.cli.publish:main"
 
 [dependency-groups]
 dev = ["ruff", "ty", "pytest", "pytest-cov", "pip-audit"]

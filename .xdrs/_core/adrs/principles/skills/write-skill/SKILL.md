@@ -6,13 +6,13 @@ description: >
   Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-30
+  version: "1.3.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
 
-Guides the creation of a well-structured skill package by following `_core-adr-policy-003` skill standards, consulting `xdrs-core` for every core element definition, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
+Guides the creation of a well-structured skill package by following `_core-adr-policy-003` skill standards and `_core-adr-policy-023` runtime standards, consulting `xdrs-core` for every core element definition, checking existing skills to avoid duplication, and producing a complete SKILL.md ready to activate in VS Code.
 
 ### Inputs
 
@@ -57,7 +57,7 @@ Keep every question and intermediate message <100 words and the final summary <1
 
 ### Phase 1: Understand the Skill Goal
 
-1. Read `.xdrs/_core/adrs/principles/003-skill-standards.md` in full to internalize the SKILL.md format and folder layout.
+1. Read `.xdrs/_core/adrs/principles/003-skill-standards.md` and `.xdrs/_core/adrs/principles/023-skill-runtime-standards.md` in full to internalize the SKILL.md format, folder layout and runtime rules.
 2. Read `.xdrs/_core/adrs/principles/001-xdrs-standards.md` in full before defining any core element for the skill package. Treat it as the canonical source for type, scope, subject, naming constraints, and folder placement rules.
 3. Identify what the skill must do, the concrete outcome it should produce, and the exact conditions under which an agent should activate it. Do NOT proceed without a clear goal, outcome, and activation trigger.
 
@@ -170,9 +170,9 @@ Rules:
 - The `description` field must state both *what* the skill does and *when* to activate it.
 - Keep the skill task-oriented. It should have a clear starting trigger and a concrete ending result.
 - Mention tools or prerequisites when they are required to complete the task reliably.
-- Declare a "<N words" cap, or "(uncapped: <reason>)", exactly once for every natural-language content the skill generates, per **Generated content caps** in `_core-adr-policy-003`.
+- Declare a "<N words" cap, or "(uncapped: <reason>)", exactly once for every natural-language content the skill generates, per **Generated content caps** in `_core-adr-policy-023`.
 - Do not duplicate content from referenced Policies — link instead.
-- If the skill creates files at runtime (outputs, intermediate files, ad-hoc scripts), restate in `## Instructions`, next to the steps writing them, the parts of **Work files** in `_core-adr-policy-003` it uses: `.tmp/[skill-name]-[YYYYMMDDHHMMSS]/`, `.work/`, `.work/scripts/`, and the final `results-path:` line. This restatement is the one exception to the no-duplication rule, so the skill runs standalone.
+- If the skill creates files at runtime (outputs, intermediate files, ad-hoc scripts), restate in `## Instructions`, next to the steps writing them, the parts of **Work files** in `_core-adr-policy-023` it uses: `.tmp/[skill-name]/[run-name]/` (never files directly in `.tmp/[skill-name]/`), `.work/`, the OS temp dir for throwaway files, and the final `results-path:` line when a run folder is created. This restatement is the one exception to the no-duplication rule, so the skill runs standalone.
 - Do not present the skill itself as policy; mandatory behavior must come from referenced Policies or other policy artifacts.
 - When the skill depends on Policies, make the activation logic and instructions consistent with the Policy metadata so the skill does not operationalize inactive or out-of-scope decisions.
 - For diagrams and non-Markdown assets, follow `_core-adr-policy-020`: prefer plain Markdown tables/lists first, then ASCII art for very simple cases, then Mermaid.js (sequence, state, activity, entity diagrams) for complex ones, then draw.io when Mermaid is insufficient — save as Editable Vector (File → Save As → Editable Vector) and store as `.svg` in the sibling `.assets/` folder.
@@ -193,7 +193,7 @@ Before writing files, verify:
 7. **Required sections**: Does `## Overview` contain nested `### Inputs` (Required/Optional bullets), `### Outputs` (Contents/Changes bullets), and `### Halt Conditions` listing this skill's specific stop triggers — each bullet under 20 words or a single "None"?
 8. **Meta-policy compliance**: Run the shared module at `.xdrs/_core/adrs/principles/skills/.assets/meta-policy-compliance.md`. Substitute `[DOCUMENT]` with `skill`.
 9. **Output caps**: Does every natural-language content the skill generates (files, messages, questions, summaries, external posts) have exactly one "<N words" cap or "(uncapped: <reason>)" marker, with code and structured data unmarked?
-10. **Work files**: If the skill creates files at runtime, do its Instructions restate the default execution dir, `.work/`, `.work/scripts/`, and `results-path:` line from `_core-adr-policy-003`, or an explicit alternative location?
+10. **Work files**: If the skill creates files at runtime, do its Instructions restate the run folder, `.work/`, OS temp dir and `results-path:` rules from `_core-adr-policy-023`, or an explicit alternative location?
 
 If any check fails, revise before continuing.
 
@@ -261,6 +261,7 @@ Follow the lint verification steps in `.xdrs/_core/adrs/principles/skills/.asset
 ## References
 
 - [_core-adr-policy-003 - Skill standards](../../003-skill-standards.md)
+- [_core-adr-policy-023 - Skill runtime standards](../../023-skill-runtime-standards.md)
 - [_core-adr-policy-001 - XDRS standards](../../001-xdrs-standards.md)
 - [_core-adr-policy-021 - Skill bundling](../../021-skill-bundling.md)
 - [write-policy skill](../write-policy/SKILL.md)

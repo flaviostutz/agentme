@@ -1,6 +1,6 @@
 # resolve-pr-comments scripts
 
-Node.js script (no dependencies) behind the `resolve-pr-comments` skill. `update-section.js` reads and updates the tracking file (`.tmp/review-pr-<N>.md`) by stable section id; see the header comment of the script for the commands. See [../SKILL.md](../SKILL.md) for usage by agents.
+Node.js script (no dependencies) behind the `resolve-pr-comments` skill. `update-section.js` reads and updates the tracking file (`.tmp/resolve-pr-comments/<run-name>/review-pr-<N>.md`) by stable section id; see the header comment of the script for the commands. See [../SKILL.md](../SKILL.md) for usage by agents.
 
 ## Development
 

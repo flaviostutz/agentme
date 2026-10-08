@@ -32,7 +32,7 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
 **Assertions**
 - [ ] Skill asks at least one question about who receives notifications and what triggers them before producing any output.
 - [ ] Skill does not output a story while any area in the identification table (problem, scope, requirements, flow, edge cases, dependencies) has an open question.
-- [ ] Output follows the output template with Title (max 10 words), User Story (As a … I want … so that …), Scope, and Acceptance Criteria sections.
+- [ ] Output follows the output template with Title (<10 words), User Story (As a … I want … so that …), Scope, and Acceptance Criteria sections.
 - [ ] Output contains acceptance criteria items that are verifiable and start with a checkbox `- [ ]`.
 - [ ] Skill shows 2–3 sample notification entries (e.g. direct message, mention, status change) in Phase 5 alongside the diagram and records them under `## Detailed Specs`.
 

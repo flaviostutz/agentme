@@ -63,7 +63,7 @@ export const runIssueGet = async (argv: readonly string[], deps: Deps): Promise<
   const dir =
     typeof parsed['download-dir'] === 'string'
       ? parsed['download-dir']
-      : `.tmp/issue-attachments/${owner}-${repo}-${number}`;
+      : `.tmp/get-github-contents/${owner}-${repo}-${number}`;
   const attachments = parsed['no-download'] === true ? [] : await downloadAssets(assets, dir, deps);
   const record = {
     url: issue.html_url,

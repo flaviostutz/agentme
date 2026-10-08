@@ -6,8 +6,8 @@ Recomputes every Overall from Base and Credibility with exact arithmetic and lis
 by Overall, highest first, ties by Name. Exits with an error when a row is incomplete or a stored
 Overall differs from the recomputed one. Invites every candidate whose unrounded Overall is above 5.0.
 With --write it also sorts the Candidates table and writes the interview list section with the
-heading, counts, closing sentence and one empty-bullet block per invited candidate; fill the
-`<fill>` bullets afterwards and run `cvs-check --stage interview`.
+heading, counts, closing sentence and one `- Chart: <fill>` bullet per invited candidate; replace
+each `<fill>` with the link to the candidate's interview chart and run `cvs-check --stage interview`.
 """
 
 import argparse

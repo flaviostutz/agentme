@@ -1,16 +1,16 @@
-"""Organise a staged folder into one plainly named folder per candidate."""
+"""Copy the staged originals into one plainly named folder per candidate under <run>/.work/sources."""
 
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from analyse_cvs.adapters.connectors.local_fs import folders
-from analyse_cvs.shared.constants import MANIFEST
+from analyse_cvs.shared.constants import MANIFEST, SOURCES_DIR
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
-def validate(plan: dict[str, Any], manifest: dict[str, Any], folder: Path) -> None:
+def validate(plan: dict[str, Any], manifest: dict[str, Any], run: Path) -> None:
     """Raise ValueError when the plan has unknown keys, unknown ids, bad slugs or file targets."""
     groups = {g["id"] for g in manifest["groups"]}
     docs = {f["id"] for f in manifest["files"] if f["id"]}
@@ -23,84 +23,56 @@ def validate(plan: dict[str, Any], manifest: dict[str, Any], folder: Path) -> No
             if key not in ids:
                 msg = f"unknown {kind} id: {key}"
                 raise ValueError(msg)
-            if not isinstance(slug, str) or not SLUG_RE.match(slug) or slug == "md":
+            if not isinstance(slug, str) or not SLUG_RE.match(slug):
                 msg = f"invalid candidate slug for {key}: {slug!r}"
                 raise ValueError(msg)
-            target = folder / slug
+            target = run / SOURCES_DIR / slug
             if target.exists() and not target.is_dir():
                 msg = f"target exists and is not a folder: {slug}"
                 raise ValueError(msg)
 
 
-def _rename_groups(
-    plan: dict[str, Any],
-    manifest: dict[str, Any],
-    folder: Path,
-    moves: dict[str, str],
-    touched: set[Path],
-) -> list[dict[str, Any]]:
-    renamed: list[dict[str, Any]] = []
-    groups = {g["id"]: g for g in manifest["groups"]}
-    for gid, slug in plan.get("folders", {}).items():
-        group = groups[gid]
-        src, dst = folder / group["name"], folder / slug
-        if group["name"] == slug or not src.is_dir():
-            continue
-        if dst.exists() and not src.samefile(dst):
-            folders.move_tree(src, dst, moves, folder)
-            renamed.append({"group": gid, "from": group["name"], "to": slug, "merged": True})
-        else:
-            folders.rename_folder(src, dst, folder / f".organise-{slug}")
-            for f in manifest["files"]:
-                if f["group"] == gid:
-                    moves[f["source"]] = slug + f["source"][len(group["name"]) :]
-            renamed.append({"group": gid, "from": group["name"], "to": slug, "merged": False})
-        touched.add(src)
-        group["name"] = slug
-    return renamed
+def _target(entry: dict[str, Any], plan: dict[str, Any], group_names: dict[str, str]) -> tuple[str, str] | None:
+    """Return (slug, path inside the slug folder) for a manifest entry, or None when the plan skips it."""
+    if entry["id"] in plan.get("files", {}):
+        return plan["files"][entry["id"]], PurePosixPath(entry["source"]).name
+    slug = plan.get("folders", {}).get(entry["group"])
+    if slug is None:
+        return None
+    inside = PurePosixPath(entry["source"]).relative_to(group_names[entry["group"]])
+    return slug, inside.as_posix()
 
 
-def _move_files(
-    plan: dict[str, Any],
-    manifest: dict[str, Any],
-    folder: Path,
-    moves: dict[str, str],
-    touched: set[Path],
-) -> None:
-    for doc_id, slug in plan.get("files", {}).items():
-        entry = next(f for f in manifest["files"] if f["id"] == doc_id)
-        old = folder / moves.get(entry["source"], entry["source"])
-        if old.parent == folder / slug or not old.is_file():
-            continue
-        new = folders.free_path(folder / slug / old.name)
-        folders.move_file(old, new)
-        touched.add(old.parent)
-        moves[entry["source"]] = new.relative_to(folder).as_posix()
+def organise(run: Path, source: Path, plan: dict[str, Any]) -> dict[str, Any]:
+    """Copy the planned originals from source into <run>/.work/sources/<slug>/ and update the manifest.
 
-
-def organise(folder: Path, plan: dict[str, Any]) -> dict[str, Any]:
-    """Apply the plan, update the manifest and return the renamed, sources and removed report."""
-    manifest_path = folder / MANIFEST
+    A files entry overrides the folder of its group. Different files that clash get a -2, -3 suffix.
+    """
+    manifest_path = run / MANIFEST
     manifest = folders.read_json(manifest_path)
-    validate(plan, manifest, folder)
+    validate(plan, manifest, run)
+    group_names = {g["id"]: g["name"] for g in manifest["groups"]}
 
-    moves: dict[str, str] = {}
-    removed: list[str] = []
-    touched: set[Path] = set()
-    renamed = _rename_groups(plan, manifest, folder, moves, touched)
-    _move_files(plan, manifest, folder, moves, touched)
+    work: list[tuple[dict[str, Any], Path, Path]] = []
+    unassigned: list[str] = []
+    for entry in manifest["files"]:
+        target = _target(entry, plan, group_names)
+        if target is None:
+            if entry["id"] and "organised" not in entry:
+                unassigned.append(entry["id"])
+            continue
+        original = source / entry["source"]
+        if not original.is_file() or original.is_symlink():
+            msg = f"source file missing or not a regular file: {entry['source']}"
+            raise ValueError(msg)
+        work.append((entry, original, run / SOURCES_DIR / target[0] / target[1]))
 
-    for path in sorted(touched, key=lambda p: len(p.parts), reverse=True):
-        if path != folder and folder in path.parents:
-            top = folder / path.relative_to(folder).parts[0]
-            folders.remove_if_empty(top, removed, folder)
-
-    for f in manifest["files"]:
-        f["source"] = moves.get(f["source"], f["source"])
+    for entry, original, dest in work:
+        entry["organised"] = folders.copy_unique(original, dest).relative_to(run).as_posix()
     folders.write_json(manifest_path, manifest)
 
     return {
-        "renamed": renamed,
-        "sources": {f["id"]: f["source"] for f in manifest["files"] if f["id"]},
-        "removed": sorted(set(removed)),
+        "organised": {e["id"] or e["source"]: e["organised"] for e, _, _ in work},
+        "slugs": sorted({PurePosixPath(e["organised"]).parts[2] for e, _, _ in work}),
+        "unassigned": unassigned,
     }

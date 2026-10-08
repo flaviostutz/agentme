@@ -4,8 +4,12 @@ from decimal import Decimal
 from pathlib import Path
 
 SUPPORTED = {".pdf", ".docx", ".pptx", ".html", ".htm", ".txt", ".md"}
-STAGING = Path("md") / ".staging"
+WORK = Path(".work")
+STAGING = WORK / "staging"
 MANIFEST = STAGING / "manifest.json"
+SOURCES_DIR = WORK / "sources"
+MD_DIR = WORK / "md"
+CHART_NAME = "interview-chart.md"
 MARK = "[REDACTED]"
 
 SCALE_MIN = Decimal("1.0")

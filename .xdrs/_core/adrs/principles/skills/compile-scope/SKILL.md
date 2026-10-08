@@ -4,8 +4,8 @@ description: >
   Compiles or updates any scope declaring `scope-type: compiled` from its configured external sources. Reads compilation meta-policies to discover sources, fetches content (git clone, local copy, or web scrape), plans policy changes, migrates policies one at a time with structured format, `## Source` sections, and `**compilation-note:**` markers, then runs lint and review. Documents source inconsistencies without inventing fixes. Activate when the user asks to compile, update, sync, refresh, or recompile a compiled scope.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-30
+  version: "1.3.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -76,11 +76,11 @@ Keep every question and intermediate message <100 words and the final summary <1
 
 ### Phase 2: Fetch Sources
 
-1. Create the execution dir `.tmp/compile-scope-[YYYYMMDDHHMMSS]/` at the workspace root (local start time; append `-2`, `-3`... if it exists) with a `.work/staging/` folder. Put any other intermediate file in `.work/` and any ad-hoc script you generate in `.work/scripts/`; never write secrets there (pass them via environment, or use the OS temp dir and delete the file after use). If the workspace is read-only, use the same layout under the OS temp dir. Keep the dir after the run.
+1. Use `.tmp/compile-scope/.work/staging/[name]/` at the workspace root as the staging folder of each source (`[name]` is the source slug); this skill has no run folder. Delete that folder before fetching into it, so no stale content is reused. Never write secrets or ad-hoc scripts there; use the OS temp dir for them and delete them when the run ends. If the workspace is read-only, use the same layout under the OS temp dir. Keep staging after the run.
 2. For each due source (from Phase 1), fetch in the following preference order (first available wins; if all equivalent URLs are listed, try each in order):
-   - **Git URL** (`- [git] ...`): run `git clone --depth=1 [url] .tmp/compile-scope-[ts]/.work/staging/[name]/`. If `git` is not available or the clone fails, fall back to the next option.
-   - **Local folder** (`- [local] ...`): copy the folder contents to `.tmp/compile-scope-[ts]/.work/staging/[name]/`.
-   - **Web URL** (`- [web] ...`): before scraping, search the workspace for a skill specialized in fetching content from this URL or website domain (e.g., a skill whose description or name references the domain, the product, or the content type). Some websites require special handling — SSO, client certificates, shadow DOM, iframes, CAPTCHAs, or other quirks. If a specialized fetch skill is found, follow it to retrieve the content. If no specialized skill exists, fall back to `npx --package=@playwright/cli@latest playwright-cli`; run with `--help` to confirm available commands and save output as `.html` file(s) in `.tmp/compile-scope-[ts]/.work/staging/[name]/`.
+   - **Git URL** (`- [git] ...`): run `git clone --depth=1 [url] .tmp/compile-scope/.work/staging/[name]/`. If `git` is not available or the clone fails, fall back to the next option.
+   - **Local folder** (`- [local] ...`): copy the folder contents to `.tmp/compile-scope/.work/staging/[name]/`.
+   - **Web URL** (`- [web] ...`): before scraping, search the workspace for a skill specialized in fetching content from this URL or website domain (e.g., a skill whose description or name references the domain, the product, or the content type). Some websites require special handling — SSO, client certificates, shadow DOM, iframes, CAPTCHAs, or other quirks. If a specialized fetch skill is found, follow it to retrieve the content. If no specialized skill exists, fall back to `npx --package=@playwright/cli@latest playwright-cli`; run with `--help` to confirm available commands and save output as `.html` file(s) in `.tmp/compile-scope/.work/staging/[name]/`.
 3. If any source cannot be fetched via any listed option, report the failure and continue with remaining sources. Do not abort the entire compilation for a single failed source.
 4. Immediately after a source is fetched successfully, create `.assets/sources/[name]/source.md` if absent and update its `last-fetch-timestamp` to the current time — this happens regardless of the `Source storage` setting, since the tracking file always persists per `_core-adr-policy-019` rule 12.
 5. Convert non-markdown documents found in the fetched source directories. Use only the format converters actually needed:
@@ -178,7 +178,6 @@ After writing each policy:
    - Any sources that could not be fetched.
    - Lint and review pass/fail status.
    - Sources persisted, kept temporary, or skipped as already in sync.
-2. Whenever the execution dir was created, including when halting in an earlier phase, end the final message with `results-path: .tmp/compile-scope-[ts]/` (the actual dir).
 
 ## Anti-Patterns
 
@@ -205,4 +204,5 @@ After writing each policy:
 ## References
 
 - [_core-adr-policy-019 - Compiled scope type](../../019-compiled-scope-type.md)
+- [_core-adr-policy-023 - Skill runtime standards](../../023-skill-runtime-standards.md)
 - [_core-adr-policy-008 - Policy structured standards](../../008-policy-structured-standards.md)

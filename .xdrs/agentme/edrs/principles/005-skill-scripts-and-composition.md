@@ -85,11 +85,11 @@ The following steps MUST be performed by a script, never by the LLM in chat, eve
 
 #### 12-llm-input-script-output-contract
 
-Judgement MUST enter a script as structured input (flags, JSON, report cells). The script MUST validate it (ranges, enums, formats), exit non-zero with a clear message on invalid input, and SHOULD support `--json` output. The LLM MUST use the script output as is and MUST NOT override or recompute it; a disagreement is reported to the user. Scripts that write files MUST be idempotent and confined to the skill's output folder.
+Judgement MUST enter a script as structured input (flags, JSON, report cells). The script MUST validate it (ranges, enums, formats), exit non-zero with a clear message on invalid input, and SHOULD support `--json` output. The LLM MUST use the script output as is and MUST NOT override or recompute it; a disagreement is reported to the user. Scripts that write files MUST be idempotent and confined to the skill's run folder under `.tmp/[skill-name]/` per [_core-adr-policy-023](../../../_core/adrs/principles/023-skill-runtime-standards.md).
 
 #### 13-script-failure-and-missing-scripts
 
-When a script for a rule 11 step fails or cannot run, the skill MUST halt and report the command and the error, and MUST NOT fall back to computing in chat. When no packaged script exists for a rule 11 step, the skill MUST write a script under `.work/scripts/` per [_core-adr-policy-003](../../../_core/adrs/principles/003-skill-standards.md), run it, state its path in the result, and SHOULD propose packaging it as a tested script.
+When a script for a rule 11 step fails or cannot run, the skill MUST halt and report the command and the error, and MUST NOT fall back to computing in chat. When no packaged script exists for a rule 11 step, the skill MUST write a throwaway script in the OS temp dir per the work files rules of [_core-adr-policy-023](../../../_core/adrs/principles/023-skill-runtime-standards.md), run it, delete it when the run ends, and SHOULD propose packaging it as a tested script.
 
 #### 14-script-steps-are-tested
 
@@ -107,3 +107,4 @@ Packaged scripts MUST be covered by unit tests per rules 06 and 07. Every `SKILL
 - [agentme-edr-303](../platform/303-common-targets.md) and [agentme-edr-304](../platform/304-tool-execution-and-scripting.md) - Makefile targets and tool execution
 - [_core-adr-policy-021](../../../_core/adrs/principles/021-skill-bundling.md) - skill bundling
 - [_core-adr-policy-003](../../../_core/adrs/principles/003-skill-standards.md) - skill standards
+- [_core-adr-policy-023](../../../_core/adrs/principles/023-skill-runtime-standards.md) - skill runtime standards

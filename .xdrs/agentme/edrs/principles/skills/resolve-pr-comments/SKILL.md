@@ -15,8 +15,8 @@ description: >
   to process its comments.
 metadata:
   author: flaviostutz
-  version: "4.6.1"
-  updated: 2026-10-04
+  version: "4.7.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -57,7 +57,10 @@ before anything is sent.
 ### Outputs
 
 #### Contents
-- Per-comment triage summary shown in chat
+- Per-comment triage summary shown in chat (<120 words per comment)
+- Tracking file `<run>/review-pr-<N>.md` (uncapped: one templated section per comment)
+- Sandbox clone `<run>/.work/<repo-dir>/` when the current directory is not the PR's repo (uncapped: repository files)
+- `results-path: <run>/` ending the final message (<60 words of summary before it)
 
 #### Changes
 - Code fixes committed to the PR branch
@@ -65,11 +68,15 @@ before anything is sent.
 
 ### Halt Conditions
 - Missing PR URL, or URL resolves to an issue
+- PR URL is malformed, or its host is unsupported and the human names no provider
 - Local repo unrelated and sandbox clone declined
 - Dirty worktree with no checkout choice made
 - Toolchain mismatch with no resolution chosen
+- Confidence is too low to classify a comment and the human gives no direction
 
 ## Instructions
+
+Run folder layout: `<run>` is `.tmp/resolve-pr-comments/<run-name>/`, `<run-name>` = `<repo-dir>-pr-<N>`, relative to the starting directory. The tracking file sits at `<run>/review-pr-<N>.md`; the sandbox clone and other work files under `<run>/.work/`. Never put files directly in `.tmp/resolve-pr-comments/`. Throwaway scripts go in the OS temp dir.
 
 ### Provider selection (runs before Phase 1)
 
@@ -122,22 +129,19 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
 3. If the current directory is NOT a checkout of the PR's related repo -- unrelated repo, no
    git work tree at all, or empty -- never proceed against it in place. Instead, ask the
    human to confirm cloning the PR's *base* repository (not a fork/head repo) into a new,
-   isolated sandbox at `.tmp/<repo-dir>` (named after the repo, relative to the current
-   directory). Use a plain, standalone `git clone` -- never `git worktree add`, and never
+   isolated sandbox at `<run>/.work/<repo-dir>` (named after the repo, under the run folder). Use a plain, standalone `git clone` -- never `git worktree add`, and never
    anything that touches the current directory's own `.git` -- so the sandbox gets its own
    independent `.git` with zero relationship to whatever is (or isn't) checked out here:
-   deleting `.tmp/<repo-dir>` (`rm -rf`) afterwards fully and cleanly removes it with no
+   deleting `<run>/.work/<repo-dir>` (`rm -rf`) afterwards fully and cleanly removes it with no
    residue in either direction, and nothing about the current directory's own git state is
-   ever touched by creating or removing it. If `.tmp/<repo-dir>` already exists from a prior
-   run against the same repo, reuse it (fetch + checkout) instead of re-cloning, so a
-   `.tmp/review-pr-<N>.md` from that earlier session is resumed rather than recreated. If the
+   ever touched by creating or removing it. If `<run>/.work/<repo-dir>` already exists from a prior
+   run against the same PR, reuse it (fetch + checkout) instead of re-cloning, so a
+   `<run>/review-pr-<N>.md` from that earlier session is resumed rather than recreated. If the
    human declines the offer, stop -- there is no other override. Once created, this sandbox
-   becomes the local repo root for the rest of the run (Phase 2 onward), including where
-   `.tmp/review-pr-<N>.md` is written.
-4. Never edit `.gitignore` for `.tmp/`. Before this run first writes under `.tmp/` in a given
-   repo root (the sandbox clone above, or Phase 2's tracking file), if that root's `.gitignore`
-   lacks a `.tmp` entry, tell the human once that adding one is recommended to avoid committing
-   these working files, then proceed.
+   becomes the local repo root for the rest of the run (Phase 2 onward).
+4. Never edit `.gitignore` for `.tmp/`. Before this run first writes under `.tmp/`, if the
+   current directory's `.gitignore` lacks a `.tmp` entry, tell the human once that adding one
+   is recommended to avoid committing these working files, then proceed.
 5. If related and the worktree is clean, offer to check out the PR branch; confirm first.
 6. If related but the worktree is dirty or on the wrong branch, ask the human to choose
    explicitly: stash and check out / commit first / skip checkout and stay read-only / abort.
@@ -154,13 +158,13 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
 
 ### Phase 2: Comments Preparation
 
-1. Target file: `.tmp/review-pr-<N>.md`. Always re-read the current on-disk content first --
+1. Target file: `<run>/review-pr-<N>.md`. Always re-read the current on-disk content first --
    never trust cached session state -- so manual developer edits are respected.
 2. Only `open` comments are ever recorded; one already `resolved`/`closed` at fetch time gets
    no section and is never surfaced.
 3. New file: call `scripts/update-section.js init <file> <pr-number> <pr-link>
    <auto-summary...>` first (raw PR summary via stdin) to write the PR link, raw summary,
-   and an auto-generated under-20-word summary (no confirmation needed) before analysing any
+   and an auto-generated <20 words summary (no confirmation needed) before analysing any
    comment. Then, per open comment, compute its fields (rules 8-19) and call
    `append-section` to write its templated section immediately, one comment at a time --
    never batch every section in memory until the end, so a mid-run context compaction never
@@ -214,7 +218,7 @@ Only ever branch on `status`, `can_reply`, and `can_resolve` -- never on the pro
     (e.g. a deleted account). Set once at creation, never recomputed.
 13. Render `comment-url` verbatim from the read skill's `url` (a permalink to the provider's
     web UI). Set once at creation, never recomputed.
-14. Render `possible-user-intention`: an AI-authored, under-20-word inference of why the
+14. Render `possible-user-intention`: an AI-authored, <20 words inference of why the
     author raised this and what they may be worried about, reasoned from `comment-raw` plus
     the whole `replies-raw` thread, grounded by `source-lines` when it resolves to real code.
     Stay within that worry/concern framing -- leave blank or minimal when there's no real
@@ -279,7 +283,7 @@ automation-gradient principle (`_core-adr-policy-003`), nothing in this skill re
 **Tracking file template** (one section per open comment):
 
 ```markdown
-### <short title, up to 10 words>
+### <short title, <10 words>
 id: <kind>/<numeric-id>
 status: open|resolved|wontfix|closed
 source: [<file>:<line-start>-<line-end>](../<file>#L<line-start>-L<line-end>)
@@ -292,7 +296,7 @@ suggested-fix: |
 author-raw: <comment author, verbatim, or "unknown">
 comment-url: <permalink to the comment on the provider's web UI>
 type: nitpick|question|issue|suggestion|discussion|praise|thought|chore|other|information
-possible-user-intention: <under-20-word inference of the author's likely worry/motivation, or blank>
+possible-user-intention: <short inference of the author's likely worry/motivation (<20 words), or blank>
 suggested-fix-assessment: <accept-as-is|evolve-with-changes|not-recommended, with a short rationale, or blank>
 criticality: critical|high|medium|low
 automation-suggestion: fully-auto|guided
@@ -413,11 +417,12 @@ cluster orders as one unit, using its shared `criticality`.
      -- one fix-implementation path regardless. Read the relevant code and implement the
      change directly this same session; never invoke `refine-plan-mode` or any nested
      planning workflow. When a `suggested-fix` exists, apply it verbatim (`accept-as-is`) or
-     evolved (`evolve-with-changes`), drafting a summary reply under 10 words stating which.
+     evolved (`evolve-with-changes`), drafting a summary reply <10 words stating which.
      Add a short inline code comment only if the rationale wouldn't be obvious from the
      code/diff alone. The human may edit the drafted summary freely. Do not run
      build/lint/test yet -- validation is batched at the group boundary (step 6), not per
      fix.
+   Every drafted reply is <80 words.
    Set `pending-reply: drafted` and persist `reply-draft`/`resolve-on-apply` immediately --
    then show one FYI outcome line: `Drafted comment X ({action}): {short outcome}.` (no
    confirmation question; the text was already visible on the focus card and remains
@@ -575,11 +580,11 @@ same for the resolve. Leave `error`/`unverified` items `drafted` and report them
 - **Question content** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a
   short title with option labels ("Choose A or B?") is never enough. Every question -- the
   focus-card action question and every other one (sandbox clone, dirty worktree, missing
-  runtime, validation failure, apply mode, continue-or-stop) -- MUST stay under 140 words
+  runtime, validation failure, apply mode, continue-or-stop) -- MUST stay <140 words
   and include:
-  1. **Title and context**: a title under 15 words, then a context line under 25 words
+  1. **Title and context**: a title <15 words, then a context line <25 words
      with the finding and current state.
-  2. **Options with consequences**: 2-4 options, each under 25 words, with its key
+  2. **Options with consequences**: 2-4 options, each <25 words, with its key
      consequences (benefit, cost or risk, effort, reversibility, what it postpones).
   3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g.
      "A: (recommended) ..."); the human decides.
@@ -590,7 +595,7 @@ same for the resolve. Leave `error`/`unverified` items `drafted` and report them
      ~200-character limit; condense before truncating. If anything was cut, also put the
      full question in a chat message first (the focus card, for comments); never reduce
      the UI to "see above".
-  6. **Phase gates**: gate summaries under 80 words.
+  6. **Phase gates**: gate summaries <80 words.
   7. **Re-explain on request**: when the human asks for clarification instead of choosing,
      re-ask with expanded context, never the same wording, up to twice the caps.
 - **Incremental persistence**: the tracking file is written back to disk immediately after
@@ -621,7 +626,7 @@ same for the resolve. Leave `error`/`unverified` items `drafted` and report them
 **Input**: `https://github.com/acme/widgets/pull/482` (run by the PR's own author)
 
 Selects `get-github-contents` (host `github.com`), fetches PR #482 and its comments, checks
-out a related local branch, and populates `.tmp/review-pr-482.md` one comment at a time (via
+out a related local branch, and populates `.tmp/resolve-pr-comments/widgets-pr-482/review-pr-482.md` one comment at a time (via
 `init`/`append-section`) before asking anything. Phase 3 shows the summary table and the
 human picks option 3. Phase 4 opens with a one-time estimate, then walks the
 highest-criticality group first: for a straightforward `fix`, it implements the change
@@ -633,9 +638,8 @@ confirming the held fix is safe to send later.
 is not a checkout of `acme/widgets`
 
 Phase 1's Workspace & Repo Validation detects the mismatch and offers to clone
-`acme/widgets` into `.tmp/widgets` as a standalone sandbox; on confirmation it clones, checks
-out the PR branch, then treats `.tmp/widgets` as
-the local repo root -- so `.tmp/review-pr-482.md` lands there too.
+`acme/widgets` into `.tmp/resolve-pr-comments/widgets-pr-482/.work/widgets` as a sandbox; on confirmation it clones, checks
+out the PR branch, then treats that sandbox as the local repo root.
 
 **Input**: the human cancels the session partway through Phase 4, then re-invokes the skill
 on the same PR later
@@ -666,7 +670,7 @@ mandatory apply confirmation.
 ## Edge Cases
 
 - **Unrelated local repo (or no repo/empty directory)**: never proceed against it in place --
-  always offer the `.tmp/<repo-dir>` sandbox clone instead (the Workspace & Repo Validation
+  always offer the `<run>/.work/<repo-dir>` sandbox clone instead (the Workspace & Repo Validation
   step 3); only fail with no override once the human explicitly declines that offer.
 - **PR URL resolves to an issue, not a PR**: report a clear error in Phase 1 and stop (GitHub
   shares one numbering pool between issues and PRs).

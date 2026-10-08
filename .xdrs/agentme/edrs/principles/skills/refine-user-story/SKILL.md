@@ -9,8 +9,8 @@ description: >
   back to its source.
 metadata:
   author: flaviostutz
-  version: "4.7.0"
-  updated: 2026-10-05
+  version: "4.8.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -46,6 +46,8 @@ Activate when:
 - Story still too large after a split is proposed
 - Input has a pull request, board or query URL, or two or more URLs
 - Source item changed during refinement (`stale:` on write-back) and the human has not decided
+- The input is dubious (contradictory, or unrelated to a story) and the human does not clarify it
+- Confidence is too low to split or scope the story and the human gives no direction
 
 ## Instructions
 
@@ -68,13 +70,13 @@ Activate when:
 
 **Phase gate UI rule**: At every point where the skill requires human confirmation before advancing to the next phase — any instruction that says "Wait for the answer before continuing" or requires the human to confirm convergence — use `vscode_askQuestions` to present the gate. Always include a clearly labeled recommended option such as "Continue to Phase N — [phase name]" and allow free text for corrections, follow-up questions, or redirects. Do not present a text prompt alone and wait for freeform input — the human must always have a visible, labeled UI option to advance. Before each gate, summarize in chat what the phase produced, any open risks or deferred items, and what each gate option will cause next (Question content rule applies).
 
-**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay under 140 words and include:
-1. **Title and context**: a title under 15 words, then a context line under 25 words with the finding and current state.
-2. **Options with consequences**: 2–4 options, each under 25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay <140 words and include:
+1. **Title and context**: a title <15 words, then a context line <25 words with the finding and current state.
+2. **Options with consequences**: 2–4 options, each <25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
 3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the user still decides.
 4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
 5. **UI fields**: fill every `vscode_askQuestions` field (header, question, message, option label, option description = consequences) up to its ~200-character limit, condensing before truncating; if anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
-6. **Phase gates**: gate summaries under 80 words.
+6. **Phase gates**: gate summaries <80 words.
 7. **Re-explain on request**: when the user asks for clarification instead of choosing, re-ask with expanded context (references, examples, impact), never the same wording, up to twice the caps.
 
 Example:
