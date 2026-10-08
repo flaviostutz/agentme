@@ -100,20 +100,20 @@ def _overlap_notes(ledgers: list) -> list:
 
 
 def _period_flow_notes(references: list) -> tuple:
-    """Aggregated period flows cannot be split: the earlier window per asset wins, later overlapping ones are dropped."""
+    """Aggregated period flows cannot be split: the earlier window per security wins, later overlapping ones are dropped."""
     kept, notes, last_end = [], [], {}
-    ordered = sorted(references, key=lambda r: (r.get("account", ""), r.get("asset", ""), r.get("from", "")))
+    ordered = sorted(references, key=lambda r: (r.get("account", ""), r.get("security", ""), r.get("from", "")))
     for r in ordered:
         if r.get("kind") != "period-flows":
             kept.append(r)
             continue
-        k = (r["account"], r["asset"])
+        k = (r["account"], r["security"])
         if k in last_end and r["from"] <= last_end[k]:
             notes.append(
                 {
                     "level": "warn",
                     "kind": "period-flows-overlap",
-                    "message": f"{r['account']} {r['asset']}: window {r['from']}..{r['to']} overlaps an earlier report; "
+                    "message": f"{r['account']} {r['security']}: window {r['from']}..{r['to']} overlaps an earlier report; "
                     "its entries and exits were dropped to avoid counting them twice",
                 }
             )

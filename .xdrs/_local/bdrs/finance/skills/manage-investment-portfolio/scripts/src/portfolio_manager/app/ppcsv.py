@@ -64,7 +64,7 @@ ACCOUNT_COLUMNS = (
     "ledger_opening_cash",
 )
 SNAPSHOT_COLUMNS = ("account", "date", "currency", "cash", "positions_value", "total", "record_json")
-REFERENCE_COLUMNS = ("kind", "account", "asset", "from", "to", "record_json")
+REFERENCE_COLUMNS = ("kind", "account", "security", "from", "to", "record_json")
 # Columns Portfolio Performance parses as numbers; only these switch to ',' decimals (ledger_* stay exact with '.').
 NUMBER_COLUMNS = ("Value", "Shares", "Fees", "Taxes", "Gross Amount")
 

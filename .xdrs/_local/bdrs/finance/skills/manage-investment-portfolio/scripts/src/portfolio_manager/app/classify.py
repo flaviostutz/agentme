@@ -4,12 +4,12 @@ import re
 from datetime import date
 from decimal import Decimal
 
-ASSET_CLASSES = ("equity", "bond", "fund", "etf", "cash", "commodity", "crypto", "real-estate", "other")
+SECURITY_CLASSES = ("equity", "bond", "fund", "etf", "cash", "commodity", "crypto", "real-estate", "other")
 FIELDS = (
     "isin",
     "ticker",
     "name",
-    "asset_class",
+    "security_class",
     "region",
     "country",
     "sector",
@@ -20,15 +20,15 @@ FIELDS = (
     "source_url",
     "as_of",
 )
-REQUIRED = ("isin", "asset_class", "source_url", "as_of")
+REQUIRED = ("isin", "security_class", "source_url", "as_of")
 ISIN = re.compile(r"^[A-Z]{2}[A-Z0-9]{9}\d$")
 
 
-def queue(assets: list, known: list) -> list:
-    """Instruments still lacking a classification, with identifiers only."""
+def queue(securities: list, known: list) -> list:
+    """Securities still lacking a classification, with identifiers only."""
     have = {k["isin"] for k in known}
     seen, out = set(), []
-    for a in assets:
+    for a in securities:
         key = a["isin"]
         if key and key not in have and key not in seen and not a.get("unsupported"):
             seen.add(key)
@@ -51,8 +51,8 @@ def validate(entries) -> tuple:
         problems += [f"missing {f}" for f in REQUIRED if not e.get(f)]
         if e.get("isin") and not ISIN.match(str(e["isin"])):
             problems.append("isin is not a valid ISIN")
-        if e.get("asset_class") and e["asset_class"] not in ASSET_CLASSES:
-            problems.append(f"asset_class must be one of {', '.join(ASSET_CLASSES)}")
+        if e.get("security_class") and e["security_class"] not in SECURITY_CLASSES:
+            problems.append(f"security_class must be one of {', '.join(SECURITY_CLASSES)}")
         if e.get("source_url") and not str(e["source_url"]).startswith("https://"):
             problems.append("source_url must be an https URL")
         if e.get("as_of"):
@@ -74,16 +74,16 @@ def merge(existing: list, new: list) -> list:
     return [by_isin[k] for k in sorted(by_isin)]
 
 
-def allocation(assets: list, known: list, field: str) -> dict:
-    """EUR value per classification value (instruments without a classification are grouped as 'unclassified')."""
+def allocation(securities: list, known: list, field: str) -> dict:
+    """EUR value per classification value (securities without a classification are grouped as 'unclassified')."""
     by_isin = {k["isin"]: k for k in known}
     out: dict = {}
-    for a in assets:
+    for a in securities:
         if a.get("unsupported") or a.get("value_eur") is None:
             continue
         label = (
             by_isin.get(a["isin"], {}).get(field)
-            or (a.get("asset_class") if field == "asset_class" else None)
+            or (a.get("security_class") if field == "security_class" else None)
             or "unclassified"
         )
         out[label] = out.get(label, Decimal(0)) + Decimal(a["value_eur"])

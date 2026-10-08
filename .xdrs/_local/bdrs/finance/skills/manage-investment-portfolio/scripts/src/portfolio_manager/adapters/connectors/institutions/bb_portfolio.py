@@ -85,7 +85,7 @@ def parse(doc: Doc, answers: dict) -> list:
         kind = "savings" if name.lower().startswith(UNSUPPORTED) else cls
         for bucket, value in ((start_pos, v[0]), (end_pos, v[3])):
             pos = position("", "", name.title(), None, None, value, "BRL")
-            pos["asset_class"] = kind
+            pos["security_class"] = kind
             if kind == "savings":
                 pos["unsupported"] = "savings product"
             bucket.append(pos)
@@ -93,7 +93,7 @@ def parse(doc: Doc, answers: dict) -> list:
             {
                 "kind": "period-flows",
                 "account": acct,
-                "asset": name.title(),
+                "security": name.title(),
                 "from": iso(pstart),
                 "to": iso(pend),
                 "entries": dec(v[1]),
