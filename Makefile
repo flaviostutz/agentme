@@ -7,7 +7,7 @@ all: build lint test
 
 build: install
 	@echo ">>> .: $@"
-	$(MISE) npm pack --pack-destination=./dist
+	$(MISE) pnpm pack --pack-destination=./dist
 
 lint:
 	@echo ">>> .: $@"
