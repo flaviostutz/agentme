@@ -35,11 +35,12 @@ def test_write_sorts_table_and_adds_interview_list(report, candidate_row, workdi
     assert text.index("| Ana |") < text.index("| Bo |") < text.index("| Cy |")
     assert "### 1. Ana (Overall 7.3, Credibility 7.0)" in text
     assert text.endswith("This list is a recommendation; a human decides who to interview.\n")
+    assert "- Chart: <fill>" in text
     capsys.readouterr()
     assert check.main([path, "--stage", "interview"]) == 1
-    assert "unfilled bullets" in capsys.readouterr().out
+    assert "unfilled Chart links" in capsys.readouterr().out
 
-    (workdir / path).write_text(text.replace("<fill>", "text"))
+    (workdir / path).write_text(text.replace("<fill>", "[chart](ana/interview-chart.md)"))
     assert check.main([path, "--stage", "interview"]) == 0
 
 

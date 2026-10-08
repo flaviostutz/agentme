@@ -59,7 +59,7 @@ describe('runIssueGet', () => {
       updatedAt: '2026-05-01T10:00:00Z',
       repository: { private: true, archived: false },
       comments: [{ id: 7, author: null, body: 'see https://other.example.com/x' }],
-      attachments: [{ name: 'mock', path: '.tmp/issue-attachments/acme-widgets-42/1-mock.png' }],
+      attachments: [{ name: 'mock', path: '.tmp/get-github-contents/acme-widgets-42/1-mock.png' }],
       links: ['https://wiki.example.com/spec', 'https://other.example.com/x'],
     });
     expect(world.ghCalls[0]).toEqual([

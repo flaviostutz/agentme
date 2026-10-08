@@ -1,5 +1,6 @@
-"""Filesystem operations on candidate source folders under .tmp/."""
+"""Filesystem operations on candidate source folders and run folders under .tmp/."""
 
+import filecmp
 import json
 import os
 import shutil
@@ -8,7 +9,26 @@ from typing import Any
 
 from analyse_cvs.shared.constants import STAGING
 
-JUNK = {".DS_Store", "Thumbs.db"}
+
+def resolve_run(run: str, cwd: Path, source: Path | None = None) -> Path:
+    """Return the absolute run folder inside <cwd>/.tmp.
+
+    With a source folder the run may be new but must not be the source or nested with it; without one
+    the run must already exist.
+    """
+    root = (cwd / ".tmp").resolve()
+    path = (cwd / run).resolve()
+    if path == root or root not in path.parents:
+        msg = f"run folder must be inside {root}: {path}"
+        raise ValueError(msg)
+    if source is not None:
+        if path == source or path in source.parents or source in path.parents:
+            msg = f"run folder and source folder must be separate, not nested: {path}"
+            raise ValueError(msg)
+    elif not path.is_dir():
+        msg = f"run folder does not exist: {path}"
+        raise ValueError(msg)
+    return path
 
 
 def resolve_folder(folder: str, cwd: Path) -> Path:
@@ -42,7 +62,7 @@ def list_sources(folder: Path) -> tuple[list[dict[str, str]], list[tuple[Path, s
     groups: list[dict[str, str]] = []
     sources: list[tuple[Path, str | None]] = []
     for entry in sorted(folder.iterdir()):
-        if not _visible(entry) or entry.name == "md":
+        if not _visible(entry):
             continue
         if entry.is_file():
             sources.append((entry, None))
@@ -95,35 +115,18 @@ def free_path(path: Path) -> Path:
         n += 1
 
 
-def remove_if_empty(path: Path, removed: list[str], folder: Path) -> None:
-    """Delete path and its subfolders when only junk files remain, recording the removals."""
-    if not path.is_dir() or path.is_symlink():
-        return
-    for child in path.iterdir():
-        remove_if_empty(child, removed, folder)
-    children = list(path.iterdir())
-    if all(c.name in JUNK and c.is_file() and not c.is_symlink() for c in children):
-        for c in children:
-            c.unlink()
-        path.rmdir()
-        removed.append(path.relative_to(folder).as_posix())
-
-
-def move_tree(src: Path, dst: Path, moves: dict[str, str], folder: Path) -> None:
-    """Move every file under src into dst, keeping relative paths and suffixing clashes."""
-    for root, _dirs, names in os.walk(src):
-        for name in names:
-            old = Path(root) / name
-            new = free_path(dst / old.relative_to(src))
-            new.parent.mkdir(parents=True, exist_ok=True)
-            old.rename(new)
-            moves[old.relative_to(folder).as_posix()] = new.relative_to(folder).as_posix()
-
-
-def rename_folder(src: Path, dst: Path, tmp: Path) -> None:
-    """Rename via tmp so case-only changes work on case-insensitive filesystems."""
-    src.rename(tmp)
-    tmp.rename(dst)
+def copy_unique(src: Path, dest: Path) -> Path:
+    """Copy src to dest, or to a -2, -3 name when different content exists; identical content is reused."""
+    n = 1
+    target = dest
+    while target.exists():
+        if filecmp.cmp(src, target, shallow=False):
+            return target
+        n += 1
+        target = dest.with_name(f"{dest.stem}-{n}{dest.suffix}")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(src, target)
+    return target
 
 
 def move_file(old: Path, new: Path) -> None:

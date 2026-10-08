@@ -17,12 +17,12 @@ date local clone of `acme/widgets`, which has 2 open comments).
 The skill: (1) parses the URL host as `github.com` and activates `get-github-contents`; (2)
 Phase 1 fetches PR #482 metadata and every comment, then confirms the local repo matches
 `acme/widgets` and offers to check out the PR branch; (3) Phase 2 calls `init` to write
-`.tmp/review-pr-482.md`'s header before analysing anything, then computes each comment's
+`.tmp/resolve-pr-comments/widgets-pr-482/review-pr-482.md`'s header before analysing anything, then computes each comment's
 fields and calls `append-section` to write its section immediately, one comment at a time --
 rendering each section's `source` field as a clickable markdown link to the matching file in
 the local checkout (never a provider URL), `source-lines` with the commented line(s) plus
 padding, `diff-hunk-raw`/`author-raw`/`comment-url` verbatim from the read skill,
-`possible-user-intention` (an under-20-word, silently generated read of the author's likely
+`possible-user-intention` (a <20 words, silently generated read of the author's likely
 concern), and `possible-follow-ups` (2-4 candidate next actions); (4) Phase 3 renders the
 2-row summary table and asks the literal numbered 4-way automation-level question -- the
 human picks option 3 (guide all), so both comments use the guided flow; (5) Phase 4 walks
@@ -82,7 +82,7 @@ requested -- then reports the final summary by action taken and send status.
       no distinction between the two cases.
 - [ ] Skill records the section's original comment text under `comment-raw` and any existing
       thread replies under `replies-raw`.
-- [ ] Skill populates `possible-user-intention` with an under-20-word inference silently,
+- [ ] Skill populates `possible-user-intention` with a <20 words inference silently,
       with no dedicated confirmation prompt of its own.
 
 ### Scenario 2: Phase 3's "something else" free text drives a mixed fully-auto/guided run
@@ -147,7 +147,7 @@ comment's section has been written, before the 5th comment's fields are computed
 
 **Expected Behaviour**
 
-Phase 2 first calls `init` to durably write `.tmp/review-pr-<N>.md`'s header (PR link, raw
+Phase 2 first calls `init` to durably write `.tmp/resolve-pr-comments/<run-name>/review-pr-<N>.md`'s header (PR link, raw
 summary, auto-generated summary) before analysing any single comment. It then computes
 comment 1's fields and calls `append-section` to write its section immediately, repeating
 this one-comment-at-a-time for comments 2, 3, and 4 -- never holding more than one comment's

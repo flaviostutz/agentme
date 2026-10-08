@@ -80,25 +80,25 @@ The detail file MUST follow this template:
 **Story ID:** userstory-NNN-slug
 
 ## Title
-[max 10 words, outcome-focused]
+[<10 words, outcome-focused]
 
 ## User Story
 As a [role], I want to [action], so that [benefit].
 
 ## Scope
-[max 200 words. List features, behaviors, screens, or services in scope.]
+[<200 words. List features, behaviors, screens, or services in scope.]
 - [feature or behavior]
 
 ## Edge Cases
-[optional — max 50 words. Known edge cases and expected handling.]
+[optional — <50 words. Known edge cases and expected handling.]
 - [edge case — expected handling]
 
 ## Out of Scope
-[optional — max 30 words.]
+[optional — <30 words.]
 - [out-of-scope item]
 
 ## Constraints
-[optional — max 30 words. Any rule, technology, regulatory, or business constraint that must be respected.]
+[optional — <30 words. Any rule, technology, regulatory, or business constraint that must be respected.]
 - [constraint]
 
 ## Detailed Specs

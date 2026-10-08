@@ -60,6 +60,8 @@ def test_interview_section_lists_invited_in_rank_order(ranked_report):
         "### 2. Dee (Overall 5.0, Credibility 5.6)",
     ]
     assert section[-1] == "This list is a recommendation; a human decides who to interview."
+    assert section.count("- Chart: <fill>") == 2
+    assert not any(line.startswith(("- Why invite", "- Investigate", "- Questions")) for line in section)
 
 
 def test_nobody_invited(make_report, candidate_row):
@@ -95,9 +97,9 @@ def test_check_interview(ranked_report):
 
     written = apply_ranking(lines, table, ranked)
     errors = check_interview(written, ranked)
-    assert "interview list still has unfilled bullets" in errors
+    assert "interview list still has unfilled Chart links" in errors
 
-    filled = [line.replace("<fill>", "text") for line in written]
+    filled = [line.replace("<fill>", "[chart](x/interview-chart.md)") for line in written]
     assert check_interview(filled, ranked) == []
 
     broken = [line for line in filled if not line.startswith("This list") and "### 2." not in line]

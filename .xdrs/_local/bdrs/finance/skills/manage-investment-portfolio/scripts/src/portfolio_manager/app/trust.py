@@ -1,6 +1,6 @@
 """'How far to trust' section: per-account data quality, announced coverage gaps and fixed disclosures."""
 
-from portfolio_manager.app.fmt import table
+from portfolio_manager.app.fmt import cell, table
 
 DISCLOSURES = (
     "Flows of snapshot and value-only accounts are estimated at the middle of each statement period.",
@@ -10,12 +10,20 @@ DISCLOSURES = (
 )
 
 
-def _gap_text(gaps: list) -> str:
-    if not gaps:
-        return "none"
-    return "; ".join(
-        f"{g['start']}..{g['end']} " + (f"accepted: {g['note']}" if g.get("note") else "unconfirmed") for g in gaps
-    )
+def _status(finding: dict) -> str:
+    given = finding["accepted"]
+    return f'accepted: {given["reason"]} "{given["note"]}"' if given else "open"
+
+
+def _finding_text(findings: list) -> str:
+    return "; ".join(f"{f['label']} {_status(f)}" for f in findings) or "none"
+
+
+def _portfolio_wide(check: dict) -> list:
+    """Findings that belong to no single account (overlaps, scope, expected start) with the user's answer."""
+    mine = [f for f in check["findings"] if not f["account"]]
+    lines = [cell("- " + f"{f['kind']} ({f['message']}): {_status(f)}") for f in mine]
+    return [*lines, ""] if lines else []
 
 
 def _warnings(analysis: dict, account: str) -> str:
@@ -29,25 +37,25 @@ def late_starters(analysis: dict) -> list:
 
 
 def section(analysis: dict, check: dict | None) -> list:
-    gaps = (check or {}).get("gaps", [])
+    found = (check or {}).get("findings", [])
     rows = [
         [
             k,
             a["account"]["mode"],
             "exact" if a["flows_status"] == "complete" else "estimated",
             a["last"],
-            _gap_text([g for g in gaps if g["account"] == k]),
+            _finding_text([f for f in found if f["account"] == k]),
             _warnings(analysis, k),
         ]
         for k, a in sorted(analysis["accounts"].items())
     ]
     out = ["## How far to trust", ""]
-    out += table(["Account", "Mode", "Flows", "Latest date", "Coverage gaps (user status)", "Warnings"], rows)
+    out += table(["Account", "Mode", "Flows", "Latest date", "Coverage findings (user status)", "Warnings"], rows)
     if check is None:
         out += ["Coverage was not checked in this run (`pm check-input`).", ""]
     else:
-        open_gaps = sum(1 for g in gaps if not g.get("note"))
-        out += [f"Detected coverage gaps: {len(gaps)} ({open_gaps} unconfirmed).", ""]
+        out += [f"Coverage start expected by the user: {cell(check['expected_start'] or 'not given')}.", ""]
+        out += _portfolio_wide(check)
     late = late_starters(analysis)
     out += [f"- {d}" for d in DISCLOSURES]
     if late:

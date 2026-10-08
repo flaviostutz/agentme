@@ -1,10 +1,12 @@
-"""Organise a staged .tmp/ source folder into one plainly named folder per candidate.
+"""Copy the staged originals into one plainly named folder per candidate in the run folder.
 
-Reads md/.staging/manifest.json written by cvs-stage and a plan file:
+  cvs-organise <run> <plan.json> [--json]
+
+Reads <run>/.work/staging/manifest.json written by cvs-stage and a plan file:
   {"folders": {"g-01": "roger-mathias"}, "files": {"doc-05": "anna-silva"}}
-"folders" renames a group folder to a candidate slug, merging into an existing slug folder.
-"files" moves a staged document's source file into the candidate slug folder.
-Clashing filenames get a -2, -3 suffix. Folders left empty are removed. Safe to re-run.
+"folders" copies every document of a group folder into <run>/.work/sources/<slug>/, keeping subpaths.
+"files" copies one staged document's original into the candidate slug folder (it overrides its group).
+Different files with the same name get a -2, -3 suffix. The source folder is only read. Safe to re-run.
 """
 
 import argparse
@@ -12,7 +14,7 @@ import json
 import sys
 from pathlib import Path
 
-from analyse_cvs.adapters.connectors.local_fs.folders import resolve_folder
+from analyse_cvs.adapters.connectors.local_fs.folders import read_json, resolve_folder, resolve_run
 from analyse_cvs.app.organising import organise
 from analyse_cvs.shared.constants import MANIFEST
 
@@ -24,28 +26,29 @@ def main(argv: list[str] | None = None) -> int:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("folder", help="source folder, relative to the current directory, inside .tmp/")
+    parser.add_argument("run", help="run folder, relative to the current directory, inside .tmp/")
     parser.add_argument("plan", help="JSON plan file")
     parser.add_argument("--json", action="store_true", help="print machine-readable JSON")
     args = parser.parse_args(argv)
 
     try:
-        folder = resolve_folder(args.folder, Path.cwd())
-        if not (folder / MANIFEST).is_file():
+        run = resolve_run(args.run, Path.cwd())
+        if not (run / MANIFEST).is_file():
             msg = "manifest not found; run cvs-stage first"
             raise ValueError(msg)  # noqa: TRY301
+        source = resolve_folder(read_json(run / MANIFEST)["source_root"], Path.cwd())
         plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
-        result = organise(folder, plan)
-    except (ValueError, OSError) as err:
+        result = organise(run, source, plan)
+    except (ValueError, OSError, KeyError) as err:
         print(f"error: {err}", file=sys.stderr)
         return 1
 
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
-        for r in result["renamed"]:
-            print(f"{'merged' if r['merged'] else 'renamed'} {r['from']!r} -> {r['to']}")
-        for path in result["removed"]:
-            print(f"removed empty folder {path!r}")
-        print(f"{len(result['renamed'])} folder(s) renamed or merged, {len(result['removed'])} removed")
+        for key, path in result["organised"].items():
+            print(f"{key!r} -> {path}")
+        for doc_id in result["unassigned"]:
+            print(f"unassigned {doc_id}")
+        print(f"{len(result['organised'])} file(s) copied for {len(result['slugs'])} candidate folder(s)")
     return 0

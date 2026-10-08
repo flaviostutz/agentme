@@ -1,6 +1,6 @@
 ---
 name: _core-adr-policy-003-skill-standards
-description: Defines skill package standards including structure, SKILL.md format, co-location with XDRS packages, and default placement of runtime work files. Use when creating or reviewing skills.
+description: Defines skill package standards including structure, SKILL.md format, script standards, and co-location with XDRS packages. Use when creating or reviewing skills.
 apply-to: All skill packages
 valid-from: 2025-01-01
 ---
@@ -189,39 +189,9 @@ When a skill includes `scripts/`:
 - SHOULD support both human-readable and machine-readable (JSON) output when producing analysis or report output.
 - SHOULD stay single-purpose.
 
-**Work files**
+**Runtime behavior**
 
-Files a skill creates while running MUST follow this default unless the skill or user sets another location:
-- `.tmp/[skill-name]-[YYYYMMDDHHMMSS]/` at the workspace root (local start time), created lazily, suffixed `-2`, `-3`... if taken, holds final outputs.
-- Its `.work/` holds intermediate files (caches, staging); `.work/scripts/` holds ad-hoc scripts generated at runtime.
-- Keep it after the run. Workspaces SHOULD gitignore `.tmp/`; skills MUST NOT edit `.gitignore` for it.
-- MUST NOT write secrets there; use environment or harness, or the OS temp dir (deleted after use) when a file is unavoidable.
-- On a read-only workspace, use the same layout under the OS temp dir.
-- When the dir was created, even on halt or failure, end the final chat message with `results-path: [dir]/`.
-- Skills that create files MUST restate the parts of this layout they use in their own `## Instructions`, to run standalone.
-
-**Quality gate**
-
-Before creating a skill, confirm it removes real ambiguity or repetitive effort compared to not having it. Skills that only restate a Policy, or that handle a one-off task unlikely to recur, SHOULD NOT be created.
-
-**Clarify First**
-
-Generative skills — those producing a deliverable document (Policy, Skill, Article, Research, Initiative, Presentation) — SHOULD list the 2-4 inputs they need confirmed (e.g., topic, scope, audience) and ask the user when any is unknown, stopping once those inputs are confirmed rather than over-interrogating. Skills that route, review, or report instead of authoring a new deliverable do not need this pattern.
-
-**Halt behavior**
-
-Skills MUST halt on missing required input, dubious/ambiguous input, or insufficient agent confidence, unless the user explicitly instructs the agent to proceed anyway. This override applies generally; a skill's own `## Halt Conditions` list does not need to restate it.
-
-**Generated content caps**
-
-Every natural-language content a skill generates MUST declare a hard word cap written exactly as `<N words`, whether a human or an agent executes the skill. This covers files, templates, reports, intermediate chat messages, HITL questions, final summaries, and text posted to external systems (e.g., PR comments, commit messages).
-- Exempt, with no marker: code (including its comments), structured data (JSON, YAML, tracking files), verbatim copies, and frontmatter fields already limited in characters by a spec or Policy.
-- Caps MUST be in words; other limits MAY coexist but never replace them.
-- Declare each cap once: in the template placeholder (including templates in `references/` or `.assets/`), else in the Instructions step producing the content, else in its `#### Contents` bullet.
-- A blanket statement MAY cover a content class (e.g., all intermediate messages); a more specific cap overrides it.
-- Write the number inline; a Policy reference is optional.
-- Content whose size cannot be bounded MUST be marked `(uncapped: <reason>)`, the reason explaining why.
-- Caps are hard: condense, or split into another item only where the skill allows it; never split one logical item across messages. An explicit user request lifts the cap for that item only.
+How a skill behaves while running (work files, quality gate, clarifying questions, halting, generated content caps) is defined in [`_core-adr-policy-023`](023-skill-runtime-standards.md).
 
 **Validation**
 
@@ -238,6 +208,7 @@ skills-ref validate .xdrs/[scope]/[type]/[subject]/skills/[skill-name]
 - [skills-ref validation library](https://github.com/agentskills/agentskills/tree/main/skills-ref)
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md)
 - [_core-adr-policy-004 - Article standards](004-article-standards.md)
+- [_core-adr-policy-023 - Skill runtime standards](023-skill-runtime-standards.md)
 - [_core-adr-policy-005 - Semantic versioning for XDRS packages](005-semantic-versioning-for-xdrs-packages.md)
 - [_core-adr-policy-006 - Research standards](006-research-standards.md)
 - [_core-adr-policy-021 - Skill bundling](021-skill-bundling.md)

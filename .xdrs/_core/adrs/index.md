@@ -28,6 +28,7 @@ Foundational standards, principles, and guidelines.
 - [_core-adr-policy-020](principles/020-media-and-asset-standards.md) - **Media and asset standards** — Canonical diagram format preference order and non-Markdown asset rules for all XDRS document types
 - [_core-adr-policy-021](principles/021-skill-bundling.md) - **Skill bundling** — Optional per-skill Makefile mechanism to stage a self-contained dist/ output for standalone distribution
 - [_core-adr-policy-022](principles/022-scope-activation.md) - **Scope activation** — How installed scopes are listed in the root index, activated, narrowed, or disabled, and when they become read-only
+- [_core-adr-policy-023](principles/023-skill-runtime-standards.md) - **Skill runtime standards** — How skills place work files under .tmp, halt, ask for clarification, and cap generated content
 
 ## Skills
 

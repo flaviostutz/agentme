@@ -69,11 +69,12 @@ def workdir(tmp_path, monkeypatch):
 
 @pytest.fixture
 def report(workdir):
-    """Return a function that writes a report into .tmp/ and returns its relative path."""
+    """Return a function that writes report.md into the run folder .tmp/analyse-cvs/sample and returns its path."""
 
     def write(candidates=(), sources=(), tail=""):
-        path = workdir / ".tmp" / "cv-sample-analysis-2026-10-04.md"
-        path.write_text(_make_report(candidates, sources, tail), encoding="utf-8")
-        return ".tmp/cv-sample-analysis-2026-10-04.md"
+        run = workdir / ".tmp" / "analyse-cvs" / "sample"
+        run.mkdir(parents=True, exist_ok=True)
+        (run / "report.md").write_text(_make_report(candidates, sources, tail), encoding="utf-8")
+        return ".tmp/analyse-cvs/sample/report.md"
 
     return write

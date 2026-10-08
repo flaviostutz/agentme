@@ -5,7 +5,7 @@
 criteria   weights, criteria count, 3 aspects and aspect weight bounds
 scores     score ranges, one decimal, Rationale and Notes limits, source references, Base gap
 scenarios  S1-S3 lines in Scenario notes and the adjustment limits
-interview  the interview list matches the ranking and has no unfilled bullets
+interview  the interview list matches the ranking and every Chart link is filled
 Prints errors (exit 1) and warnings (the skill must resolve or justify each one). Never writes.
 """
 

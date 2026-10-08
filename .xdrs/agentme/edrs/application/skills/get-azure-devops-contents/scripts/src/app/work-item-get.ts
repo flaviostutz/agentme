@@ -111,7 +111,7 @@ export const runWorkItemGet = (argv: readonly string[], deps: Deps): number => {
   const dir =
     typeof parsed['download-dir'] === 'string'
       ? parsed['download-dir']
-      : `.tmp/work-item-attachments/${ref.org}-${ref.id}`;
+      : `.tmp/get-azure-devops-contents/${ref.org}-${ref.id}`;
   const assets = mergeAssets([...related, ...inline]);
   const attachments =
     parsed['no-download'] === true ? [] : downloadAssets(assets, { dir, org: ref.org }, deps);

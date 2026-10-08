@@ -43,7 +43,7 @@ item JSON read through `https://dev.azure.com/contoso`.
 - [ ] Skill accepts the legacy URL without asking the human to convert it.
 - [ ] Skill runs `work-item-get.ts` instead of composing `az rest` or `curl` reads by hand.
 - [ ] Output returns `project: "My Project"`, `rev` and `projectVisibility`.
-- [ ] Output lists the downloaded file with a `path` under `.tmp/work-item-attachments/` and the failed one with an `error`.
+- [ ] Output lists the downloaded file with a `path` under `.tmp/get-azure-devops-contents/` and the failed one with an `error`.
 - [ ] Output `links` contains the wiki URL.
 - [ ] Skill rejects a PR URL for `work-item-get` with a usage error.
 

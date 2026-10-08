@@ -3,8 +3,8 @@
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
+from portfolio_manager.app import acceptance, inputcheck
 from portfolio_manager.app import analyze as analyze_mod
-from portfolio_manager.app import inputcheck
 from portfolio_manager.app import report as report_mod
 from portfolio_manager.app.fx import Rates
 from portfolio_manager.shared.errors import PmError
@@ -35,11 +35,70 @@ def run_analyze(ws: "Workspace", load_rates: RatesLoader) -> dict[str, Any]:
     return result
 
 
+def require_ingested(ws: "Workspace") -> None:
+    if ws.manifest()["status"] == "empty":
+        msg = "nothing ingested yet: run `pm ingest` first"
+        raise PmError(msg)
+
+
+def current_check(ws: "Workspace") -> dict[str, Any]:
+    """Completeness check computed from the ledger in data/ and the user's acceptances."""
+    require_ingested(ws)
+    accounts = ws.read("data/accounts.json", {})
+    return inputcheck.check(
+        ws.read("data/ingest.json", {}),
+        accounts.get("accounts", []),
+        ws.read("data/snapshots.json", []),
+        ws.read("data/unresolved.json", []),
+        accounts.get("openings", {}),
+        acceptance.load(ws.read(acceptance.FILE)),
+    )
+
+
+def blocked(ws: "Workspace", what: str) -> str | None:
+    """Refusal text while a finding is open or a record is unresolved; None when the output may be written."""
+    result = current_check(ws)
+    parts = []
+    if (n := len(inputcheck.open_findings(result))) > 0:
+        parts.append(f"{n} finding(s) open")
+    if result["unresolved"]:
+        parts.append(f"{len(result['unresolved'])} unresolved record(s)")
+    if not parts:
+        return None
+    return (
+        f"{what} refused: {' and '.join(parts)}. Add statements, or the user accepts each finding with "
+        "`pm accept` and answers each record with `pm answer`; `pm check-input` lists them."
+    )
+
+
+def set_expected_start(ws: "Workspace", text: str | None) -> None:
+    """Save the first day the user expects the statements to cover; it cannot be after the latest data."""
+    day = acceptance.parse_day(text).isoformat()
+    require_ingested(ws)
+    latest = inputcheck.latest_date(ws.read("data/ingest.json", {}), ws.read("data/snapshots.json", []))
+    if latest and day > latest:
+        msg = f"--from {day} is after the latest statement date {latest}"
+        raise PmError(msg)
+    ws.write_tracked(acceptance.FILE, acceptance.with_expected_start(acceptance.load(ws.read(acceptance.FILE)), day))
+
+
+def record_acceptances(ws: "Workspace", ids: list[str] | None, reason: str | None, note: str | None) -> int:
+    """Store the user's decision for each finding id; returns how many findings were accepted."""
+    if not ids:
+        msg = "--id is required (repeat it to accept several findings)"
+        raise PmError(msg)
+    clean = acceptance.clean_note(note)
+    found = current_check(ws)["findings"]
+    store = acceptance.add(acceptance.load(ws.read(acceptance.FILE)), found, ids, reason, clean)
+    ws.write_tracked(acceptance.FILE, store)
+    return len(set(ids))
+
+
 def run_report(ws: "Workspace", load_rates: RatesLoader) -> tuple[dict[str, Any], dict[str, str], list[dict[str, Any]]]:
     """Analyze, then write the markdown reports and graphs; stale outputs are removed."""
     analysis = run_analyze(ws, load_rates)
     unresolved = ws.read("data/unresolved.json", [])
-    files = report_mod.render(analysis, unresolved, ws.read("data/classifications.json", []))
+    files = report_mod.render(analysis, unresolved, ws.read("data/classifications.json", []), current_check(ws))
     ws.clean_outputs("reports", "*.md", set(files))
     ws.clean_outputs("graphs", "*.mmd", set(files))
     for rel, text in files.items():
@@ -58,11 +117,8 @@ def record_answer(ws: "Workspace", answer_id: str | None, value: str | None, acc
         answers["accept_files"] = sorted(set(answers["accept_files"]) | {shas[0]})
     else:
         pending = {u["id"] for u in ws.read("data/unresolved.json", [])}
-        ingest = ws.read("data/ingest.json", {})
-        accounts = ws.read("data/accounts.json", {}).get("accounts", [])
-        noted = {g["id"] for g in inputcheck.gaps(ingest, accounts, ws.read("data/snapshots.json", []))}
-        if answer_id not in pending | noted:
-            msg = f"unknown id {answer_id!r}; pending ids: {', '.join(sorted(pending | noted)[:10]) or 'none'}"
+        if answer_id not in pending:
+            msg = f"unknown id {answer_id!r}; pending ids: {', '.join(sorted(pending)[:10]) or 'none'}"
             raise PmError(msg)
         if not value:
             msg = "--value is required with --id"

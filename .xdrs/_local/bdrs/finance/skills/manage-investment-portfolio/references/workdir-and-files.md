@@ -14,7 +14,30 @@
 | `exports/portfolio-performance/` | Written by `pm export` only: Portfolio Performance CSV files (see below); fully rewritten on each export |
 | `logs/` | JSONL run logs (timestamps live only here) |
 | `answers.json` | `answers` (record id to value) and `accept_files` (sha256) |
+| `acceptances.json` | Written by `pm check-input --from` and `pm accept`: `settings.expected_start` and `accepted` (finding id, kind, reason, note). Tracked by `validate`; never edit by hand |
 | `manifest.json` | Hashes of raw and ledger files, used by `validate` |
+
+## Completeness findings
+
+`pm check-input` computes findings from the ledger and `acceptances.json` and writes `derived/input-check.json`.
+A finding id is a hash of its kind, account and key facts, so a new statement that fixes the cause removes the
+finding and a changed cause creates a new id that needs a new decision. `pm report`, `pm run` and `pm export`
+are refused while a finding is open or a record is unresolved.
+
+| Kind | Raised when | Reasons the user may give |
+| --- | --- | --- |
+| `gap` | A period between two statements of one account is not covered | `opened-on-date`, `no-activity`, `unobtainable`, `accept-as-is` |
+| `late-start` | The first statement starts more than 35 days after the expected start, or the account has only reference statements | same four |
+| `stale-end` | An account's last statement is more than 35 days before the latest data of any account | same four |
+| `derived-opening` | An opening position was derived without a cost basis | same four |
+| `check-warn` | A statement check failed softly | `unobtainable`, `accept-as-is` |
+| `overlap` | Overlapping statements disagree (`overlap-mismatch`) or double-count period flows (`period-flows-overlap`) | `unobtainable`, `accept-as-is` |
+| `scope` | Which accounts are covered; the user confirms nothing else is missing | `accept-as-is` |
+| `expected-start` | No expected start date was given with `--from` yet | `accept-as-is` |
+
+`pm accept --id <id> [--id ...] --reason <reason> --note "<text>"` stores one record per id. The note is the
+user's own words: one line, 1 to 200 characters. An invalid kind and reason pair, an unknown id or a missing
+note exits 2 and stores nothing. `portfolio.md` shows the reason and note per account.
 
 ## Portfolio Performance export
 

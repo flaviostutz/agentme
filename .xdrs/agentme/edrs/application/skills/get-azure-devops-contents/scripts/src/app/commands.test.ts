@@ -80,7 +80,7 @@ describe('runWorkItemGet', () => {
       reproSteps: null,
       comments: [{ id: 1, author: 'Cy', markdown: 'md:<p>see https://other.example.com/x</p>' }],
       attachments: [
-        { name: 'shot.png', url: ATT, path: '.tmp/work-item-attachments/contoso-321/1-shot.png' },
+        { name: 'shot.png', url: ATT, path: '.tmp/get-azure-devops-contents/contoso-321/1-shot.png' },
       ],
       links: [
         'https://example.com/design',

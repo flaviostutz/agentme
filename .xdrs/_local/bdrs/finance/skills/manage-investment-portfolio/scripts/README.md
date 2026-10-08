@@ -14,18 +14,20 @@ One CLI, `pm`, with these subcommands (all take `--name <work-name>`):
 | `inspect` | Report page counts, status and detected institution of PDFs, never amounts |
 | `ingest` | Copy PDFs to `raw/`, parse them with the institution adapters and merge into the ledger |
 | `answer` | Store an answer for an unresolved record, or accept a rejected file, then re-ingest |
+| `check-input` | List completeness findings (gaps, late starts, stale ends, derived openings, scope); `--from <date>` records the first day the user expects covered |
+| `accept` | Close findings with the user's reason and note (`--id` repeatable); stored in `acceptances.json` |
 | `analyze` | ECB FX, accounting, reconciliation and performance |
 | `classify` | Write the classification queue or import researched classifications |
-| `report` | Analyze and write markdown reports and `.mmd` graphs |
-| `export` | Write Portfolio Performance CSV files to `exports/portfolio-performance/`; `--decimal-comma` for a German number format |
-| `export` | Write the ledger as Portfolio Performance CSV files in `exports/portfolio-performance/` and verify they read back into the same ledger |
-| `run` | `init`, `ingest` and `report` in one step (does not export) |
+| `report` | Analyze and write markdown reports and `.mmd` graphs; refused (exit 1, nothing written) while a finding is open or a record is unresolved |
+| `export` | Write the ledger as Portfolio Performance CSV files in `exports/portfolio-performance/` and verify they read back into the same ledger; `--decimal-comma` for a German number format; same gate as `report` |
+| `run` | `init`, `ingest` and `report` in one step (does not export); same gate as `report` |
 | `validate` | Check hashes, rejected files, errors and failed checks |
 
 Run it without installing anything, using the package folder as the source:
 
 ```bash
-uvx --from <skill-dir>/scripts pm run --name main --offline --source .tmp/statements
+uvx --from <skill-dir>/scripts pm ingest --name main --source .tmp/statements
+uvx --from <skill-dir>/scripts pm check-input --name main --from 2025-01-01
 ```
 
 ## Layout

@@ -411,10 +411,10 @@ def embedded_charts(analysis: dict) -> list:
     return out
 
 
-def render(analysis: dict, unresolved: list, known: list) -> dict:
+def render(analysis: dict, unresolved: list, known: list, check: dict | None = None) -> dict:
     """Return {relative path: text} for every report and graph."""
     files = {
-        "reports/portfolio.md": portfolio_report(analysis, unresolved),
+        "reports/portfolio.md": portfolio_report(analysis, unresolved, check),
         "reports/monthly.md": periodic_report(analysis, unresolved, "Monthly report", lambda x: x.startswith("month ")),
         "reports/yearly.md": periodic_report(
             analysis, unresolved, "Yearly report", lambda x: x.startswith(("year", "inception"))

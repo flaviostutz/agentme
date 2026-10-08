@@ -28,6 +28,7 @@ test: build
 	$(MISE) uvx --from $(BUILD)/scripts cvs-check --help > /dev/null
 	$(MISE) uvx --from $(BUILD)/scripts cvs-rank --help > /dev/null
 	$(MISE) uvx --from $(BUILD)/scripts cvs-sources --help > /dev/null
+	$(MISE) uvx --from $(BUILD)/scripts cvs-publish --help > /dev/null
 
 clean:
 	@echo ">>> .xdrs/agentme/bdrs/operations/skills/analyse-cvs: $@"

@@ -7,8 +7,8 @@ description: >
    bootstrap agentme guidance into a repository without manually deciding which records to keep.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-21
+  version: "1.2.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -37,6 +37,7 @@ extraction.
 - Package does not expose enough metadata to enumerate XDRs
 - Extraction would overwrite locally customized agent files
 - Candidate exclusion is debatable (keep instead of guessing)
+- Package metadata is dubious (malformed or contradictory) and the human does not confirm it
 
 ### Runtime Requirements
 - Node.js 18+ (agentme CLI)

@@ -8,8 +8,8 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.5.0"
-  updated: 2026-09-24
+  version: "3.6.0"
+  updated: 2026-10-08
 ---
 
 ## Overview
@@ -18,13 +18,13 @@ Ensures that every plan is deeply validated through iterative consistency checks
 
 **Questioning rule**: Ask questions about all findings proactively — skip only trivially obvious ones with no decision weight. Use `vscode_askQuestions` when available; ask at most 4–5 tightly related questions per call. Before each new round, explicitly state what territory has not yet been explored and will be the focus of this round (in structured phases such as Phase 4 or Phase 6, state which predefined check or angle you are covering next) — do not re-ask questions already addressed in previous rounds. Never self-resolve a choice point, and never produce output, plan sections, or decisions while any open decision, unresolved assumption, or ambiguity remains — embed nothing as 'or X / TBD / to be decided' — resolve through questions first. For findings with major impact on downstream users or consumers (breaking changes, behavior regressions, removals), do not ask — emit a prominently formatted **SEVERE WARNING** with a clear description of the impact and continue.
 
-**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay under 140 words and include:
-1. **Title and context**: a title under 15 words, then a context line under 25 words with the finding and current state.
-2. **Options with consequences**: 2–4 options, each under 25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): a short title with option labels ("Choose A or B?") is never enough. Every question MUST stay <140 words and include:
+1. **Title and context**: a title <15 words, then a context line <25 words with the finding and current state.
+2. **Options with consequences**: 2–4 options, each <25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
 3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the human still decides.
 4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
 5. **UI fields**: fill the `vscode_askQuestions` header, question, message, option labels, and option descriptions (consequences) with as much as fits each ~200-character limit; condense before truncating. If anything was cut, also put the full question in chat first; never reduce the UI to "see above".
-6. **Phase gates**: gate summaries under 80 words.
+6. **Phase gates**: gate summaries <80 words.
 7. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording, up to twice the caps.
 
 Example:
