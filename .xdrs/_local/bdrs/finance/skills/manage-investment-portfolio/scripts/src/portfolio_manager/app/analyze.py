@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from itertools import pairwise
 
-from portfolio_manager.app import accounting, reconcile
+from portfolio_manager.app import accounting, overview, reconcile
 from portfolio_manager.app import performance as perf
 from portfolio_manager.app.records import dec
 from portfolio_manager.shared.values import ZERO
@@ -44,6 +44,7 @@ class Valuer:
 
     def __init__(self, acct: dict, res: dict | None, opening: dict, snaps: list, events: list, refs: list) -> None:
         self.acct, self.res, self.opening = acct, res, opening
+        self.snaps = sorted(snaps, key=lambda s: s["date"])
         self.checkpoints = sorted((s["date"], _supported_total(s)) for s in snaps if _supported_total(s) is not None)
         self.mode = acct["mode"]
         if (
@@ -105,7 +106,7 @@ class Valuer:
             for r in (
                 r
                 for r in refs
-                if r["kind"] == "period-flows" and r["account"] == acct and not norm(r["asset"]).startswith("poupanca")
+                if r["kind"] == "period-flows" and r["account"] == acct and not norm(r["security"]).startswith("poupanca")
             ):
                 span = date.fromisoformat(r["to"]) - date.fromisoformat(r["from"])
                 mid = (date.fromisoformat(r["from"]) + span / 2).isoformat()
@@ -135,6 +136,20 @@ class Valuer:
         flow_total = sum((f["amount"] for f in self.flows if before[0] < f["date"] <= after[0]), ZERO)
         frac = Decimal(perf.days_between(before[0], day)) / Decimal(perf.days_between(before[0], after[0]))
         return before[1] + flow_to_day + (after[1] - before[1] - flow_total) * frac
+
+    def split(self, day: str) -> tuple:
+        """(cash, positions) in the account currency at a date; (None, None) when the statement has no position detail."""
+        total, _ = self.value(day)
+        if total is None:
+            return None, None
+        if self.mode == "transactions":
+            cash = self.holdings_at(day)[0]
+            return cash, total - cash
+        snap = next((s for s in self.snaps if s["date"] == day and s["positions"]), None)
+        if snap is None:
+            return None, None
+        positions = sum((Decimal(p["value"]) for p in snap["positions"] if not p.get("unsupported")), ZERO)
+        return total - positions, positions
 
     def value(self, day: str) -> tuple:
         if self.first is None or day < self.first:
@@ -314,8 +329,15 @@ def _row(label: str, start: str, end: str, first: str, *, partial: bool = False,
 
 
 def periods(first: str, last: str) -> list:
-    """Inception plus every calendar month and year inside [first, last]; a period cut by `last` is marked partial."""
+    """Inception, the last 12 months, every calendar month and year inside [first, last]; a period cut by `last` is partial.
+
+    The last-12-months window starts at the first date when the history is shorter and then says how long it is.
+    """
     out = [_row("inception", first, last, first, inception=True)]
+    start = max(first, _back_12_months(last))
+    short = start == first
+    label = f"last 12 months ({window_label(perf.days_between(first, last))} of history)" if short else "last 12 months"
+    out.append(_row(label, start, last, first, inception=short))
     ends = month_ends(first, last)
     prev = first
     for e in ends:
@@ -331,7 +353,7 @@ def periods(first: str, last: str) -> list:
     return [p for p in out if p["from"] < p["to"]]
 
 
-def assets_table(acct: dict, res: dict | None, snaps: list, rates) -> list:
+def securities_table(acct: dict, res: dict | None, snaps: list, rates) -> list:
     """Latest statement positions with lots-based cost and realized P&L when the account has transactions."""
     with_pos = [s for s in snaps if s["positions"]]
     if not with_pos:
@@ -351,16 +373,20 @@ def assets_table(acct: dict, res: dict | None, snaps: list, rates) -> list:
             "value": p["value"],
             "as_of": snap["date"],
             "unsupported": bool(p.get("unsupported")),
-            "asset_class": p.get("asset_class"),
+            "security_class": p.get("security_class"),
             "value_eur": _opt(rates.to_eur(Decimal(p["value"]), p["currency"], snap["date"])[0]),
         }
         if res is not None:
             lots = [lot for lot in res["lots"] if lot["isin"] == key]
             realized = [r for r in res["realized"] if r["isin"] == key]
             costs = [lot["cost"] for lot in lots]
+            costs_eur = [lot["cost_eur"] for lot in lots]
             row.update(
                 lots=lots,
                 cost=None if not lots or any(c is None for c in costs) else dec(sum((Decimal(c) for c in costs), ZERO)),
+                cost_eur=None
+                if not lots or any(c is None for c in costs_eur)
+                else dec(sum((Decimal(c) for c in costs_eur), ZERO)),
                 realized_pnl=dec(sum((Decimal(r["pnl"]) for r in realized if r["pnl"] is not None), ZERO))
                 if realized
                 else None,
@@ -379,8 +405,44 @@ def _flatten_checks(rows: list) -> dict:
     return counts
 
 
-def analyze(data: dict, rates) -> dict:
-    """data: accounts, openings, events, snapshots, references. Returns the JSON-ready analysis."""
+def _account_split(view: Eur, rates) -> dict:
+    """Cash and open positions at the account's latest date, native and EUR (None when the statement has no detail)."""
+    v = view.v
+    cash, positions = v.split(v.last)
+    out = {"cash": _opt(cash), "positions": _opt(positions), "cash_eur": None, "positions_eur": None}
+    if cash is not None:
+        out["cash_eur"] = _opt(rates.to_eur(cash, view.ccy, v.last)[0])
+        out["positions_eur"] = _opt(rates.to_eur(positions, view.ccy, v.last)[0])
+    return out
+
+
+def _portfolio(views: dict, rates) -> tuple:
+    """Consolidated block (without the overview sections) and the portfolio view."""
+    pf = Portfolio(list(views.values()))
+    common = min(v.v.last for v in views.values())
+    block = {
+        "first": pf.first,
+        "common_date": common,
+        "value_eur": _opt(pf.value(common)[0]),
+        "value_status": pf.value(common)[1],
+        "periods": [dict(p, **metrics(pf, p["from"], p["to"], p["xirr_from"])) for p in periods(pf.first, common)],
+        "accounts": [
+            {
+                "account": k,
+                "last": v.v.last,
+                "value": _opt(v.v.value(v.v.last)[0]),
+                "currency": v.ccy,
+                "value_eur": _opt(v.value(v.v.last)[0]),
+                **_account_split(v, rates),
+            }
+            for k, v in sorted(views.items())
+        ],
+    }
+    return block, pf
+
+
+def analyze(data: dict, rates, benchmark: tuple = (None, None)) -> dict:
+    """data: accounts, openings, events, snapshots, references; benchmark: (ticker, saved series). JSON-ready result."""
     accounts, openings = data["accounts"]["accounts"], data["accounts"]["openings"]
     events, snapshots, refs = data["events"], data["snapshots"], data["references"]
     for e in events:
@@ -388,7 +450,7 @@ def analyze(data: dict, rates) -> dict:
             rates.add_statement(e["currency"], e["date"], Decimal(e["fx_rate"]))
     acct_res = accounting.run(accounts, openings, events, rates.to_eur)
     checks = reconcile.reconcile(acct_res, events, snapshots, refs, openings)
-    views, per_account, excluded = {}, {}, []
+    views, valuers, per_account, excluded = {}, {}, {}, []
     for a in accounts:
         snaps = [s for s in snapshots if s["account"] == a["id"]]
         valuer = Valuer(a, acct_res.get(a["id"]), openings.get(a["id"], {}), snaps, events, refs)
@@ -398,7 +460,7 @@ def analyze(data: dict, rates) -> dict:
         if rates.to_eur(Decimal(1), a["currency"], valuer.last)[0] is None:
             excluded.append({"account": a["id"], "reason": f"no {a['currency']} rate for {valuer.last}"})
             continue
-        views[a["id"]] = view
+        views[a["id"]], valuers[a["id"]] = view, valuer
         per_account[a["id"]] = {
             "account": a,
             "first": valuer.first,
@@ -410,31 +472,15 @@ def analyze(data: dict, rates) -> dict:
                 dict(p, **metrics(view, p["from"], p["to"], p["xirr_from"])) for p in periods(valuer.first, valuer.last)
             ],
             "accounting": acct_res.get(a["id"]),
-            "assets": assets_table(a, acct_res.get(a["id"]), snaps, rates),
+            "securities": securities_table(a, acct_res.get(a["id"]), snaps, rates),
         }
-    portfolio = {}
+    portfolio, parts = {}, {}
     if views:
-        pf = Portfolio(list(views.values()))
-        common = min(v.v.last for v in views.values())
-        portfolio = {
-            "first": pf.first,
-            "common_date": common,
-            "value_eur": _opt(pf.value(common)[0]),
-            "value_status": pf.value(common)[1],
-            "periods": [dict(p, **metrics(pf, p["from"], p["to"], p["xirr_from"])) for p in periods(pf.first, common)],
-            "accounts": [
-                {
-                    "account": k,
-                    "last": v.v.last,
-                    "value": _opt(v.v.value(v.v.last)[0]),
-                    "currency": v.ccy,
-                    "value_eur": _opt(v.value(v.v.last)[0]),
-                }
-                for k, v in sorted(views.items())
-            ],
-        }
+        portfolio, pf = _portfolio(views, rates)
+        parts = overview.build(portfolio, per_account, valuers, pf, data, rates, (metrics, month_ends), benchmark)
     return {
         "portfolio": portfolio,
+        **parts,
         "accounts": per_account,
         "excluded": excluded,
         "checks": checks,

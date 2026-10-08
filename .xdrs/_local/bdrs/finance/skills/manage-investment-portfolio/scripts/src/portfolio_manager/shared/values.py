@@ -18,7 +18,7 @@ CURRENCY_CODES = ("EUR", "USD", "BRL", "GBP", "CHF", "CAD")
 _MONEY = re.compile(
     r"^(?P<s1>[-+])?\s*(?P<mark>US\$|R\$|€|\$|£)?\s*(?P<s2>[-+])?\s*(?P<num>\d[\d.,]*)\s*(?P<code>[A-Z]{3})?\s*(?P<s3>-)?$"
 )
-CALCULATION_VERSION = 2
+CALCULATION_VERSION = 3
 ZERO = Decimal(0)
 CENT = Decimal("0.01")
 

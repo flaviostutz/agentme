@@ -59,7 +59,7 @@ def parse(doc: Doc, answers: dict) -> list:
                     "account": acct,
                     "year": int(y),
                     "section": section,
-                    "asset": m.group("name").title(),
+                    "security": m.group("name").title(),
                     "start": dec(parse_number(m.group("a"), ",")),
                     "end": dec(parse_number(m.group("b"), ",")),
                     "income": dec(parse_number(m.group("c"), ",")) if m.group("c") else None,

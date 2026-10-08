@@ -9,6 +9,7 @@ from portfolio_manager.shared.values import ZERO
 EPS = Decimal("0.000001")
 PLACES = Decimal("0.0000000001")
 FLOW_TYPES = {"DEPOSIT": 1, "WITHDRAWAL": 1, "TRANSFER_IN": 1, "TRANSFER_OUT": 1}
+INCOME_KINDS = {"DIVIDEND": "dividends", "INTEREST": "interest", "FEE": "fees", "TAX": "taxes"}
 
 
 def _opt(value) -> str | None:
@@ -24,6 +25,7 @@ class Account:
         self.lots: dict = defaultdict(deque)
         self.realized, self.flows, self.errors, self.states = [], [], [], []
         self.income = {"dividends": ZERO, "interest": ZERO, "fees": ZERO, "taxes": ZERO, "withholding": ZERO}
+        self.income_events: list = []
         self.unreliable: set = set()
         self.negative_cash_days: set = set()
         self.opening_date = opening.get("date")
@@ -136,17 +138,30 @@ class Account:
             self.sell(e)
         elif kind == "SPLIT":
             self.split(e)
-        elif kind == "DIVIDEND":
-            self.income["dividends"] += Decimal(e["cash"])
-            self.income["withholding"] += Decimal(e["tax"])
-        elif kind == "INTEREST":
-            self.income["interest"] += Decimal(e["cash"])
-        elif kind == "FEE":
-            self.income["fees"] += -Decimal(e["cash"])
-        elif kind == "TAX":
-            self.income["taxes"] += -Decimal(e["cash"])
+        elif kind in INCOME_KINDS:
+            self._income(e)
         if kind in FLOW_TYPES:
             self.flows.append({"date": e["date"], "type": kind, "amount": dec(Decimal(e["cash"]))})
+
+    def _income(self, e: dict) -> None:
+        """Totals per kind plus a dated event (positive magnitude, EUR at the event date) for period reports."""
+        kind = INCOME_KINDS[e["type"]]
+        sign = 1 if kind in ("dividends", "interest") else -1
+        amount = sign * Decimal(e["cash"])
+        self.income[kind] += amount
+        withholding = Decimal(e["tax"]) if kind == "dividends" else ZERO
+        self.income["withholding"] += withholding
+        self.income_events.append(
+            {
+                "date": e["date"],
+                "kind": kind,
+                "security": e["isin"] or e["symbol"],
+                "name": e["name"],
+                "amount": dec(amount),
+                "amount_eur": _opt(self.to_eur(amount, self.ccy, e["date"])[0]),
+                "withholding_eur": _opt(self.to_eur(withholding, self.ccy, e["date"])[0]),
+            }
+        )
 
     def result(self) -> dict:
         open_lots = [
@@ -174,6 +189,7 @@ class Account:
             "realized": self.realized,
             "realized_status": "complete" if len(known) == len(self.realized) else "partial",
             "income": {k: dec(v) for k, v in self.income.items()},
+            "income_events": self.income_events,
             "flows": self.flows,
             "states": self.states,
             "errors": self.errors,
