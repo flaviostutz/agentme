@@ -100,7 +100,8 @@ def parse(doc: Doc, answers: dict) -> list:
     if "Number of positions" not in lines or "Total value" not in lines:
         msg = "upvest snapshot: missing totals"
         raise PmError(msg)
-    count = int(_value_after(lines, "Number of positions"))
+    # some layouts print the count twice on one line ("7 7")
+    count = int(_value_after(lines, "Number of positions").split()[0])
     total = parse_money(_value_after(lines, "Total value"))[1]
     pos_sum = sum((Decimal(p["value"]) for p in positions), ZERO)
     res["snapshots"] = [

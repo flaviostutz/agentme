@@ -1,5 +1,6 @@
 """'How far to trust' section: per-account data quality, announced coverage gaps and fixed disclosures."""
 
+from portfolio_manager.app import concepts
 from portfolio_manager.app.fmt import cell, table
 
 DISCLOSURES = (
@@ -49,8 +50,17 @@ def section(analysis: dict, check: dict | None) -> list:
         ]
         for k, a in sorted(analysis["accounts"].items())
     ]
-    out = ["## How far to trust", ""]
-    out += table(["Account", "Mode", "Flows", "Latest date", "Coverage findings (user status)", "Warnings"], rows)
+    counts = analysis["check_counts"]
+    out = [
+        f"## How far to trust ({concepts.link('trust')})",
+        "",
+        "<details>",
+        f"<summary>Data quality per investment account and coverage findings ({counts['warn'] + counts['fail']} warn/fail checks)</summary>",
+        "",
+    ]
+    out += table(
+        ["Investment account", "Mode", "Flows", "Latest date", "Coverage findings (user status)", "Warnings"], rows
+    )
     if check is None:
         out += ["Coverage was not checked in this run (`pm check-input`).", ""]
     else:
@@ -60,4 +70,4 @@ def section(analysis: dict, check: dict | None) -> list:
     out += [f"- {d}" for d in DISCLOSURES]
     if late:
         out.append(f"- Late start in this data set: {', '.join(late)}.")
-    return [*out, ""]
+    return [*out, "", "</details>", ""]

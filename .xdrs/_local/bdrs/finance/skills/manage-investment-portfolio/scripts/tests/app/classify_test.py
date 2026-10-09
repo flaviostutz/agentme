@@ -5,7 +5,7 @@ from portfolio_manager.app import classify
 
 GOOD = {
     "isin": "IE00B4L5Y983",
-    "asset_class": "etf",
+    "security_class": "etf",
     "region": "World",
     "source_url": "https://example.org/fund",
     "as_of": "2025-06-30",
@@ -24,7 +24,7 @@ def test_validate_rejects_amounts_and_unknown_fields():
 
 def test_validate_rejects_bad_values():
     bad = [
-        {"isin": "nope", "asset_class": "magic", "source_url": "http://x", "as_of": "yesterday"},
+        {"isin": "nope", "security_class": "magic", "source_url": "http://x", "as_of": "yesterday"},
         {"isin": "IE00B4L5Y983"},
         "text",
     ]
@@ -34,7 +34,7 @@ def test_validate_rejects_bad_values():
         "not a valid ISIN" in errors[0]
         and "https" in errors[0]
         and "YYYY-MM-DD" in errors[0]
-        and "asset_class" in errors[0]
+        and "security_class" in errors[0]
     )
     assert "missing source_url" in errors[1]
     assert "must be an object" in errors[2]
@@ -61,15 +61,15 @@ def test_queue_lists_identifiers_only_and_skips_known_and_unsupported():
     assert q == [{"isin": "US0378331005", "ticker": "B", "name": "Beta"}]
 
 
-def test_allocation_groups_with_unclassified_and_asset_class_fallback():
+def test_allocation_groups_with_unclassified_and_security_class_fallback():
     assets = [
-        {"isin": "IE00B4L5Y983", "value_eur": "60", "asset_class": None},
-        {"isin": "", "value_eur": "30", "asset_class": "bond"},
-        {"isin": "X", "value_eur": "10", "asset_class": None},
+        {"isin": "IE00B4L5Y983", "value_eur": "60", "security_class": None},
+        {"isin": "", "value_eur": "30", "security_class": "bond"},
+        {"isin": "X", "value_eur": "10", "security_class": None},
         {"isin": "U", "value_eur": "5", "unsupported": True},
         {"isin": "N", "value_eur": None},
     ]
     by_region = classify.allocation(assets, [GOOD], "region")
     assert by_region == {"World": Decimal(60), "unclassified": Decimal(40)}
-    by_class = classify.allocation(assets, [GOOD], "asset_class")
+    by_class = classify.allocation(assets, [GOOD], "security_class")
     assert by_class == {"etf": Decimal(60), "bond": Decimal(30), "unclassified": Decimal(10)}

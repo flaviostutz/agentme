@@ -19,10 +19,21 @@ def test_resolve_tmp_only_allows_paths_inside_tmp(tmp_path):
 
 def test_work_dir_name_validation(tmp_path):
     (tmp_path / ".tmp").mkdir()
-    assert work_dir("my-run_1", tmp_path).name == "manage-investment-portfolio-my-run_1"
-    for bad in ("", "a/b", "a b"):
+    assert work_dir("my-run-1", tmp_path) == (tmp_path / ".tmp" / "manage-investment-portfolio" / "my-run-1").resolve()
+    for bad in ("", "a/b", "a b", "My_Run", "-a", "a--b", ".work"):
         with pytest.raises(PmError):
             work_dir(bad, tmp_path)
+
+
+def test_cache_lives_in_the_skill_work_folder_apart_from_the_run_folder(tmp_path):
+    ws = Workspace(tmp_path / ".tmp" / "manage-investment-portfolio" / "p1")
+    assert ws.read_cache("x.json") is None
+    ws.write_cache("x.json", {"k": 1})
+    assert ws.read_cache("x.json") == {"k": 1}
+    assert ws.cache_path("x.json") == tmp_path / ".tmp" / "manage-investment-portfolio" / ".work" / "p1" / "x.json"
+    assert not ws.path("cache").exists()
+    ws.cache_path("x.json").write_text("{broken", encoding="utf-8")
+    assert ws.read_cache("x.json") is None
 
 
 def test_dumps_is_deterministic_and_workspace_roundtrips(tmp_path):

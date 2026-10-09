@@ -3,17 +3,26 @@
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from portfolio_manager.app import acceptance, inputcheck
+from portfolio_manager.app import acceptance, inputcheck, reports
 from portfolio_manager.app import analyze as analyze_mod
-from portfolio_manager.app import report as report_mod
+from portfolio_manager.app import benchmark as benchmark_mod
 from portfolio_manager.app.fx import Rates
+from portfolio_manager.app.ingest import BENCHMARK_FILE
 from portfolio_manager.shared.errors import PmError
+from portfolio_manager.shared.values import CALCULATION_VERSION
 
 if TYPE_CHECKING:
     from portfolio_manager.adapters.connectors.local_fs.workspace import Workspace
 
 RatesLoader = Callable[[str], tuple[Rates, str]]
+ChartDownloader = Callable[[str], tuple[dict | None, str]]
 LEDGER_FILES = ("accounts", "events", "snapshots", "references")
+
+
+def configured_ticker(ws: "Workspace") -> str | None:
+    """The benchmark ticker saved in config.yaml, or None when none is configured."""
+    cfg = ws.config().get("benchmark")
+    return (cfg.get("ticker") if isinstance(cfg, dict) else None) or None
 
 
 def run_analyze(ws: "Workspace", load_rates: RatesLoader) -> dict[str, Any]:
@@ -22,17 +31,53 @@ def run_analyze(ws: "Workspace", load_rates: RatesLoader) -> dict[str, Any]:
     if any(v is None for v in data.values()):
         msg = "nothing ingested yet: run `pm ingest` first"
         raise PmError(msg)
+    manifest = ws.manifest()
+    if manifest.get("calculation_version") != CALCULATION_VERSION:
+        msg = (
+            f"this work dir was ingested with calculation version {manifest.get('calculation_version')}, "
+            f"the skill is at {CALCULATION_VERSION}: run `pm ingest` again (or `pm run`)"
+        )
+        raise PmError(msg)
     last = max((s["date"] for s in data["snapshots"]), default="1970-01-01")
     rates, notice = load_rates(last)
-    manifest = ws.manifest()
     manifest["status"] = "analyzing"
     ws.save_manifest(manifest)
-    result = analyze_mod.analyze(data, rates)
+    result = analyze_mod.analyze(data, rates, (configured_ticker(ws), ws.read(BENCHMARK_FILE)))
     result["fx_notice"] = notice
     ws.write("derived/analysis.json", result)
     manifest["status"] = "analyzed"
     ws.save_manifest(manifest)
     return result
+
+
+def run_benchmark(ws: "Workspace", ticker: str | None, downloader: ChartDownloader) -> dict[str, Any]:
+    """Download monthly closes for the ticker (or use the cached response when offline) and save them as a tracked input.
+
+    Only the ticker leaves the machine. The ticker is saved in config.yaml once the data has been accepted.
+    """
+    symbol = benchmark_mod.validate_ticker(ticker or configured_ticker(ws) or "")
+    cache = f"yahoo-{symbol}.json"
+    payload, error = downloader(symbol)
+    source = "download"
+    series = None
+    if payload is not None:
+        try:
+            series = benchmark_mod.parse_chart(payload)
+        except PmError as err:
+            error = str(err)
+    if series is None:
+        cached = ws.read_cache(cache)
+        if cached is None:
+            msg = f"benchmark for {symbol} not available: {error or 'no data'}; no cached copy exists"
+            raise PmError(msg)
+        series, source = benchmark_mod.parse_chart(cached), "cache"
+    else:
+        ws.write_cache(cache, payload)
+    ws.write_tracked(BENCHMARK_FILE, {"ticker": symbol, "source": source, **series})
+    cfg = ws.config()
+    cfg["benchmark"] = {"ticker": symbol}
+    ws.save_config(cfg)
+    return {"ticker": symbol, "source": source, "months": len(series["prices"]), "currency": series["currency"]}
 
 
 def require_ingested(ws: "Workspace") -> None:
@@ -98,11 +143,12 @@ def run_report(ws: "Workspace", load_rates: RatesLoader) -> tuple[dict[str, Any]
     """Analyze, then write the markdown reports and graphs; stale outputs are removed."""
     analysis = run_analyze(ws, load_rates)
     unresolved = ws.read("data/unresolved.json", [])
-    files = report_mod.render(analysis, unresolved, ws.read("data/classifications.json", []), current_check(ws))
-    ws.clean_outputs("reports", "*.md", set(files))
-    ws.clean_outputs("graphs", "*.mmd", set(files))
+    files = reports.render(analysis, unresolved, ws.read("data/classifications.json", []), current_check(ws))
+    for sub, pattern in (("reports", "*.md"), ("graphs", "*.mmd"), ("graphs", "*.svg")):
+        ws.clean_outputs(sub, pattern, set(files))
     for rel, text in files.items():
         ws.write_text(rel, text)
+    ws.write("derived/securities.json", {"accounts": {k: a["securities"] for k, a in analysis["accounts"].items()}})
     return analysis, files, unresolved
 
 

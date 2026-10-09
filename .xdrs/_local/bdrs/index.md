@@ -8,5 +8,5 @@ Overrides all other scopes for project-internal business rules and product conte
 Personal finance analysis.
 
 - [analyse-account-transactions](finance/skills/analyse-account-transactions/SKILL.md) - **Analyse transactions** — Normalizes, grounds and classifies bank, card and shared-expense statements from any bank and period, then reports money flow, hidden and recurring spending, and costed actions *(skill)*
-- [manage-investment-portfolio](finance/skills/manage-investment-portfolio/SKILL.md) - **Manage investment portfolio** — Parses Revolut, Trading 212, Upvest and Banco do Brasil statement PDFs into a reconciled ledger, then reports wealth, returns, cash flows, P&L, FX effect and allocation per account, asset, month and year *(skill)*
+- [manage-investment-portfolio](finance/skills/manage-investment-portfolio/SKILL.md) - **Manage investment portfolio** — Parses Revolut, Trading 212, Upvest and Banco do Brasil statement PDFs into a reconciled ledger, then reports wealth, returns, cash flows, P&L, FX effect and allocation per investment account, security, month and year, with a main portfolio report for the last 12 months *(skill)*
 

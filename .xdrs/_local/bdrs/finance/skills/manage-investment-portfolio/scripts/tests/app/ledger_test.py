@@ -56,7 +56,14 @@ def test_overlapping_statements_that_disagree_are_flagged_and_agreeing_ones_are_
 
 def test_overlapping_period_flow_windows_keep_the_earlier_one():
     def flows(start, end, entries):
-        return {"kind": "period-flows", "account": "bb", "asset": "FUND", "from": start, "to": end, "entries": entries}
+        return {
+            "kind": "period-flows",
+            "account": "bb",
+            "security": "FUND",
+            "from": start,
+            "to": end,
+            "entries": entries,
+        }
 
     kept, notes = ledger._period_flow_notes(
         [flows("2025-07-01", "2026-03-31", "5"), flows("2025-01-01", "2025-12-31", "9"), {"kind": "other"}]

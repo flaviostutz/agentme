@@ -109,9 +109,8 @@ def merge(per_account: list, names: dict) -> dict:
             t = total.setdefault(r["key"], {"eur": ZERO, "status": "complete"})
             t["eur"] += eur
             t["status"] = perf.worst(t["status"], status)
+    ordered = sorted(total.items(), key=lambda kv: (-kv[1]["eur"], kv[0]))
     out = [
-        {"key": k, "name": names.get(k, k), "contribution_eur": _s(v["eur"]), "status": v["status"]}
-        for k, v in total.items()
+        {"key": k, "name": names.get(k, k), "contribution_eur": _s(v["eur"]), "status": v["status"]} for k, v in ordered
     ]
-    out.sort(key=lambda r: (-Decimal(r["contribution_eur"]), r["key"]))
     return {"rows": out}

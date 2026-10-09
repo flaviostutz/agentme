@@ -5,9 +5,17 @@ SKILL_DIRS := $(patsubst %/Makefile,%,$(filter-out .xdrs/_core/%,$(wildcard .xdr
 
 all: build lint test
 
+STAGE_DIR := .cache/stage
+
+# packing from a staged copy because pnpm pack walks node_modules/.cache dirs even when excluded in "files"
 build: install
 	@echo ">>> .: $@"
-	$(MISE) pnpm pack --pack-destination=./dist
+	rm -rf $(STAGE_DIR) dist
+	mkdir -p $(STAGE_DIR) dist
+	# rsync skips excluded dirs without descending into them (skills' node_modules/.cache are 400MB+), so pack never sees them
+	rsync -aR --exclude node_modules --exclude .cache --exclude dist --exclude __pycache__ \
+		package.json bin .filedist-package.yml .xdrs/index.md .xdrs/agentme $(STAGE_DIR)/
+	cd $(STAGE_DIR) && $(MISE) pnpm pack --pack-destination=$(CURDIR)/dist
 
 lint:
 	@echo ">>> .: $@"

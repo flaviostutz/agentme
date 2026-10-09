@@ -67,10 +67,10 @@ def test_xirr_short_window_reports_the_return_over_the_window_not_a_scaled_rate(
     assert r["rate"] > r["value"]
 
 
-def test_xirr_needs_at_least_30_days():
-    assert xirr([], "2025-01-01", "2025-01-31", Decimal(100), Decimal(101))["value"] is not None
-    short = xirr([], "2025-01-01", "2025-01-30", Decimal(100), Decimal(101))
-    assert short["value"] is None and short["reason"] == "n/a (<30d)"
+def test_xirr_needs_at_least_28_days():
+    assert xirr([], "2025-02-01", "2025-03-01", Decimal(100), Decimal(101))["value"] is not None
+    short = xirr([], "2025-01-01", "2025-01-28", Decimal(100), Decimal(101))
+    assert short["value"] is None and short["reason"] == "n/a (<28d)"
 
 
 def test_xirr_with_a_zero_start_value_and_an_in_window_flow():
