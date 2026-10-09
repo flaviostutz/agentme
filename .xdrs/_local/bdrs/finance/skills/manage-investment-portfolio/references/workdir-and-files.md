@@ -1,16 +1,19 @@
 # Work dir and files
 
-`.tmp/manage-investment-portfolio-<portfolio>/` (the portfolio name allows letters, digits, `.`, `-`, `_`).
+One run folder per portfolio, `.tmp/manage-investment-portfolio/<portfolio>/` (the portfolio name allows lowercase
+letters, digits and single `-`). Disposable caches live apart, in `.tmp/manage-investment-portfolio/.work/<portfolio>/`:
+`parse-*.json` (parse results keyed by file hash, answers, adapter sources and calculation version), `ecb-hist.csv` (ECB rates) and
+`yahoo-<ticker>.json` (last benchmark response). `.work/` is safe to delete at any time; the next run refetches
+or reparses what is missing. Nothing is stored directly in `.tmp/manage-investment-portfolio/`.
 
 | Path | Content |
 | --- | --- |
-| `config.yaml` | `base_currency` (EUR), tolerances, `tracked_accounts`; never overwritten by `init` |
+| `config.yaml` | `base_currency` (EUR), tolerances, `tracked_accounts`, `benchmark.ticker` (set by `pm benchmark`); never overwritten by `init` |
 | `raw/` | Copies of the statement PDFs, named with the content hash |
-| `data/` | Canonical ledger: `accounts`, `events`, `snapshots`, `references`, `unresolved`, `ingest` (JSON, sorted keys) |
-| `cache/` | Parse results keyed by file hash, answers and calculation version; `ecb-hist.csv` rates |
-| `derived/` | `analysis.json`, `classify-queue.json`, classifications |
-| `reports/` | Markdown reports |
-| `graphs/` | Mermaid `.mmd` files |
+| `data/` | Canonical ledger: `accounts`, `events`, `snapshots`, `references`, `unresolved`, `ingest` (JSON, sorted keys), and `benchmark.json` (monthly closes of the benchmark, written by `pm benchmark`) |
+| `derived/` | `analysis.json`, `classify-queue.json`, `securities.json` |
+| `reports/` | Markdown reports: `portfolio.md` is the main entry and every report links to the others |
+| `graphs/` | Mermaid `.mmd` files and `wealth-bridge.svg` |
 | `exports/portfolio-performance/` | Written by `pm export` only: Portfolio Performance CSV files (see below); fully rewritten on each export |
 | `logs/` | JSONL run logs (timestamps live only here) |
 | `answers.json` | `answers` (record id to value) and `accept_files` (sha256) |
@@ -49,7 +52,7 @@ into the identical ledger (`export` verifies this and exits 1 on any difference)
 | `portfolio-transactions.csv` | PP columns: Buy, Sell, Delivery and Transfer in/out (splits, opening lots, transfers) |
 | `account-transactions.csv` | PP columns: Deposit, Removal, Interest, Dividend, Fees, Taxes and their reversals (opening cash too) |
 | `securities.csv` | One row per instrument: ISIN, ticker, name, currency (most frequent value wins) |
-| `accounts.csv` | One securities and one cash account per ledger account (`<id>` and `<id> (<currency>)`) |
+| `accounts.csv` | One securities and one cash account per investment account (`<id>` and `<id> (<currency>)`) |
 | `snapshots.csv`, `references.csv` | Value-only snapshots and reference records, not importable by PP; kept for the round trip |
 | `README.txt` | Import order, mapping, and known PP caveats |
 
@@ -60,6 +63,33 @@ columns. Dividend withholding tax has no PP import column and stays only in `led
 start with a formula character are prefixed with `'` and decoded on read-back. Numbers use `.` decimals;
 `--decimal-comma` switches only Value, Shares, Fees, Taxes and Gross Amount to `,` (the `ledger_*` columns
 stay exact, so the round trip is unchanged).
+
+## Reports and graphs
+
+| Report | Content |
+| --- | --- |
+| `portfolio.md` | Wealth since inception per investment account, last 12 months (TWR, XIRR, net flows), wealth bridge, top 10 open positions, benchmark, performance, trust and notes |
+| `monthly.md`, `yearly.md` | Performance per month (latest 24) and per year for the portfolio and each investment account, with a XIRR chart each. Every row has a Window column; TWR, XIRR and period return of a row share that window |
+| `investment-accounts.md` | Wealth share per investment account, then one section per account: cash, positions, flows, data quality |
+| `securities.md` | Open positions across investment accounts, contribution to the gain, lots per account |
+| `income.md` | Dividends and interest: trailing 12 months, per year, per payer, withholding drag |
+| `risk.md` | CAGR, volatility, best/worst month and drawdown from inception and for the latest 12 complete calendar months, CAGR per year and the volatility vs CAGR quadrant |
+| `markets.md` | Allocation by classification; only when classifications exist |
+| `concepts.md` | Plain-language definitions that the other reports link to |
+
+Graphs: `wealth`, `wealth-by-account`, `twr-12m`, `xirr-12m`, `net-flows-12m`, `monthly-xirr-<scope>`,
+`yearly-xirr-<scope>`, `allocation`, `income`, `drawdown`, `cagr-per-year` and `benchmark` as Mermaid, and
+`wealth-bridge.svg`, `quadrant-inception.svg` and `quadrant-12m.svg` (fixed-size SVGs with a white background).
+`<scope>` is `portfolio` or the account id as a file-name slug. The 12-month charts are drawn only when the window
+is a full 12 months and only from complete points; a XIRR chart needs two complete rows. Months without a value
+are omitted from a chart, never drawn as zero.
+
+## Benchmark
+
+`pm benchmark --ticker <ticker>` downloads monthly closes from the unofficial Yahoo Finance chart endpoint (no key;
+only the ticker is sent) and stores them in `data/benchmark.json`. Offline runs reuse `.work/<portfolio>/yahoo-<ticker>.json`.
+Prices in another currency are converted to EUR with the ECB rate of the month, so the comparison is marked
+approximate. A response that does not parse is rejected and nothing is stored.
 
 ## Determinism
 

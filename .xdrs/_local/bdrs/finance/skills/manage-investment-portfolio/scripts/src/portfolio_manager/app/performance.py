@@ -65,7 +65,7 @@ def twr(value_at, flows: list, d0: str, d1: str) -> dict:
     return {"value": growth - 1, "status": status, "reason": ""}
 
 
-MIN_XIRR_DAYS = 30
+MIN_XIRR_DAYS = 28  # shortest calendar month, so every full month gets an XIRR
 
 
 def _no_xirr(days: int, reason: str) -> dict:
@@ -76,7 +76,7 @@ def xirr(flows: list, d0: str, d1: str, v0: Decimal, v1: Decimal) -> dict:
     """Money-weighted result over the window d0..d1; flows: [{date, amount}] (amount > 0 = money added).
 
     value is the actual return over the window (not scaled to a year); rate is the equivalent annual rate.
-    Windows under 30 days are n/a. Result {value, rate, days, status, reason}.
+    Windows under 28 days are n/a. Result {value, rate, days, status, reason}.
     """
     days = days_between(d0, d1)
     if days < MIN_XIRR_DAYS:

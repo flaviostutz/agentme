@@ -1,6 +1,6 @@
 """Portfolio manager CLI.
 
-Commands: portfolio-name, init, inspect, ingest, check-input, answer, accept, analyze, classify, report,
+Commands: portfolio-name, init, inspect, ingest, check-input, answer, accept, analyze, classify, benchmark, report,
 export, run, validate.
 
 Reports and exports are refused (exit 1, nothing written) while a coverage finding is open or a record is unresolved.
@@ -17,15 +17,22 @@ from pathlib import Path
 
 from portfolio_manager.adapters.connectors.ecb.ecb_rates import download_ecb, load_cached
 from portfolio_manager.adapters.connectors.institutions import default_registry
-from portfolio_manager.adapters.connectors.local_fs.workspace import Workspace, collect_sources, resolve_tmp, work_dir
+from portfolio_manager.adapters.connectors.local_fs.workspace import (
+    SKILL_DIR,
+    Workspace,
+    collect_sources,
+    resolve_tmp,
+    work_dir,
+)
 from portfolio_manager.adapters.connectors.pdf.pdf_reader import read_pdf
-from portfolio_manager.app import acceptance, export_pp, inputcheck, inspector, workflow
+from portfolio_manager.adapters.connectors.yahoo.yahoo_prices import download_chart
+from portfolio_manager.app import acceptance, export_pp, inputcheck, inspector, reports, workflow
 from portfolio_manager.app import classify as classify_mod
 from portfolio_manager.app import ingest as ingest_mod
 from portfolio_manager.app import portfolio_name as portfolio_name_mod
-from portfolio_manager.app import report as report_mod
 from portfolio_manager.app.fx import Rates
 from portfolio_manager.shared.errors import PmError
+from portfolio_manager.shared.values import CALCULATION_VERSION
 
 WORK_COMMANDS = (
     "init",
@@ -36,6 +43,7 @@ WORK_COMMANDS = (
     "accept",
     "analyze",
     "classify",
+    "benchmark",
     "report",
     "export",
     "run",
@@ -63,7 +71,7 @@ def _run_id() -> str:
 
 
 def _summary(ws: Workspace, lines: list[str]) -> str:
-    rel = f".tmp/{ws.root.name}/"
+    rel = f"{SKILL_DIR}/{ws.root.name}/"
     return "\n".join([*lines, f"results-path: {rel}"])
 
 
@@ -74,7 +82,7 @@ def _rates_loader(ws: Workspace, *, offline: bool) -> Callable[[str], tuple[Rate
     downloader = offline_downloader if offline else download_ecb
 
     def load(needed_until: str) -> tuple[Rates, str]:
-        return load_cached(ws.path("cache/ecb-hist.csv"), needed_until, downloader)
+        return load_cached(ws.cache_path("ecb-hist.csv"), needed_until, downloader)
 
     return load
 
@@ -201,7 +209,7 @@ def _classify_entries(args: argparse.Namespace, cwd: Path, known: list) -> list 
     """Entries to import from --import or the --set flags (merged over the known entry); None when neither is used."""
     given = {f: getattr(args, f) for f in SET_FIELDS if getattr(args, f, None)}
     if args.import_file and given:
-        msg = "use either --import or the --isin/--asset-class/... flags, not both"
+        msg = "use either --import or the --isin/--security-class/... flags, not both"
         raise PmError(msg)
     if args.import_file:
         try:
@@ -234,8 +242,8 @@ def cmd_classify(args: argparse.Namespace, cwd: Path) -> Result:
     if analysis is None:
         msg = "no analysis yet: run `pm analyze` first"
         raise PmError(msg)
-    assets = [r for a in analysis["accounts"].values() for r in a["assets"]]
-    pending = classify_mod.queue(assets, known)
+    securities = [r for a in analysis["accounts"].values() for r in a["securities"]]
+    pending = classify_mod.queue(securities, known)
     ws.write("derived/classify-queue.json", pending)
     return 0, _summary(
         ws,
@@ -243,11 +251,32 @@ def cmd_classify(args: argparse.Namespace, cwd: Path) -> Result:
     )
 
 
+def _offline_chart(_ticker: str) -> tuple[dict | None, str]:
+    return None, "offline mode"
+
+
+def cmd_benchmark(args: argparse.Namespace, cwd: Path) -> Result:
+    ws = _ws(args, cwd)
+    _need(ws)
+    with ws.lock():
+        info = workflow.run_benchmark(ws, args.ticker, _offline_chart if args.offline else download_chart)
+    line = (
+        f"Benchmark {info['ticker']}: {info['months']} monthly close(s) in {info['currency']} "
+        f"from the {info['source']}. Run `pm report` to see the comparison."
+    )
+    return 0, _summary(ws, [line])
+
+
 def _report_result(ws: Workspace, *, offline: bool) -> Result:
     if refusal := workflow.blocked(ws, "Report"):
         return 1, _summary(ws, [refusal])
     analysis, files, unresolved = workflow.run_report(ws, _rates_loader(ws, offline=offline))
-    lines = report_mod.summary(analysis, unresolved, len(files), f".tmp/{ws.root.name}/")
+    lines = reports.summary(analysis, unresolved, len(files), f"{SKILL_DIR}/{ws.root.name}/")
+    if not workflow.configured_ticker(ws):
+        lines.append(
+            "No benchmark yet: ask the user whether to compare with a market ETF, then run "
+            "`pm benchmark --ticker <ticker>` (only the ticker is sent to Yahoo Finance)."
+        )
     return (1 if analysis["errors"] else 0), _summary(ws, lines)
 
 
@@ -295,7 +324,9 @@ def cmd_run(args: argparse.Namespace, cwd: Path) -> Result:
         ws.init()
     sources = collect_sources(resolve_tmp(args.source, cwd)) if args.source else []
     with ws.lock():
-        if sources or ws.manifest()["status"] == "empty":
+        manifest = ws.manifest()
+        stale = manifest.get("calculation_version") != CALCULATION_VERSION
+        if sources or manifest["status"] == "empty" or stale:
             _ingest(ws, sources)
         return _report_result(ws, offline=args.offline)
 
@@ -311,6 +342,7 @@ HANDLERS = {
     "check-input": cmd_check_input,
     "analyze": cmd_analyze,
     "classify": cmd_classify,
+    "benchmark": cmd_benchmark,
     "report": cmd_report,
     "export": cmd_export,
     "run": cmd_run,
@@ -324,7 +356,7 @@ def _portfolio_arg(sp: argparse.ArgumentParser) -> None:
         dest="portfolio",
         default=DEFAULT_PORTFOLIO,
         help=(
-            "portfolio name (alias --name); work dir .tmp/manage-investment-portfolio-<name>/ "
+            "portfolio name (alias --name); run folder .tmp/manage-investment-portfolio/<name>/ "
             f"(default {DEFAULT_PORTFOLIO})"
         ),
     )
@@ -351,7 +383,7 @@ def _export_args(sp: argparse.ArgumentParser) -> None:
 def _classify_args(sp: argparse.ArgumentParser) -> None:
     sp.add_argument("--import", dest="import_file", help="JSON list of researched classifications, inside .tmp/")
     for field in SET_FIELDS:
-        flag = "--asset-name" if field == "name" else f"--{field.replace('_', '-')}"  # --name is the portfolio alias
+        flag = "--security-name" if field == "name" else f"--{field.replace('_', '-')}"  # --name is the portfolio alias
         sp.add_argument(flag, dest=field, help=f"classification {field} for --isin")
 
 
@@ -371,6 +403,13 @@ def _accept_args(sp: argparse.ArgumentParser) -> None:
     sp.add_argument("--note", help=f"the user's own words, one line of at most {acceptance.MAX_NOTE} characters")
 
 
+def _benchmark_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--ticker", help="Yahoo Finance ticker of the benchmark ETF or index (e.g. IWDA.AS); default: config.yaml"
+    )
+    sp.add_argument("--offline", action="store_true", help="do not download; use the cached response only")
+
+
 def _portfolio_name_args(sp: argparse.ArgumentParser) -> None:
     sp.add_argument("--source", required=True, help="file or folder with statement PDFs, inside .tmp/")
 
@@ -384,6 +423,7 @@ EXTRA_ARGS = {
     "report": [_offline_arg],
     "export": [_export_args],
     "classify": [_classify_args],
+    "benchmark": [_benchmark_args],
     "answer": [_answer_args],
     "check-input": [_check_input_args],
     "accept": [_accept_args],

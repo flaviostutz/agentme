@@ -47,11 +47,11 @@ def test_a_month_cut_by_the_last_date_is_partial_but_a_full_month_is_not():
     assert "month 2026-02" in labels(analyze.periods("2026-01-01", "2026-02-28"))
 
 
-def test_xirr_window_is_at_most_12_calendar_months_and_inception_uses_the_full_history():
+def test_every_row_has_its_own_window_so_xirr_covers_exactly_the_row_period():
     rows = {r["label"]: r for r in analyze.periods("2024-01-31", "2026-06-30")}
-    assert rows["year 2026 (to date)"]["xirr_from"] == "2025-06-30"
-    assert rows["year 2024"]["xirr_from"] == "2024-01-31"
-    assert rows["inception"]["xirr_from"] == "2024-01-31"
+    assert rows["year 2026 (to date)"]["from"] == "2025-12-31"
+    assert rows["month 2026-02"]["from"] == "2026-01-31" and rows["month 2026-02"]["to"] == "2026-02-28"
+    assert all("xirr_from" not in r for r in rows.values())
 
 
 def test_window_labels_show_months():
@@ -59,18 +59,24 @@ def test_window_labels_show_months():
     assert analyze.window_label(97) == "3.2mon"
 
 
-def test_metrics_use_the_window_for_xirr_and_report_its_length():
+def test_metrics_report_the_length_of_the_row_period_as_window():
     view = View({"2025-01-01": "100", "2025-07-01": "100", "2026-01-01": "110"})
-    out = analyze.metrics(view, "2025-07-01", "2026-01-01", "2025-01-01")
-    assert out["xirr_window"] == "12mon" and out["xirr_window_days"] == 365 and out["xirr"] is not None
-    short = analyze.metrics(view, "2025-07-01", "2026-01-01")
-    assert short["xirr_window"] == "6mon"
+    year = analyze.metrics(view, "2025-01-01", "2026-01-01")
+    assert year["window"] == "12mon" and year["window_days"] == 365 and year["xirr"] is not None
+    half = analyze.metrics(view, "2025-07-01", "2026-01-01")
+    assert half["window"] == "6mon" and half["window_days"] == 184
 
 
-def test_xirr_under_30_days_is_n_a_with_the_reason_and_still_gives_a_gain():
+def test_february_month_gets_an_xirr_over_its_28_days():
+    view = View({"2026-01-31": "100", "2026-02-28": "101"})
+    out = analyze.metrics(view, "2026-01-31", "2026-02-28")
+    assert out["window_days"] == 28 and out["xirr"] is not None
+
+
+def test_xirr_under_28_days_is_n_a_with_the_reason_and_still_gives_a_gain():
     view = View({"2025-01-01": "100", "2025-01-12": "101"})
     out = analyze.metrics(view, "2025-01-01", "2025-01-12")
-    assert out["xirr"] is None and out["xirr_reason"] == "n/a (<30d)" and out["gain"] == "1"
+    assert out["xirr"] is None and out["xirr_reason"] == "n/a (<28d)" and out["gain"] == "1"
 
 
 def test_period_return_status_follows_the_valuation_statuses():

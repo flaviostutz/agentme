@@ -7,6 +7,7 @@ from portfolio_manager.app import bridge, contribution, income, positions, risk,
 from portfolio_manager.shared.values import ZERO
 
 WINDOW = "last 12 months"
+FULL_WINDOW_DAYS = 365  # a shorter history only covers part of the 12 months
 
 
 def _names(data: dict) -> dict:
@@ -21,7 +22,7 @@ def _names(data: dict) -> dict:
     return names
 
 
-def _contribution(win: dict | None, per_account: dict, valuers: dict, data: dict, rates) -> dict:
+def _contribution(win: dict | None, valuers: dict, data: dict, rates) -> dict:
     """Per-security contribution inside the window, per account then merged; securities without a price are listed."""
     if win is None:
         return {"rows": [], "missing": []}
@@ -56,12 +57,20 @@ def build(portfolio: dict, per_account: dict, valuers: dict, pf, data: dict, rat
     d0, d1 = (win["from"], win["to"]) if win else (portfolio["common_date"],) * 2
     pos = positions.aggregate(per_account)
     return {
-        "window": None if win is None else {"label": win["label"], "from": win["from"], "to": win["to"]},
+        "window": None
+        if win is None
+        else {
+            "label": win["label"],
+            "from": win["from"],
+            "to": win["to"],
+            "days": win["window_days"],
+            "full": win["window_days"] >= FULL_WINDOW_DAYS,
+        },
         "trend": rows,
         "risk": risk.measures(portfolio["periods"]),
         "bridge": None if win is None else bridge.window_bridge(win, per_account),
         "positions": pos,
-        "contribution": _contribution(win, per_account, valuers, data, rates),
+        "contribution": _contribution(win, valuers, data, rates),
         "income": income.summarize(per_account, d0, d1, _positions_total(portfolio["accounts"])),
         "benchmark": benchmark_mod.build(bench[0], bench[1], rows, win["from"] if win else None, rates),
     }

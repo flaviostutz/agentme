@@ -3,7 +3,7 @@
 import re
 from typing import NamedTuple
 
-GROUPS = ("Value", "Flows", "Returns", "Profit and loss", "Data quality", "Periods and projections")
+GROUPS = ("Value", "Flows", "Returns", "Risk", "Profit and loss", "Data quality", "Periods and projections")
 MAX_WORDS = {"summary": 30, "useful": 30, "example": 50, "formula": 40}
 
 
@@ -19,11 +19,45 @@ class Concept(NamedTuple):
 
 CONCEPTS = (
     Concept(
+        "investment-account",
+        "Value",
+        "Investment account",
+        "A brokerage or bank account that holds your cash and securities and sends you its own statements.",
+        "Each one has its own cash and positions. Use this to see where your money sits.",
+        "Trading 212 in EUR and Upvest in EUR are two investment accounts; wealth adds both.",
+    ),
+    Concept(
+        "security",
+        "Value",
+        "Security",
+        "Something you hold in an investment account, such as a share, fund, ETF or bond, identified by its ISIN.",
+        "Positions are listed per security. Use this to see what you own behind each account.",
+        "IE00B4L5Y983 is the ISIN of one ETF that can be held in two accounts at once.",
+    ),
+    Concept(
+        "cash-positions",
+        "Value",
+        "Cash and positions",
+        "Cash is money waiting in the account; positions are the securities you hold, valued at their latest price.",
+        "Together they make the account value. Use this to see how much of your wealth is invested.",
+        "An account with 200 EUR cash and 800 EUR of ETFs is worth 1,000 EUR.",
+        r"$V = cash + \sum q \cdot p$",
+    ),
+    Concept(
+        "weight",
+        "Value",
+        "Weight",
+        "Share of one open position in the total value of all open positions.",
+        "Shows concentration. Use this to spot a position that dominates your portfolio.",
+        "A 2,500 EUR position among 10,000 EUR of open positions has a weight of 25 %.",
+        r"$w = \frac{V_{position}}{\sum V_{positions}}$",
+    ),
+    Concept(
         "wealth",
         "Value",
         "Wealth",
-        "Sum of all tracked account values in EUR on the common date.",
-        "Shows what you own in total across banks and brokers. Use this to track your net worth.",
+        "Sum of all tracked investment account values in EUR on the common date.",
+        "Shows what you own in total across investment accounts. Use this to track your net worth.",
         "Revolut 4,000 + Trading 212 1,000 + Upvest 9,000 EUR give a wealth of 14,000 EUR.",
         r"$W_t = \sum_i V_{i,t} \cdot fx_{i,t}$ with $V$ the account value and $fx$ the EUR rate.",
     ),
@@ -118,8 +152,8 @@ CONCEPTS = (
         "twr",
         "Returns",
         "TWR (natural)",
-        "Chained return of the assets themselves, ignoring the timing of your deposits.",
-        "Shows how what you hold performed. Use this to judge the assets, not your timing.",
+        "Chained return of the securities themselves, ignoring the timing of your deposits.",
+        "Shows how what you hold performed. Use this to judge the securities, not your timing.",
         "Value 100 grows to 110, you deposit 100, then 210 grows to 220.5: 10 % and 5 % chain to 15.5 %.",
         r"$TWR = \prod_k \frac{V_k - F_k}{V_{k-1}} - 1$",
     ),
@@ -127,24 +161,94 @@ CONCEPTS = (
         "xirr",
         "Returns",
         "XIRR (actual)",
-        "Your real return given the dates of every deposit and withdrawal, over the XIRR window.",
+        "Your real return given the dates of every deposit and withdrawal, over the window of the row.",
         "Shows what you earned considering when you added money. Use this to judge your own decisions.",
         "Investing 100 EUR in January and 100 EUR in June can give a different result than TWR if markets moved in between.",
         r"$V_0 (1+r)^{T} + \sum_k F_k (1+r)^{T-t_k} = V_1$ and the shown value is $(1+r)^{T}-1$.",
     ),
     Concept(
-        "xirr-window",
+        "window",
         "Returns",
-        "XIRR window",
-        "The span used for XIRR: at most the last 12 months of the row, or the full history for inception.",
-        "Tells how long the XIRR result covers. Use this to avoid comparing a 3 month result with a 12 month one.",
-        "A row for year 2026 (to date) ending in June may show a 9mon window if the history started in September.",
+        "Window",
+        "The length of the row's own period, in months. TWR, XIRR and period return of that row all cover exactly this span.",
+        "Tells how long the results of a row cover. Use this to avoid comparing a 1 month result with a 12 month one.",
+        "A row for year 2026 (to date) ending in June shows 6mon, and a full year shows 12mon.",
+    ),
+    Concept(
+        "cagr",
+        "Returns",
+        "CAGR",
+        "TWR since inception scaled to one year; shown only with 12 months or more of history.",
+        "Lets long histories be compared with yearly rates. Use this to compare your result with an annual target.",
+        "A TWR of 21 % over two years gives a CAGR of about 10 %.",
+        r"$CAGR = (1 + TWR)^{365/d} - 1$ with $d$ the days of history.",
+    ),
+    Concept(
+        "benchmark",
+        "Returns",
+        "Benchmark",
+        "A market fund or index ETF used as a yardstick, converted to EUR, whose return since the window start sits next to your TWR.",
+        "Shows whether your choices beat a simple alternative. Use this to judge if your picking pays off.",
+        "Your TWR of 6 % against 8 % for a world ETF means the benchmark did better.",
+    ),
+    Concept(
+        "wealth-bridge",
+        "Returns",
+        "Wealth bridge",
+        "Start value plus money added, income, fees and taxes, FX effect and market effect gives the end value.",
+        "Explains where the change in wealth came from. Use this to see how much was your saving versus markets.",
+        "Start 10,000 + added 2,000 + income 200 - costs 50 + FX 30 + market 620 = 12,800 EUR.",
+        r"$V_{end} = V_{start} + F + I - C + FX + M$",
+    ),
+    Concept(
+        "volatility",
+        "Risk",
+        "Volatility",
+        "Spread of the monthly TWR returns scaled to a year; needs at least three complete months.",
+        "Shows how bumpy the ride was. Use this to compare how much risk different periods carried.",
+        "Monthly returns that vary by about 3 points around their mean give an annual volatility near 10 %.",
+        r"$\sigma = s_{monthly} \cdot \sqrt{12}$",
+    ),
+    Concept(
+        "drawdown",
+        "Risk",
+        "Maximum drawdown",
+        "Largest fall of the chained monthly TWR from an earlier peak to a later low.",
+        "Shows the worst temporary loss you lived through. Use this to check that you can stand such a fall.",
+        "A return index peaking at 120 and falling to 96 has a drawdown of 20 %.",
+        r"$DD = \min_t \left(\frac{I_t}{\max_{s \le t} I_s} - 1\right)$",
+    ),
+    Concept(
+        "best-worst-month",
+        "Risk",
+        "Best and worst month",
+        "Highest and lowest TWR among the complete calendar months.",
+        "Shows the range of single-month results. Use this to see what a bad month can look like.",
+        "A best month of +6.1 % in 2025-11 and a worst month of -4.3 % in 2025-03.",
+    ),
+    Concept(
+        "contribution",
+        "Profit and loss",
+        "Contribution",
+        "Result of one security in the window: value change minus money put in, plus income received.",
+        "Shows which securities made or lost the money. Use this to find your main winners and losers.",
+        "A fund worth 1,000 EUR at the start and 1,500 at the end, with 200 bought and 30 of dividends, contributed 330 EUR.",
+        r"$C = V_{end} - V_{start} - (buys - sells) + income$",
+    ),
+    Concept(
+        "trailing-yield",
+        "Profit and loss",
+        "Trailing income yield",
+        "Dividends and interest received in the last 12 months divided by today's value of the open positions.",
+        "Shows the cash income your holdings produce. Use this to compare it with other sources of income.",
+        "300 EUR received over 12 months on 10,000 EUR of open positions gives 3 %.",
+        r"$y = \frac{income_{12m}}{V_{positions}}$",
     ),
     Concept(
         "dividends-interest",
         "Profit and loss",
         "Dividends and interest",
-        "Cash paid to you by assets or accounts, before and after withholding.",
+        "Cash paid to you by securities or accounts, before and after withholding.",
         "Shows income that does not depend on selling. Use this to compare income across accounts.",
         "A 12 EUR dividend with 3 EUR withholding adds 9 EUR of net income.",
     ),
@@ -244,9 +348,17 @@ CONCEPTS = (
         "held-window",
         "Periods and projections",
         "Held window",
-        "How long an asset was held inside a period, in months.",
-        "Tells the span behind an asset result. Use this to compare assets bought at different times.",
-        "An asset bought in April and shown at year end has a held window of about 9 months.",
+        "How long a security was held inside a period, in months.",
+        "Tells the span behind a security result. Use this to compare securities bought at different times.",
+        "A security bought in April and shown at year end has a held window of about 9 months.",
+    ),
+    Concept(
+        "last-12-months",
+        "Periods and projections",
+        "Last 12 months",
+        "The window from one year before the common date to that date; shorter, and labelled, when the history is shorter.",
+        "Gives a recent view independent of calendar years. Use this to compare your current pace with older years.",
+        "With a common date of 2026-06-30 the window starts on 2025-06-30; with 7 months of history the label says 7mon.",
     ),
     Concept(
         "partial-period",
@@ -261,7 +373,7 @@ CONCEPTS = (
         "Periods and projections",
         "Projection (extrapolated)",
         "Past results scaled to a year; only in projections.md and never a prediction.",
-        "Shows what a past rate would give over a year. Use this to compare pace across banks, not to forecast.",
+        "Shows what a past rate would give over a year. Use this to compare pace across investment accounts, not to forecast.",
         "A 2 % return over 120 days scales to about 6.2 % a year.",
         r"$r_{year} = (1 + r)^{365/d} - 1$",
     ),
@@ -285,10 +397,12 @@ def link(key: str, label: str | None = None) -> str:
     return f"[{label or c.name}](concepts.md#{slug(c.name)})"
 
 
-def render() -> str:
+def render(before: list | None = None) -> str:
+    """The concepts page; `before` lines (navigation, status) go right under the title."""
     out = [
         "# Concepts",
         "",
+        *(before or []),
         "Plain-language taxonomy of every term used in the reports. Formulas use EUR values unless noted.",
         "",
     ]

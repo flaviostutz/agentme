@@ -1,6 +1,6 @@
 ---
 skill: manage-investment-portfolio
-skill-version: "2.2.0"
+skill-version: "3.1.0"
 ---
 
 ## Test Scenarios
@@ -12,7 +12,7 @@ skill-version: "2.2.0"
 "Analyse my broker statements in `.tmp/statements/` and tell me my wealth and return." The folder holds
 `trading212-2026-01.pdf` and `revolut-2026-q1.pdf`, both readable statements for the fictitious holder Jane
 Roe (account ending 4321), loading without unresolved records. `uv` is installed and the network is
-available. The user declines web research of classifications. After `pm check-input --from 2025-01-01`
+available. The user declines web research of classifications and a benchmark comparison. After `pm check-input --from 2025-01-01`
 the script lists 2 open findings: a `late-start` for the Revolut account (first statement in March 2025) and
 the `scope` finding. The user cannot find the earlier Revolut statements.
 
@@ -22,13 +22,16 @@ the `scope` finding. The user cannot find the earlier Revolut statements.
 2. Phase 2 runs `pm ingest --source .tmp/statements` and relays the summary.
 3. Phase 3b asks the first day the statements should cover, runs `pm check-input --from`, and asks per
    finding what to do.
-4. Phase 4 runs `pm report` and `pm validate`, and relays wealth, TWR, checks and unresolved count.
-5. Phase 7 lists the accepted findings, states the opening-position caveat and ends with `results-path:`.
+4. Phase 4 runs `pm report` and `pm validate`, and relays wealth, TWR, checks and unresolved count, and
+   points to `reports/portfolio.md` as the main entry.
+5. Phase 4b asks whether to compare with a benchmark ticker; the user declines.
+6. Phase 7 lists the accepted findings, states the opening-position caveat and ends with `results-path:`.
 
 **Simulated Human Responses**
 1. "Start of 2025."
 2. "Q1 (late start): accept, I opened that account in March 2025." "Q2 (scope): accept as is."
-3. "No web research."
+3. "No benchmark."
+4. "No web research."
 
 **Assertions**
 
@@ -45,9 +48,15 @@ the `scope` finding. The user cannot find the earlier Revolut statements.
       to close findings the user did not decide.
 - [ ] Skill asks whether web research of classifications is allowed, with a context line, a consequence per
       option and one option prefixed "(recommended)".
+- [ ] Skill asks before any benchmark download, states that only the ticker is sent, and does not run
+      `pm benchmark` after the user declined.
+- [ ] Skill points to `reports/portfolio.md` as the main entry and does not retell its tables in chat.
+- [ ] Skill does not state a volatility, CAGR or risk quadrant in chat and points to `reports/risk.md` for them.
 - [ ] Skill's chat messages are each under 150 words, show the account only as `4321`, and the last line of
       the final answer is `results-path:` followed by a path under `.tmp/`.
 - [ ] Skill writes nothing outside `.tmp/` and does not edit any file in `data/`, `derived/` or `reports/`.
+- [ ] Skill keeps reports and the ledger in `.tmp/manage-investment-portfolio/<name>/` and disposable caches in
+      `.tmp/manage-investment-portfolio/.work/<name>/`, with no file directly in `.tmp/manage-investment-portfolio/`.
 - [ ] Skill states that opening positions have no cost basis, so realized P&L is partial.
 
 ### Scenario 2: Unresolved records and a rejected file

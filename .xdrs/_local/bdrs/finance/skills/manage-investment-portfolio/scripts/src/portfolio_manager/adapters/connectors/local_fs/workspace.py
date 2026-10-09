@@ -1,4 +1,4 @@
-"""Work-dir persistence. Everything lives under <cwd>/.tmp/manage-investment-portfolio-<portfolio>/."""
+"""Work-dir persistence: run folder <cwd>/.tmp/manage-investment-portfolio/<portfolio>/, caches in .tmp/manage-investment-portfolio/.work/<portfolio>/."""
 
 import contextlib
 import json
@@ -13,11 +13,13 @@ import yaml
 from portfolio_manager.shared.errors import PmError
 from portfolio_manager.shared.values import dumps, sha256_file, sha256_text
 
-SUBDIRS = ("raw", "data", "cache", "derived", "reports", "graphs", "exports/portfolio-performance", "logs")
+SKILL_DIR = ".tmp/manage-investment-portfolio"
+SUBDIRS = ("raw", "data", "derived", "reports", "graphs", "exports/portfolio-performance", "logs")
 DEFAULT_CONFIG = {
     "base_currency": "EUR",
     "tolerances": {"money": "0.01", "quantity": "0.000001"},
     "tracked_accounts": [],
+    "benchmark": {"ticker": ""},
 }
 
 
@@ -32,10 +34,10 @@ def resolve_tmp(path: str, cwd: Path) -> Path:
 
 
 def work_dir(name: str, cwd: Path) -> Path:
-    if not re.fullmatch(r"[A-Za-z0-9._-]+", name):
-        msg = f"invalid portfolio name {name!r}: use letters, digits, dot, dash or underscore"
+    if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", name):
+        msg = f"invalid portfolio name {name!r}: use lowercase letters, digits and single hyphens"
         raise PmError(msg)
-    return resolve_tmp(f".tmp/manage-investment-portfolio-{name}", cwd)
+    return resolve_tmp(f"{SKILL_DIR}/{name}", cwd)
 
 
 def collect_sources(source: Path) -> list[Path]:
@@ -63,6 +65,22 @@ class Workspace:
 
     def path(self, rel: str) -> Path:
         return self.root / rel
+
+    def cache_path(self, rel: str) -> Path:
+        """Disposable cache file, namespaced per portfolio under the skill's .work folder; safe to delete."""
+        return self.root.parent / ".work" / self.root.name / rel
+
+    def read_cache(self, rel: str):
+        path = self.cache_path(rel)
+        if not path.is_file():
+            return None
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+
+    def write_cache(self, rel: str, obj) -> None:
+        write_atomic(self.cache_path(rel), dumps(obj))
 
     def import_raw(self, source: Path) -> tuple[str, dict[str, str]]:
         """Copy source to raw/<sha8>-<name>; identical content is never copied twice. Returns (name, info)."""
@@ -112,6 +130,9 @@ class Workspace:
             msg = "config.yaml must be a mapping"
             raise PmError(msg)
         return {**DEFAULT_CONFIG, **data}
+
+    def save_config(self, cfg: dict) -> None:
+        write_atomic(self.path("config.yaml"), yaml.safe_dump(cfg, sort_keys=True))
 
     def read(self, rel: str, default=None):
         path = self.path(rel)

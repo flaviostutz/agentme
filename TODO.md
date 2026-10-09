@@ -2,6 +2,20 @@
 
 <!-- Format: see agentme-edr-001 -->
 
+## [BACKLOG] 11- Official benchmark price source for manage-investment-portfolio (2026-10-08)
+
+- status: open
+- prompt: `pm benchmark` reads monthly closes from the unofficial Yahoo Finance chart endpoint (`adapters/connectors/yahoo/` in `scripts/src/portfolio_manager/`). Replace or complement it with a documented source (for example a licensed or key-based price API, or user-supplied CSV of index levels) and keep the cache fallback, the ticker-only disclosure and the EUR conversion. Acceptance: benchmark figures no longer depend on an unofficial endpoint and the report drops the "approximate" mark when prices are month-end closes.
+- deferred reason: No agreed data source; the unofficial endpoint was accepted for the first version because it needs no key.
+- why this is important: An undocumented endpoint can change or stop without notice, and the benchmark comparison would silently fall back to the cache.
+
+## [BACKLOG] 10- Link an external bank account to each investment account in manage-investment-portfolio (2026-10-08)
+
+- status: open
+- prompt: In `manage-investment-portfolio`, let the user link a bank account to an investment account so that deposits and withdrawals become transfers between the two and buys and sells move money in the investment account only. Needs bank statement layouts (adapters under `adapters/connectors/institutions/`), a transfer matching rule, reconciliation checks and the effect on wealth and net flows. Acceptance: wealth over investment accounts plus linked bank accounts reconciles with the statements, and external flows are only those that cross the combined boundary.
+- deferred reason: Needs bank statement layouts and sample statements from the user; roughly doubles the scope of the 3.0.0 report upgrade.
+- why this is important: Deposits shown as external flows overstate money added when the money came from the user's own bank account that is tracked elsewhere.
+
 ## [BACKLOG] 9- Live-verify GitHub contents skills and Azure DevOps work item comments API (2026-10-05)
 
 - status: open
@@ -34,6 +48,6 @@
 ## [BACKLOG] 1- ETF look-through exposure for the manage-investment-portfolio skill (2026-09-30)
 
 - status: open
-- prompt: Investigate and implement ETF look-through exposure (region, sector, top holdings) in the manage-investment-portfolio skill (`app/classify.py`, `app/report.py` in `scripts/src/portfolio_manager/`, `markets.md`). Classifications today come only from identifiers with a source URL and an as-of date; extend `classify` to accept constituent weights per ETF and report aggregated exposure.
+- prompt: Investigate and implement ETF look-through exposure (region, sector, top holdings) in the manage-investment-portfolio skill (`app/classify.py`, `app/reports/markets.py` in `scripts/src/portfolio_manager/`, `markets.md`). Classifications today come only from identifiers with a source URL and an as-of date; extend `classify` to accept constituent weights per ETF and report aggregated exposure.
 - deferred reason: Needs a data source for ETF constituents; out of scope for the first version.
 - why this is important: Allocation by ETF name hides the real regional and sector exposure.

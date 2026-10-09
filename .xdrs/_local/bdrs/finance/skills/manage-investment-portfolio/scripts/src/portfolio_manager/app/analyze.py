@@ -106,7 +106,9 @@ class Valuer:
             for r in (
                 r
                 for r in refs
-                if r["kind"] == "period-flows" and r["account"] == acct and not norm(r["security"]).startswith("poupanca")
+                if r["kind"] == "period-flows"
+                and r["account"] == acct
+                and not norm(r["security"]).startswith("poupanca")
             ):
                 span = date.fromisoformat(r["to"]) - date.fromisoformat(r["from"])
                 mid = (date.fromisoformat(r["from"]) + span / 2).isoformat()
@@ -255,18 +257,14 @@ def window_label(days: int) -> str:
     return f"{days / 30.4375:.1f}".removesuffix(".0") + "mon"
 
 
-def metrics(view, d0: str, d1: str, window_from: str | None = None) -> dict:
-    """Period metrics for an Eur view or Portfolio between two dates; XIRR uses window_from..d1 (default d0..d1)."""
-    x0 = window_from or d0
+def metrics(view, d0: str, d1: str) -> dict:
+    """Period metrics for an Eur view or Portfolio between two dates; TWR, XIRR and period return share d0..d1."""
     flows = view.flows()
     v0, s0 = view.value(d0)
     v1, s1 = view.value(d1)
-    vx, sx = view.value(x0)
     in_period = [f for f in flows if d0 < f["date"] <= d1]
-    in_window = [f for f in flows if x0 < f["date"] <= d1]
     net = sum((f["amount"] for f in in_period), ZERO)
     flow_status = perf.worst(*(f["status"] for f in in_period)) if in_period else "complete"
-    window_status = perf.worst(*(f["status"] for f in in_window)) if in_window else "complete"
     t = perf.twr(view.value, flows, d0, d1)
     if t["status"] != "unavailable":
         t["status"] = perf.worst(t["status"], flow_status)
@@ -281,18 +279,17 @@ def metrics(view, d0: str, d1: str, window_from: str | None = None) -> dict:
         "twr": _opt(t["value"]),
         "twr_status": t["status"],
         "twr_reason": t["reason"],
-        "xirr_from": x0,
-        "xirr_window": window_label(perf.days_between(x0, d1)),
-        "xirr_window_days": perf.days_between(x0, d1),
+        "window": window_label(perf.days_between(d0, d1)),
+        "window_days": perf.days_between(d0, d1),
     }
-    if vx is None or v1 is None:
+    if v0 is None or v1 is None:
         out.update(xirr=None, xirr_rate=None, xirr_status="unavailable", xirr_reason="missing valuation")
     else:
-        x = perf.xirr(in_window, x0, d1, vx, v1)
+        x = perf.xirr(in_period, d0, d1, v0, v1)
         out.update(
             xirr=_opt(x["value"]),
             xirr_rate=_opt(x["rate"]),
-            xirr_status="unavailable" if x["status"] == "unavailable" else perf.worst(sx, s1, window_status),
+            xirr_status="unavailable" if x["status"] == "unavailable" else perf.worst(s0, s1, flow_status),
             xirr_reason=x["reason"],
         )
     if v0 is None or v1 is None:
@@ -314,7 +311,7 @@ def _back_12_months(day: str) -> str:
         return d.replace(year=d.year - 1, day=28).isoformat()
 
 
-def _row(label: str, start: str, end: str, first: str, *, partial: bool = False, inception: bool = False) -> dict:
+def _row(label: str, start: str, end: str, *, partial: bool = False, inception: bool = False) -> dict:
     """One period row: Start is the close of `from`, so the first included day is the day after (inception: the first day)."""
     first_day = start if inception else (date.fromisoformat(start) + timedelta(days=1)).isoformat()
     return {
@@ -324,7 +321,6 @@ def _row(label: str, start: str, end: str, first: str, *, partial: bool = False,
         "first_day": first_day,
         "partial": partial,
         "complete_through": end if partial else None,
-        "xirr_from": start if inception else max(first, _back_12_months(end)),
     }
 
 
@@ -333,23 +329,21 @@ def periods(first: str, last: str) -> list:
 
     The last-12-months window starts at the first date when the history is shorter and then says how long it is.
     """
-    out = [_row("inception", first, last, first, inception=True)]
+    out = [_row("inception", first, last, inception=True)]
     start = max(first, _back_12_months(last))
     short = start == first
     label = f"last 12 months ({window_label(perf.days_between(first, last))} of history)" if short else "last 12 months"
-    out.append(_row(label, start, last, first, inception=short))
+    out.append(_row(label, start, last, inception=short))
     ends = month_ends(first, last)
     prev = first
     for e in ends:
         y, m = int(e[:4]), int(e[5:7])
-        out.append(
-            _row(f"month {e[:7]}", prev, e, first, partial=e == last and e < f"{e[:8]}{calendar.monthrange(y, m)[1]}")
-        )
+        out.append(_row(f"month {e[:7]}", prev, e, partial=e == last and e < f"{e[:8]}{calendar.monthrange(y, m)[1]}"))
         prev = e
     for y in sorted({e[:4] for e in ends}):
         start = max(first, f"{int(y) - 1}-12-31")
         end = min(last, f"{y}-12-31")
-        out.append(_row(f"year {y}", start, end, first, partial=end < f"{y}-12-31"))
+        out.append(_row(f"year {y}", start, end, partial=end < f"{y}-12-31"))
     return [p for p in out if p["from"] < p["to"]]
 
 
@@ -425,7 +419,7 @@ def _portfolio(views: dict, rates) -> tuple:
         "common_date": common,
         "value_eur": _opt(pf.value(common)[0]),
         "value_status": pf.value(common)[1],
-        "periods": [dict(p, **metrics(pf, p["from"], p["to"], p["xirr_from"])) for p in periods(pf.first, common)],
+        "periods": [dict(p, **metrics(pf, p["from"], p["to"])) for p in periods(pf.first, common)],
         "accounts": [
             {
                 "account": k,
@@ -468,9 +462,7 @@ def analyze(data: dict, rates, benchmark: tuple = (None, None)) -> dict:
             "flows_status": valuer.flow_status,
             "latest_value": _opt(valuer.value(valuer.last)[0]),
             "latest_value_eur": _opt(view.value(valuer.last)[0]),
-            "periods": [
-                dict(p, **metrics(view, p["from"], p["to"], p["xirr_from"])) for p in periods(valuer.first, valuer.last)
-            ],
+            "periods": [dict(p, **metrics(view, p["from"], p["to"])) for p in periods(valuer.first, valuer.last)],
             "accounting": acct_res.get(a["id"]),
             "securities": securities_table(a, acct_res.get(a["id"]), snaps, rates),
         }

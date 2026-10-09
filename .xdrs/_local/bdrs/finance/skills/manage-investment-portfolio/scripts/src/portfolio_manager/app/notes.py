@@ -1,11 +1,10 @@
-"""Report footers: links to the concepts a report uses plus short notes built from that report's own numbers.
+"""Report notes: short hints built from that report's own numbers.
 
 Every note is a template with a conditional trigger, so a hint is only printed when the numbers support it.
 """
 
 from decimal import Decimal
 
-from portfolio_manager.app import concepts
 from portfolio_manager.app.fmt import money, pct
 
 MAX_NOTE_WORDS = 40
@@ -13,17 +12,21 @@ TEMPLATES = {
     "partial": "{label} covers {first_day} .. {to} only; do not compare it with a full period.",
     "xirr_above": (
         "{label}: XIRR (actual) {xirr} is above TWR (natural) {twr}, so the money you added before gains "
-        "worked better than the assets alone."
+        "worked better than the securities alone."
     ),
     "xirr_below": (
         "{label}: XIRR (actual) {xirr} is below TWR (natural) {twr}, so money added before weaker days "
-        "cost you part of the assets' own result."
+        "cost you part of the securities' own result."
     ),
     "unavailable": "{n} of {m} rows have no TWR (natural); n/a means a valuation is missing, not a zero return.",
     "deposits_led": "{share} % of the wealth change since inception came from your deposits, not from markets.",
     "costs_exceed_income": "Fees and taxes ({fees} EUR) were larger than dividends and interest ({income} EUR).",
     "observation": "{account} was last observed on {last}; {n} of {m} period-end values are interpolated (~).",
     "fx": "{account}: the exchange rate moved your EUR result by {fx} EUR since inception.",
+    "short_window": "{label}: only {first} .. {last} is available, so the 12-month figures cover that shorter span.",
+    "no_price": "Left out of the open positions because no price or EUR value is available: {names}.",
+    "no_price_contribution": "Left out of the contribution because a price is missing: {names}.",
+    "unconverted": "{n} income, fee or tax event(s) could not be converted to EUR and are not counted.",
 }
 
 
@@ -94,8 +97,26 @@ def fx_notes(analysis: dict) -> list:
     return out
 
 
-def footer(keys: list, notes: list, analysis: dict | None = None) -> list:
-    """Markdown footer: concept links, then notes; with an analysis it also lists the observation dates."""
-    lines = ["## Notes", "", "Concepts used: " + ", ".join(concepts.link(k) for k in keys) + ".", ""]
+def overview_notes(analysis: dict) -> list:
+    """Hints about the 12-month overview: short history, left-out items and values that could not be converted."""
+    out = []
+    win = analysis.get("window")
+    if win and "of history" in win["label"]:
+        out.append(TEMPLATES["short_window"].format(label=win["label"], first=win["from"], last=win["to"]))
+    pos = analysis.get("positions") or {}
+    if pos.get("excluded"):
+        out.append(TEMPLATES["no_price"].format(names=", ".join(pos["excluded"])))
+    missing = (analysis.get("contribution") or {}).get("missing") or []
+    if missing:
+        out.append(TEMPLATES["no_price_contribution"].format(names=", ".join(missing)))
+    bridge = analysis.get("bridge") or {}
+    unconverted = bridge.get("unconverted", 0) + (analysis.get("income") or {}).get("unconverted", 0)
+    if unconverted:
+        out.append(TEMPLATES["unconverted"].format(n=unconverted))
+    return out
+
+
+def section(notes: list, analysis: dict | None = None) -> list:
+    """Markdown notes section; with an analysis it also lists the observation dates. Empty when there is nothing to say."""
     all_notes = [*notes, *(observation_notes(analysis) if analysis else [])]
-    return [*lines, *(f"- {n}" for n in all_notes), ""] if all_notes else lines
+    return ["## Notes", "", *(f"- {n}" for n in all_notes), ""] if all_notes else []

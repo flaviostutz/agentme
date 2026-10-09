@@ -1,5 +1,7 @@
 """Institution adapter registry: detect which adapter reads a document (first match wins)."""
 
+import hashlib
+from pathlib import Path
 from types import ModuleType
 
 from portfolio_manager.adapters.connectors.institutions import (
@@ -38,6 +40,13 @@ class InstitutionRegistry:
 
     def by_name(self, name: str) -> ModuleType | None:
         return next((a for a in self.adapters if name == a.NAME), None)
+
+    def fingerprint(self) -> str:
+        """Hash of the adapter sources, so cached parse results are dropped when an adapter changes."""
+        digest = hashlib.sha256()
+        for adapter in self.adapters:
+            digest.update(Path(adapter.__file__).read_bytes())
+        return digest.hexdigest()[:8]
 
 
 def default_registry() -> InstitutionRegistry:

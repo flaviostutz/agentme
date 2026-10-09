@@ -22,8 +22,8 @@ def test_portfolio_parses_both_ends_flows_and_unsupported_savings(make_doc):
     assert (start["date"], end["date"]) == ("2025-01-01", "2025-01-31")
     assert (start["positions_value"], end["positions_value"], end["total"]) == ("1500", "1600", "1600")
     cdb, savings = end["positions"]
-    assert cdb["asset_class"] == "fixed-income" and "unsupported" not in cdb
-    assert savings["asset_class"] == "savings" and savings["unsupported"] == "savings product"
+    assert cdb["security_class"] == "fixed-income" and "unsupported" not in cdb
+    assert savings["security_class"] == "savings" and savings["unsupported"] == "savings product"
     flows = [r for r in res["references"] if r["kind"] == "period-flows"]
     assert (flows[0]["entries"], flows[0]["exits"]) == ("200", "100")
     assert all(c["level"] == "ok" for c in res["checks"])
@@ -56,7 +56,7 @@ def test_informe_year_end_balances_per_section(make_doc):
     (res,) = bb_informe.parse(make_doc(informe_pages()), {})
     assert res["account"]["id"] == "bb-1930"
     refs = res["references"]
-    assert [(r["section"], r["asset"]) for r in refs] == [("exempt", "Cdb Teste"), ("current-account", "Saldo Cc")]
+    assert [(r["section"], r["security"]) for r in refs] == [("exempt", "Cdb Teste"), ("current-account", "Saldo Cc")]
     assert (refs[0]["start"], refs[0]["end"], refs[0]["income"]) == ("1000", "1100", "50")
     assert refs[1]["income"] is None and Decimal(refs[1]["end"]) == 20
 

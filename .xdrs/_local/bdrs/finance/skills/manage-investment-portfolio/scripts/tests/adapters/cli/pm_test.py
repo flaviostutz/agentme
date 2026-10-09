@@ -1,6 +1,6 @@
 # Runtime: pytest; end-to-end CLI runs on synthetic PDFs inside a temporary .tmp/ (offline, no mocks).
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -62,11 +62,15 @@ def run(cwd, *argv):
 
 
 def read(cwd, rel, name="t"):
-    return json.loads((cwd / ".tmp" / f"manage-investment-portfolio-{name}" / rel).read_text(encoding="utf-8"))
+    return json.loads((work(cwd, name) / rel).read_text(encoding="utf-8"))
 
 
 def work(cwd, name="t") -> Path:
-    return cwd / ".tmp" / f"manage-investment-portfolio-{name}"
+    return cwd / ".tmp" / "manage-investment-portfolio" / name
+
+
+def cache(cwd, name="t") -> Path:
+    return cwd / ".tmp" / "manage-investment-portfolio" / ".work" / name
 
 
 START = "2025-01-01"
@@ -97,13 +101,33 @@ def full_run(cwd, name="t", source=".tmp/src"):
 def test_full_run_writes_reports_graphs_and_a_short_summary(cwd, sources):
     code, text = full_run(cwd)
     assert code == 0, text
-    assert text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio-t/"
+    assert text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio/t/"
     assert len(text.split()) < 150
     names = sorted(p.name for p in (work(cwd) / "reports").iterdir())
-    assert names == ["assets.md", "banks.md", "monthly.md", "portfolio.md", "yearly.md"]
-    assert "allocation.mmd" in {p.name for p in (work(cwd) / "graphs").iterdir()}
+    assert names == [
+        "concepts.md",
+        "income.md",
+        "investment-accounts.md",
+        "monthly.md",
+        "portfolio.md",
+        "risk.md",
+        "securities.md",
+        "yearly.md",
+    ]
+    graphs = {p.name for p in (work(cwd) / "graphs").iterdir()}
+    assert {"allocation.mmd", "wealth.mmd", "wealth-bridge.svg", "wealth-by-account.mmd"} <= graphs
+    reports = work(cwd) / "reports"
+    for name in ("monthly.md", "yearly.md", "investment-accounts.md"):
+        assert "| Window |" in (reports / name).read_text(encoding="utf-8")
+    assert "Wealth by investment account" in (reports / "investment-accounts.md").read_text(encoding="utf-8")
+    risk = (reports / "risk.md").read_text(encoding="utf-8")
+    assert "## From inception" in risk and "## Last 12 months" in risk and "## How to read the quadrant" in risk
+    assert "visualcapitalist.com" in risk and "trustybull.com" in risk
     for md in (work(cwd) / "reports").glob("*.md"):
-        assert md.read_text(encoding="utf-8").splitlines()[2].startswith("> Unresolved records:")
+        lines = md.read_text(encoding="utf-8").splitlines()
+        assert lines[0].startswith("# ")
+        assert all(label in lines[2] for label in ("Portfolio", "Monthly", "Income", "Risk", "Concepts"))
+        assert lines[4].startswith("> Unresolved records:")
 
 
 def test_rerun_without_new_files_is_byte_identical(cwd, sources):
@@ -139,7 +163,8 @@ def test_without_ecb_rates_the_brl_account_is_excluded_not_zeroed(cwd, sources):
 
 def test_with_cached_ecb_rates_brl_is_converted(cwd, sources):
     run(cwd, "init", "--name", "t")
-    (work(cwd) / "cache" / "ecb-hist.csv").write_text(ecb_csv(), encoding="utf-8")
+    (cache(cwd) / "ecb-hist.csv").parent.mkdir(parents=True)
+    (cache(cwd) / "ecb-hist.csv").write_text(ecb_csv(), encoding="utf-8")
     code, _ = full_run(cwd)
     analysis = read(cwd, "derived/analysis.json")
     assert code == 0 and analysis["excluded"] == []
@@ -151,13 +176,13 @@ def test_with_cached_ecb_rates_brl_is_converted(cwd, sources):
 def test_portfolio_flag_and_default_name(cwd):
     assert run(cwd, "init", "--portfolio", "p1")[0] == 0 and work(cwd, "p1").is_dir()
     code, text = run(cwd, "init")
-    assert code == 0 and text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio-main/"
+    assert code == 0 and text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio/main/"
 
 
 def test_portfolio_name_uses_the_holder_and_never_writes_files(cwd, sources):
     code, text = run(cwd, "portfolio-name", "--source", ".tmp/src")
     assert (code, text) == (0, "portfolio: titular-ficticio")
-    assert not any(p.name.startswith("manage-investment-portfolio-") for p in (cwd / ".tmp").iterdir())
+    assert not (cwd / ".tmp" / "manage-investment-portfolio").exists()
 
 
 def test_portfolio_name_asks_when_no_holder_or_a_tie(cwd, sources, make_pdf):
@@ -280,7 +305,7 @@ def test_classification_queue_import_and_markets_report(cwd, sources):
     good = [
         {
             "isin": ISIN_A,
-            "asset_class": "etf",
+            "security_class": "etf",
             "region": "World",
             "source_url": "https://example.org/a",
             "as_of": "2025-01-31",
@@ -299,13 +324,13 @@ def test_classification_queue_import_and_markets_report(cwd, sources):
 
 def test_classify_set_flags_validate_merge_and_never_need_a_json_file(cwd, sources):
     full_run(cwd)
-    args = ["classify", "--name", "t", "--isin", ISIN_A, "--asset-class", "etf"]
+    args = ["classify", "--name", "t", "--isin", ISIN_A, "--security-class", "etf"]
     code, text = run(cwd, *args, "--region", "World", "--source-url", "https://example.org/a", "--as-of", "2025-01-31")
     assert code == 0 and "Imported 1" in text
     assert read(cwd, "data/classifications.json")[0]["region"] == "World"
     code, _ = run(cwd, "classify", "--name", "t", "--isin", ISIN_A, "--sector", "Tech")
     merged = read(cwd, "data/classifications.json")
-    assert code == 0 and (merged[0]["sector"], merged[0]["region"], merged[0]["asset_class"]) == (
+    assert code == 0 and (merged[0]["sector"], merged[0]["region"], merged[0]["security_class"]) == (
         "Tech",
         "World",
         "etf",
@@ -315,9 +340,9 @@ def test_classify_set_flags_validate_merge_and_never_need_a_json_file(cwd, sourc
 
 def test_classify_set_rejects_invalid_or_incomplete_input(cwd, sources):
     full_run(cwd)
-    code, text = run(cwd, "classify", "--name", "t", "--isin", "XX", "--asset-class", "etf")
+    code, text = run(cwd, "classify", "--name", "t", "--isin", "XX", "--security-class", "etf")
     assert code == 1 and "Rejected" in text and "valid ISIN" in text and "source_url" in text
-    assert run(cwd, "classify", "--name", "t", "--asset-class", "etf")[0] == 2
+    assert run(cwd, "classify", "--name", "t", "--security-class", "etf")[0] == 2
     (cwd / ".tmp" / "c.json").write_text("[]", encoding="utf-8")
     assert run(cwd, "classify", "--name", "t", "--import", ".tmp/c.json", "--isin", ISIN_A)[0] == 2
     assert not (work(cwd) / "data" / "classifications.json").exists()
@@ -326,7 +351,7 @@ def test_classify_set_rejects_invalid_or_incomplete_input(cwd, sources):
 def test_validate_flags_hand_edited_answers_and_classifications(cwd, sources):
     full_run(cwd)
     flags = ["--source-url", "https://example.org/a", "--as-of", "2025-01-31"]
-    run(cwd, "classify", "--name", "t", "--isin", ISIN_A, "--asset-class", "etf", *flags)
+    run(cwd, "classify", "--name", "t", "--isin", ISIN_A, "--security-class", "etf", *flags)
     assert run(cwd, "validate", "--name", "t")[0] == 0
     path = work(cwd) / "data" / "classifications.json"
     path.write_text(path.read_text(encoding="utf-8").replace("etf", "bond"), encoding="utf-8")
@@ -390,7 +415,7 @@ def test_export_writes_files_that_rebuild_the_ledger_and_the_same_analysis(cwd, 
     clean_ingest(cwd)
     code, text = run(cwd, "export", "--name", "t")
     assert code == 0, text
-    assert text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio-t/"
+    assert text.splitlines()[-1] == "results-path: .tmp/manage-investment-portfolio/t/"
     assert "upvest-5731" in text and "bb-1930" in text
     files = export_files(cwd)
     assert sorted(files) == [
@@ -589,3 +614,38 @@ def test_legacy_gap_notes_in_answers_do_not_accept_findings(cwd, sources):  # re
     run(cwd, "ingest", "--name", "t")
     run(cwd, "check-input", "--name", "t")
     assert open_ids(cwd) == ids
+
+
+def _chart(months, currency="EUR"):
+    stamps = [int(datetime.fromisoformat(f"{m}-01T00:00:00+00:00").timestamp()) for m in months]
+    closes = [100 + i for i in range(len(months))]
+    meta = {"currency": currency, "symbol": "IWDA.AS"}
+    return {"chart": {"result": [{"meta": meta, "timestamp": stamps, "indicators": {"quote": [{"close": closes}]}}]}}
+
+
+def test_benchmark_download_cache_fallback_and_report_section(cwd, sources, monkeypatch):
+    full_run(cwd)
+    assert "Benchmark" in (work(cwd) / "reports" / "portfolio.md").read_text(encoding="utf-8")
+    months = ["2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07"]
+    calls = []
+
+    def fake(ticker):
+        calls.append(ticker)
+        return _chart(months), ""
+
+    monkeypatch.setattr(pm, "download_chart", fake)
+    code, text = run(cwd, "benchmark", "--name", "t", "--ticker", "IWDA.AS")
+    assert code == 0 and calls == ["IWDA.AS"] and "8 monthly close(s)" in text and "download" in text
+    assert "ticker: IWDA.AS" in (work(cwd) / "config.yaml").read_text(encoding="utf-8")
+    code, text = run(cwd, "report", "--name", "t", "--offline")
+    assert code == 0 and "benchmark" in {p.stem for p in (work(cwd) / "graphs").iterdir()}
+    code, text = run(cwd, "benchmark", "--name", "t", "--offline")
+    assert code == 0 and "cache" in text and calls == ["IWDA.AS"]
+
+
+def test_benchmark_without_cache_or_with_a_bad_ticker_fails_cleanly(cwd, sources):
+    full_run(cwd)
+    code, text = run(cwd, "benchmark", "--name", "t", "--ticker", "IWDA.AS", "--offline")
+    assert code == 2 and "no cached copy" in text
+    assert run(cwd, "benchmark", "--name", "t", "--ticker", "a/b")[0] == 2
+    assert run(cwd, "benchmark", "--name", "t")[0] == 2

@@ -23,9 +23,12 @@ class Adapters(Protocol):
 
     def detect(self, doc: Doc) -> Any: ...
 
+    def fingerprint(self) -> str: ...
+
 
 DATA_FILES = ("accounts", "events", "snapshots", "references", "unresolved", "ingest")
-TRACKED_INPUTS = ("answers.json", ACCEPTANCES_FILE, "data/classifications.json")
+BENCHMARK_FILE = "data/benchmark.json"
+TRACKED_INPUTS = ("answers.json", ACCEPTANCES_FILE, "data/classifications.json", BENCHMARK_FILE)
 AI_ADDRESSED = re.compile(
     r"(?i)\b(ignore (all |any )?(previous|prior|above) (instructions|prompts?)|system prompt|"
     r"as an? (ai|language model|assistant)|you (must|should) (now )?(tell|reply|respond|answer)|"
@@ -34,10 +37,10 @@ AI_ADDRESSED = re.compile(
 
 
 def _parse_file(ws: "Workspace", path: Path, sha: str, answers: dict, reader: PdfReader, registry: Adapters) -> dict:
-    """Return {file, sha256, results, status, notices}; cached by file hash, answers and calculation version."""
-    key = f"{sha[:16]}-{sha256_text(dumps(answers))[:8]}-v{CALCULATION_VERSION}"
-    cache_rel = f"cache/parse-{key}.json"
-    cached = ws.read(cache_rel)
+    """Return {file, sha256, results, status, notices}; cached by file hash, answers, adapters and calculation version."""
+    key = f"{sha[:16]}-{sha256_text(dumps(answers))[:8]}-{registry.fingerprint()}-v{CALCULATION_VERSION}"
+    cache_rel = f"parse-{key}.json"
+    cached = ws.read_cache(cache_rel)
     if cached is not None:
         return {**cached, "file": path.name, "sha256": sha}
     doc = reader(path)
@@ -60,7 +63,7 @@ def _parse_file(ws: "Workspace", path: Path, sha: str, answers: dict, reader: Pd
             ) as err:  # adapters reject drifted layouts
                 out.update(status="layout-drift", problem=f"{type(err).__name__}: {err}")
         out["notices"] = [s[:120] for s in doc.lines() if AI_ADDRESSED.search(s)][:5]
-    ws.write(cache_rel, out)
+    ws.write_cache(cache_rel, out)
     return {**out, "file": path.name, "sha256": sha}
 
 
