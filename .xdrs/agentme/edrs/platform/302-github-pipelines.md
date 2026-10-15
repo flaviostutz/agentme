@@ -146,6 +146,12 @@ jobs:
 
 ---
 
+#### 04-performance-step-is-optional
+
+Performance tests need a deployed environment, so `ci.yml` MUST NOT run them. A project MAY add a separate manually dispatched or post-deploy job that runs `make test-performance` (or one `test-performance-<kind>` target) with `STAGE` set to `acc`, and MAY run the baseline kind against a prod canary. Kinds, environments, guardrails and thresholds follow [agentme-edr-306](306-performance-testing.md).
+
+---
+
 #### Required secrets and permissions
 
 | Secret / Permission | Used in | Purpose |

@@ -21,6 +21,10 @@ The `agentme` scope provides opinionated, reusable guidance on how to scaffold, 
 
 All content in this scope is published and consumed by external projects. Changes must be clear, backwards-compatible where possible, and thoroughly reviewed before merging.
 
+### Architectural decisions
+
+The `agentme` ADRs cover architectural decisions such as the computational environments (`sbx`, `dev`, `tst`, `acc`, `prd`) and how they may depend on each other. See the full list in the [ADRs Index](adrs/index.md).
+
 ### Engineering decisions
 
 The `agentme` EDRs cover project tooling and structure for each supported language, CLI standards, monorepo layout, CI/CD pipelines, and observability. See the full list in the [EDRs Index](edrs/index.md).
@@ -31,5 +35,6 @@ The `agentme` BDRs cover software development project management practices: how 
 
 ## Type Indexes
 
+- [ADRs Index](adrs/index.md) - Architectural decisions for computational environments
 - [EDRs Index](edrs/index.md) - Engineering decisions for coding best practices and project tooling
 - [BDRs Index](bdrs/index.md) - Business decisions for software development project management

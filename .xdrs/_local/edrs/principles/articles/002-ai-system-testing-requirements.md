@@ -28,21 +28,27 @@ The practical reading: a quick internal prompt experiment carries little formal 
 
 This is the "objective" question, and it is also the question a testable acceptance criterion needs to answer. [agentme-edr-152](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) rule `05` defines the full taxonomy; the entries below are the ones most likely to show up in a business requirement:
 
-| Test type | What passing it proves | Why it matters to the business |
-|---|---|---|
-| Functional | The output matches a documented, pre-agreed correct answer | Gives auditable proof the system is right before it ships |
-| Smoke | A handful of critical cases pass before the fuller suite runs | Cheap early warning, avoids paying for expensive evals on a broken build |
-| Safety | The output contains nothing harmful, policy-violating, or offensive | Protects the brand and keeps the system within acceptable-use rules |
-| Adversarial | The system resists prompt injection, jailbreaks, and unsafe tool use | Reduces the chance of a security incident |
-| Fairness | Different legitimate customer segments all get the outcome the business policy intends | Surfaces unintentional policy gaps before customers hit them |
-| Bias | Protected characteristics (gender, ethnicity, age, and similar) do not change the outcome | Reduces legal and regulatory exposure under rules such as the EU AI Act or GDPR |
-| Robustness | The system keeps working when input is messy, incomplete, or unexpected | Protects reliability commitments made to customers |
-| Groundedness | An answer is backed by real retrieved source material rather than invented | Stops answers that sound confident but aren't backed by anything real from reaching customers |
-| Repeatability | Repeated runs of the same request stay consistent with each other | Supports any consistency commitment made to customers |
-| Explainability | The output comes with a rationale that genuinely supports it | Gives auditors and users a rationale they can actually check |
-| Unit (code-level) | The underlying code logic is correct in isolation, with no live model call | The cheapest and fastest point to catch a defect |
+| Test type | What passing it proves | Why it matters to the business | Frameworks and how it is tested |
+|---|---|---|---|
+| Functional | The output matches a documented, pre-agreed correct answer | Gives auditable proof the system is right before it ships | `eval.py` runs golden cases on the real model; LLM judge |
+| Smoke | A handful of critical cases pass before the fuller suite runs | Cheap early warning, avoids paying for expensive evals on a broken build | Same `eval.py`, limited to a few critical golden cases, run first |
+| Safety | The output contains nothing harmful, policy-violating, or offensive | Protects the brand and keeps the system within acceptable-use rules | Harmful-prompt golden cases on the real model; LLM judge checks policy |
+| Adversarial | The system resists prompt injection, jailbreaks, and unsafe tool use | Reduces the chance of a security incident | Injection and jailbreak golden cases on the real agent; LLM judge |
+| Fairness | Different legitimate customer segments all get the outcome the business policy intends | Surfaces unintentional policy gaps before customers hit them | One golden case per segment scenario; LLM judge compares expected decision |
+| Bias | Protected characteristics (gender, ethnicity, age, and similar) do not change the outcome | Reduces legal and regulatory exposure under rules such as the EU AI Act or GDPR | Cases varying only protected attributes; similarity or LLM judge compares |
+| Robustness | The system keeps working when input is messy, incomplete, or unexpected | Protects reliability commitments made to customers | Typo, empty, odd-input golden cases on the real model; LLM judge |
+| Groundedness | An answer is backed by real retrieved source material rather than invented | Stops answers that sound confident but aren't backed by anything real from reaching customers | Retrieval (RAG) golden cases; LLM judge checks claims against retrieved context |
+| Repeatability | Repeated runs of the same request stay consistent with each other | Supports any consistency commitment made to customers | Each case runs several times; similarity or LLM judge checks agreement |
+| Explainability | The output comes with a rationale that genuinely supports it | Gives auditors and users a rationale they can actually check | Golden cases on the real model; LLM judge checks rationale |
+| Performance | The system keeps meeting speed, error and cost limits at expected peak, under bursts and long runs, and fails gracefully with data intact when a database, disk, provider or network fails | Shows the system holds under real conditions before a launch or a surge of users, and keeps customer data safe when something breaks | A separate performance module drives the deployed pre-production system with its own cases; limits are declared up front and a failed limit stops the run |
+| Unit (code-level) | The underlying code logic is correct in isolation, with no live model call | The cheapest and fastest point to catch a defect | Python `pytest` with LangChain fake models standing in for the LLM |
+| A/B test in production | Version B beats the current version A on real users, measured on quality, cost and speed | Evidence of real-world gain before a change replaces what customers use today | Two versions on live traffic; LLM judge, user feedback, cost, latency |
 
 Two more types complete the full picture: `prompt` regression tests, which catch behavior changes whenever a prompt or model version changes, and code-level `integration` tests, which verify real calls to external systems. A single business scenario can also be checked by more than one type at once — one documented example can double as both a `functional` proof point and a `fairness` check ([agentme-edr-152](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) rule `02`).
+
+### Real-world comparison: the A/B test
+
+Offline tests cannot show how real users react, so a behavior-changing release of an AI component that handles more than 100 requests per day, makes regulated or high-impact decisions, or takes irreversible actions must also be compared in production ([agentme-edr-501](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/501-project-quality-standards.md) rule `09`). Two versions run at the same time for different groups of users, usually split 50/50 and fixed per user, and the team measures answer quality, user feedback, cost and speed. The analyst's part is to define, before launch, which metrics matter and what result makes the new version the winner ([agentme-edr-407](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/operations/407-a-b-testing-in-production.md) and [agentme-edr-157](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/157-ai-a-b-testing.md)). The test is temporary: it ends with a recorded decision and a single version kept. For high-impact decisions, the new version first goes to a small controlled group (employees or beta users) who give active feedback.
 
 ### Why they have to run, and in that order
 
@@ -61,5 +67,9 @@ Someone has to decide, in writing, what "correct," "safe," or "fair" means for a
 - [agentme-edr-141 - AI LLM development standards](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/141-ai-llm-development-standards.md) - Defines the LLM / Agent / Workflow tier classification
 - [agentme-edr-122 - Unit test requirements](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/122-unit-test-requirements.md) - General unit test requirements referenced by the Workflow tier
 - [agentme-edr-156 - AI eval fairness and bias](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/156-ai-eval-fairness-bias.md) - Deeper methodology behind the fairness and bias test types
+- [agentme-edr-407 - A/B testing in production](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/operations/407-a-b-testing-in-production.md) - Generic rules for planning, running and retiring an A/B test
+- [agentme-edr-157 - AI A/B testing](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/157-ai-a-b-testing.md) - AI-specific metrics, duration and controlled first group
+- [agentme-edr-306 - Performance testing](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/platform/306-performance-testing.md) - Kinds, environments, thresholds and reports for performance tests
+- [agentme-edr-158 - AI performance testing](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/158-ai-performance-testing.md) - AI latency, error rate, cost and integrity under load and failures
 - [agentme-bdr-404 - Team roles and specialists](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/bdrs/operations/404-team-roles-and-specialists.md) - Defines the AI BA's responsibility for test and evaluation requirements
 - [agentme-bdr-403 - Product team composition](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/bdrs/operations/403-product-team-composition.md) - Requires testable conditions in BA/AI BA acceptance criteria given no embedded QA role

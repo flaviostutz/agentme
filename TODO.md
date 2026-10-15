@@ -2,6 +2,27 @@
 
 <!-- Format: see agentme-edr-001 -->
 
+## [BACKLOG] 14- Enforce environment short names in project templates and CI (2026-10-16)
+
+- status: open
+- prompt: Add a check that rejects `STAGE` values and `.env.<stage>` file names whose prefix is not one of `sbx`, `dev`, `tst`, `acc`, `prd`, per agentme-edr-307 rules `02-stage-value-must-be-validated` and `03-env-files-must-use-the-prefix-name`. Start with the `create-*-project` skills' Makefile templates (under `.xdrs/agentme/edrs/application/skills/`) and the CI examples in agentme-edr-302. Acceptance: a Makefile target run with `STAGE=staging` fails with a message naming the value.
+- deferred reason: New tooling beyond the policy text; left out of the environments policy change.
+- why this is important: Without a check, names drift back to production, staging and test.
+
+## [BACKLOG] 13- Policy for production console change control (2026-10-16)
+
+- status: open
+- prompt: Write a policy on how developers and engineers may change production through consoles, which agentme-adr-301 rule `06-prd-serves-final-users` only says they can access together with monitoring. Cover read-only defaults, approval for writes, audit trail and break-glass access. Likely ADR governance plus EDR governance; check agentme-core-adr-policy-001 rule 03 for scope fit.
+- deferred reason: Excluded from the environments policy to keep it to model, connectivity and access.
+- why this is important: Console access to prd without change rules is the most direct way to break production.
+
+## [BACKLOG] 12- Policy for data handling across environments (2026-10-16)
+
+- status: open
+- prompt: Write a policy on which data may exist in each environment (agentme-adr-301): whether production data may be copied to `dev`, `tst` or `acc`, masking and synthetic data rules, and retention in `sbx`. Check `_core-adr-policy-016` for the data subject and agentme-edr-306 rule `06-datasets-and-data-safety` for existing synthetic data rules.
+- deferred reason: Excluded from the environments policy to keep it to model, connectivity and access.
+- why this is important: Production data in lower environments is a common source of leaks.
+
 ## [BACKLOG] 11- Official benchmark price source for manage-investment-portfolio (2026-10-08)
 
 - status: open

@@ -62,7 +62,7 @@ FEATURE_FLAG_NEW_UI=false
 
 #### 04-stage-specific-dotenv-committed
 
-Stage-specific overrides MUST use the naming convention `.env.[stage]` (e.g., `.env.production`, `.env.staging`, `.env.test`). These files may be committed to the repository because they carry deployment-stage configuration rather than local developer configuration. They are used during deployment pipelines where the stage is known and explicit.
+Stage-specific overrides MUST use the naming convention `.env.[stage]` where `[stage]` is an environment short name from [agentme-edr-307](307-environment-short-names.md) (e.g., `.env.prd`, `.env.acc`, `.env.tst`). These files may be committed to the repository because they carry deployment-stage configuration rather than local developer configuration. They are used during deployment pipelines where the stage is known and explicit.
 
 The generic `.env` MUST NOT be committed. The distinction is: `.env` is for local, ad-hoc, standalone use; `.env.[stage]` is for deployment pipelines with a defined environment identity.
 

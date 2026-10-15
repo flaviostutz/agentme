@@ -51,7 +51,22 @@ describe('parseWorkItemUrl', () => {
   });
 
   it.each([
-    'https://dev.azure.com/contoso/Widgets/_boards/board/t/Team/Stories?workitem=9',
+    ['https://dev.azure.com/contoso/Widgets/_boards/board/t/Team/Stories?workitem=9', 9],
+    ['https://dev.azure.com/contoso/Widgets/_backlogs/backlog/Team/Stories?a=1&workItem=12#x', 12],
+    ['https://contoso.visualstudio.com/Widgets/_boards/board/t/Team/Stories?workitem=7', 7],
+  ])('resolves the work item open on a board or backlog URL %s', (url, id) => {
+    expect(parseWorkItemUrl(url)).toMatchObject({
+      id,
+      org: 'contoso',
+      project: 'Widgets',
+      webUrl: `https://dev.azure.com/contoso/Widgets/_workitems/edit/${id}`,
+    });
+  });
+
+  it.each([
+    'https://dev.azure.com/contoso/Widgets/_boards/board/t/Team/Stories',
+    'https://dev.azure.com/contoso/Widgets/_boards/board/t/Team/Stories?workitem=abc',
+    'https://dev.azure.com/contoso/Widgets/_queries/query/abc?workitem=9',
     'https://dev.azure.com/contoso/Widgets/_queries/query/abc',
     'https://github.com/acme/widgets/issues/1',
     'not a url',

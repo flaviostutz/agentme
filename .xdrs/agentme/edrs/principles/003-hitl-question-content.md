@@ -1,11 +1,11 @@
 ---
 name: agentme-edr-policy-003-hitl-question-content
 description: >
-  Defines the mandatory format of every question an AI agent asks a human (clarifying, decision,
-  approval, or phase-gate question): a short title with context, 2-4 options with consequences,
-  a "(recommended)" prefix on the preferred option, word caps, and question-UI fields filled with
-  as much of the question as fits. Use when writing skills with human-in-the-loop (HITL)
-  questions, or whenever an agent asks a human to decide something.
+  Defines what every question an AI agent asks a human (clarifying, decision, approval, or
+  phase-gate question) must contain: a short title with context, options with their consequences,
+  a "(recommended)" prefix on the preferred option, and text that stands on its own. Use when
+  writing skills with human-in-the-loop (HITL) questions, or whenever an agent asks a human to
+  decide something.
 apply-to: Any AI agent question to a human (clarifying, decision, approval, or phase gate), inside or outside skills, in agentme and scopes that follow or extend it.
 valid-from: 2026-09-23
 ---
@@ -22,7 +22,7 @@ Question: What must every agent question to a human contain so the human can dec
 
 **Compact, self-contained decision questions**
 
-Every question MUST follow a compact template: a short title with one line of context, 2-4 options stating their consequences, and a "(recommended)" prefix on the preferred option.
+Every question MUST be short and self-contained: a title with one line of context, options that state their consequences, and a "(recommended)" prefix on the preferred option.
 
 ### Details
 
@@ -30,7 +30,7 @@ A HITL question is any point where an agent pauses and asks a human for input: c
 
 #### 01-context-must-precede-every-question
 
-Right after its title, every question MUST give a context line stating what was found and the relevant current state. A question MUST NOT consist of a title and option labels only. The context MAY link the file, section, or system involved and MAY say why the agent cannot resolve the point alone, within the caps of rule 11.
+Right after its title, every question MUST give a context line stating what was found and the relevant current state. A question MUST NOT consist of a title and option labels only. The context MAY link the file, section, or system involved and MAY say why the agent cannot resolve the point alone.
 
 #### 03-each-option-must-state-consequences
 
@@ -38,33 +38,31 @@ Every option MUST state what it does and its most decision-relevant consequences
 
 #### 05-questions-must-be-self-contained
 
-The human MUST be able to decide from the question text alone, without scrolling back to earlier rounds or opening files. Terms not defined earlier in the same message MUST be explained in plain words. When several questions are batched, each MUST be numbered (Q1, Q2, ...) and carry its own context and options, and a single round MUST NOT exceed 5 questions.
+The human MUST be able to decide from the question text alone, without scrolling back to earlier rounds or opening files. Terms not defined earlier in the same message MUST be explained in plain words. When several questions are batched, each MUST be numbered (Q1, Q2, ...) and carry its own context and options; a batch SHOULD stay small, about 5 questions.
 
-#### 06-ui-fields-must-carry-maximum-question-content
+#### 06-ui-fields-must-carry-the-question-content
 
-When asking through a question UI with separate fields (e.g. `vscode_askQuestions`), the agent MUST map each part to its own field: "Q<n> <topic>" to the header, the title to the question, the context to the message, each option with its "(recommended)" prefix to an option label, and that option's consequences to the option description. The agent SHOULD also set the UI's recommended flag on that option when one exists.
-
-The agent MUST fill every field with as much decision-relevant content as fits its length limit (about 200 characters for `vscode_askQuestions`, 50 for its header), condensing wording first and truncating with "..." only as a last resort. When any part was condensed or truncated, the agent MUST also place the full question in a chat message immediately before the UI call and MAY append "(full text above)" to the UI question. The agent MUST NOT reduce the UI to a bare reference such as "Q1 (see above)" or to option labels without consequences.
+When asking through a question UI with separate fields (e.g. `vscode_askQuestions`), the agent MUST put the real content in the fields: the title in the question, the context in the message, and each option's label and consequences in the option label and description. The agent MUST NOT reduce the UI to a bare reference such as "Q1 (see above)" or to option labels without consequences. When a field's length limit forces a cut, the agent SHOULD condense first and then place the full question in chat right before the UI call.
 
 #### 07-phase-gates-must-summarize-outcome
 
-A phase-gate question (continue, re-run, add a comment) MUST summarize what the phase produced, any open risks or deferred items, and what each gate option will cause next. The summary SHOULD stay <80 words or 5 bullets.
+A phase-gate question (continue, re-run, add a comment) MUST summarize what the phase produced, any open risks or deferred items, and what each gate option will cause next, in a few lines.
 
 #### 08-requests-for-more-context-must-be-re-explained
 
-When the human answers with a request for clarification (e.g. "explain better") instead of choosing, the agent MUST re-ask the same question with expanded context, such as concrete file references, examples, or impact, and MUST NOT repeat the original wording. The re-asked question MAY use up to twice the caps of rule 11.
+When the human answers with a request for clarification (e.g. "explain better") instead of choosing, the agent MUST re-ask the same question with expanded context, such as concrete file references, examples, or impact, and MUST NOT repeat the original wording.
 
 #### 09-write-confirmations-extend-adapter-rules
 
-Approval questions for external-system writes MUST follow [`agentme-edr-policy-127-external-system-adapter-skills.04-human-in-the-loop-before-mutations`](../application/127-external-system-adapter-skills.md#04-human-in-the-loop-before-mutations) and MUST also apply rules 03, 06, and 11 of this policy.
+Approval questions for external-system writes MUST follow [`agentme-edr-policy-127-external-system-adapter-skills.04-human-in-the-loop-before-mutations`](../application/127-external-system-adapter-skills.md#04-human-in-the-loop-before-mutations) and MUST also apply rules 03 and 06 of this policy.
 
-#### 10-skills-must-embed-and-test-the-checklist
+#### 10-skills-must-reference-this-policy
 
-A skill with HITL questions MUST embed rules 01, 03, 05-08, and 11 as a checklist in its instructions. Its `SKILL.test.md` (per [`agentme-edr-017`](017-skill-testing.md)) MUST contain at least one assertion verifying that a decision question has a context line, option consequences, and a "(recommended)" prefix, and at least one assertion verifying that question-UI fields carry that content per rule 06.
+A skill with HITL questions MUST reference this policy and apply rules 01, 03, 05, 06 and 11 to its questions. Its `SKILL.test.md` (per [`agentme-edr-017`](017-skill-testing.md)) SHOULD contain an assertion that a decision question has a context line, option consequences, and a "(recommended)" prefix.
 
 #### 11-questions-must-follow-compact-template
 
-Every decision question MUST use the template below and MUST stay <140 words in total (title, context, and all options). Caps are written as `<N words` per [`_core-adr-policy-023`](../../../_core/adrs/principles/023-skill-runtime-standards.md), in the skill that asks the question:
+Every decision question SHOULD follow the template below and stay compact. A one-line title, a one-line context, and options of one or two sentences each are usually enough; longer text is justified only when the decision needs it:
 
 ```text
 Q<n>: <title>
@@ -73,16 +71,7 @@ Q<n>: <title>
 - B: <option>. <consequences>.
 ```
 
-Each part SHOULD respect its cap:
-
-| Part | Cap |
-|---|---|
-| Title | <15 words |
-| Context | <25 words |
-| Options | 2-4 per question |
-| Each option, with its consequences | <25 words |
-
-When one option is preferable, the agent SHOULD prefix it with "(recommended)" right after its letter; a separate recommendation line or reason is not needed. The human MUST still make the decision; a recommendation MUST NOT be applied without the human's answer.
+One question offers 2-4 options. When one option is preferable, the agent SHOULD prefix it with "(recommended)" right after its letter; a separate recommendation line is not needed. The human MUST still make the decision; a recommendation MUST NOT be applied without the human's answer.
 
 ### Example
 
@@ -98,19 +87,9 @@ Allowed:
 > - B: 24h limit, change AC3. Keeps security; users log in daily.
 > - C: (recommended) 30 days on trusted devices only. Keeps MFA; about 3 extra days of work.
 
-The same question in `vscode_askQuestions` fields (rule 06). Every part fits, so no chat copy is needed:
-
-| Field | Content |
-|---|---|
-| header | Q1 session length |
-| question | Q1: How long should a login session last? |
-| message | `userstory-004.md` AC3 says sessions last 30 days, but `auth-spec.md` section 2.1 limits tokens to 24h with MFA. |
-| option A label / description | A: 30 days, update the spec / Better UX; weakens MFA; needs security sign-off |
-| option B label / description | B: 24h limit, change AC3 / Keeps security; users log in daily |
-| option C label / description | C: (recommended) 30 days on trusted devices only / Keeps MFA; about 3 extra days of work |
+In a question UI with separate fields (rule 06), the title goes to the question field, the context to the message, and each option's label and consequences to the option label and description.
 
 ## References
 
 - [`agentme-edr-017`](017-skill-testing.md) - Skill testing
 - [`agentme-edr-127`](../application/127-external-system-adapter-skills.md) - External system adapter skills
-- [`_core-adr-policy-023`](../../../_core/adrs/principles/023-skill-runtime-standards.md) - Skill runtime standards (word cap format)

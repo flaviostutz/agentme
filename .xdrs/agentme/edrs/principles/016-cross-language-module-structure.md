@@ -125,6 +125,8 @@ Benchmark tests MUST live in one of these locations:
 - `<module>/tests_benchmark/` for module-specific harnesses or datasets
 - `<parent>/tests_benchmark/` when they cover multiple sibling modules
 
+Performance tests of a deployed system (load, stress, soak, resilience) are not benchmarks. They MUST live in a `performance-<slug>/` module per [agentme-edr-306](../platform/306-performance-testing.md).
+
 #### 08-module-makefiles-must-expose-shared-targets
 
 Every module `Makefile` MUST expose the common target names from [agentme-edr-303](../platform/303-common-targets.md). At minimum, modules MUST provide `build`, `lint`, and `test`, and SHOULD also provide `all`, `clean`, and `lint-fix` when meaningful.
@@ -133,3 +135,4 @@ Every module `Makefile` MUST expose the common target names from [agentme-edr-30
 
 - [agentme-edr-301](../platform/301-monorepo-structure.md) - Monorepo aggregation and delegation rules
 - [agentme-edr-303](../platform/303-common-targets.md) - Shared Makefile target names
+- [agentme-edr-306](../platform/306-performance-testing.md) - Performance test modules
