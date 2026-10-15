@@ -28,6 +28,9 @@ const PR_PATTERNS = [
 const WORK_ITEM_PATTERNS = [
   /^https:\/\/dev\.azure\.com\/([^/\s]+)\/([^/\s]+)\/_workitems\/edit\/(\d+)(?:[/?#].*)?$/i,
   /^https:\/\/([^./\s]+)\.visualstudio\.com\/([^/\s]+)\/_workitems\/edit\/(\d+)(?:[/?#].*)?$/i,
+  // Board or backlog link that has a work item open: .../_boards/board/t/Team/Stories?workitem=9
+  /^https:\/\/dev\.azure\.com\/([^/\s]+)\/([^/\s]+)\/_(?:boards|backlogs)\/[^?#\s]*\?(?:[^#\s]*&)?workitem=(\d+)(?:[&#].*)?$/i,
+  /^https:\/\/([^./\s]+)\.visualstudio\.com\/([^/\s]+)\/_(?:boards|backlogs)\/[^?#\s]*\?(?:[^#\s]*&)?workitem=(\d+)(?:[&#].*)?$/i,
 ];
 
 const firstMatch = (patterns: readonly RegExp[], url: string): RegExpExecArray | undefined => {
@@ -54,7 +57,7 @@ export const parsePrUrl = (url: string): PrRef => {
   };
 };
 
-// PR and board URLs are rejected on purpose: only one work item can be refined at a time.
+// PR, query and board URLs without an open work item are rejected: exactly one work item is read.
 export const parseWorkItemUrl = (url: string): WorkItemRef => {
   if (firstMatch(PR_PATTERNS, url)) {
     throw usageError(`pull request URL given, a work item URL is required: ${url}`);

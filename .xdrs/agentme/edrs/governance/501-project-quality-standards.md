@@ -268,3 +268,10 @@ AI projects are classified into three tiers — LLM, Agent, and Workflow — def
 - Evals MUST run against real LLM providers (not mocks) to capture model drift.
 - For eval folder structure and LLM-as-judge scoring, see [agentme-edr-151](../application/151-ai-eval-standards.md). For eval script requirements, see [agentme-edr-153](../application/153-ai-eval-script.md).
 - For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-152](../application/152-ai-test-types-taxonomy.md).
+
+**A/B test requirements (all tiers):**
+
+- A behavior-changing release of an AI component MUST be validated with an A/B test in production when ANY of these holds: the component produces results at more than 100 requests per day; it makes regulated or high-impact decisions; it takes irreversible actions.
+- Behavior-changing means any change that can alter outputs: prompt, model or its parameters, tools, graph, framework or retrieval data.
+- Refactors, infrastructure changes and security patches without output change are exempt. An emergency hotfix MAY skip the A/B test and MUST get an after-the-fact review.
+- For how to plan and run the A/B test, see [agentme-edr-157](../application/157-ai-a-b-testing.md) and [agentme-edr-407](../operations/407-a-b-testing-in-production.md).

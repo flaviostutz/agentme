@@ -56,7 +56,7 @@ Each refined user story MUST have a detail file placed at:
 `.xdrs/[scope]/bdrs/operations/initiatives/.assets/userstory-NNN-slug.md`
 
 - NNN and slug MUST match the placeholder file that was refined (extracted from its `**Story ID:**` line). For new stories without a placeholder, use the next available NNN in `.assets/` and derive the slug by kebab-casing the story title to at most 7 words.
-- The file MUST begin with a `**Story ID:** userstory-NNN-slug` line. A refined file has no `**Status:**` field; the absence of the status field indicates the story is complete.
+- The file MUST begin with a `**Story ID:** userstory-NNN-slug` line. A refined file has no `**Status:**` field; the absence of the status field indicates the story is complete. A story with a `## Pending Questions` section keeps `**Status:** to-be-refined`.
 
 A **pending placeholder file** is created for every story added to the epic initiative before it is refined. It MUST contain:
 ```markdown
@@ -74,7 +74,7 @@ A **pending placeholder file** is created for every story added to the epic init
 - [Reason]: [userstory-NNN-other-story](.assets/userstory-NNN-other-story.md)
 ```
 
-The detail file MUST follow this template:
+The detail file MUST follow this template. Only Title and User Story are required; every other section is optional and is omitted when it has no content or would repeat a fact held by another section. Never write N/A.
 
 ```markdown
 **Story ID:** userstory-NNN-slug
@@ -85,55 +85,45 @@ The detail file MUST follow this template:
 ## User Story
 As a [role], I want to [action], so that [benefit].
 
-## Scope
-[<200 words. List features, behaviors, screens, or services in scope.]
-- [feature or behavior]
+## Details
+[Prose <30 words and/or <8 bullets of <30 words each. Adds context, rules, constraints, answered decisions and accepted defaults the user story does not say; never repeats it.]
+- [rule, behaviour, constraint, measurable need, blocking dependency or assumption]
+[A diagram, example or exercise discussed or shown to the person during refinement is kept here as a labelled block and does not count toward the caps.]
 
-## Edge Cases
-[optional — <50 words. Known edge cases and expected handling.]
-- [edge case — expected handling]
-
-## Out of Scope
-[optional — <30 words.]
-- [out-of-scope item]
-
-## Constraints
-[optional — <30 words. Any rule, technology, regulatory, or business constraint that must be respected.]
-- [constraint]
-
-## Detailed Specs
-[Required when any API, integration, or data detail was discovered. Mark N/A if none.
- A story lacking sufficient detail here is not ready for implementation.]
-- [External API / integration: endpoint, method, payload, auth, behavior]
-- [Data field: type, format, valid values, meaning, constraints]
-- [Doc link: URL or file path — what it covers]
-- [Contact: name/role — what they own or can clarify]
-- [Process rule or business constraint not captured in Constraints above]
+## Notes
+[optional - at most 6 bullets, <40 words each. Source, link, reuse target, contact or hint that changes how the builder starts.]
+- [note]
 
 ## Acceptance Criteria
-- [ ] [verifiable outcome]
+[<4 checklist lines, <12 words each. Only non-standard delivery aspects that decide whether the story can be closed, concrete and easy to check, saying what can be found where.]
+- [ ] [delivery result, e.g. "Pipeline fails if F1 score < 0"]
 
-## Attachments
-[highly desirable — screenshots, mockups, or diagrams illustrating the feature.]
-- [attachment]
+## Out of Scope
+[optional - at most 3 bullets, <15 words each. Only subtle boundaries people would doubt; never obvious exclusions.]
+- [out-of-scope item]
+
+## Pending Questions
+[only while the story is not ready; roles only, <100 words.]
+- [OQn (for: role): question]
 
 **Epic initiative:** [NNN-epic-slug.md](../NNN-epic-slug.md)
 ```
 
-#### 05-detailed-specs-requirement
+The team's standard Definition of Done is not repeated in the story.
+
+#### 05-readiness-requirement
 
 A user story that lacks enough detail to begin architecture, planning, or implementation is not ready for implementation and MUST be re-refined before it is moved to in-progress.
 
-- The `## Detailed Specs` section MUST be present in every user story detail file.
-- When integration or interface details were discovered during refinement (external APIs, data contracts, documentation links, contact names), the section MUST be populated with those details.
-- When no such details apply, the section MUST be explicitly marked `N/A`.
-- A story with an empty or absent `## Detailed Specs` section is treated as not refined.
+- When integration or interface details were discovered during refinement (external APIs, data contracts, documentation links, contact names, reuse targets), they MUST be recorded in `## Details` when they constrain behaviour, and in `## Notes` when they are pointers.
+- A story whose interfaces are unknown MUST carry a Pending Question instead of an empty section.
+- `## Acceptance Criteria` MUST hold only delivery checks, concrete enough that anyone can decide whether the story can be closed.
 
 #### 06-refinement-workflow
 
 Stories MUST be refined using the `refine-user-story` skill. The skill:
 - Detects active epic initiative documents and lists pending stories for selection.
-- MUST run a structured 10-phase refinement process including interface/integration spec discovery.
+- MUST run a structured refinement process including local research and interface/integration spec discovery.
 - MUST write the resulting detail file and update the key task link in the initiative's Milestone.
 - When a story is split, MUST create placeholder files for each deferred slice and add them as pending task links in the initiative.
 - MAY take a URL of the story to refine (GitHub issue, Azure DevOps work item, public web page) and, after the human confirms, write the refined story back to that source and create `[NEEDS REFINING]` placeholder items there for deferred slices; local tracking of deferred slices is kept regardless.

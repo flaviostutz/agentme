@@ -104,6 +104,7 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 | `test-integration` | *(Optional)* Run integration and end-to-end tests only. Projects without integration tests MAY omit this target. |
 | `test-smoke` | *(Optional)* Run a fast, minimal subset of tests to verify the software is basically functional. Useful as a post-deploy health check. |
 | `eval` | *(Optional)* Run **all evaluations** for the module. Used alongside `test` to measure the accuracy and performance of statistical systems such as ML models, AI agents, or noisy systems. Typically runs against a live or near-live system (similar to an integration test) and produces a performance analysis report (e.g., F1 score, Accuracy, Precision, Recall). MUST NOT be included in `test` or `all` — evals are opt-in because they require live dependencies and MAY be slow or costly to run. Individual evaluations MUST follow the prefix convention: `eval-<qualifier>` (e.g., `eval-simple`, `eval-complex`). |
+| `test-performance` | *(Optional)* Run the default performance kinds (baseline, load, spike) of a `performance-<slug>` module against a deployed environment selected with `STAGE`. MUST NOT be included in `test` or `all`. One kind runs through `test-performance-<kind>` (e.g., `test-performance-stress`, `test-performance-soak`). See [agentme-edr-306](306-performance-testing.md). |
 
 ##### Release group
 
@@ -123,7 +124,7 @@ Two environment variables have defined semantics and MUST be used consistently.
 
 | Variable | Purpose |
 |----------|---------|
-| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. Common prefixes: `dev`, `tst`, `acc`, `prd`. Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. MAY be required by any target that is environment-aware (build, lint, deploy, etc.). |
+| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. The prefix MUST be one of `sbx`, `dev`, `tst`, `acc`, `prd` (see [agentme-edr-307](307-environment-short-names.md)). Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. MAY be required by any target that is environment-aware (build, lint, deploy, etc.). |
 | `VERSION` | Sets the explicit version used during packaging and deployment. Used when there is no automatic version-tagging utility, or to override it. |
 
 ---
@@ -222,7 +223,7 @@ make all
 
 `make all`, `make test`, and `make lint` MUST include every subtarget that runs **offline** — meaning it requires no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository.
 
-Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a staging environment, `lint-api` against a remote schema registry) MUST exist as named targets so developers can invoke them explicitly, but MUST NOT be invoked from `all`, `test`, or `lint`.
+Subtargets that require external dependencies (e.g., `test-integration` against a live database, `test-e2e` against a `tst` environment, `lint-api` against a remote schema registry) MUST exist as named targets so developers can invoke them explicitly, but MUST NOT be invoked from `all`, `test`, or `lint`.
 
 ---
 
@@ -247,3 +248,4 @@ dev-mlflow:
 
 - [agentme-edr-301](301-monorepo-structure.md) - Monorepo layout and delegation structure
 - [agentme-edr-304](304-tool-execution-and-scripting.md) - Tool-execution rules for Makefile targets and CI
+- [agentme-edr-306](306-performance-testing.md) - Performance testing targets

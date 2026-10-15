@@ -9,8 +9,8 @@ description: >
   change-azure-devops-contents runs.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-10-08
+  version: "1.3.0"
+  updated: 2026-10-15
 ---
 
 ## Overview
@@ -25,7 +25,8 @@ logic (rule 08).
 
 #### Required
 - Azure DevOps PR URL (`.../_git/<repo>/pullrequest/<n>`) or work item URL
-  (`.../_workitems/edit/<id>`), modern `dev.azure.com` or legacy `<org>.visualstudio.com` host
+  (`.../_workitems/edit/<id>`, or a board/backlog link with `?workitem=<id>`), modern
+  `dev.azure.com` or legacy `<org>.visualstudio.com` host
 
 #### Optional
 - Resource to read (default: metadata and comments)
@@ -99,7 +100,7 @@ Run once per task before any read. `<skill-dir>` below is this skill's folder.
 npx -y tsx@4.23.15 <skill-dir>/scripts/src/adapters/cli/work-item-get.ts --work-item-url <work-item-url> [--download-dir <dir>] [--no-download]
 ```
 
-Reads one work item of any type (a PR, board or query URL is rejected with exit 2) and prints
+Reads one work item of any type (a PR URL, a query URL, or a board URL without `?workitem=<id>` is rejected with exit 2) and prints
 one JSON object:
 
 | Field | Value |

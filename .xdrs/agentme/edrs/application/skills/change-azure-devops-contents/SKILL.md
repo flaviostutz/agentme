@@ -9,8 +9,8 @@ description: >
   write to an Azure DevOps PR or work item.
 metadata:
   author: flaviostutz
-  version: "1.3.0"
-  updated: 2026-10-08
+  version: "1.4.0"
+  updated: 2026-10-15
 ---
 
 ## Overview
@@ -23,7 +23,7 @@ first (rule 06). Holds no business logic (rule 08): the caller decides what to w
 ### Inputs
 
 #### Required
-- Azure DevOps PR or work item URL
+- Azure DevOps PR or work item URL (a board/backlog link with `?workitem=<id>` counts as that work item)
 - Items to write (comment id, body, status, title, rev)
 
 #### Optional

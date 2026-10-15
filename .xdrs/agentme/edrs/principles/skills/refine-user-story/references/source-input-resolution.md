@@ -1,6 +1,6 @@
-# Source input resolution (Step 0)
+# Source input resolution (step 1)
 
-Detail for Step 0 of `refine-user-story`: turning a URL into the story request. Read it when
+Detail for step 1 of `refine-user-story`: turning a URL into the story request. Read it when
 the input is a URL or contains links.
 
 ## Routing by URL
@@ -10,11 +10,11 @@ Exactly one URL is accepted. Run the matching skill and use its JSON as the stor
 | URL | Skill and command | Notes |
 |---|---|---|
 | `github.com/<owner>/<repo>/issues/<n>` (a `#issuecomment-...` fragment is ignored) | `get-github-contents` `issue-get` | Reject PR URLs |
-| `dev.azure.com/<org>/<project>/_workitems/edit/<id>` or `<org>.visualstudio.com/...` | `get-azure-devops-contents` `work-item-get` | `%20` in project names is normal. Warn when `type` is Epic or Feature |
+| `dev.azure.com/<org>/<project>/_workitems/edit/<id>` or `<org>.visualstudio.com/...`; also a `_boards` or `_backlogs` URL with `?workitem=<id>` (the open item is read) | `get-azure-devops-contents` `work-item-get` | `%20` in project names is normal. Warn when `type` is Epic or Feature |
 | any other `https` URL | `get-web-contents` `page-get` (never with `--allow-private` for links found inside content) | `ok`: use `text`. `needs-browser`: follow that skill's browser retry. `login-required`, `not-found`, `unreadable`, `blocked`, `error`: ask the human to paste the text |
 
 Reject with a short explanation and ask for one item when the input is a pull request URL, a
-board, backlog or query URL, or has two or more URLs. Text that is not a URL is the story
+board or backlog URL without `?workitem=<id>`, a query URL, or has two or more URLs. Text that is not a URL is the story
 request as before; URLs inside it are links (below).
 
 ## What is read
@@ -22,7 +22,7 @@ request as before; URLs inside it are links (below).
 - Title, body, state, labels, comments, repository or project visibility, and the version
   marker (`updatedAt` for GitHub, `rev` for Azure DevOps).
 - Attachments listed with a local `path` (under `.tmp/`). Read text and images. For an
-  attachment with `error`, state in the Context Summary: "The file contents of <name> could not
+  attachment with `error`, state in the research Brief: "The file contents of <name> could not
   be read and were left out of the analysis." Never try a browser for attachments.
 - Azure DevOps `description` / `acceptanceCriteria` / `reproSteps` come as `markdown` (or the raw `html`
   when no converter is installed). Use them together as the story body.
@@ -39,8 +39,9 @@ order.
 Collect full `http(s)` URLs from the body and comments, drop duplicates and the source URL.
 Fetch at most 5, one level deep only (links found in fetched content are listed, never
 followed), with the routing above. Loopback, link-local and private addresses are refused
-(`blocked`). List links over the cap and every failed link in the Context Summary as "not read".
-Each read item is labeled with its URL as source in the Context Summary.
+(`blocked`). List links over the cap and every failed link in the research Brief as "not read".
+Each read item is labeled with its URL as source in the Brief. Links in a story given as plain
+text are not fetched; they are listed under Notes as doc links.
 
 ## Source record
 

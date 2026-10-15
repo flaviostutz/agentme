@@ -44,6 +44,7 @@ Every monorepo MUST follow this top-level directory layout:
 │   ├── examples/         # Optional sibling consumer examples for modules in this app
 │   ├── tests_integration/# Optional cross-module integration tests for this app
 │   ├── tests_benchmark/  # Optional cross-module benchmarks for this app
+│   ├── performance-<slug>/ # Optional performance test modules (agentme-edr-306)
 │   └── shared/           # Resources shared by modules within THIS application
 │
 ├── Makefile              # Root Makefile coordinating all areas
@@ -58,6 +59,7 @@ Every monorepo MUST follow this top-level directory layout:
 - MUST depend only on resources in `/shared/`. Direct cross-application dependencies are forbidden; use published artifacts (container images, published libraries) instead.
 - MUST contain a `README.md` with: purpose, architecture overview, how to build, and how to run.
 - MAY contain `examples/`, `tests_integration/`, and `tests_benchmark/` when those artifacts apply to multiple modules inside the application.
+- MAY contain `performance-<slug>/` modules that test the application as a deployed system, per [agentme-edr-306](306-performance-testing.md).
 
 #### 03-module-folders
 
