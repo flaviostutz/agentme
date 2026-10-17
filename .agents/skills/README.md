@@ -5,6 +5,7 @@ Symlinks that expose skills to agents (relative links, see `_core-adr-policy-018
 | Link | Target |
 |------|--------|
 | `manage-investment-portfolio` | `../../.xdrs/_local/bdrs/finance/skills/manage-investment-portfolio` |
+| `research-topic` | `../../.xdrs/agentme/edrs/principles/skills/research-topic` |
 | `review` | `../../.xdrs/_core/adrs/principles/skills/review` |
 | `write-xdrs-doc` | `../../.xdrs/_core/adrs/principles/skills/write-xdrs-doc` |
 
