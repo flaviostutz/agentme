@@ -4,10 +4,11 @@ Detail for the write-back in step 6 of `refine-user-story`. Runs only when the s
 GitHub issue or an Azure DevOps work item and the story is saved locally. Public web pages have no
 write-back.
 
-## Offer
+## Choice made at the approval gate
 
-Ask with `vscode_askQuestions`: "Update the source item" (recommended) or "Keep the story local
-only". Choosing local only ends the write-back after local tracking.
+The person chooses "Save locally and update the source" or "Save locally only" at the approval
+gate in step 6, after seeing the final story. Write-back runs only after the first choice and
+after the story is saved locally. Choosing local only ends the write-back after local tracking.
 
 ## What is written
 

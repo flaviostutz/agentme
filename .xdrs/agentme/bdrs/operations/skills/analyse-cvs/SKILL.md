@@ -8,13 +8,13 @@ description: >
   interview chart. Use when asked to analyse, screen, rank, or compare CVs or resumes for a role.
 metadata:
   author: flaviostutz
-  version: "3.1.0"
-  updated: 2026-10-08
+  version: "3.3.0"
+  updated: 2026-10-16
 ---
 
 ## Overview
 
-Screens the CVs and related documents in a `.tmp/` folder for one role. Documents can be loose files or sit in one subfolder per candidate. The skill agrees 3 key aspects, 5 interview aspects and weighted criteria with the human, converts every document to markdown with `markitdown`, redacts protected attributes, and groups the documents per candidate. It then audits each candidate's claims for false or strange items (Credibility), scores each aspect from 1.0 to 10.0, dry-runs 3 role scenarios that can adjust the aspect scores, checks every score and note against the evidence and for bias, ranks the candidates, and writes the report with an interview list of every candidate whose Overall is above 5.0. For each of them it prepares a folder with the candidate's documents and an `interview-chart.md` for the interviewer.
+Screens the CVs and related documents in a `.tmp/` folder for one role. Documents can be loose files or sit in one subfolder per candidate. The skill agrees 3 key aspects, 5 interview aspects and weighted criteria with the human, converts every document to markdown with `markitdown`, redacts protected attributes, and groups the documents per candidate. It then audits each candidate's claims for false or strange items (Credibility), scores each aspect from 1.0 to 10.0, dry-runs 3 role scenarios that can adjust the aspect scores, checks every score and note against the evidence and for bias, ranks the candidates, and writes the report with an interview list of every candidate whose Overall is above 5.0. For each of them it prepares a folder with the candidate's documents and an `interview-chart.md` for the interviewer, then reviews every chart in a second pass for consistency, grounding, clarity and usefulness.
 
 Everything the skill produces goes to one run folder, `.tmp/analyse-cvs/<id>/`. The source folder is only read and never changed.
 
@@ -41,7 +41,7 @@ The skill judges and the scripts compute: the LLM reads documents, audits claims
 - `.tmp/analyse-cvs/<id>/report.md` ranked report (uncapped: scoring tables with their own per-field caps, set in the phases)
 - `.tmp/analyse-cvs/<id>/<candidate-slug>/` per invited candidate: original documents and `interview-chart.md` (uncapped: copied documents)
 - Converted, redacted markdown files and other work files in `.tmp/analyse-cvs/<id>/.work/` (uncapped: converted documents)
-- Interview list, revision count and `results-path: <run>/` in chat (<120 words)
+- Interview list, revision count and `results-path: <run>/` in chat (<120 words), after the Phase 12 second pass
 
 #### Changes
 
@@ -267,9 +267,24 @@ Acceptance: every score is grounded or revised with a reason, and every row has 
 4. Replace the `<fill>` of the candidate's `- Chart:` bullet in the report with a markdown link to the chart whose text and relative path are both `<slug>/interview-chart.md` (as in the Report Template). When the chart already existed, only set the link.
 5. When nobody is above 5.0, the section already says `Invited: 0 of <m>` and that no candidate scored above 5.0; add a suggestion to review the criteria or the candidate pool, and create no candidate folders.
 6. Run `cvs-check <report> --stage interview` and fix every error (table order, headings, counts, unfilled Chart links, closing sentence).
-7. Show the interview list in chat together with the revision count and any skipped files, and end the message with `results-path: <run>/` on its own line.
 
-Acceptance: every invited candidate has a folder with their documents and an `interview-chart.md` that follows the reference, the report links every chart and passes the interview check, and chat shows the list, revision count, skipped files and the results path.
+Acceptance: every invited candidate has a folder with their documents and an `interview-chart.md` that follows the reference, and the report links every chart and passes the interview check.
+
+### Phase 12: Second Pass
+
+When nobody is invited, skip steps 1-4 and go to step 5.
+
+1. Reread every `interview-chart.md` written in Phase 11, one candidate at a time, against the candidate's row and `<run>/.work/md/<slug>-*.md`, and check and fix:
+   - inconsistent or contradicting information: between the chart and the report row (Overall, Base, Credibility, Notes), and inside the chart (story line, summary, points and questions);
+   - ungrounded data: every story line item, point, context sentence and question traces to the row or the redacted markdown, with the right source reference (for example one reference never covers a claim from two documents); nothing is named or dated that the documents do not name or date;
+   - confusing or opaque information: wording a first-time reader cannot follow, unexplained abbreviations or terms, questions that do not say what in the documents prompts them, pronouns or wording that guess gender;
+   - items that will not help in the interview: padding, duplicate or near-duplicate points and questions, questions the candidate cannot answer from the documents, intents that do not name what the answer tells the interviewer, and flags that are not job-relevant.
+2. When a chart point or a question needs a change that the report row does not support, change the row's Notes the same way, add `! revised: <reason>` to it, and re-run `cvs-score overall <report> <candidate-slug>` only if Base or Credibility changed.
+3. Keep the caps and the format of [references/interview-chart.md](references/interview-chart.md). Never change a number that the report holds, and never rewrite an existing chart from scratch; edit only what the check finds.
+4. Run `cvs-check <report> --stage scores` and `cvs-check <report> --stage interview` again, and fix every error.
+5. Show the interview list in chat together with the revision count (including this phase) and any skipped files, and end the message with `results-path: <run>/` on its own line.
+
+Acceptance: every chart is consistent with the report and its sources, grounded, clear and useful for the interview, the checks pass, and chat shows the list, revision count, skipped files and the results path.
 
 ### Report Template
 
