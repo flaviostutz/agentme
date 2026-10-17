@@ -126,6 +126,7 @@ Stories MUST be refined using the `refine-user-story` skill. The skill:
 - MUST run a structured refinement process including local research and interface/integration spec discovery.
 - MUST write the resulting detail file and update the key task link in the initiative's Milestone.
 - When a story is split, MUST create placeholder files for each deferred slice and add them as pending task links in the initiative.
+- MUST show the original contents in chat first, and the final story at an approval gate before saving locally or writing back; nothing is stored or synced before the human answers it.
 - MAY take a URL of the story to refine (GitHub issue, Azure DevOps work item, public web page) and, after the human confirms, write the refined story back to that source and create `[NEEDS REFINING]` placeholder items there for deferred slices; local tracking of deferred slices is kept regardless.
 
 #### 07-ephemeral-lifecycle

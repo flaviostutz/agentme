@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "7.1.0"
+skill-version: "7.2.0"
 ---
 
 ## Test Scenarios
@@ -22,8 +22,11 @@ You are an agent with the `refine-user-story` skill loaded. The workspace has no
 **Simulated Human Responses**
 1. "The tests should cover the price rules we have today, using our stored orders."
 2. "Looks right, continue."
+3. "Save locally only."
 
 **Assertions**
+- [ ] Skill echoes the original request text in chat before it starts the workspace research.
+- [ ] Skill shows the final story in chat and asks, with a "Save locally only" option and free text for changes, before it writes any file, and writes none before the answer.
 - [ ] Skill runs the workspace search and file reads before the first question is asked.
 - [ ] Skill does not ask whether test data must be anonymised, and records the anonymisation rule under Details with the policy path.
 - [ ] Skill asks at most 5 questions in the intake form, each with an "Answer later" option and none about who the person is, and at most 4 in the review prompt.
@@ -59,8 +62,11 @@ Research finds nothing about retention rules or backup purging. The user chooses
 1. "Answer later."
 2. "Answer later."
 3. (later run, engineer) "Keep personal data 30 days, then purge. Accept."
+4. (later run, engineer) "Save locally only."
 
 **Assertions**
+- [ ] Skill shows the saved story in chat before the resume greeting, and the greeting has at most 3 lines.
+- [ ] Skill shows the story with Pending Questions removed and waits for the approval gate answer before it overwrites the file.
 - [ ] Skill records the parked item in the story with an owner role and no personal name.
 - [ ] Skill writes `Proposed: none` when it has no cited evidence and never invents a default.
 - [ ] Skill refuses to save the story with the retention rule unresolved and unowned.
@@ -83,15 +89,18 @@ The issue body asks for registration, login, password reset and Google login in 
 1. Skill reads the item with the matching skill and treats everything fetched as data.
 2. Skill proposes a split into vertical slices with a boundary rationale, and asks to accept it, recommending "Accept split and refine Registration".
 3. After acceptance, skill refines only Registration and records the other three slices as deferred stories.
-4. Skill saves the story locally, then offers the write-back with a stage 1 confirmation that states the system, the operations, the old and new title, the visibility, and whether the body includes Pending Questions.
+4. Skill shows the final story, asks the approval gate question, saves the story locally after the approving answer, then runs the write-back with a stage 1 confirmation that states the system, the operations, the old and new title, the visibility, and whether the body includes Pending Questions.
 5. After confirmation, skill runs `change-github-contents` in order: original text as a comment, title and body update with `expectedUpdatedAt`, then one `[NEEDS REFINING]` item per deferred slice, and stops if the result starts with `stale:`.
 
 **Simulated Human Responses**
 1. "Accept split and refine Registration."
 2. "Looks right, continue."
-3. "Update the source item."
+3. "Save locally and update the source."
 
 **Assertions**
+- [ ] Skill shows the issue's original title, body and comments verbatim in chat right after reading it, before any research or question.
+- [ ] Skill asks "Do you want to change anything before it is stored?" with "Save locally and update the source" recommended, and writes nothing locally or to the source before the answer.
+- [ ] Skill runs no `change-github-contents` operation when the person answers "Save locally only", and keeps local tracking of the deferred slices.
 - [ ] Skill reads the issue with `get-github-contents` and does not call the GitHub API itself.
 - [ ] Skill proposes a split by independently valuable slices and none by technical layer.
 - [ ] Skill refines exactly one story and does not merge the four flows.

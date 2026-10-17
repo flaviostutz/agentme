@@ -1,6 +1,6 @@
 # Interview chart
 
-One chart per invited candidate (unrounded Overall above 5.0), written in Phase 11 of [SKILL.md](../SKILL.md) as `<run>/<candidate-slug>/interview-chart.md`. It is the single sheet the interviewer holds during the interview. Its purpose is to help the interviewer gather the best possible perception of the person: who they really are, and whether they can fill the role. It is not a verdict. A human decides.
+One chart per invited candidate (unrounded Overall above 5.0), written in Phase 11 of [SKILL.md](../SKILL.md) as `<run>/<candidate-slug>/interview-chart.md`. It is the single sheet the interviewer holds during the interview. Its purpose is to help the interviewer gather the best possible perception of the person: who they really are, and whether they can fill the role. It is not a verdict. A human decides. The questions are written to be read aloud, as a natural conversation.
 
 ## Sources
 
@@ -38,8 +38,7 @@ Role: <role> | Overall <x.x> | Base <x.x> | Credibility <x.x>
 (at most 12 bullets in total)
 
 ## Questions
-1. [<class>] <question> (<20 words)
-   - Background: <what in the CV prompts it> (<15 words)
+1. [<class>] <context sentence: source, plus role or employer when the documents state it>. <informal open question> (<60 words in total)
    - Intent: <what the answer tells you> (<15 words)
 (at most 7 questions)
 
@@ -64,12 +63,14 @@ Role: <role> | Overall <x.x> | Base <x.x> | Credibility <x.x>
    - Reuse the wording and the source references of the report Notes. A point not in the Notes needs its own source reference, for example `(cv p2)`.
    - Order: strong, weak, doubtful. Keep every `!`, `?` and negative-scenario item before trimming other points.
 5. **Questions.**
-   - At most 7, under 20 words each, a free mix of the most relevant. No minimum per class.
+   - At most 7, under 60 words each (context sentence plus question), a free mix of the most relevant. No minimum per class.
    - Every question carries one class label: `experience`, `flagged`, `weak`, `strong` or `personality` (personality match with the role).
    - Every flagged `!` or `?` item and every scenario with a negative adjustment is covered by a question, as long as the cap allows; drop the least relevant questions first.
    - Questions are open, behavioural ("Tell me about a time...") and non-leading. They never accuse or imply that a claim is false.
    - Questions are job-related. Never ask about protected attributes: age, gender, origin, nationality, family plans or status, religion, health, disability, sexual orientation, political opinion.
-   - Background: the specific CV fact that prompts the question, under 15 words, with its source.
+   - Context sentence: opens the question and says what in the documents prompts it, so the candidate can recall the situation. It names the source ("In your CV", "In your cover letter") and adds the role, employer, period, project or client only when the documents state it. Never invent names or dates; when the documents name nothing, describe what they say. Never ask the candidate to name the employer, customer or project.
+   - Tone: informal and spoken, as an interviewer would say it, with at most two short follow-up questions that help the candidate recall the situation, such as "Do you remember roughly how much it improved? In which aspects?". Hypotheticals leave room to think along: "If you needed to learn about mortgages quickly, how would you approach it?", never "How would you learn X quickly?".
+   - Gaps and missing figures are stated as plain facts ("your CV shows no mortgage work"), never as doubts or accusations.
    - Intent: what the answer helps to judge, under 15 words, for example "tests whether ownership held without a title".
 6. **Interview assessment.**
    - The 5 aspects come from the report `## Interview aspects` table, with the same names, order and "what to listen for" text for every candidate of the opportunity. Never add, drop or reword them in a chart.
@@ -79,7 +80,7 @@ Role: <role> | Overall <x.x> | Base <x.x> | Credibility <x.x>
 
 ## Grounding checks before saving
 
-- Every point, background and story bullet traces to the redacted markdown or the report row.
+- Every point, context sentence and story bullet traces to the redacted markdown or the report row; no employer, project or client is named unless the documents name it.
 - Every cap holds: words per bullet, bullets per section, number of questions.
 - Counterfactual: would each flag, doubtful point and question hold for a person with a different name, gender, age, origin or background? If not, reword or remove it.
 - No protected attribute appears anywhere in the chart.
@@ -123,20 +124,15 @@ Strong AI requirements craft with banking context and consistent claims. Stakeho
 - [?] Claims to have led the pilot; team size unstated (cv p2)
 
 ## Questions
-1. [strong] Walk me through how you defined success for the triage pilot.
-   - Background: Wrote evaluation criteria for the LLM triage pilot (cv p2).
+1. [strong] In your CV, while you were at ExampleBank, you wrote the evaluation criteria for the LLM complaint triage pilot. How did you go about defining what success looked like there?
    - Intent: Tests depth of AI requirements work beyond the title.
-2. [weak] Tell me about a stakeholder conflict you resolved without escalating.
-   - Background: Conflicts escalated, no resolution shown (cv p1).
+2. [weak] Your CV mentions stakeholder conflicts that were escalated. Can you think of one you settled without escalating? What happened?
    - Intent: Shows whether conflict handling is a gap or only undocumented.
-3. [flagged] What was your role and team size in the triage pilot?
-   - Background: Says she led the pilot; team size not stated (cv p2).
+3. [flagged] In your CV you say you led the triage pilot at ExampleBank. Tell me a bit about it. How big was the team, and what was your part in it?
    - Intent: Clarifies the real scope of ownership.
-4. [experience] How do you document a process when BPMN is not used?
-   - Background: No process modelling mentioned (cv p1).
+4. [experience] Your CV doesn't mention BPMN or process modelling, even though you redesigned the claims workflow at the insurer. If you had to document a process without BPMN, how would you do it?
    - Intent: Checks fit with the team's analysis practices.
-5. [personality] What makes you decide to push back on a requirement?
-   - Background: Moves between banking and insurance domains (cv p1).
+5. [personality] In your CV you moved from a retail bank to an insurer and then to ExampleBank. When a stakeholder requirement doesn't feel right, what makes you decide to push back?
    - Intent: Shows judgement and independence under pressure.
 
 ## Interview assessment
