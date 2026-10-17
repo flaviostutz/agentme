@@ -31,7 +31,7 @@ Search results support the hypothesis that reviews wait for an unassigned review
 **Assertions**
 - [ ] Skill asks the intent type and why the problem was not fixed before in Phase 1, with options carrying consequences and a "(recommended)" prefix.
 - [ ] Skill asks every question through `vscode_askQuestions` with suggested options, one marked "(recommended)", and free text for "Other"; no question is asked as plain chat text or without options.
-- [ ] Skill posts a short chat summary of findings before each question call, and the UI title and context line carry the finding and current state.
+- [ ] Skill posts a short chat summary of the phase output and the question before each question call, and the UI message, title and context line carry the finding, the items to judge (pillars, hypotheses, options) and the current state, so the content is visible even when chat text is not rendered.
 - [ ] Skill shows a one-line dry-run result before each gate and writes no scenarios or answers into `research.md`.
 - [ ] Skill lists hypotheses with a falsifier each and none that cannot be false.
 - [ ] Skill records at least one contradicting-evidence search per hypothesis in the query log.
