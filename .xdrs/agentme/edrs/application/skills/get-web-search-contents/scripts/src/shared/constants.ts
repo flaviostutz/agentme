@@ -1,0 +1,19 @@
+export const DEFAULT_MAX_SEARCHES = 10;
+export const HARD_MAX_SEARCHES = 30;
+export const PACING_MS = 3000;
+export const MAX_QUERY_CHARS = 300;
+export const MAX_PROMPT_CHARS = 1000;
+export const MAX_RESULTS = 10;
+export const MAX_SNIPPET_CHARS = 300;
+export const MAX_TITLE_CHARS = 200;
+export const MAX_AI_TEXT_CHARS = 2000;
+export const MAX_CHAT_TEXT_CHARS = 8000;
+export const MAX_CITATIONS = 10;
+export const CDP_PORT = 9231;
+export const DEFAULT_SESSION = 'search';
+export const STATE_ROOT = '.tmp/get-web-search-contents';
+// Polling windows for pages that render after load.
+export const RESULTS_WAIT_MS = 10_000;
+export const ASSIST_WAIT_MS = 15_000;
+export const ANSWER_WAIT_MS = 45_000;
+export const POLL_MS = 1500;

@@ -7,8 +7,8 @@ description: >
   explore or understand a topic, problem or option before deciding or planning.
 metadata:
   author: flaviostutz
-  version: "1.0.0"
-  updated: 2026-10-17
+  version: "1.2.0"
+  updated: 2026-10-20
 ---
 
 ## Overview
@@ -45,14 +45,14 @@ The output is a proposal draft: a short overview of the subject, shown in chat b
 ### User Interaction
 - Framing questions in Phase 1 about intention, success criteria and why the problem is unsolved
 - Every question asked in the VS Code UI, after a chat summary, with options, "(recommended)" and "Other"
-- A phase gate after every phase, with Continue, Go deeper and free text
+- A phase gate after every phase: Continue to the named next phase, Re-run the current one, free text
 - One source confirmation at the Phase 4 gate
 - A question at the Phase 6 gate whether to explore solutions, when a related solution exists
 - A final question on what to do with the proposal draft
 
 ### Runtime Requirements
-- A web search or fetch capability; without it the run continues in degraded mode
-- Node.js 22+ with `npx` for the `get-web-contents` skill
+- A web search capability: skill `get-web-search-contents` (an open browser window on port 9231); without it the run continues in degraded mode
+- Node.js 22+ with `npx` for the `get-web-contents` and `get-web-search-contents` skills
 - Write access to `.tmp/research-topic/`
 
 ## Instructions
@@ -96,7 +96,12 @@ Keep every question <140 words, every gate summary <80 words and every other int
 - *Skip*: when the person chooses to skip, record every open item as a Deferred Risk in `research.md` and advance.
 - *Backtrack*: when a finding changes the problem, intention or scope from an earlier phase, say which phase is affected and why, and re-run that phase with the new information.
 
-**Phase gate rule.** After the readiness dry run of a phase, show a summary of what the phase produced, the open risks, and the one-line dry-run result. Then call `vscode_askQuestions` with the options "Continue to Phase N+1 - <name>" (recommended), "Go deeper" and free text for a comment or correction. The gate line reads "Phase N Complete. Do you want to proceed to [Phase N+1: <name>], or adjust?" and the agent stops until the person answers. A comment or "Go deeper" re-runs the phase and shows the gate again.
+**Phase gate rule.** After the readiness dry run of a phase, show a summary of what the phase produced, the open risks, and the one-line dry-run result. Then call `vscode_askQuestions` with these options, always naming the phases and stating the next phase objective in the UI, never a bare "Continue":
+- "Continue to Phase N+1 - <next phase name>: <next phase objective in <12 words>" (recommended)
+- "Re-run Phase N - <previous phase name> (go deeper)": names the phase that just finished, so the person knows exactly what will be repeated
+- Free text for a comment or correction
+
+The gate line reads "Phase N <name> complete. Next: Phase N+1 - <name>, which will <objective>. Proceed, re-run Phase N - <name>, or adjust?" and the agent stops until the person answers. A comment or re-run repeats Phase N and shows the gate again. When a gate offers another re-run target (backtrack to an earlier phase), label it "Re-run Phase M - <name>" too. Phase names and objectives are the heading and first step of each phase below; the last phase has no next phase, so its gate offers only the close-out questions.
 
 **Readiness dry run.** Before every gate, run this check silently:
 1. Write at least 4 scenarios from different angles: a skeptical expert reading the phase output, a reader who never saw the chat, a check against the stated intention and constraints, and a case where it goes wrong.
@@ -108,7 +113,7 @@ Keep every question <140 words, every gate summary <80 words and every other int
 
 **Grounding rule.** Tag every fact in `research.md` with `[S#]` pointing to a source: a web URL with its access date, a workspace path, `user` for what the person said, or `[llm-unverified]`. An `[llm-unverified]` claim never counts as supporting evidence, is searched on the next round, and keeps the hypothesis open. A run with no real supporting source ends with status `unverified` and its draft says so.
 
-**Search budget.** Per phase round, use at most 6 searches and 8 page reads per hypothesis (for Phases 2 and 7, per round). Number every query in the query log. Stop and ask when a search engine shows a CAPTCHA, a block or a rate limit; offer degraded mode, pasted sources, or waiting.
+**Search budget.** Per phase round, use at most 6 searches and 8 page reads per hypothesis (for Phases 2 and 7, per round). Number every query in the query log. Skill `get-web-search-contents` also caps a run at `--max-searches` (default 10, hard maximum 30), so pass `--run-id <topic-slug>` and ask before raising it. Stop and ask when a search returns `captcha`, `blocked` or `cap-reached`; offer degraded mode, pasted sources, or waiting. Never solve or bypass a CAPTCHA.
 
 **Privacy rule.** A search query MUST NOT contain PII or security details such as credentials, tokens, vulnerabilities or internal infrastructure. Use generic terms. Decline a topic that is about a named private person.
 
@@ -118,7 +123,9 @@ Keep every question <140 words, every gate summary <80 words and every other int
 
 **Work files** (per [`_core-adr-policy-023`](../../../../../_core/adrs/principles/023-skill-runtime-standards.md)). The run folder is `.tmp/research-topic/<topic-slug>/` with a lowercase kebab-case slug of the topic; when the name is taken by a run the person does not resume, append `-2`, `-3`. Never store files directly in `.tmp/research-topic/`. Fetched page text goes in `.tmp/research-topic/.work/<url-slug>/`, is safe to delete, and is re-checked for freshness before reuse. Throwaway files go in the OS temp dir. When a run folder was created, even on halt, end the final chat message with `results-path: .tmp/research-topic/<topic-slug>/`.
 
-**Reading pages.** Run skill [`get-web-contents`](../../../application/skills/get-web-contents/SKILL.md) for every page read, passing the `https` URL and expecting the JSON with `status`, `title` and `text` back. Act on a non-`ok` status as that skill says. Search itself uses the web search capability of the environment, whichever it is.
+**Searching.** Run skill [`get-web-search-contents`](../../../application/skills/get-web-search-contents/SKILL.md) for every search, with a generic query and `--run-id <topic-slug>`; it uses DuckDuckGo unless the person confirms Google, and returns `results` and an optional `ai` summary. Treat the `ai` text as `[llm-unverified]` and open its citations before relying on them. Choose which result URLs to read from the titles, snippets and the plausibility of the source.
+
+**Reading pages.** Run skill [`get-web-contents`](../../../application/skills/get-web-contents/SKILL.md) for every page read, passing the `https` URL and expecting the JSON with `status`, `title` and `text` back. Act on a non-`ok` status as that skill says.
 
 **Degraded mode.** When no search or page read is possible, continue with model knowledge only. Tag every finding `[llm-unverified]`, ask the person to paste trusted sources, and close the run as `unverified`.
 
@@ -160,7 +167,7 @@ Keep every question <140 words, every gate summary <80 words and every other int
 
 ### Phase 5: Deep search and fact-finding
 
-1. For each hypothesis, in order, search for supporting facts, then search on purpose for contradicting evidence, then for existing solutions or practices. Run skill `get-web-contents` for each page worth reading.
+1. For each hypothesis, in order, search for supporting facts, then search on purpose for contradicting evidence, then for existing solutions or practices. Run skill `get-web-search-contents` for each search and skill `get-web-contents` for each page worth reading.
 2. Run the source integrity audit on every source: who wrote it, when, whether it is a primary or secondary source, whether the author is independent, and what bias it may carry. Write the result in the Sources table. A weak source supports only a weak claim.
 3. Write the Evidence section with source tags. Update the hypothesis status in place to supported, contradicted or mixed with a one-line verdict.
 4. Respect the search budget. When it is exhausted before a verdict, say so and leave the status `open`.
@@ -174,7 +181,7 @@ Keep every question <140 words, every gate summary <80 words and every other int
 4. Stop the loop when a round changes no status, or the person stops it.
 5. Decide the route for the gate:
    - Intent is `understand-only`, or no related solution was found: go to Phase 8 without asking.
-   - A related solution was found, or the intent is fix, enhance or decide: offer "Continue to Phase 7 - Solution Exploration" (recommended when the intent is fix, enhance or decide) and "Overview only - go to Phase 8".
+   - A related solution was found, or the intent is fix, enhance or decide: offer "Continue to Phase 7 - Solution exploration: compare options against your success criteria" (recommended when the intent is fix, enhance or decide) and "Overview only - go to Phase 8 - Close-out and proposal draft: report findings without comparing solutions".
 6. Run the readiness dry run, then the Phase 6 gate with the route options.
 
 ### Phase 7: Solution exploration (optional)
@@ -203,20 +210,20 @@ Example prompts:
 
 Phase gate, typical (end of Phase 3):
 > Pillars: setup docs, tooling, mentoring. dry run: 4 scenarios, 1 fixed, ready.
-> Phase 3 Complete. Do you want to proceed to [Phase 4: Hypotheses], or adjust these pillars?
-> Options: Continue to Phase 4 (recommended) | Go deeper | Add a comment or correction
+> Phase 3 Pillars complete. Next: Phase 4 - Hypotheses, which will write falsifiable candidate answers. Proceed, re-run Phase 3 - Pillars, or adjust?
+> Options: Continue to Phase 4 - Hypotheses: write falsifiable candidate answers (recommended) | Re-run Phase 3 - Pillars (go deeper) | Add a comment or correction
 
 Source confirmation at the Phase 4 gate:
 > Q1: Test these 3 hypotheses with web search?
 > H1-H3 are in research.md, each with a falsifier. Sources: web search, workspace docs, your notes.
-> - A: (recommended) Continue to Phase 5. About 18 searches in total.
-> - B: Go deeper on the hypotheses first. Delays evidence, may sharpen H2.
+> - A: (recommended) Continue to Phase 5 - Deep search and fact-finding: test each hypothesis with evidence. About 18 searches in total.
+> - B: Re-run Phase 4 - Hypotheses (go deeper). Delays evidence, may sharpen H2.
 
 Phase 6 solution question, edge case:
 > Q1: Explore solutions for this topic?
 > Phase 5 found 2 existing solutions: a CI setup check and a doc template. Your intent is fix.
-> - A: (recommended) Explore solutions. Phase 7 compares options against your success criteria.
-> - B: Overview only. Close-out reports the findings and the existing solutions as facts.
+> - A: (recommended) Continue to Phase 7 - Solution exploration. Compares options against your success criteria.
+> - B: Overview only, go to Phase 8 - Close-out and proposal draft. Reports the findings and the existing solutions as facts.
 
 Phase 8 end question:
 > Q1: What should I do with the proposal draft?
@@ -248,7 +255,7 @@ See [references/research-template.md](references/research-template.md) for the h
 - **Solution in disguise**: reframe to the problem it solves before Phase 2.
 - **Intention unknown**: offer 3-4 candidate intentions instead of guessing.
 - **Understand-only intent**: skip Phase 7 and go from Phase 6 to Phase 8 without asking.
-- **Search blocked by CAPTCHA**: stop, offer degraded mode, pasted sources or waiting; degraded runs close as `unverified`.
+- **Search blocked by CAPTCHA**: stop, offer degraded mode, pasted sources or waiting; degraded runs close as `unverified`. Never solve it, and never retry on another engine without the person's confirmation for Google.
 - **Resumed run with old sources**: re-fetch web sources older than this session before reusing them.
 - **Existing run folder with the same slug**: ask whether to resume it or start a new run named `-2`.
 - **Topic given in another language**: write the draft in the person's language and search in both languages when useful.
@@ -301,3 +308,4 @@ See [references/research-template.md](references/research-template.md) for the h
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing
 - [refine-plan-mode](../refine-plan-mode/SKILL.md) — Source of the gate, questioning and navigation rules
 - [get-web-contents](../../../application/skills/get-web-contents/SKILL.md) — Reads web pages
+- [get-web-search-contents](../../../application/skills/get-web-search-contents/SKILL.md) — Searches the web through the browser
