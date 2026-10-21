@@ -8,7 +8,7 @@ skill-version: "1.0.0"
 ### Scenario 1: Vague idea through a Gen-2 loop to a chat draft
 
 **Trigger / Input**
-You are an agent with the `research-topic` skill loaded and a working web search capability. The workspace has no `.tmp/research-topic/` folder. The user says:
+You are an agent with the `research-topic` skill loaded and the `get-web-search-contents` skill working. The workspace has no `.tmp/research-topic/` folder. The user says:
 
 "Research why our pull request reviews take so long."
 
@@ -25,15 +25,18 @@ Search results support the hypothesis that reviews wait for an unassigned review
 **Simulated Human Responses**
 1. "Fix. Median time to first review under 4 hours. No constraints. I think nobody owns review time."
 2. "Continue" at every gate until Phase 4, then "Continue to Phase 5" on the source confirmation.
-3. "Continue to Phase 7 - Solution Exploration" at the Phase 6 gate.
+3. "Continue to Phase 7 - Solution exploration" at the Phase 6 gate.
 4. "Show it in chat only."
 
 **Assertions**
 - [ ] Skill asks the intent type and why the problem was not fixed before in Phase 1, with options carrying consequences and a "(recommended)" prefix.
 - [ ] Skill asks every question through `vscode_askQuestions` with suggested options, one marked "(recommended)", and free text for "Other"; no question is asked as plain chat text or without options.
 - [ ] Skill posts a short chat summary of the phase output and the question before each question call, and the UI message, title and context line carry the finding, the items to judge (pillars, hypotheses, options) and the current state, so the content is visible even when chat text is not rendered.
+- [ ] Skill labels every gate option with phase names: "Continue to Phase N+1 - <name>: <objective>" and "Re-run Phase N - <name>", never a bare "Continue" or "Go deeper".
 - [ ] Skill shows a one-line dry-run result before each gate and writes no scenarios or answers into `research.md`.
 - [ ] Skill lists hypotheses with a falsifier each and none that cannot be false.
+- [ ] Skill runs `get-web-search-contents` with `--run-id <topic-slug>` for every search and `get-web-contents` for every page read.
+- [ ] Skill tags the `ai` summary of a search `[llm-unverified]` and does not count it as supporting evidence.
 - [ ] Skill records at least one contradicting-evidence search per hypothesis in the query log.
 - [ ] Skill tags every finding with a source tag and does not count an `llm-unverified` claim as supporting evidence.
 - [ ] Skill replaces the mixed Gen-1 hypothesis with a linked Gen-2 hypothesis in place and loops to Phase 5.
@@ -49,7 +52,7 @@ You are an agent with the `research-topic` skill loaded. The user says:
 
 "We need a wiki to improve developer productivity and also fix onboarding and flaky tests."
 
-During Phase 2 the search engine shows a CAPTCHA after the first query.
+During Phase 2 `get-web-search-contents` returns `status: "captcha"` after the first query, and the other engine is not confirmed.
 
 **Expected Behaviour**
 1. Skill detects that the topic is broad and a solution in disguise, proposes a split into 2-4 narrower topics, and asks which one to research first.
@@ -70,7 +73,7 @@ During Phase 2 the search engine shows a CAPTCHA after the first query.
 - [ ] Skill proposes 2-4 narrower topics and researches only the one the person picked.
 - [ ] Skill asks which problem the wiki should solve before it writes Hypotheses.
 - [ ] Skill offers 3-4 candidate intentions rather than guessing one.
-- [ ] Skill stops at the CAPTCHA and asks, and does not keep searching.
+- [ ] Skill stops at the CAPTCHA and asks, and does not keep searching, solve the CAPTCHA or open Google without a confirmation.
 - [ ] Skill tags every finding `llm-unverified` in degraded mode and sets `status: unverified`.
 - [ ] Skill opens the proposal draft with the unverified status line.
 - [ ] Skill records the skipped Phase 3 items as Deferred Risks and carries them to the draft.

@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 # Bundling dependencies per _core-adr-policy-021 (skill-bundling): contents skills
 # activated at runtime that must be resolvable from a standalone distribution.
-DEPS := ../../../application/skills/get-web-contents
+DEPS := ../../../application/skills/get-web-contents ../../../application/skills/get-web-search-contents
 BUILD := dist/build
 
 .PHONY: build lint test clean
@@ -30,7 +30,7 @@ lint:
 
 test: build
 	@echo ">>> .xdrs/agentme/edrs/principles/skills/research-topic: $@"
-	@for name in get-web-contents; do \
+	@for name in get-web-contents get-web-search-contents; do \
 		grep -q "dist/$$name/SKILL.md" $(BUILD)/SKILL.md || { echo "bundled link for $$name missing"; exit 1; }; \
 		[ -f $(BUILD)/dist/$$name/SKILL.md ] || { echo "bundled $$name missing"; exit 1; }; \
 	done

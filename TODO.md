@@ -2,6 +2,21 @@
 
 <!-- Format: see agentme-edr-001 -->
 
+## [BACKLOG] 16- Duck.ai chat in get-web-search-contents (2026-10-20)
+
+- status: open
+- prompt: Add a `duckai` command to `get-web-search-contents` that asks a question to Duck.ai (`https://duck.ai`, textarea `name=user-prompt`) and returns the answer as an `llm-unverified` lead, like the Google AI Mode `chat.ts`. Acceptance: a prompt returns the answer text through the CLI, a follow-up reuses the thread, and the cap and privacy guards apply to each turn.
+- deferred reason: In the live spike every Duck.ai answer attempt failed with the generic "Oops... There was an issue processing your request", after the terms were accepted; the cause is unknown.
+- why this is important: Duck.ai would give an AI answer without the Google automation risk.
+
+## [BACKLOG] 15- Google inline AI Overview in get-web-search-contents (2026-10-20)
+
+- status: open
+- prompt: Capture the AI Overview block that Google shows above the organic results in `get-web-search-contents` and return it as `ai` with `source: "google-ai-overview"` and its citations. Acceptance: for a query that shows the block, `search.ts --engine google` returns its text and source links, and `ai-summary-none` when absent.
+- deferred reason: The block did not appear for the spike queries, so its selectors could not be verified; only Google AI Mode is captured now.
+- why this is important: The Overview is what most people see first on Google, and it comes with the search at no extra request.
+
+
 ## [BACKLOG] 14- Enforce environment short names in project templates and CI (2026-10-16)
 
 - status: open
