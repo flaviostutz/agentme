@@ -1,6 +1,6 @@
 ---
 skill: get-azure-devops-contents
-skill-version: "1.1.0"
+skill-version: "1.3.1"
 ---
 
 ## Test Scenarios

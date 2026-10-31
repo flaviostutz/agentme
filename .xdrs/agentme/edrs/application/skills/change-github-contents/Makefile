@@ -4,7 +4,7 @@ TSX := npx -y tsx@4.23.15
 
 # Bundling dependencies per _core-adr-policy-021 (skill-bundling): skills activated in prose.
 DEPS := ../get-github-contents
-BUILD := dist/build
+BUILD := dist/change-github-contents
 
 .PHONY: build lint test clean
 
@@ -18,7 +18,7 @@ build: clean
 		mkdir -p $(BUILD)/dist/$$name; \
 		if [ -f $$d/Makefile ]; then \
 			$(MAKE) -C $$d build; \
-			cp -R $$d/dist/build/. $(BUILD)/dist/$$name/; \
+			cp -R $$d/dist/$$name/. $(BUILD)/dist/$$name/; \
 		else \
 			cp $$d/SKILL.md $(BUILD)/dist/$$name/; \
 		fi; \

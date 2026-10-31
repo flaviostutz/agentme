@@ -1,6 +1,6 @@
 ---
 skill: manage-investment-portfolio
-skill-version: "3.1.0"
+skill-version: "3.1.1"
 ---
 
 ## Test Scenarios

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 MISE := mise exec --
-BUILD := dist/build
+BUILD := dist/analyse-cvs
 
 .PHONY: build lint test clean
 

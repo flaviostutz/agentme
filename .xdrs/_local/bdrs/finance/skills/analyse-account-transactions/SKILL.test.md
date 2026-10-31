@@ -1,6 +1,6 @@
 ---
 skill: analyse-account-transactions
-skill-version: "3.2.0"
+skill-version: "3.2.1"
 ---
 
 ## Test Scenarios

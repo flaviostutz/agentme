@@ -1,6 +1,6 @@
 ---
 skill: get-github-contents
-skill-version: "1.1.0"
+skill-version: "1.2.1"
 ---
 
 ## Test Scenarios

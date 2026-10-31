@@ -1,6 +1,6 @@
 ---
 skill: run-skill-tests
-skill-version: "1.2.0"
+skill-version: "1.3.1"
 ---
 
 ## Test Scenarios

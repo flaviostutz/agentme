@@ -10,8 +10,8 @@ description: >
   work item or public web page); the refined story can be written back to its source.
 metadata:
   author: flaviostutz
-  version: "7.2.0"
-  updated: 2026-10-16
+  version: "7.2.1"
+  updated: 2026-10-23
 ---
 
 ## Overview
@@ -64,7 +64,7 @@ Activate when:
 - **Never invent.** A parked question gets a proposed default only with cited evidence (path or URL, marked "unconfirmed"); otherwise write "none".
 - **Experience first.** Write each case as what the user of the solution sees or can do. Keep the story short; each fact appears once and other sections point to it. Bring implementation detail in only when the story is engineering or the person answers engineering questions.
 - **Calibrate.** Tag every question *business* or *engineering* and start in business words. Ability is per topic and shifts during the run; see Topic fade in step 3.
-- **Question format.** Follow [`agentme-edr-003`](../../003-hitl-question-content.md): a title, a context line (for a one-way question start with "One-way:" and the cost of undoing it), options with consequences, "(recommended)" on the preferred option, and self-contained text. Use `vscode_askQuestions`; each field must carry real content, never "see above". Answers and gate summaries stay short.
+- **Question format.** Follow [`agentme-edr-003`](../../003-hitl-question-content.md): a title, a context line (for a one-way question start with "One-way:" and the cost of undoing it), options with consequences, "(recommended)" on the preferred option, and self-contained text. Use `vscode_askQuestions`; each field must carry real content, never "see above". With batched questions, each question's fields hold only its own content: the one-line context goes in `question` (up to 200 characters) and the full context in its `message`; do not repeat the questions in chat before the form. Answers and gate summaries stay short.
 - **Question budget.** At most 5 questions in intake and 4 in review (9 in total, usually fewer), in 4 to 6 prompts. Overflow one-way items are shown once with "Answer now" or "Park with owner role" and recorded as Pending Questions; two-way overflow takes the default. Ask before parking or deferring, per `agentme-edr-001` rule 06.
 - **Answer later.** Every question offers "Answer later". For a one-way item it becomes a Pending Question with an owner role; for a two-way item the default applies.
 - **Split by value.** Split by independently valuable end-to-end slices, never by technical layer. Produce exactly one recommended result: one story, or the split stories.

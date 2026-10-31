@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 MISE := mise exec --
-BUILD := dist/build
+BUILD := dist/analyse-account-transactions
 CLIS := aat-normalize aat-ground aat-ledger aat-validate aat-answers aat-research aat-stats
 
 .PHONY: build lint test clean

@@ -8,8 +8,8 @@ description: >
   the XDRS repository even when not directly exposed in the .agents skills folder.
 metadata:
   author: flaviostutz
-  version: "3.6.0"
-  updated: 2026-10-08
+  version: "3.7.0"
+  updated: 2026-10-23
 ---
 
 ## Overview
@@ -22,8 +22,8 @@ Ensures that every plan is deeply validated through iterative consistency checks
 1. **Title and context**: a title <15 words, then a context line <25 words with the finding and current state.
 2. **Options with consequences**: 2–4 options, each <25 words, with its key consequences (benefit, cost or risk, effort, reversibility, what it postpones).
 3. **Recommendation**: prefix the preferred option with "(recommended)" (e.g. "A: (recommended) ..."); the human still decides.
-4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context, at most 5 per round.
-5. **UI fields**: fill the `vscode_askQuestions` header, question, message, option labels, and option descriptions (consequences) with as much as fits each ~200-character limit; condense before truncating. If anything was cut, also put the full question in chat first; never reduce the UI to "see above".
+4. **Self-contained**: decidable without scrolling back or opening files; batched questions numbered Q1..Qn, each with its own context in its own UI fields, at most 5 per round.
+5. **UI fields**: put each question's full context in its own `vscode_askQuestions` fields: `header` (title, up to 50 characters), `question` (title and one-line context, up to 200 characters), `message` (full context, no limit), option labels and descriptions (consequences). Batched questions never share fields: no details of Q2..Qn in Q1, never "see above". No chat copy before the call.
 6. **Phase gates**: gate summaries <80 words.
 7. **Re-explain on request**: when the human asks for clarification instead of choosing, re-ask with expanded context (concrete references, examples, impact), never the same wording, up to twice the caps.
 

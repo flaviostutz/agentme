@@ -1,6 +1,6 @@
 ---
 skill: monorepo-setup
-skill-version: "1.2.1"
+skill-version: "1.3.1"
 ---
 
 ## Test Scenarios
