@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 MISE := mise exec --
-BUILD := dist/build
+BUILD := dist/get-azure-devops-contents
 TSX := npx -y tsx@4.23.15
 
 .PHONY: build lint test clean

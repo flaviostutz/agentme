@@ -1,6 +1,6 @@
 ---
 skill: get-web-contents
-skill-version: "1.0.0"
+skill-version: "1.1.1"
 ---
 
 ## Test Scenarios

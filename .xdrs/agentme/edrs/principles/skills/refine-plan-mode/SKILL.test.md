@@ -1,6 +1,6 @@
 ---
 skill: refine-plan-mode
-skill-version: "3.5.0"
+skill-version: "3.7.0"
 ---
 
 ## Test Scenarios
@@ -93,7 +93,7 @@ The skill flags this as a violation of the Questioning rule and the HITL require
 - [ ] Violation is noted if the agent attempted to self-resolve a subjective decision.
 - [ ] Skill gives the question a short title and a context line naming where the choice arose (the angle and plan section).
 - [ ] Skill describes each option (single long document vs. quick-reference cards) with its consequences and prefixes one with "(recommended)".
-- [ ] Skill fills the `vscode_askQuestions` header, question, message, option labels, and option descriptions with the title, context, options, and consequences, and does not reduce the UI to a bare "see above" reference even when the full question is also in chat.
+- [ ] Skill fills the `vscode_askQuestions` header, question, message, option labels, and option descriptions with the title, context, options, and consequences, and does not reduce the UI to a bare "see above" reference.
 
 ### Scenario 5: Feature split — deferred parts saved to TODO.md per agentme-edr-001
 
@@ -142,3 +142,24 @@ Throughout every phase, the plan document is maintained as a single continuously
 - [ ] The final plan's top-level sections match SKILL.md's Final Plan Artifact Template section exactly, with zero additional top-level sections.
 - [ ] Todo-list tracking used during the workflow (per the Task tracking rule) does not appear inside the final plan document.
 - [ ] The Deferred Features entry from the Phase 2 Step 5 split appears only in `TODO.md` (per `agentme-edr-001`), not duplicated inside the main plan body.
+
+### Scenario 7: Batched questions with long contexts keep one context per question
+
+**Trigger / Input**
+
+"Plan pagination for the list endpoints." During a Phase 4 round the skill has 4 open questions (pagination style, page size, rollout to existing clients, cursor format), each needing more than 200 characters of context.
+
+**Expected Behaviour**
+
+The UI call contains 4 questions. Each has its own title in `header`, a title plus one-line context in `question` (up to 200 characters), its full context in its own `message`, and options with consequences. No details of Q2-Q4 appear in Q1's fields, and the questions are not repeated in chat before the call.
+
+**Simulated Human Responses**
+1. "Q1 A, Q2 A, Q3 A, Q4 A"
+
+**Assertions**
+
+- [ ] Skill does not write a chat block with the full text of Q1..Q4 before the first `vscode_askQuestions` call.
+- [ ] Each question's `message` field contains that question's full context and only its own.
+- [ ] Q1's `message` and options contain no text that belongs to Q2, Q3 or Q4.
+- [ ] Every question has its own title in the question field and options with consequences, one prefixed with "(recommended)".
+- [ ] Skill does not reduce any UI field to a bare "see above" reference.

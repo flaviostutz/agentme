@@ -10,8 +10,8 @@ description: >
   skill.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-10-08
+  version: "1.1.1"
+  updated: 2026-10-23
   cdp-port: "9230"
 ---
 
@@ -67,7 +67,7 @@ Every question to the human MUST follow [`agentme-edr-003`](../../../principles/
 - [ ] **01**: Title, then one context line stating what was found and the current state.
 - [ ] **03**: 2-4 options, each stating what it does and its main consequence.
 - [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
-- [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
+- [ ] **06**: Put each question's full context in its own question-UI fields: `header` (title, up to 50 characters), `question` (title and one-line context, up to 200 characters), `message` (the rest of the context, no length limit), option labels and descriptions (consequences). Batched questions never share fields: no details of Q2..Qn in Q1, never "see above". Do not repeat the question text in chat before the UI call.
 - [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in <80 words.
 - [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
 - [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question <140 words. Never apply a recommendation without the human's answer.

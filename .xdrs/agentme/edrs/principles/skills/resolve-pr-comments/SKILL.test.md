@@ -1,6 +1,6 @@
 ---
 skill: resolve-pr-comments
-skill-version: "4.6.1"
+skill-version: "4.8.0"
 ---
 
 ## Test Scenarios
@@ -27,8 +27,13 @@ concern), and `possible-follow-ups` (2-4 candidate next actions); (4) Phase 3 re
 2-row summary table and asks the literal numbered 4-way automation-level question -- the
 human picks option 3 (guide all), so both comments use the guided flow; (5) Phase 4 walks
 each comment one at a time, rendering its full focus card before asking the human to choose
-an action, then drafts the reply/fix text, persists it as `pending-reply: drafted`, and shows
-one FYI outcome line -- no confirmation question, nothing sent yet; (6) Phase 6 gathers both
+an action, then drafts the reply/fix text and persists it as `pending-reply: drafted`; for
+comment 1 (reply) it shows one FYI outcome line, for comment 2 (fix) it applies the change,
+persists the draft, then posts a Change card (files, before/after, drafted reply, "not yet
+validated") as its own chat message and asks the review gate (Approve / Request changes /
+Undo this change and re-decide / Continue and stop asking); the human requests a change, the
+skill applies it, re-posts the card and re-asks, and the human then approves -- no git command
+is run and nothing is sent yet; (6) Phase 6 gathers both
 now-drafted comments, renders a numbered consolidated preview table (`#`, `id`, title,
 action, resolve-on-apply) followed by each row's exact draft text, and the human uses a
 free-text instruction naming comment 2's `#` to change its reply text before applying both
@@ -41,6 +46,8 @@ requested -- then reports the final summary by action taken and send status.
 3. "For comment 1: confirm criticality, action = reply. Yes, resolve the thread once
    applied." (accepts the drafted text unedited)
 4. "For comment 2: confirm criticality, action = fix." (drafted text left as-is at Phase 4)
+   Gate answer 1: "Request changes: also rename the variable in the test file." Gate answer
+   2: "Approve."
 5. (Phase 6) "For comment 2, reply with 'Renamed per your suggestion, thanks!' instead, then
    apply all now."
 
@@ -66,8 +73,18 @@ requested -- then reports the final summary by action taken and send status.
       not a bare "see above" reference to the focus card.
 - [ ] Skill's Phase 6 apply confirmation states System, Operation, Fields, and Estimated
       impact before asking.
-- [ ] Skill shows no confirmation question in Phase 4 -- only a one-line FYI outcome after
-      each draft is persisted, for both comments.
+- [ ] Skill shows no gate for comment 1 (reply-only) -- only a one-line FYI outcome after its
+      draft is persisted.
+- [ ] Skill persists comment 2 as `pending-reply: drafted` before asking the review gate,
+      then posts a Change card as its own chat message showing the files, before/after of
+      only that comment's changed lines, the drafted reply, and a "not yet validated" note.
+- [ ] Skill's gate question offers Approve, Request changes, Undo this change and re-decide,
+      and Continue and stop asking, with consequences in each option and no bare "see above".
+- [ ] Skill applies the requested change, re-posts the Change card, and re-asks the gate
+      before advancing; it runs no git command at any point of the gate.
+- [ ] Change card matches confirmed example (acceptance): `Rename foo to bar` in `src/a.ts`
+      shows a before and after line and the drafted reply with the
+      `(resolve-pr-comments - guided)` suffix.
 - [ ] Skill's Phase 6 renders a numbered consolidated preview table (`#`, `id`, title,
       action, resolve-on-apply) followed by each row's exact draft text below the table.
 - [ ] Skill accepts a Phase 6 free-text instruction naming comment 2's preview `#` to change
@@ -89,18 +106,18 @@ requested -- then reports the final summary by action taken and send status.
 
 **Trigger / Input**
 
-Phase 2 populates 3 open comments: comment A (a simple, repetitive rename request with a
+Phase 2 populates 5 open comments: comment A (a simple, repetitive rename request with a
 clean `suggested-fix`, classified `automation-suggestion: fully-auto`), comment B (a vague
-architectural question, classified `automation-suggestion: guided`), and comment C (a minor
+architectural question, classified `automation-suggestion: guided`), comment C (a minor
 style nitpick, classified `automation-suggestion: fully-auto`, not mentioned in the human's
-free text below). At Phase 3, the human answers option 4 with "automate everything, but
-guide comment B".
+free text below), and comments D and E (two distinct bug fixes, both `guided`). At Phase 3,
+the human answers option 4 with "automate everything, but guide comments B, D and E".
 
 **Expected Behaviour**
 
 Phase 4 reaches comment A and, matching the free text's "automate everything", skips its
 focus card and action question entirely: before starting, it shows one starting banner line
-(`Starting comment A of 3 (fix): "<short title>".`), then auto-chooses `fix`, applies the
+(`Starting comment A of 5 (fix): "<short title>".`), then auto-chooses `fix`, applies the
 `suggested-fix` verbatim, defaults `resolve-on-apply` from `can_resolve` with no ask, drafts
 and persists `pending-reply: drafted` immediately, and shows one brief outcome line
 (`Auto-handled comment A (fix): ...`). The drafted text carries the
@@ -109,22 +126,30 @@ guidance, still gets its full focus card and action question exactly as document
 human choosing `reply` and editing the drafted text, earning the
 `(resolve-pr-comments - guided)` suffix. Comment C, not explicitly addressed by the free
 text, follows its own `automation-suggestion` (`fully-auto`) and is handled the same
-no-question way as comment A, each with its own starting banner and outcome line. Phase 6
-later gathers all three comments together and requires the same explicit apply confirmation
+no-question way as comment A, each with its own starting banner and outcome line. Comments D
+and E, named for guidance, each get their full focus card and action question; the human
+chooses `fix` for both. For D, the skill applies the change, persists `drafted`, posts the
+Change card and asks the review gate; the human answers "Continue and stop asking". For E,
+the skill shows the focus card and action question, applies the fix and persists `drafted`,
+but posts no Change card and asks no gate (it shows the FYI outcome line instead). The gate
+flag is session-scoped and is not written to the tracking file. Phase 6
+later gathers all five comments together and requires the same explicit apply confirmation
 for all of them -- no comment's fully-auto origin grants it a bypass of that gate.
 
 **Simulated Human Responses**
-1. (Phase 3) "4. Automate everything, but guide comment B."
+1. (Phase 3) "4. Automate everything, but guide comments B, D and E."
 2. "For comment B: action = reply. Use this reply text instead: 'We considered that
    approach; here's why we didn't take it...'" (replaces the drafted text with free text)
-3. (Phase 6) "Apply all now."
+3. "For comment D: action = fix." Gate answer: "Continue and stop asking."
+4. "For comment E: action = fix."
+5. (Phase 6) "Apply all now."
 
 **Assertions**
 
 - [ ] Skill's Phase 3 renders the summary table and asks the literal numbered 4-way
       automation-level question before Phase 4 begins.
 - [ ] Skill interprets the free-text option-4 answer against the numbered table, applying the
-      no-question path to comments A and C and the guided path to comment B by name.
+      no-question path to comments A and C and the guided path to comments B, D and E by name.
 - [ ] Skill never shows comment A's or comment C's focus card or an action question for
       either, auto-choosing and applying each one's action with no human confirmation.
 - [ ] Skill shows one starting banner line before each of comment A's and comment C's work
@@ -134,7 +159,14 @@ for all of them -- no comment's fully-auto origin grants it a bypass of that gat
       and C's no-question handling.
 - [ ] Skill suffixes comment B's reply -- replaced with human-supplied free text -- with
       `(resolve-pr-comments - guided)`.
-- [ ] Skill's Phase 6 requires the same explicit apply confirmation for all three comments --
+- [ ] Skill never posts a Change card or asks the review gate for comments A or C
+      (fully-auto path) or for comment B (reply-only).
+- [ ] Skill posts a Change card and asks the review gate for comment D, with the "Continue
+      and stop asking" option present.
+- [ ] Skill, after the "Continue and stop asking" answer, still shows comment E's full focus
+      card and action question but posts no Change card and asks no gate for it.
+- [ ] Skill does not write the gate-off flag to the tracking file.
+- [ ] Skill's Phase 6 requires the same explicit apply confirmation for all five comments --
       being drafted via the no-question path grants no bypass of Phase 6's gate.
 
 ### Scenario 3: Phase 2 writes the tracking file incrementally, surviving a mid-run interruption

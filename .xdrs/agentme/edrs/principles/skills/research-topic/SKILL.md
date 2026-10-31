@@ -7,8 +7,8 @@ description: >
   explore or understand a topic, problem or option before deciding or planning.
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-10-20
+  version: "1.3.0"
+  updated: 2026-10-23
 ---
 
 ## Overview
@@ -72,7 +72,7 @@ Keep every question <140 words, every gate summary <80 words and every other int
 
 **Questioning rule.** Ask every question to the person, in every phase, through the VS Code question UI (`vscode_askQuestions`); never ask as plain chat text and wait for a free-form reply. Ask at most 5 tightly related questions per round. Before each round, say what territory is not yet covered. Do not re-ask answered questions. Never self-resolve a choice point, and never write a decision into `research.md` while an assumption or ambiguity about it is open.
 
-**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): every question has a title, a context line, 2-4 options with consequences, and "(recommended)" on the preferred option. It is self-contained and fills every question-UI field (header up to 50 characters, question and message and options up to about 200 characters each); condense before truncating, and put the full question in chat first only when something was cut. Never reduce the UI to "see above".
+**Question content rule** (per [`agentme-edr-003`](../../003-hitl-question-content.md)): every question has a title, a context line, 2-4 options with consequences, and "(recommended)" on the preferred option. It is self-contained and puts each question's full context in its own question-UI fields: `header` (up to 50 characters), `question` (title and one-line context, up to 200 characters), `message` (the rest of the context, no length limit), option labels and descriptions. Batched questions never share fields, and the questions are not repeated in chat before the call. Never reduce the UI to "see above".
 
 **Question context rule.** Before every `vscode_askQuestions` call, write a short summary in chat (<80 words, bullets allowed) of what the phase produced or what was decided so far, plus the question being asked and why it matters now, so the person can decide without scrolling back. Phase gates use the gate summary below; other rounds (framing, pillar confirmation, source confirmation, solution choice) get this summary too. Chat text before a tool call may not be rendered by the host, so the content the person must judge (pillars, hypotheses, solution options, phase findings) is also placed in the question UI itself: the `message` field carries the phase summary and the question, and each item to judge is its own option, or a line in the context text when options do not fit. The question title and context line in the UI carry the finding and current state on their own: a bare title such as "Which intent?" is never enough. Never put the summary only in chat nor only in the UI, and never answer "I cannot see it" by repeating the same chat text; re-ask with the content inside the UI.
 
@@ -84,7 +84,7 @@ Keep every question <140 words, every gate summary <80 words and every other int
 - [ ] **03**: 2-4 options, each stating what it does and its main consequence.
 - [ ] **04**: Asked through `vscode_askQuestions` with suggested options, the preferred one labeled "(recommended)", and free text for "Other".
 - [ ] **05**: Self-contained, with terms explained. Number batched questions (Q1, Q2) and ask at most 5 per round.
-- [ ] **06**: Fill every question-UI field (header, question, message, option labels, option descriptions) with as much of the question and consequences as fits; condense before truncating. If anything was cut, also put the full question in chat first. Never reduce the UI to "see above".
+- [ ] **06**: Put each question's full context in its own question-UI fields: `header` (title, up to 50 characters), `question` (title and one-line context, up to 200 characters), `message` (the rest of the context, no length limit), option labels and descriptions (consequences). Batched questions never share fields: no details of Q2..Qn in Q1, never "see above". Do not repeat the question text in chat before the UI call.
 - [ ] **07**: Phase gates summarize what was produced, open risks, and what each option causes next, in <80 words.
 - [ ] **08**: When the human asks for clarification, re-ask with more context (examples, files, impact) and never repeat the same wording.
 - [ ] **11**: Use the template `Q<n>: <title>` / context / `- A: (recommended) <option>. <consequences>.` Keep the whole question <140 words. Never apply a recommendation without the human's answer.

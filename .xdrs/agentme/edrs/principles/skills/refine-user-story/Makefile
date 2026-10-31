@@ -3,7 +3,7 @@ SHELL := /bin/bash
 # Bundling dependencies per _core-adr-policy-021 (skill-bundling): contents skills
 # activated at runtime that must be resolvable from a standalone distribution.
 DEPS := ../../../application/skills/get-github-contents ../../../application/skills/change-github-contents ../../../application/skills/get-azure-devops-contents ../../../application/skills/change-azure-devops-contents ../../../application/skills/get-web-contents
-BUILD := dist/build
+BUILD := dist/refine-user-story
 
 .PHONY: build lint test clean
 
@@ -17,7 +17,7 @@ build: clean
 		mkdir -p $(BUILD)/dist/$$name; \
 		if [ -f $$d/Makefile ]; then \
 			$(MAKE) -C $$d build; \
-			cp -R $$d/dist/build/. $(BUILD)/dist/$$name/; \
+			cp -R $$d/dist/$$name/. $(BUILD)/dist/$$name/; \
 		else \
 			cp $$d/SKILL.md $(BUILD)/dist/$$name/; \
 		fi; \

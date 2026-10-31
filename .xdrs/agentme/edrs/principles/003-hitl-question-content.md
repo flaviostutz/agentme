@@ -38,11 +38,11 @@ Every option MUST state what it does and its most decision-relevant consequences
 
 #### 05-questions-must-be-self-contained
 
-The human MUST be able to decide from the question text alone, without scrolling back to earlier rounds or opening files. Terms not defined earlier in the same message MUST be explained in plain words. When several questions are batched, each MUST be numbered (Q1, Q2, ...) and carry its own context and options; a batch SHOULD stay small, about 5 questions.
+The human MUST be able to decide from the question text alone, without scrolling back to earlier rounds or opening files. Terms not defined earlier in the same message MUST be explained in plain words. When several questions are batched, each MUST be numbered (Q1, Q2, ...) and carry its own context and options in its own question fields; a batch SHOULD stay small, about 5 questions.
 
 #### 06-ui-fields-must-carry-the-question-content
 
-When asking through a question UI with separate fields (e.g. `vscode_askQuestions`), the agent MUST put the real content in the fields: the title in the question, the context in the message, and each option's label and consequences in the option label and description. The agent MUST NOT reduce the UI to a bare reference such as "Q1 (see above)" or to option labels without consequences. When a field's length limit forces a cut, the agent SHOULD condense first and then place the full question in chat right before the UI call.
+When asking through a question UI with separate fields (e.g. `vscode_askQuestions`), the agent MUST put the real content in the fields: the title and a one-line context in the question (up to 200 characters), the full context in the message (no length limit), and each option's label and consequences in the option label and description. The agent MUST NOT reduce the UI to a bare reference such as "Q1 (see above)" or to option labels without consequences, and SHOULD NOT repeat the question text in chat before the UI call. When several questions are batched in one UI call, each question's fields MUST hold only that question's own content; the agent MUST NOT place details of Q2 or later in the first question's fields.
 
 #### 07-phase-gates-must-summarize-outcome
 
@@ -87,7 +87,11 @@ Allowed:
 > - B: 24h limit, change AC3. Keeps security; users log in daily.
 > - C: (recommended) 30 days on trusted devices only. Keeps MFA; about 3 extra days of work.
 
-In a question UI with separate fields (rule 06), the title goes to the question field, the context to the message, and each option's label and consequences to the option label and description.
+In a question UI with separate fields (rule 06), the title goes to the question field, the context to the message, and each option's label and consequences to the option label and description. With batched questions, every question uses its own fields.
+
+Disallowed in a batched UI call:
+
+> Q1 message: "Context for Q1. Q2: ... Q3: ... Q4: ..." while Q2-Q4 only show bare titles.
 
 ## References
 

@@ -1,6 +1,6 @@
 ---
 skill: change-azure-devops-contents
-skill-version: "1.2.0"
+skill-version: "1.4.1"
 ---
 
 ## Test Scenarios

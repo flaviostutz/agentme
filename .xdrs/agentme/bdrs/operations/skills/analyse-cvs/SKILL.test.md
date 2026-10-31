@@ -1,6 +1,6 @@
 ---
 skill: analyse-cvs
-skill-version: "3.0"
+skill-version: "3.3.1"
 ---
 
 ## Test Scenarios
