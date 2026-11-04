@@ -83,7 +83,7 @@ A scope-type definition policy MAY declare a parent scope type by including a ru
 
 A `scope-type` value in a scope `index.md` is valid if and only if a policy file whose name ends with `{scope-type}-scope-type` exists in the `principles` subject of any `core`-type scope in the workspace. When `scope-type` is an array, this applies to every element.
 
-When a scope declares a `scope-type` but any corresponding `{scope-type}-scope-type.md` policy is absent from the workspace or defined only in a `disabled` scope, the scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`). Missing or disabled-only types MUST be fixed in local scopes.
+When a scope declares a `scope-type` but any corresponding `{scope-type}-scope-type.md` policy is absent from the workspace or defined only in a `disabled` scope, the scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`). Missing or disabled-only types MUST be fixed in local scopes, unless the scope is itself disabled.
 
 #### 11-def-scope-type-must-be-structured
 
@@ -213,7 +213,7 @@ A scope `extends:` declaration MUST NOT reference the declaring scope itself. To
 
 #### 32-extends-mandatory-presence
 
-Every scope listed in a scope's `extends:` field MUST exist in the workspace with an accessible `index.md`. If any referenced scope is absent or its `index.md` cannot be read, the extending scope MUST be fixed when local and is READ-ONLY when external (`_core-adr-policy-022.06-read-only-dependencies`).
+Every scope listed in a scope's `extends:` field MUST exist in the workspace with an accessible `index.md`. If any referenced scope is absent or its `index.md` cannot be read, the extending scope MUST be fixed when local and is READ-ONLY when external, unless it is itself disabled (`_core-adr-policy-022.06-read-only-dependencies`).
 
 #### 33-extends-content-precedence
 

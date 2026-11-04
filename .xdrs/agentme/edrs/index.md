@@ -101,6 +101,7 @@ Contribution and collaboration standards shared across projects.
 
 - [agentme-edr-501](governance/501-project-quality-standards.md) - **Project quality standards** - Require build, lint, and test verification before completion
 - [agentme-edr-502](governance/502-contributing-guide-requirements.md) - **Contributing guide requirements** - Define the minimum structure for CONTRIBUTING guides
+- [agentme-edr-503](governance/503-test-groups-and-release-flow.md) - **Test groups and release flow** - Four test groups (Development, Governance, Business, Production), gates and main group per test type
 
 ## Operations
 

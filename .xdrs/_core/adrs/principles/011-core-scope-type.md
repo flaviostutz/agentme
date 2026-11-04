@@ -65,7 +65,7 @@ A `core`-type scope MAY be distributed to consumers alongside the companion cons
 
 #### 08-unavailable-core-read-only
 
-A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent or tagged `disabled` in the root index, the companion scope MUST be treated as READ-ONLY (see `_core-adr-policy-022.06-read-only-dependencies`): content in it MUST NOT be added, changed, or removed. The scope lacks the meta governance that defines how its content MUST be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
+A `-core` scope referenced via `follows:` in a companion scope's `index.md` may not be present in the workspace of a consumer of that companion scope. When the referenced `-core` scope is absent or tagged `disabled` in the root index, the companion scope MUST be treated as READ-ONLY, unless the companion scope is itself tagged `disabled` (see `_core-adr-policy-022.06-read-only-dependencies`): content in it MUST NOT be added, changed, or removed. The scope lacks the meta governance that defines how its content MUST be authored, and modifications without those standards would produce non-compliant content. Tools and agents MUST NOT propose or apply changes to a READ-ONLY scope and MUST surface the read-only status to the user when the scope is accessed.
 
 #### 09-distribution-advisable
 

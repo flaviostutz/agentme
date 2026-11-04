@@ -46,6 +46,7 @@ Research documents are Markdown files placed inside a subject folder alongside p
 - `## Conclusion` MUST summarize the main findings, practical takeaway, applicability boundaries, and important open questions. It MUST stay under 400 words.
 - `## References` MUST list all cited literature, websites, tutorials, documentation, discussions, or related artifacts.
 - In general, research SHOULD roughly follow the proportion `Introduction : Methods : Results : Discussion ≈ 3 : 5 : 6 : 4`.
+- A research document MAY start with a frontmatter block containing only `sync-date`, per [`_core-adr-policy-024`](024-sync-date-frontmatter.md); the title line follows the block.
 - Be strict about the goal of each section. Avoid duplicating the same material across sections and prefer clarity over rhetorical flourishes.
 - Research documents SHOULD stay under 5000 words total. They MAY exceed that only when the `## Introduction` explicitly states that the study will be lengthy because a very detailed analysis is required.
 - Research documents SHOULD link in `## References` to the Policies, skills, articles, discussions, and external references relevant to the subject or that later cite the work.
@@ -83,6 +84,10 @@ Examples:
 All research documents MUST follow this template:
 
 ```markdown
+---
+sync-date: [Optional, opt-in. ISO date of the last verification with other entities; see _core-adr-policy-024. When absent, omit the whole frontmatter block.]
+---
+
 # [scope]-[type]-research-[number]: [Short Title]
 
 ## Abstract

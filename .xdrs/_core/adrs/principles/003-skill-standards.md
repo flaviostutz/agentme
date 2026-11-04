@@ -104,6 +104,7 @@ metadata:                 # required
   author: <team-or-person>       # required
   version: "1.0.0"                # required: full semantic versioning
   updated: YYYY-MM-DD              # required: date of the last material content change
+  sync-date: YYYY-MM-DD            # optional, opt-in: date of the last verification with other entities (see _core-adr-policy-024)
 ---
 
 ## Overview
@@ -163,6 +164,7 @@ Rules:
 - The `name` field MUST match the folder name exactly (e.g., `code-review`). This keeps skill identifiers simple and aligned with the filesystem hierarchy.
 - The directory name and the `name:` field MUST contain only lowercase alphanumeric characters and hyphens (e.g., `code-review`, `2fa-setup`).
 - `metadata` is REQUIRED. `metadata.version` MUST use full semantic versioning (`MAJOR.MINOR.PATCH`, e.g. `1.0.0`), consistent with [`_core-adr-policy-005`](005-semantic-versioning-for-xdrs-packages.md); `metadata.author` MUST be non-empty; `metadata.updated` MUST be an ISO `YYYY-MM-DD` date, refreshed whenever the skill's content materially changes.
+- `metadata.sync-date` is OPTIONAL and follows [`_core-adr-policy-024`](024-sync-date-frontmatter.md); it is distinct from `metadata.updated`, which records content changes only.
 - `description` SHOULD stay near 250 characters when the activation trigger can be stated that tightly, even though the hard cap remains 1024 characters — it is loaded into context on every activation scan.
 - `## Overview` SHOULD state the task objective, expected outcome, and relevant prerequisites or tools when they matter, and MUST contain nested subsections, in order, for `### Inputs`, `### Outputs`, `### Halt Conditions`, then the optional `### User Interaction` and `### Runtime Requirements`.
 - `### Inputs` MUST contain `#### Required` (the bare minimum needed to invoke the skill) then `#### Optional` (helpful extra context), in that order.

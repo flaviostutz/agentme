@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new skill, agent skill, or SKILL.md file.
 metadata:
   author: flaviostutz
-  version: "1.3.0"
-  updated: 2026-10-08
+  version: "1.3.1"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -90,7 +90,7 @@ Quick test:
 
 ### Phase 4: Write the SKILL.md
 
-Use the mandatory agentskills format:
+Use the mandatory agentskills format. Omit the optional `metadata.sync-date` unless the user explicitly asks for it for a specific sync purpose (`_core-adr-policy-024`):
 
 ```
 ---

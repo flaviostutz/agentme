@@ -5,5 +5,5 @@ Project-local engineering decisions for the agentme repository. Not shared with 
 ## Articles
 
 - [_local-edr-article-001](principles/articles/001-copilot-plan-best-practices.md) - **copilot-plan-best-practices** — Index for the 30-minute presentation on using `/plan` in GitHub Copilot effectively
-- [_local-edr-article-002](principles/articles/002-ai-system-testing-requirements.md) - **ai-system-testing-requirements** — Why AI systems need testing beyond code checks, requirements per AI tier, test type objectives, and why failures block releases
+- [_local-edr-article-002](principles/articles/002-ai-system-testing-requirements.md) - **ai-system-testing-requirements** — The four test groups (Development, Governance, Business, Production) and release flow, why AI systems need more testing than code checks, requirements per AI tier, and test type objectives
 - [_local-edr-article-001](operations/articles/001-dora-metrics-adoption-guide.md) - **dora-metrics-adoption-guide** — What each of DORA's four key metrics measures, how each decomposes into sub-metrics, and an adoption order from simplest to most complex

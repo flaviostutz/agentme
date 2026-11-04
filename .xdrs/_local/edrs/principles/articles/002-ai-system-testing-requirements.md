@@ -2,9 +2,75 @@
 
 ## Overview
 
-Explains why AI systems (LLM, Agent, Workflow tiers) need testing beyond regular code checks, what's required per tier, what each test type verifies, and why failing tests block a release. Audience: business analysts defining AI requirements.
+Explains why AI systems (LLM, Agent, Workflow tiers) need testing beyond regular code checks, the four test groups (Development, Governance, Business, Production) and how they flow to production, what's required per tier, what each test type verifies, and why failing tests block a release. Audience: business analysts defining AI requirements.
 
 ## Content
+
+### Four groups of tests, four different conversations
+
+"We tested it" can mean four unrelated things, with different risk, people, data and standards. [agentme-edr-503](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/503-test-groups-and-release-flow.md) sorts every test type into a group by what the test is for at that point of the delivery flow, not by where it runs. Groups are always written in full ("group Governance") so they are not mixed up with the `dev`, `acc` and `prd` environments.
+
+```mermaid
+flowchart LR
+  subgraph DEVG["group Development"]
+    D["WHAT: does it work, and is it fast and stable enough?<br/>WHO: developers, Tester/QA, AI Engineer<br/>WHERE: local, CI, dev; tst for cross-team integration; acc for performance runs<br/>WHEN: every commit and PR; performance before release<br/>HOW: unit, integration, contract, smoke, AI quality evals, performance<br/>DATA: synthetic, fixtures, mocked dependencies"]
+  end
+  subgraph ACC["environment acc - Governance and Business in parallel with performance runs"]
+    G["group Governance<br/>WHAT: do we comply with security, legal and control requirements?<br/>WHO: Tech Lead, AI Lead, security; compliance/risk function for exceptions<br/>WHEN: before release decision<br/>HOW: AI safety, fairness, bias, adversarial, explainability, security testing, accessibility, privacy, resilience<br/>DATA: curated, versioned, anonymised or synthetic; evidence retained"]
+    B["group Business<br/>WHAT: do we know the consequences of deploying?<br/>WHO: BA, business SMEs; Product Owner decides, Tech Lead opinion recorded<br/>WHEN: before release decision<br/>HOW: business scenarios, user journeys, operational acceptance, rollback rehearsal<br/>DATA: realistic, anonymised, named testers"]
+  end
+  R{"Release decision<br/>go-live approval and risk record"}
+  subgraph PRDG["group Production"]
+    P["WHAT: does it work with real infrastructure and real users?<br/>WHO: Product Owner decides stage moves, Tech Lead owns rollback, DevOps runs<br/>WHERE: prd<br/>WHEN: planned deployment windows, alpha then beta then GA<br/>HOW: feature flags, canary, blue/green, A/B, synthetic probes, monitoring<br/>DATA: real users and real data"]
+  end
+  D -- "CI gate passes, deploy to acc" --> G
+  D -- "CI gate passes, deploy to acc" --> B
+  D -- "performance runs in acc" --> R
+  G --> R
+  B --> R
+  R -- "approved" --> P
+  R -- "defects or failed control" --> D
+  P -- "rollback or incident" --> D
+```
+
+The catalog below shows each test type's main group. A technique used elsewhere is a variation, not a second main classification.
+
+![Test types grouped by their main purpose across Development, Governance, Business, and Production](.assets/test-groups.svg)
+
+Governance and Business run side by side in `acc` and feed one release decision. A failed Governance control cannot be waived by the business approver; only the organisation's compliance/risk function can record an exception, and requirements that [agentme-edr-501](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/501-project-quality-standards.md) rule `09` makes a hard stop are never waived. The Business gate does not claim the software is perfect: it records what was not tested in `acc` (for example, because simulating it is too costly or impossible) and how group Production mitigates it with a slow rollout, feature flags and monitoring. Nothing reaches `prd`, even with a flag off, before that gate.
+
+| | Development | Governance | Business | Production |
+|---|---|---|---|---|
+| Question | Is it built right, fast and stable enough? | Can we show security, legal and control requirements are met? | Do we know the consequences of deploying? | Does it hold with real infrastructure and real users? |
+| Who | Developers, Tester/QA, AI Engineer | AI Lead, Tech Lead, Tester/QA; compliance/risk function reviews | Business analyst and SMEs; Product Owner decides | DevOps runs; Product Owner and Tech Lead decide |
+| Environment and data | Local, CI, `dev`, `tst`, `acc` for performance; synthetic and mocked | `acc`; curated, versioned, anonymised or synthetic | `acc`; realistic, anonymised, named testers | `prd`; real users and data |
+| When | Every commit; performance before release | Before the release decision, each control per release or periodic | Before the release decision | Planned windows: alpha, beta, GA |
+| Risk if skipped | Late defects and rework | Fines, liability, audit findings | A wrong business outcome or an unprepared operation | Customer harm, outage, lost trust |
+| Techniques | Unit, contract, golden-dataset evals, load and soak runs | Red-team, bias and fairness evals, penetration test, accessibility audit, DR drill | Acceptance scenarios, journeys, rollback rehearsal, usability | Canary, blue/green, A/B, shadow traffic, synthetic probes |
+| Standards and controls | General test concepts of ISO/IEC/IEEE 29119-1:2022 | EU AI Act Art. 9, 10, 15 and 72; DORA Art. 24; ISO/IEC 42001:2023; WCAG 2.2; NIST AI RMF 1.0 | Go-live approval of [agentme-bdr-405](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/bdrs/operations/405-digital-product-roles-raci.md) | Rollout plan with window, rollback and objective; [agentme-edr-407](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/operations/407-a-b-testing-in-production.md) |
+| Evidence | CI and eval reports | Retained audit evidence | Gate record | Stage records, monitoring |
+
+The release candidate also has an exception and an emergency path, both recorded and neither waiving a hard stop:
+
+```mermaid
+stateDiagram-v2
+  [*] --> Built
+  Built --> DevelopmentVerified: group Development passes
+  DevelopmentVerified --> InAcceptance: deploy to acc
+  InAcceptance --> Decision: Governance evidence and Business results
+  Decision --> Built: defects found
+  Decision --> GovernanceException: mandatory Governance control failed
+  GovernanceException --> Alpha: exception recorded by compliance/risk function
+  GovernanceException --> Built: no exception granted
+  Decision --> Alpha: approved by Product Owner
+  DevelopmentVerified --> Alpha: emergency path with reduced scope, risk record and due date
+  Alpha --> Beta: plan criteria met
+  Beta --> GA: plan criteria met
+  Alpha --> RolledBack: Tech Lead decides
+  Beta --> RolledBack: Tech Lead decides
+  RolledBack --> Built
+  GA --> [*]
+```
 
 ### Why AI systems need more than a regular test suite
 
@@ -28,23 +94,23 @@ The practical reading: a quick internal prompt experiment carries little formal 
 
 This is the "objective" question, and it is also the question a testable acceptance criterion needs to answer. [agentme-edr-152](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) rule `05` defines the full taxonomy; the entries below are the ones most likely to show up in a business requirement:
 
-| Test type | What passing it proves | Why it matters to the business | Frameworks and how it is tested |
-|---|---|---|---|
-| Functional | The output matches a documented, pre-agreed correct answer | Gives auditable proof the system is right before it ships | `eval.py` runs golden cases on the real model; LLM judge |
-| Smoke | A handful of critical cases pass before the fuller suite runs | Cheap early warning, avoids paying for expensive evals on a broken build | Same `eval.py`, limited to a few critical golden cases, run first |
-| Safety | The output contains nothing harmful, policy-violating, or offensive | Protects the brand and keeps the system within acceptable-use rules | Harmful-prompt golden cases on the real model; LLM judge checks policy |
-| Adversarial | The system resists prompt injection, jailbreaks, and unsafe tool use | Reduces the chance of a security incident | Injection and jailbreak golden cases on the real agent; LLM judge |
-| Fairness | Different legitimate customer segments all get the outcome the business policy intends | Surfaces unintentional policy gaps before customers hit them | One golden case per segment scenario; LLM judge compares expected decision |
-| Bias | Protected characteristics (gender, ethnicity, age, and similar) do not change the outcome | Reduces legal and regulatory exposure under rules such as the EU AI Act or GDPR | Cases varying only protected attributes; similarity or LLM judge compares |
-| Robustness | The system keeps working when input is messy, incomplete, or unexpected | Protects reliability commitments made to customers | Typo, empty, odd-input golden cases on the real model; LLM judge |
-| Groundedness | An answer is backed by real retrieved source material rather than invented | Stops answers that sound confident but aren't backed by anything real from reaching customers | Retrieval (RAG) golden cases; LLM judge checks claims against retrieved context |
-| Repeatability | Repeated runs of the same request stay consistent with each other | Supports any consistency commitment made to customers | Each case runs several times; similarity or LLM judge checks agreement |
-| Explainability | The output comes with a rationale that genuinely supports it | Gives auditors and users a rationale they can actually check | Golden cases on the real model; LLM judge checks rationale |
-| Performance | The system keeps meeting speed, error and cost limits at expected peak, under bursts and long runs, and fails gracefully with data intact when a database, disk, provider or network fails | Shows the system holds under real conditions before a launch or a surge of users, and keeps customer data safe when something breaks | A separate performance module drives the deployed pre-production system with its own cases; limits are declared up front and a failed limit stops the run |
-| Unit (code-level) | The underlying code logic is correct in isolation, with no live model call | The cheapest and fastest point to catch a defect | Python `pytest` with LangChain fake models standing in for the LLM |
-| A/B test in production | Version B beats the current version A on real users, measured on quality, cost and speed | Evidence of real-world gain before a change replaces what customers use today | Two versions on live traffic; LLM judge, user feedback, cost, latency |
+| Test type | Main group | What passing it proves | Why it matters to the business | Frameworks and how it is tested |
+|---|---|---|---|---|
+| Functional | Development | The output matches a documented, pre-agreed correct answer | Gives auditable proof the system is right before it ships | `eval.py` runs golden cases on the real model; LLM judge |
+| Smoke | Development | A handful of critical cases pass before the fuller suite runs | Cheap early warning, avoids paying for expensive evals on a broken build | Same `eval.py`, limited to a few critical golden cases, run first |
+| Safety | Governance | The output contains nothing harmful, policy-violating, or offensive | Protects the brand and keeps the system within acceptable-use rules | Harmful-prompt golden cases on the real model; LLM judge checks policy |
+| Adversarial | Governance | The system resists prompt injection, jailbreaks, and unsafe tool use | Reduces the chance of a security incident | Injection and jailbreak golden cases on the real agent; LLM judge |
+| Fairness | Governance | Different legitimate customer segments all get the outcome the business policy intends | Surfaces unintentional policy gaps before customers hit them | One golden case per segment scenario; LLM judge compares expected decision |
+| Bias | Governance | Protected characteristics (gender, ethnicity, age, and similar) do not change the outcome | Reduces legal and regulatory exposure under rules such as the EU AI Act or GDPR | Cases varying only protected attributes; similarity or LLM judge compares |
+| Robustness | Governance | The system keeps working when input is messy, incomplete, or unexpected | Protects reliability commitments made to customers | Typo, empty, odd-input golden cases on the real model; LLM judge |
+| Groundedness | Development | An answer is backed by real retrieved source material rather than invented | Stops answers that sound confident but aren't backed by anything real from reaching customers | Retrieval (RAG) golden cases; LLM judge checks claims against retrieved context |
+| Repeatability | Development | Repeated runs of the same request stay consistent with each other | Supports any consistency commitment made to customers | Each case runs several times; similarity or LLM judge checks agreement |
+| Explainability | Governance | The output comes with a rationale that genuinely supports it | Gives auditors and users a rationale they can actually check | Golden cases on the real model; LLM judge checks rationale |
+| Performance | Development | The system keeps meeting speed, error and cost limits at expected peak, under bursts and long runs, and fails gracefully with data intact when a database, disk, provider or network fails | Shows the system holds under real conditions before a launch or a surge of users, and keeps customer data safe when something breaks | A separate performance module drives the deployed pre-production system with its own cases; limits are declared up front and a failed limit stops the run |
+| Unit (code-level) | Development | The underlying code logic is correct in isolation, with no live model call | The cheapest and fastest point to catch a defect | Python `pytest` with LangChain fake models standing in for the LLM |
+| A/B test in production | Production | Version B beats the current version A on real users, measured on quality, cost and speed | Evidence of real-world gain before a change replaces what customers use today | Two versions on live traffic; LLM judge, user feedback, cost, latency |
 
-Two more types complete the full picture: `prompt` regression tests, which catch behavior changes whenever a prompt or model version changes, and code-level `integration` tests, which verify real calls to external systems. A single business scenario can also be checked by more than one type at once — one documented example can double as both a `functional` proof point and a `fairness` check ([agentme-edr-152](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) rule `02`).
+Further types complete the picture: `prompt` regression tests and code-level `integration` tests (both group Development). Types outside the AI taxonomy, such as security, accessibility, privacy and resilience tests (group Governance) or business acceptance, usability and rollback rehearsals (group Business), are classified in [agentme-edr-503](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/503-test-groups-and-release-flow.md) rule `07` but are only mandatory when another policy, a regulation or a contract requires them. A type's main group is where it normally belongs; the same technique may appear in another group as a named variation, for example developers running `safety` evals in CI. A single business scenario can also be checked by more than one type at once, so one documented example can double as both a `functional` proof point and a `fairness` check ([agentme-edr-152](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) rule `02`).
 
 ### Real-world comparison: the A/B test
 
@@ -63,6 +129,10 @@ Someone has to decide, in writing, what "correct," "safe," or "fair" means for a
 ## References
 
 - [agentme-edr-501 - Project quality standards](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/501-project-quality-standards.md) - Rule `09` sets mandatory unit test/eval requirements per AI tier and the release-blocking gate
+- [agentme-edr-503 - Test groups and release flow](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/governance/503-test-groups-and-release-flow.md) - The four test groups, gates, exceptions, emergency path and main group of every test type
+- [agentme-adr-301 - Computational environments](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/adrs/platform/301-computational-environments.md) - The `dev`, `tst`, `acc` and `prd` environments the groups run in
+- [agentme-bdr-405 - Digital product roles RACI](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/bdrs/operations/405-digital-product-roles-raci.md) - Go-live approval, rollback and test ownership
+- External standards cited by article number only: EU AI Act Art. 9, 10, 15, 72; DORA Art. 24; ISO/IEC 42001:2023; ISO/IEC/IEEE 29119-1:2022; WCAG 2.2; NIST AI RMF 1.0
 - [agentme-edr-152 - AI test types taxonomy](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md) - Full taxonomy of AI test types, objectives, mocking constraints, and the quality-progression order
 - [agentme-edr-141 - AI LLM development standards](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/141-ai-llm-development-standards.md) - Defines the LLM / Agent / Workflow tier classification
 - [agentme-edr-122 - Unit test requirements](https://github.com/flaviostutz/agentme/tree/main/.xdrs/agentme/edrs/application/122-unit-test-requirements.md) - General unit test requirements referenced by the Workflow tier

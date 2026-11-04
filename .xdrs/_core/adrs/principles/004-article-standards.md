@@ -42,6 +42,7 @@ Articles are Markdown documents placed inside a subject folder alongside policie
 - For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md). Articles SHOULD use diagrams to illustrate concepts, overviews, and relationships; draw.io SHOULD be used for conceptual and relationship diagrams (e.g., component maps, context views, architecture overviews) when Mermaid cannot adequately express them.
 - File names MUST be lowercase.
 - MUST NOT use emojis in article content.
+- An article MAY start with a frontmatter block containing only `sync-date`, per [`_core-adr-policy-024`](024-sync-date-frontmatter.md); the title line follows the block.
 
 **Folder layout**
 
@@ -71,6 +72,10 @@ Examples:
 All articles MUST follow this template:
 
 ```markdown
+---
+sync-date: [Optional, opt-in. ISO date of the last verification with other entities; see _core-adr-policy-024. When absent, omit the whole frontmatter block.]
+---
+
 # [scope]-[type]-article-[number]: [Short Title]
 
 <!-- If this article is part of a series, add the line below (omit otherwise): -->
