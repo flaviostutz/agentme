@@ -116,3 +116,4 @@ Teams SHOULD run the kinds that fit the risk when a trigger from the Decision Ou
 - [agentme-edr-152](../application/152-ai-test-types-taxonomy.md) - Dataset entry envelope
 - [agentme-edr-122](../application/122-unit-test-requirements.md) - Unit tests for helper code
 - [agentme-edr-305](305-environment-variable-configuration.md) - Environment configuration
+- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - Performance tests are group Development by objective, though run mainly in `acc`

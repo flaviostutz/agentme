@@ -5,8 +5,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a new Policy (ADR, BDR, or EDR).
 metadata:
   author: flaviostutz
-  version: "1.2.0"
-  updated: 2026-09-30
+  version: "1.2.1"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -107,7 +107,7 @@ Choose a title that clearly states the question this Policy answers, not the ans
 
 ### Phase 6: Write the First Draft
 
-Use the mandatory template from `002-policy-standards`:
+Use the mandatory template from `002-policy-standards`. Omit the optional `sync-date` field unless the user explicitly asks for it for a specific sync purpose (`_core-adr-policy-024`); never add it to Policies of `compiled` scopes:
 
 **Check if the decision requires a structured set of rules:**
 If the decision defines strong rules or policies that must be stated explicitly, or if other documents, skills, or agents have a clear need to reference individual rules, you MUST apply the structured rule format from `_core-adr-policy-008-policy-structured-standards`. This means:

@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1844" height="1080" viewBox="0 0 1844 1080" role="img" aria-labelledby="title description">
+  <title id="title">Test groups across the delivery flow</title>
+  <desc id="description">A four-stage diagram showing Development, Governance, Business, and Production test types, with the release flow moving from left to right.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#71817c" />
+    </marker>
+    <style>
+      .sans { font-family: "Avenir Next", "Segoe UI", sans-serif; }
+      .serif { font-family: Georgia, "Times New Roman", serif; }
+      .ink { fill: #18302d; }
+      .muted { fill: #61716d; }
+      .item { font-size: 15px; fill: #263d39; }
+      .bullet { fill: #74837f; }
+    </style>
+  </defs>
+
+  <rect width="1844" height="1080" fill="#f2f4ef" />
+  <path d="M0 0h1844v12H0z" fill="#18302d" />
+
+  <text x="64" y="72" class="serif ink" font-size="42">Test groups across the delivery flow</text>
+  <text x="66" y="108" class="sans muted" font-size="17">Four distinct purposes, from proving the build to observing it with real users.</text>
+
+  <path d="M466 163H492 M902 163H928 M1338 163H1364" fill="none" stroke="#71817c" stroke-width="2" marker-end="url(#arrow)" />
+
+  <g>
+    <rect x="64" y="184" width="408" height="820" rx="8" fill="#ffffff" />
+    <path d="M72 184h392a8 8 0 0 1 8 8v7H64v-7a8 8 0 0 1 8-8z" fill="#167c80" />
+    <circle cx="94" cy="231" r="17" fill="#e2f1ef" />
+    <text x="94" y="237" text-anchor="middle" class="sans" font-size="15" font-weight="700" fill="#167c80">01</text>
+    <text x="122" y="237" class="sans ink" font-size="25" font-weight="700">Development</text>
+    <text x="90" y="274" class="sans muted" font-size="14">Prove the system works as built</text>
+    <line x1="90" y1="294" x2="446" y2="294" stroke="#e5eae6" />
+
+    <circle cx="96" cy="326" r="4" class="bullet" />
+    <text x="111" y="331" class="sans item">Unit tests</text>
+
+    <circle cx="96" cy="369" r="4" class="bullet" />
+    <text x="111" y="374" class="sans item">Code-level and cross-team</text>
+    <text x="111" y="395" class="sans item">integration tests</text>
+
+    <circle cx="96" cy="429" r="4" class="bullet" />
+    <text x="111" y="434" class="sans item">Contract tests</text>
+
+    <circle cx="96" cy="472" r="4" class="bullet" />
+    <text x="111" y="477" class="sans item">Static analysis and dependency scans</text>
+
+    <circle cx="96" cy="515" r="4" class="bullet" />
+    <text x="111" y="520" class="sans item">Code-level and AI smoke tests</text>
+
+    <circle cx="96" cy="558" r="4" class="bullet" />
+    <text x="111" y="563" class="sans item">End-to-end tests in tst</text>
+
+    <circle cx="96" cy="601" r="4" class="bullet" />
+    <text x="111" y="606" class="sans item">AI evals</text>
+    <text x="111" y="628" class="sans muted" font-size="14">Functional · prompt · repeatability</text>
+    <text x="111" y="648" class="sans muted" font-size="14">Groundedness</text>
+
+    <circle cx="96" cy="686" r="4" class="bullet" />
+    <text x="111" y="691" class="sans item">Performance tests</text>
+    <text x="111" y="713" class="sans muted" font-size="14">Baseline · load · stress · spike · soak</text>
+    <text x="111" y="733" class="sans muted" font-size="14">Engineering-owned; mainly run in acc</text>
+
+    <rect x="90" y="944" width="356" height="1" fill="#e5eae6" />
+    <text x="90" y="972" class="sans muted" font-size="13">Local / CI  ·  dev / tst  ·  performance in acc</text>
+  </g>
+
+  <g>
+    <rect x="500" y="184" width="408" height="820" rx="8" fill="#ffffff" />
+    <path d="M508 184h392a8 8 0 0 1 8 8v7H500v-7a8 8 0 0 1 8-8z" fill="#c4573d" />
+    <circle cx="530" cy="231" r="17" fill="#f8e9e4" />
+    <text x="530" y="237" text-anchor="middle" class="sans" font-size="15" font-weight="700" fill="#b64b34">02</text>
+    <text x="558" y="237" class="sans ink" font-size="25" font-weight="700">Governance</text>
+    <text x="526" y="274" class="sans muted" font-size="14">Show controls and obligations are met</text>
+    <line x1="526" y1="294" x2="882" y2="294" stroke="#e5eae6" />
+
+    <circle cx="532" cy="326" r="4" class="bullet" />
+    <text x="547" y="331" class="sans item">AI responsibility evals</text>
+    <text x="547" y="353" class="sans muted" font-size="14">Safety · adversarial · fairness · bias</text>
+    <text x="547" y="373" class="sans muted" font-size="14">Robustness · explainability</text>
+
+    <circle cx="532" cy="411" r="4" class="bullet" />
+    <text x="547" y="416" class="sans item">Security tests</text>
+    <text x="547" y="438" class="sans muted" font-size="14">DAST · penetration testing</text>
+
+    <circle cx="532" cy="476" r="4" class="bullet" />
+    <text x="547" y="481" class="sans item">Accessibility tests</text>
+
+    <circle cx="532" cy="519" r="4" class="bullet" />
+    <text x="547" y="524" class="sans item">Privacy and data-protection</text>
+    <text x="547" y="545" class="sans item">conformity</text>
+
+    <circle cx="532" cy="579" r="4" class="bullet" />
+    <text x="547" y="584" class="sans item">Resilience and disaster recovery</text>
+
+    <circle cx="532" cy="622" r="4" class="bullet" />
+    <text x="547" y="627" class="sans item">Post-market monitoring</text>
+
+    <rect x="526" y="944" width="356" height="1" fill="#e5eae6" />
+    <text x="526" y="972" class="sans muted" font-size="13">Evidence retained for audit</text>
+  </g>
+
+  <g>
+    <rect x="936" y="184" width="408" height="820" rx="8" fill="#ffffff" />
+    <path d="M944 184h392a8 8 0 0 1 8 8v7H936v-7a8 8 0 0 1 8-8z" fill="#ac7616" />
+    <circle cx="966" cy="231" r="17" fill="#f7efd9" />
+    <text x="966" y="237" text-anchor="middle" class="sans" font-size="15" font-weight="700" fill="#95620d">03</text>
+    <text x="994" y="237" class="sans ink" font-size="25" font-weight="700">Business</text>
+    <text x="962" y="274" class="sans muted" font-size="14">Make deployment consequences clear</text>
+    <line x1="962" y1="294" x2="1318" y2="294" stroke="#e5eae6" />
+
+    <circle cx="968" cy="326" r="4" class="bullet" />
+    <text x="983" y="331" class="sans item">Business acceptance scenarios</text>
+
+    <circle cx="968" cy="369" r="4" class="bullet" />
+    <text x="983" y="374" class="sans item">End-to-end user journeys in acc</text>
+
+    <circle cx="968" cy="412" r="4" class="bullet" />
+    <text x="983" y="417" class="sans item">Operational acceptance</text>
+    <text x="983" y="439" class="sans muted" font-size="14">Deploy / rollback rehearsal · runbooks</text>
+    <text x="983" y="459" class="sans muted" font-size="14">Alerts</text>
+
+    <circle cx="968" cy="497" r="4" class="bullet" />
+    <text x="983" y="502" class="sans item">Usability tests</text>
+
+    <circle cx="968" cy="540" r="4" class="bullet" />
+    <text x="983" y="545" class="sans item">Data-migration rehearsal</text>
+
+    <rect x="962" y="944" width="356" height="1" fill="#e5eae6" />
+    <text x="962" y="972" class="sans muted" font-size="13">Acceptance / UAT  ·  production readiness gate</text>
+  </g>
+
+  <g>
+    <rect x="1372" y="184" width="408" height="820" rx="8" fill="#ffffff" />
+    <path d="M1380 184h392a8 8 0 0 1 8 8v7h-408v-7a8 8 0 0 1 8-8z" fill="#547c4c" />
+    <circle cx="1402" cy="231" r="17" fill="#e8f0e5" />
+    <text x="1402" y="237" text-anchor="middle" class="sans" font-size="15" font-weight="700" fill="#456d3e">04</text>
+    <text x="1430" y="237" class="sans ink" font-size="25" font-weight="700">Production</text>
+    <text x="1398" y="274" class="sans muted" font-size="14">Verify behavior with real systems and users</text>
+    <line x1="1398" y1="294" x2="1754" y2="294" stroke="#e5eae6" />
+
+    <circle cx="1404" cy="326" r="4" class="bullet" />
+    <text x="1419" y="331" class="sans item">Post-deploy smoke and synthetic probes</text>
+
+    <circle cx="1404" cy="369" r="4" class="bullet" />
+    <text x="1419" y="374" class="sans item">Alpha · beta · canary · progressive rollout</text>
+
+    <circle cx="1404" cy="412" r="4" class="bullet" />
+    <text x="1419" y="417" class="sans item">Blue / green verification</text>
+
+    <circle cx="1404" cy="455" r="4" class="bullet" />
+    <text x="1419" y="460" class="sans item">Shadow traffic and dark launch</text>
+
+    <circle cx="1404" cy="498" r="4" class="bullet" />
+    <text x="1419" y="503" class="sans item">A/B tests</text>
+
+    <circle cx="1404" cy="541" r="4" class="bullet" />
+    <text x="1419" y="546" class="sans item">Performance baseline with guardrails</text>
+
+    <circle cx="1404" cy="584" r="4" class="bullet" />
+    <text x="1419" y="589" class="sans item">Continuous technical monitoring</text>
+    <text x="1419" y="611" class="sans muted" font-size="14">Drift · latency · errors</text>
+
+    <rect x="1398" y="944" width="356" height="1" fill="#e5eae6" />
+    <text x="1398" y="972" class="sans muted" font-size="13">Controlled rollout  ·  live users and data</text>
+  </g>
+
+  <text x="64" y="1045" class="sans muted" font-size="14">Classification is by a test's main purpose, not its environment. A test run elsewhere is a variation, not a second main group.</text>
+</svg>

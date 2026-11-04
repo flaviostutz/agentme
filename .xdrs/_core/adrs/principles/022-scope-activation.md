@@ -39,11 +39,13 @@ Policies of a scope tagged `extends-only` MUST be applied only through the `exte
 
 #### 05-disabled
 
-All content of a scope tagged `disabled` MUST be ignored by agents: its policies, skills, articles, research, and initiatives are not applied, and nothing is inherited from it through `extends:` or `follows:`. The scope is still validated and MAY be edited; a disabled local scope follows rule 06 like any other local scope. Skills of a disabled scope that are symlinked into `.agents/skills` (see `_core-adr-policy-018`) stay loaded by tools and MUST be removed by the consumer.
+All content of a scope tagged `disabled` MUST be ignored by agents: its policies, skills, articles, research, and initiatives are not applied, and nothing is inherited from it through `extends:` or `follows:`. The scope is still validated and MAY be edited; a disabled scope is exempt from the dependency causes of rule 06. Skills of a disabled scope that are symlinked into `.agents/skills` (see `_core-adr-policy-018`) stay loaded by tools and MUST be removed by the consumer.
 
 #### 06-read-only-dependencies
 
 A scope MUST be treated as READ-ONLY when a scope it follows or extends, or the scope that defines one of its scope types (including parent types), is missing, disabled, or invalid, or when it is an external scope and its own `index.md` is invalid. Content in a READ-ONLY scope MUST NOT be added, changed, or removed.
+
+A scope tagged `disabled` is treated as not present, so it is exempt from every dependency cause above, whether the scope is local or external: it MAY follow or extend disabled, missing, or invalid scopes, or use a scope type defined only in disabled scopes. An enabled scope keeps all causes: it cannot extend or follow a disabled scope because it needs access to that scope. The exemption does not propagate along `extends:` chains.
 
 - **Local scope** (not tracked in `.filedist.lock`, including `_local` and disabled scopes): a read-only local scope is frozen and cannot be maintained, so each cause is invalid and MUST be fixed.
 - **External scope** (tracked in `.filedist.lock`): the scope is READ-ONLY; agents MUST tell the user when they skip a change because of it, naming the cause and fix.

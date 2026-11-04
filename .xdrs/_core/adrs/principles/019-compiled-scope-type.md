@@ -141,9 +141,14 @@ An exception MUST be documented in a dedicated `[type]/principles/NNN-direct-sou
 
 This rule governs reasoning and usage, not the document-link graph. Independently of this rule, and regardless of whether a `NNN-direct-source-usage.md` policy exists, no document MAY hyperlink directly into `.assets/sources/`; that restriction is enforced mechanically and addresses a separate, structural concern.
 
+#### 15-scope-sync-date
+
+Compilation tools and agents MUST maintain `sync-date` in the scope `index.md` as defined in [`_core-adr-policy-024.07-compiled-scopes`](024-sync-date-frontmatter.md), setting it only after lint and review pass for the cycle.
+
 ## References
 
 - [_core-adr-policy-008 - Policy structured standards](008-policy-structured-standards.md) — numbered rule format required for all policies in compiled scopes
 - [_core-adr-policy-010 - Scope governance](010-scope-governance.md) — scope-type definition convention and local meta-policy mechanism
 - [_core-adr-policy-002 - Policy standards](002-policy-standards.md) — policy document format and frontmatter requirements
 - [_core-adr-policy-001 - XDRS standards](001-xdrs-standards.md) — scope structure and `scope-type` field definition
+- [_core-adr-policy-024 - Sync date frontmatter](024-sync-date-frontmatter.md) — `sync-date` field set on the scope index after each completed compilation

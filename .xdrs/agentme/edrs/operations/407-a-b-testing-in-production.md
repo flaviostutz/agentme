@@ -92,3 +92,4 @@ Assignment, stickiness, the default to A and the kill-switch path MUST be covere
 - [agentme-edr-501](../governance/501-project-quality-standards.md) - Tier requirements that make A/B mandatory for AI components
 - [agentme-edr-122](../application/122-unit-test-requirements.md) - Unit test requirements
 - [agentme-edr-306](../platform/306-performance-testing.md) - Performance testing, which also covers prod guardrails
+- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - A/B tests are group Production; rollout plan and release gate

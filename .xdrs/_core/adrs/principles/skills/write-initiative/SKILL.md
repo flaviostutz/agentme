@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write an initiative, plan, project plan, roadmap, or execution plan within an XDRS project.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.1.1"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -93,7 +93,7 @@ Consult `001-xdrs-standards` while making each choice in this phase. The summari
 
 ### Phase 5: Write the Initiative
 
-Use the mandatory template from `007-initiative-standards`:
+Use the mandatory template from `007-initiative-standards`. Omit the optional `sync-date` frontmatter unless the user explicitly asks for it for a specific sync purpose (`_core-adr-policy-024`):
 
 ```markdown
 # [scope]-[type]-initiative-[number]: [Short Title]

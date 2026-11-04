@@ -34,6 +34,7 @@ Initiatives are Markdown documents placed inside a subject folder alongside poli
 - Initiatives MUST include an `Expected end date:` field in ISO format (YYYY-MM-DD) inside the `## Proposed Solution` section.
 - File names MUST be lowercase.
 - MUST NOT use emojis in initiative content.
+- An initiative MAY start with a frontmatter block containing only `sync-date`, per [`_core-adr-policy-024`](024-sync-date-frontmatter.md); the title line follows the block.
 - For diagram format preferences and non-Markdown asset rules, see [`_core-adr-policy-020`](020-media-and-asset-standards.md).
 
 **Folder layout**
@@ -63,6 +64,10 @@ Examples:
 All initiatives MUST follow this template:
 
 ```markdown
+---
+sync-date: [Optional, opt-in. ISO date of the last verification with other entities; see _core-adr-policy-024. When absent, omit the whole frontmatter block.]
+---
+
 # [scope]-[type]-initiative-[number]: [Short Title]
 
 ## Executive Summary

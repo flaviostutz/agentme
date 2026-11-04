@@ -4,8 +4,8 @@ description: >
   Compiles or updates any scope declaring `scope-type: compiled` from its configured external sources. Reads compilation meta-policies to discover sources, fetches content (git clone, local copy, or web scrape), plans policy changes, migrates policies one at a time with structured format, `## Source` sections, and `**compilation-note:**` markers, then runs lint and review. Documents source inconsistencies without inventing fixes. Activate when the user asks to compile, update, sync, refresh, or recompile a compiled scope.
 metadata:
   author: flaviostutz
-  version: "1.3.0"
-  updated: 2026-10-08
+  version: "1.4.0"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -31,6 +31,7 @@ Performs a full compilation cycle for any scope declaring `scope-type: compiled`
 #### Changes
 
 - Policy files created, updated, or removed.
+- Scope `index.md` `sync-date` refreshed.
 
 ### Halt Conditions
 
@@ -107,7 +108,7 @@ Keep every question and intermediate message <100 words and the final summary <1
 For each TODO item marked CREATE or UPDATE, in sequence:
 
 1. **Write the policy file** (<2600 words, per `_core-adr-policy-002`) following `_core-adr-policy-019` and `_core-adr-policy-008`:
-   - Use standard policy frontmatter: `name`, `description`, `apply-to` (<40 words), `valid-from`. Generate these from the source text; they are exempt from the no-invented-content rule per policy-019 rule 05.
+   - Use standard policy frontmatter: `name`, `description`, `apply-to` (<40 words), `valid-from`. Generate these from the source text; they are exempt from the no-invented-content rule per policy-019 rule 05. Do NOT add `sync-date` to compiled policies; it lives only in the scope `index.md` (`_core-adr-policy-024.07-compiled-scopes`).
    - Use structured numbered rule blocks for all claims (per `_core-adr-policy-008`).
    - Transcribe source content faithfully. Do NOT invent, infer beyond what the source states, or fill gaps. Preserve ambiguities as-is.
 
@@ -169,6 +170,7 @@ After writing each policy:
 3. If storage is `temporary`: do not copy any bulk staged content into `.assets/sources/[name]/`; only `source.md` lives there.
 4. For every source processed in this run, update `.assets/sources/[name]/source.md`'s `last-compilation-timestamp` to the current time — this step only runs after Phase 6 (Lint) and Phase 7 (Review) both pass for the policies depending on that source.
 5. If a source's `Source storage` setting changed since its last run, reconcile per `_core-adr-policy-019` rule 12: switching to `temporary` removes previously persisted bulk content (keeping `source.md`); switching away from `temporary` begins persisting bulk content from this run onward.
+6. After lint and review pass for the cycle, set `sync-date` in the scope `index.md` frontmatter to today's date (`YYYY-MM-DD`), adding the field when absent, even when no source changed and no policy was modified (`_core-adr-policy-024.07-compiled-scopes`). Skip this step when the run halted or ended at the Phase 1 no-op.
 
 ### Phase 10: Report
 

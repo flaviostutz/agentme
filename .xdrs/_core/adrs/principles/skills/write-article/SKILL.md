@@ -4,8 +4,8 @@ description: >
    Creates a new article document following XDRS article standards: selects scope, type, subject, and number; then writes a focused synthetic text that combines and links multiple Policies, Research documents, and Skills around a topic. Activate this skill when the user asks to create, add, or write a new article, guide, or overview document within an XDRS project.
 metadata:
   author: flaviostutz
-  version: "1.1.0"
-  updated: 2026-09-24
+  version: "1.1.1"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -103,7 +103,7 @@ If the article spans more than one subject, place it in `principles`.
 
 ### Phase 5: Write the Article
 
-Use the mandatory template from `004-article-standards`:
+Use the mandatory template from `004-article-standards`. Omit the optional `sync-date` frontmatter unless the user explicitly asks for it for a specific sync purpose (`_core-adr-policy-024`):
 
 ```
 # [scope]-[type]-article-[number]: [Short Title]

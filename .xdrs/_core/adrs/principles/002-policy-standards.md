@@ -31,6 +31,7 @@ Policy documents are the authoritative source of truth for their scope, type, an
 | `valid-from` | Yes | ISO date (`YYYY-MM-DD`) indicating from when this decision MUST be enforced. Before this date it SHOULD be used everywhere possible, but compliance is not enforced during reviews until after this date. Defaults to the date the Policy was created. When updating an existing Policy whose `valid-from` date has already passed, preserve the original date—it MUST NOT be updated to the current date. The historical date shows when the policy was originally enabled and is important for understanding policy evolution. |
 | `license` | No | SPDX license expression (e.g. `MIT`, `Apache-2.0`, `CC-BY-4.0`). Indicates the license under which the document content is shared. If omitted, the license is governed by the repository or package defaults. |
 | `metadata` | No | Arbitrary key-value map for additional properties not defined by this spec. |
+| `sync-date` | No | ISO date (`YYYY-MM-DD`) of the last verification or reconciliation of the Policy with other entities. Opt-in, never added by default, and MUST NOT appear in Policies of `compiled` scopes. See [`_core-adr-policy-024`](024-sync-date-frontmatter.md). |
 | `freeze-reference` | No | Boolean (`true` or `false`, defaults to `false`). When `true`, the policy MUST NOT be renamed, renumbered, or moved because external parties reference it by its current identity (path, number, name, heading). Reference-identity issues are intentionally exempt. See rule [`01-freeze-reference-exemption`](#01-freeze-reference-exemption). |
 
   - Minimal example:
@@ -116,6 +117,7 @@ description: [What this decision is about and when to use it]
 apply-to: [Required. Contexts this decision applies to, <40 words. Use "All scopes" when broadly applicable.]
 valid-from: [Required. ISO date YYYY-MM-DD from when enforcement begins. Defaults to creation date.]
 license: [Optional. SPDX license expression]
+sync-date: [Optional, opt-in. ISO date of the last verification with other entities; see _core-adr-policy-024]
 metadata:
   [optional-key]: [optional-value]
 ---

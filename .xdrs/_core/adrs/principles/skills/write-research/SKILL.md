@@ -6,8 +6,8 @@ description: >
   Activate this skill when the user asks to create, add, or write a research document that backs a decision.
 metadata:
   author: flaviostutz
-  version: "1.5.0"
-  updated: 2026-09-24
+  version: "1.5.1"
+  updated: 2026-11-04
 ---
 
 ## Overview
@@ -124,7 +124,7 @@ If the results contain competing interpretations or the intended audience for th
 
 ### Phase 7: Write the Research Document
 
-Use the mandatory template from `006-research-standards`:
+Use the mandatory template from `006-research-standards`. Omit the optional `sync-date` frontmatter unless the user explicitly asks for it for a specific sync purpose (`_core-adr-policy-024`):
 
 ```markdown
 # [scope]-[type]-research-[number]: [Short Title]

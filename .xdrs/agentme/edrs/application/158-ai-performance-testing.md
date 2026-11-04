@@ -73,3 +73,4 @@ Resilience scenarios for agents and workflows SHOULD cover provider down, rate l
 - [agentme-edr-151](151-ai-eval-standards.md) - LLM-as-judge binary output
 - [agentme-edr-154](154-ai-eval-report-format.md) - Eval report format, not applied here
 - [agentme-edr-157](157-ai-a-b-testing.md) - AI A/B testing in production
+- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - Performance tests are group Development by objective, run mainly in `acc`
