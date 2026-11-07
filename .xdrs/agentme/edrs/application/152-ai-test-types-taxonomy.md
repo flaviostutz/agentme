@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-152-ai-test-types-taxonomy
-description: Names AI test types with objective, mocking constraint, and relevance; defines the golden dataset entry envelope for agentme-edr-151's eval tooling; covers three test scopes (Workflow/Agent/LLM) and a quality-progression DAG. Use when deciding which test types to implement, authoring a golden dataset entry, or selecting a test tier.
+description: Maps stable AI eval labels to the objective-based catalogue, distinguishes AI Accuracy from code correctness, and defines golden dataset entries, statistical-method guidance, mocking constraints and component scopes. Use when designing AI evaluation or selecting datasets and scoring methods.
 apply-to: AI projects (LLM, Agent, or Workflow tier) implementing AI-specific test types beyond generic code-level unit/integration tests
 valid-from: 2026-07-05
 ---
@@ -13,9 +13,9 @@ AI components need test types beyond generic unit/integration tests (safety, fai
 
 ## Decision Outcome
 
-**Adopt a named taxonomy of AI test types plus a shared "golden dataset" entry envelope that agentme-edr-151's eval tooling filters by `test_types`.**
+**Specialize the objective-based taxonomy of agentme-edr-503 for AI evaluation, retaining a shared golden dataset envelope filtered by `test_types`.**
 
-Each test type is named with its objective, mocking constraint, applicability, and relevance; every golden dataset entry is labeled with the test types it applies to.
+The catalogue defines what a test assesses; this policy defines how AI eval labels map to it. Golden datasets, scoring methods and mocking constraints specialize execution rather than defining universal test objectives.
 
 ### Details
 
@@ -51,7 +51,7 @@ Every golden dataset entry (a JSON file in `golden_dataset/data/`) MUST have thi
 
 #### 03-mocks-allowed-values
 
-The taxonomy in rule `05` rates each test type using one of three values under the `Mock Constraint` column:
+The following values describe mocking constraints for AI eval execution and code-level scopes:
 
 | Value | Meaning |
 |---|---|
@@ -61,34 +61,33 @@ The taxonomy in rule `05` rates each test type using one of three values under t
 
 #### 04-test-types-enum
 
-A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `repeatability`. Unit test and Integration test are NOT in this enum — code-level only with no golden dataset entries. A/B tests: see [agentme-edr-157](157-ai-a-b-testing.md). Performance tests are NOT in this enum: see [agentme-edr-158](158-ai-performance-testing.md). `human` is NOT a test type — use the `human_review` boolean and `human_instructions` fields instead (rule `02`).
+A golden dataset entry's `test_types` array MUST only use these values: `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`, `groundedness`, `functional`, `prompt`, `smoke`, `repeatability`. These are stable execution labels: `functional` maps to Accuracy and `prompt` to Regression protection, not new enum values `accuracy` or `regression`. Unit and integration are code-level scopes outside this enum, with no golden dataset entries. A/B experimentation serves Live outcome validation: see [agentme-edr-157](157-ai-a-b-testing.md). Performance remains outside this enum: see [agentme-edr-158](158-ai-performance-testing.md). `human` is NOT a test type — use the `human_review` boolean and `human_instructions` fields instead (rule `02`).
 
 #### 05-test-type-taxonomy
 
-Test types MUST be selected from this taxonomy. Each test type is named with its main group ([agentme-edr-503](../governance/503-test-groups-and-release-flow.md) rule `07` prevails), objective, mocking constraint, applicability, and relevance:
+AI execution labels MUST map to the objectives in [agentme-edr-policy-503-test-groups-and-release-flow.07-every-test-type-has-one-main-group](../governance/503-test-groups-and-release-flow.md#07-every-test-type-has-one-main-group), which owns the definitions, AI affinity and primary groups. This table supplies AI-specific applicability, value and method examples, not a second universal catalogue. All eleven eval labels use the golden-dataset mocking constraint of rule `08`.
 
-| Test Type Name | Main Group | `test_types` value | Test Objective | Mock Constraint | When to Apply | Relevance – Business | Relevance – Development Team | Priority (1-5) | Examples |
-|---|---|---|---|---|---|---|---|---|---|
-| Safety/content eval | Governance | `safety` | Detect harmful, biased, or policy-violating output | mocks disallowed for LLM calls | Any user-facing release | Avoids reputational harm; acceptable-use compliance | Automated content gate before merge/release | 5 | Self-harm input → output flagged |
-| Adversarial/red-team test | Governance | `adversarial` | Probe for prompt injection, jailbreaks, unsafe tool use | mocks disallowed for LLM calls | System exposes tool-invocation or agent loops | Reduces security-incident/breach liability | Finds exploitable tool-loop paths before attackers do | 5 | Prompt injection → detected; unauthorized tool call → blocked |
-| Fairness test | Governance | `fairness` | Verify diverse non-protected groups are handled correctly per business policies; each entry is an independent scenario scored inline via LLM-as-judge. See [agentme-edr-156](156-ai-eval-fairness-bias.md). | mocks disallowed for LLM calls | System makes decisions that may unconsciously exclude population segments; before releases affecting access to services | Detects unconscious policy gaps before they become regulatory or reputational issues | Stress-tests the model against edge-case group scenarios | 4 | Rural farmer loan with farm land as collateral → `{"decision": "approved"}`; self-employed applicant at student credit union → `{"decision": "declined"}` |
-| Bias test | Governance | `bias` | Certify that EU Charter/GDPR Art.9 protected attributes do NOT influence outcomes: entries sharing a `bias_group` vary only in protected attributes and outputs are compared across the group. See [agentme-edr-156](156-ai-eval-fairness-bias.md). | mocks disallowed for LLM calls | Any system producing decisions, rankings, or recommendations; when training data or prompts may encode historical disparities | Lowers legal/regulatory exposure (EU AI Act, GDPR); protects against discriminatory outcomes | Catches protected-attribute influence from training data or prompts | 3 | Same loan with male/female/non-binary names → same approval decision |
-| Robustness test | Governance | `robustness` | Verify stable behavior under noisy/out-of-distribution input | mocks disallowed for LLM calls | Inputs come from untrusted/variable sources | Protects reliability/SLAs | Confirms graceful degradation, guides input validation | 3 | Typo-laden query ("Whta is teh status of ordr 123?") → same intent as clean input; empty string → graceful error |
-| Explainability test | Governance | `explainability` | Verify output is justifiable with a faithful rationale | mocks disallowed for LLM calls | Output must be justified to users/auditors/regulators | Required for auditability; builds user trust | Gives rationale trace for debugging wrong answers | 2 | Recommendation cites a source paragraph; the rationale supports the conclusion |
-| Groundedness (RAG) eval | Development | `groundedness` | Verify the answer is supported by retrieved context | mocks disallowed for LLM calls | System uses retrieval-augmented generation | Avoids confidently-wrong answers reaching customers | Pinpoints retrieval/prompt bugs | 4 | Answer "The policy expires on 2025-01-01" is verbatim in retrieved document; no date in context → no invented date |
-| Repeatability test | Development | `repeatability` | Verify output stability across N repeated invocations under fixed configuration | mocks disallowed for LLM calls | Non-deterministic components (temperature > 0) in decision-critical flows | Protects against silently flaky behavior; supports consistency SLAs | Detects prompt/agent designs too sensitive to sampling noise | 3 | Same query 10× at temp=0.7 → semantic similarity ≥ 0.85 |
-| Functional eval (golden-dataset accuracy / LLM-as-judge) | Development | `functional` | Measure output correctness against the golden dataset | mocks disallowed for LLM calls | Required before every Workflow release ([agentme-edr-501](../governance/501-project-quality-standards.md) rule `09`); advised elsewhere | Auditable evidence of business correctness before release | Detects regressions from model/provider/prompt changes | 5 | Invoice summary matches expected `{"total": 450, "currency": "USD"}` per LLM-as-judge rubric |
-| Smoke test | Development | `smoke` | Fast pass/fail check on a small, critical subset before running fuller suites | mocks disallowed for LLM calls | Every commit/PR, before functional/responsible-AI evals run | Cheap early warning before slower evals run | Fast, cheap feedback loop | 4 | 3 critical golden entries pass before CI runs the full functional eval |
-| Prompt regression test | Development | `prompt` | Detect behavior change when a prompt or model version changes | mocks disallowed for LLM calls | Whenever a prompt template or model version changes | Prevents shipping a worse experience via a "small" tweak | Fast check on every prompt edit | 3 | Prompt v2 vs v1 on 20 entries: key fields present in ≥ 95% of v2 responses |
-| Integration test | Development | n/a — code-level only (see rule `04`) | Verify real interaction with external systems | mocks disallowed | Component depends on external systems | Reduces production outages from integration mismatches | Catches wiring bugs unit tests can't see | 2 | Agent calls real CRM API and receives a populated contact record |
-| Performance test | Development | n/a — own dataset, see [agentme-edr-158](158-ai-performance-testing.md) | Measure latency, error rate, cost and integrity under load and failures on a deployed system | Real LLM by default; MAY be mocked per [agentme-edr-158](158-ai-performance-testing.md) rule `03` | Before a first release or an expected user surge | Shows the system holds and fails gracefully | Finds capacity and cost limits early | 3 | p95 and cost per request within limits at peak |
-| Unit test (offline, mocked) | Development | n/a — code-level only (see rule `04`) | Verify deterministic logic in isolation, offline | mocks allowed | Required for Workflow tier every commit ([agentme-edr-501](../governance/501-project-quality-standards.md) rule `09`) | Lowest-cost point to catch defects | Fastest, fully offline feedback on every commit | 5 | `extract_date("next Monday")` returns ISO string; `FakeListChatModel` canned JSON is parsed correctly |
+| `test_types` label | Objective type | AI use / value | Method example | Priority (1-5) |
+|---|---|---|---|---|
+| `safety` | Safety | User-facing content/actions; avoids harmful or policy-violating behavior | Harmful-input policy rubric | 5 |
+| `adversarial` | Adversarial resistance | Tool and agent loops; exposes control-bypass paths | Injection/jailbreak scenarios, unsafe-tool-use checks | 5 |
+| `fairness` | Fairness | Segment decisions; exposes business-policy gaps | Independent segment scenarios scored inline; [156](156-ai-eval-fairness-bias.md) | 4 |
+| `bias` | Bias / non-discrimination | Decisions/rankings; exposes protected-attribute influence | Paired `bias_group` output comparisons; [156](156-ai-eval-fairness-bias.md) | 3 |
+| `robustness` | Robustness | Variable input; checks graceful behavior | Typo, empty and out-of-distribution cases | 3 |
+| `explainability` | Explainability | Justified decisions; gives users and auditors checkable rationale | Faithfulness rubric against outcome/evidence | 2 |
+| `groundedness` | Groundedness | Retrieval-based answers; detects unsupported claims | Compare claims with retrieved context | 4 |
+| `repeatability` | Repeatability | Decision-critical stochastic output; detects sampling sensitivity | Repeated semantic comparison; [155](155-ai-eval-repeatability.md) | 3 |
+| `functional` | Accuracy | Task-quality evidence before release; detects model/provider/prompt degradation | Representative golden cases and task-appropriate scoring; rule `12` | 5 |
+| `smoke` | Smoke | Cheap early warning before fuller evals | A small critical golden-case subset | 4 |
+| `prompt` | Regression protection | Prompt/model changes; protects required behavior | Replay cases across versions | 3 |
+
+Code-level unit and integration testing remain scopes with their existing mocking constraints (rule `03`), not additional eval labels. Unit testing provides cheap offline logic checks (priority 5); integration testing checks real system wiring (priority 2). Performance (priority 3) uses its own module/dataset under [158](158-ai-performance-testing.md); its real-LLM default and allowed mocking exception remain there.
 
 **Human review modifier:** `human_review: true` is NOT a test type and does NOT appear in this table (rule `02`).
 
 #### 06-priority-and-relevance-are-descriptive-only
 
-Priority, Relevance, and When to Apply in rule `05` MUST NOT be treated as mandating which test types a project must implement. [agentme-edr-501](../governance/501-project-quality-standards.md) rule `09` remains the only tier-level testing requirement. Once a project chooses to implement a test type, [agentme-edr-153](153-ai-eval-script.md) rule `01`'s failing-threshold behavior applies; the specific threshold is a project/business decision.
+Priority and applicability/value guidance in rule `05` MUST NOT be treated as mandating which test types a project implements. [agentme-edr-501](../governance/501-project-quality-standards.md) rule `09` remains the only tier-level testing requirement. Once a project chooses to implement a test type, [agentme-edr-153](153-ai-eval-script.md) rule `01`'s failing-threshold behavior applies; the specific threshold is a project/business decision.
 
 #### 07-smoke-is-distinct-from-test-smoke
 
@@ -133,7 +132,7 @@ All `test_types` values apply at all three tiers. Some have natural tier affinit
 
 #### 11-test-quality-progression
 
-The test types form a **quality-progression DAG** that guides implementation priority and tech debt ordering.
+The following progression distinguishes code-level scopes from objective types and guides implementation priority and tech debt ordering.
 
 This ordering is orthogonal to the Priority column in rule `05` and does NOT override it.
 
@@ -143,9 +142,9 @@ All edges are SHOULD relationships — advisory guidance for prioritization and 
 [code-level] Unit Test
     └──> [code-level] Integration Test
               └──> Smoke
-                    └──> Functional / Prompt
+                    └──> Accuracy / Regression protection
                               ├──> Safety
-                              ├──> Adversarial
+                              ├──> Adversarial resistance
                               ├──> Groundedness
                               ├──> Explainability
                               ├──> Robustness
@@ -160,15 +159,29 @@ All edges are SHOULD relationships — advisory guidance for prioritization and 
 | Dependency | Rationale |
 |---|---|
 | Unit / Integration → Smoke | Code correctness is a prerequisite; a component that crashes or errors will produce meaningless eval signal |
-| Smoke → Functional / Prompt | Smoke validates the critical subset; running full evals on a fundamentally broken component wastes LLM cost |
-| Functional / Prompt → Safety, Adversarial, Groundedness, Explainability, Robustness, Fairness | A functionally broken component produces unreliable responsible-AI signals — a working baseline is required |
-| Functional / Prompt → Repeatability | Measuring output variance is only meaningful when the component produces correct outputs under normal conditions |
-| Functional / Prompt → Performance | Load results only mean something when the component is already correct |
+| Smoke → Accuracy / Regression protection | Smoke validates the critical subset; running full evals on a fundamentally broken component wastes LLM cost |
+| Accuracy / Regression protection → Safety, Adversarial resistance, Groundedness, Explainability, Robustness, Fairness | A broken baseline produces unreliable responsible-AI signals |
+| Accuracy / Regression protection → Repeatability | A working baseline makes variance results interpretable |
+| Accuracy / Regression protection → Performance | Load results need a working baseline |
 | Repeatability → Bias | Bias scoring compares outputs across protected-attribute groups; if not repeatable, output differences may reflect sampling variance rather than protected-attribute influence |
 
 **Fairness does NOT depend on Repeatability.** Fairness entries are per-entry LLM-as-judge tests, unaffected by cross-invocation variance.
 
 **`human_review: true` is NOT part of this progression** — it is a per-entry modifier applicable at any stage.
+
+#### 12-accuracy-needs-statistical-evidence
+
+Accuracy MUST be distinguished from Functional correctness and Repeatability. Code-path, schema and contract assertions do not establish how reliably stochastic model outputs satisfy task-quality criteria across representative inputs. A model can be consistently wrong or give different equally correct answers. The stable `functional` label, `eval-functional` target and `report-functional.md` name refer to Accuracy; their interfaces and scoring contracts remain unchanged.
+
+Accuracy evaluation design SHOULD document:
+
+- intended population, representative sampling and important scenario slices, including rare/high-impact cases; distinguish targeted challenge sets from prevalence estimates;
+- dependable expected outcomes or rubrics that allow valid alternative answers;
+- scoring-method suitability: exact assertions for objective fields, task rubrics or semantic comparison for open responses, with judge agreement checked against trusted reviewed examples; follow [151](151-ai-eval-standards.md) for LLM-judge output contracts;
+- stochastic configuration and how output variation affects the conclusion; repeated sampling can help but does not replace coverage of distinct inputs;
+- project-specific sample-sufficiency rationale and acceptance thresholds, using the confidence intervals and convergence reporting of [154](154-ai-eval-report-format.md).
+
+A large dataset alone does not establish representativeness. Repeated trials on a few inputs are not independent coverage of more scenarios; estimates SHOULD state their sampling limitations. There is no universal minimum sample count or new repeated-call loop here; [153](153-ai-eval-script.md) and [155](155-ai-eval-repeatability.md) retain their execution rules.
 
 ## References
 

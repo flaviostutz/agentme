@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="690" viewBox="0 0 1600 690" role="img" aria-labelledby="title description">
+  <title id="title">From commit to production</title>
+  <desc id="description">The Development CI gate leads to acc. In acc, Governance evidence, Business quality and readiness, and Development performance run in parallel. All three feed the UAT business go or no-go decision, together with required control gates, which leads to Production rollout. Failed gates, rollbacks and incidents return to Development.</desc>
+  <defs>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="14" refX="16" refY="7" orient="auto">
+      <path d="M0 0L18 7L0 14Z" fill="#94a3b8"/>
+    </marker>
+    <marker id="loop" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="14" refX="16" refY="7" orient="auto">
+      <path d="M0 0L18 7L0 14Z" fill="#e11d48"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
+      .eyebrow { font-size: 18px; font-weight: 700; letter-spacing: 1.6px; }
+      .node { font-size: 29px; font-weight: 700; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 30px; font-weight: 700; }
+      .column { font-size: 17px; font-weight: 700; letter-spacing: 1.4px; fill: #64748b; }
+      .loop { font-size: 23px; font-weight: 650; fill: #be123c; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="690" rx="28" fill="#f8fafc"/>
+
+  <text class="column" x="700" y="86" text-anchor="middle">PARALLEL PRE-RELEASE TRACKS</text>
+  <text class="column" x="1095" y="212" text-anchor="middle">RELEASE GATE</text>
+
+  <rect x="40" y="290" width="230" height="100" rx="18" fill="#eaf2ff" stroke="#93c5fd" stroke-width="2"/>
+  <text class="eyebrow" x="155" y="327" text-anchor="middle" style="fill:#2563eb">DEVELOPMENT</text>
+  <text class="node" x="155" y="366" text-anchor="middle" style="fill:#1d4ed8">CI gate</text>
+
+  <rect x="320" y="300" width="130" height="80" rx="18" fill="#eef2f7" stroke="#cbd5e1" stroke-width="2"/>
+  <text class="mono" x="385" y="351" text-anchor="middle">acc</text>
+
+  <rect x="530" y="110" width="340" height="110" rx="18" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/>
+  <text class="eyebrow" x="700" y="152" text-anchor="middle" style="fill:#7c3aed">GOVERNANCE</text>
+  <text class="node" x="700" y="194" text-anchor="middle" style="fill:#6d28d9">Evidence</text>
+
+  <rect x="530" y="285" width="340" height="110" rx="18" fill="#fff7e6" stroke="#fcd34d" stroke-width="2"/>
+  <text class="eyebrow" x="700" y="327" text-anchor="middle" style="fill:#d97706">BUSINESS</text>
+  <text class="node" x="700" y="369" text-anchor="middle" style="fill:#b45309">Quality / readiness</text>
+
+  <rect x="530" y="460" width="340" height="110" rx="18" fill="#eaf2ff" stroke="#93c5fd" stroke-width="2"/>
+  <text class="eyebrow" x="700" y="502" text-anchor="middle" style="fill:#2563eb">DEVELOPMENT</text>
+  <text class="node" x="700" y="544" text-anchor="middle" style="fill:#1d4ed8">Performance</text>
+
+  <rect x="950" y="250" width="290" height="180" rx="22" fill="#172033"/>
+  <text x="1095" y="316" text-anchor="middle" style="fill:#fff;font-size:50px;font-weight:700">UAT</text>
+  <text x="1095" y="357" text-anchor="middle" style="fill:#e2e8f0;font-size:26px;font-weight:650">business go / no-go</text>
+  <path d="M990 378H1200" stroke="#475569" stroke-width="2"/>
+  <text x="1095" y="408" text-anchor="middle" style="fill:#94a3b8;font-size:21px">+ required control gates</text>
+
+  <rect x="1300" y="290" width="260" height="100" rx="18" fill="#fdecec" stroke="#f0a3a3" stroke-width="2"/>
+  <text class="eyebrow" x="1430" y="327" text-anchor="middle" style="fill:#b91c1c">PRODUCTION</text>
+  <text class="node" x="1430" y="366" text-anchor="middle" style="fill:#991b1b">Rollout</text>
+
+  <g fill="none" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M270 340H316"/>
+    <path d="M450 340C490 340 490 165 526 165"/>
+    <path d="M450 340H526"/>
+    <path d="M450 340C490 340 490 515 526 515"/>
+    <path d="M870 165C910 165 910 300 946 300"/>
+    <path d="M870 340H946"/>
+    <path d="M870 515C910 515 910 380 946 380"/>
+    <path d="M1240 340H1296"/>
+  </g>
+
+  <path d="M1430 394V640H155V396" fill="none" stroke="#e11d48" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#loop)"/>
+  <rect x="440" y="614" width="720" height="52" rx="26" fill="#f8fafc"/>
+  <text class="loop" x="800" y="648" text-anchor="middle">Failed gates, rollbacks and incidents return to Development</text>
+</svg>

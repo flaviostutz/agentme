@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="2000" viewBox="0 0 2200 2000" role="img" aria-labelledby="title description">
+  <title id="title">Test groups compared</title>
+  <desc id="description">Four groups compared by objective, people, environments, data, evidence and objective-based types. AI means AI-focused, not exclusive. Business Quality and Operational readiness supply evidence to UAT, the final business go/no-go. Methods and levels are separate from types.</desc>
+  <defs>
+    <style>
+      .sans { font-family: "Avenir Next", "Segoe UI", sans-serif; }
+      .serif { font-family: Georgia, "Times New Roman", serif; }
+      .ink { fill: #18302d; }
+      .muted { fill: #61716d; }
+      .head { font-size: 27px; font-weight: 700; fill: #ffffff; text-anchor: middle; }
+      .label { font-size: 23px; font-weight: 700; fill: #18302d; }
+      .cell { font-size: 32px; fill: #263d39; }
+      .sep { stroke: #d5dbd6; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="2200" height="2000" fill="#f2f4ef" />
+  <path d="M0 0h2200v12H0z" fill="#18302d" />
+
+  <text x="40" y="72" class="serif ink" font-size="48">Test groups compared</text>
+  <text x="42" y="110" class="sans muted" font-size="20">Objective-based types, not techniques or levels. [AI] = AI-focused, not exclusive; unmarked types = General.</text>
+
+  <rect x="40" y="234" width="2120" height="1686" rx="6" fill="#ffffff" />
+  <rect x="40" y="234" width="240" height="1686" fill="#e8ece6" />
+
+  <g class="sans">
+    <rect x="280" y="150" width="470" height="74" rx="6" fill="#2f6f5e" />
+    <rect x="750" y="150" width="470" height="74" rx="6" fill="#5a4a8a" />
+    <rect x="1220" y="150" width="470" height="74" rx="6" fill="#b0702a" />
+    <rect x="1690" y="150" width="470" height="74" rx="6" fill="#a23b3b" />
+    <text x="515" y="196" class="head">group Development</text>
+    <text x="985" y="196" class="head">group Governance</text>
+    <text x="1455" y="196" class="head">group Business</text>
+    <text x="1925" y="196" class="head">group Production</text>
+  </g>
+
+  <g>
+    <path d="M40 438H2160 M40 726H2160 M40 888H2160 M40 1050H2160 M40 1254H2160" class="sep" />
+    <path d="M280 234V1920 M750 234V1920 M1220 234V1920 M1690 234V1920" class="sep" />
+  </g>
+
+  <g class="sans">
+    <text x="56" y="344.05" class="label">Objective</text>
+    <text x="56" y="573.05" class="label">Owners /</text>
+    <text x="56" y="607.05" class="label">executors</text>
+    <text x="56" y="798.05" class="label">Main</text>
+    <text x="56" y="832.05" class="label">environments</text>
+    <text x="56" y="977.05" class="label">Data</text>
+    <text x="56" y="1160.05" class="label">Evidence</text>
+    <text x="56" y="1595.05" class="label">Test types</text>
+  </g>
+
+  <g class="sans cell">
+    <!-- Objective -->
+    <text x="296" y="284">Show the system works</text>
+    <text x="296" y="326">as built and is fast</text>
+    <text x="296" y="368">and stable enough</text>
+    <text x="766" y="284">Show security, legal</text>
+    <text x="766" y="326">and control</text>
+    <text x="766" y="368">requirements are met</text>
+    <text x="1236" y="284">Let the business know</text>
+    <text x="1236" y="326">the consequences of</text>
+    <text x="1236" y="368">deploying</text>
+    <text x="1706" y="284">Check real</text>
+    <text x="1706" y="326">infrastructure, real</text>
+    <text x="1706" y="368">users and cases that</text>
+    <text x="1706" y="410">cannot be simulated</text>
+    <!-- Owners / executors -->
+    <text x="296" y="488">Developers, Tester/QA,</text>
+    <text x="296" y="530">AI Engineer</text>
+    <text x="766" y="488">AI Lead (AI controls),</text>
+    <text x="766" y="530">Tech Lead (security),</text>
+    <text x="766" y="572">Tester/QA; the</text>
+    <text x="766" y="614">compliance/risk</text>
+    <text x="766" y="656">function reviews the</text>
+    <text x="766" y="698">evidence</text>
+    <text x="1236" y="488">Business analyst;</text>
+    <text x="1236" y="530">business SMEs as named</text>
+    <text x="1236" y="572">testers; Product Owner</text>
+    <text x="1236" y="614">decides UAT</text>
+    <text x="1706" y="488">DevOps/Infra runs;</text>
+    <text x="1706" y="530">Product Owner and Tech</text>
+    <text x="1706" y="572">Lead decide</text>
+    <!-- Main environments -->
+    <text x="296" y="776">local, CI, dev, tst</text>
+    <text x="296" y="818">performance runs in acc</text>
+    <text x="766" y="776">acc</text>
+    <text x="766" y="818">continuous post-market</text>
+    <text x="766" y="860">monitoring in prd</text>
+    <text x="1236" y="776">acc</text>
+    <text x="1706" y="776">prd</text>
+    <!-- Data -->
+    <text x="296" y="938">Synthetic, fixtures,</text>
+    <text x="296" y="980">mocked dependencies</text>
+    <text x="766" y="938">Curated, versioned,</text>
+    <text x="766" y="980">synthetic or anonymised</text>
+    <text x="1236" y="938">Realistic,</text>
+    <text x="1236" y="980">production-like,</text>
+    <text x="1236" y="1022">anonymised or synthetic</text>
+    <text x="1706" y="938">Real</text>
+    <!-- Evidence -->
+    <text x="296" y="1100">CI results and eval</text>
+    <text x="296" y="1142">reports</text>
+    <text x="766" y="1100">Retained, auditable</text>
+    <text x="766" y="1142">evidence per control</text>
+    <text x="1236" y="1100">UAT record: risk</text>
+    <text x="1236" y="1142">acceptance by the</text>
+    <text x="1236" y="1184">Product Owner, Tech</text>
+    <text x="1236" y="1226">Lead opinion recorded</text>
+    <text x="1706" y="1100">Rollout stage records</text>
+    <text x="1706" y="1142">and monitoring</text>
+    <!-- Test types -->
+    <text x="296" y="1304">• Functional correctness</text>
+    <text x="296" y="1346">• Accuracy [AI]</text>
+    <text x="296" y="1388">• Regression protection</text>
+    <text x="296" y="1430">• Smoke</text>
+    <text x="296" y="1472">• Performance</text>
+    <text x="296" y="1514">• Groundedness [AI]</text>
+    <text x="296" y="1556">• Repeatability [AI]</text>
+    <text x="296" y="1640">Levels, not types:</text>
+    <text x="296" y="1682">unit, integration, E2E</text>
+    <text x="296" y="1766">AI labels stay stable:</text>
+    <text x="296" y="1808">functional → Accuracy</text>
+    <text x="296" y="1850">prompt → Regression</text>
+    <text x="766" y="1304">• Security assurance</text>
+    <text x="766" y="1346">• Safety [AI]</text>
+    <text x="766" y="1388">• Adversarial</text>
+    <text x="766" y="1430">  resistance [AI]</text>
+    <text x="766" y="1472">• Fairness [AI]</text>
+    <text x="766" y="1514">• Bias / non-</text>
+    <text x="766" y="1556">  discrimination [AI]</text>
+    <text x="766" y="1598">• Robustness</text>
+    <text x="766" y="1640">• Explainability [AI]</text>
+    <text x="766" y="1682">• Accessibility</text>
+    <text x="766" y="1724">• Privacy /</text>
+    <text x="766" y="1766">  data protection</text>
+    <text x="766" y="1808">• Resilience / recovery</text>
+    <text x="1236" y="1304">• Quality</text>
+    <text x="1236" y="1346">• Operational readiness</text>
+    <text x="1236" y="1388">• UAT</text>
+    <text x="1236" y="1472">Technique examples:</text>
+    <text x="1236" y="1514">usability, suite replay,</text>
+    <text x="1236" y="1556">training checks, new-</text>
+    <text x="1236" y="1598">procedure rehearsals,</text>
+    <text x="1236" y="1640">communication exercises</text>
+    <text x="1236" y="1724">Quality + readiness</text>
+    <text x="1236" y="1766">+ Governance evidence</text>
+    <text x="1236" y="1808">→ UAT: consequences</text>
+    <text x="1236" y="1850">known, final go/no-go</text>
+    <text x="1706" y="1304">• Deployment</text>
+    <text x="1706" y="1346">  verification</text>
+    <text x="1706" y="1388">• Live outcome</text>
+    <text x="1706" y="1430">  validation</text>
+    <text x="1706" y="1472">• Production reliability</text>
+    <text x="1706" y="1556">Technique examples:</text>
+    <text x="1706" y="1598">blue/green verification,</text>
+    <text x="1706" y="1640">canary, A/B experiments,</text>
+    <text x="1706" y="1682">synthetic transactions</text>
+    <text x="1706" y="1766">Stages, not types:</text>
+    <text x="1706" y="1808">alpha, beta, GA</text>
+  </g>
+
+  <text x="40" y="1966" class="sans muted" font-size="16">Source: agentme-edr-503 rules 01 and 07. Groups are named in full so they are not confused with the environments dev, acc and prd.</text>
+</svg>

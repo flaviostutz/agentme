@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="932" viewBox="0 0 1600 932" role="img" aria-labelledby="title description">
+  <title id="title">group Governance profile</title>
+  <desc id="description">Objective: declared security, legal and control requirements hold. Risk if skipped: control failures and liability. Runs in acc, with post-market monitoring in prd. People: Tech Lead, AI Lead, Tester/QA, with compliance and risk reviews. Data: curated, versioned, synthetic or anonymised. Timing: before release, with a declared per-control cadence. Evidence: retained audit evidence. Main test types: Security assurance, Safety, Adversarial resistance, Fairness, Bias / non-discrimination, Robustness, Explainability, Accessibility, Privacy / data protection, Resilience / recovery.</desc>
+  <defs>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto">
+      <path d="M0 0L12 5L0 10Z" fill="#94a3b8"/>
+    </marker>
+    <linearGradient id="data" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+    <symbol id="person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 22c0-5.5 4-8.5 9-8.5s9 3 9 8.5z"/></symbol>
+    <symbol id="doc" viewBox="0 0 24 24"><path d="M5 2h9l5 5v15H5z"/><path d="M14 2v5h5" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M8 12h8M8 16h8" stroke="#fff" stroke-width="1.8"/></symbol>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
+      .eyebrow { font-size: 17px; font-weight: 700; letter-spacing: 1.4px; fill: #64748b; }
+      .chip { font-size: 21px; font-weight: 650; }
+      .cap { font-size: 24px; font-weight: 700; }
+      .sub { font-size: 19px; fill: #526176; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 22px; font-weight: 650; }
+      .note { font-size: 23px; font-weight: 650; }
+      .tile { fill: #fff; stroke: #e2e8f0; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="932" rx="28" fill="#f8fafc"/>
+
+  <rect x="40" y="40" width="440" height="570" rx="28" fill="#6d28d9"/>
+  <text x="72" y="96" style="fill:#fff;opacity:.75;font-size:17px;font-weight:700;letter-spacing:1.4px">GROUP</text>
+  <text x="72" y="160" style="fill:#fff;font-size:54px;font-weight:700">Governance</text>
+  <text x="72" y="236" style="fill:#fff;opacity:.75;font-size:17px;font-weight:700;letter-spacing:1.4px">OBJECTIVE</text>
+  <text x="72" y="284" style="fill:#fff;font-size:34px;font-weight:700">Declared security,</text>
+  <text x="72" y="328" style="fill:#fff;font-size:34px;font-weight:700">legal and control</text>
+  <text x="72" y="372" style="fill:#fff;font-size:34px;font-weight:700">requirements hold</text>
+  <g transform="translate(0,-70)">
+  <rect x="64" y="500" width="392" height="156" rx="20" style="fill:#fff;opacity:.15"/>
+  <path d="M88 548L102 522L116 548Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M102 531V539M102 543V544" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <text x="128" y="544" style="fill:#fff;opacity:.85;font-size:17px;font-weight:700;letter-spacing:1.4px">RISK IF SKIPPED</text>
+  <text x="88" y="594" style="fill:#fff;font-size:28px;font-weight:700">Control failures,</text>
+  <text x="88" y="630" style="fill:#fff;font-size:28px;font-weight:700">liability</text>
+  </g>
+
+  <rect class="tile" x="520" y="40" width="1040" height="130" rx="18"/>
+  <text class="eyebrow" x="540" y="76">WHERE IT RUNS</text>
+  <g fill="none" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#arrow)">
+    <path d="M770 119H794"/>
+    <path d="M1028 119H1052"/>
+    <path d="M1286 119H1310"/>
+  </g>
+  <rect x="540" y="92" width="225" height="54" rx="14" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+  <text class="mono" x="652" y="127" text-anchor="middle" style="fill:#94a3b8">Local · CI</text>
+  <rect x="798" y="92" width="225" height="54" rx="14" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+  <text class="mono" x="910" y="127" text-anchor="middle" style="fill:#94a3b8">dev · tst</text>
+  <rect x="1056" y="92" width="225" height="54" rx="14" fill="#f3edff" stroke="#c4b5fd" stroke-width="2.5"/>
+  <text class="mono" x="1168" y="127" text-anchor="middle" style="fill:#6d28d9">acc</text>
+  <rect x="1314" y="92" width="225" height="54" rx="14" fill="#f3edff" stroke="#c4b5fd" stroke-width="2.5"/>
+  <text class="mono" x="1426" y="127" text-anchor="middle" style="fill:#6d28d9;font-size:20px">prd · monitoring</text>
+
+  <g transform="translate(520,190)">
+    <rect class="tile" width="510" height="200" rx="18"/>
+    <text class="eyebrow" x="24" y="40">WHO</text>
+    <rect x="24" y="64" width="167" height="44" rx="22" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/>
+    <use href="#person" x="38" y="73" width="26" height="26" fill="#6d28d9"/>
+    <text class="chip" x="72" y="93" style="fill:#6d28d9">Tech Lead</text>
+    <rect x="201" y="64" width="144" height="44" rx="22" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/>
+    <use href="#person" x="215" y="73" width="26" height="26" fill="#6d28d9"/>
+    <text class="chip" x="249" y="93" style="fill:#6d28d9">AI Lead</text>
+    <rect x="24" y="124" width="167" height="44" rx="22" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/>
+    <use href="#person" x="38" y="133" width="26" height="26" fill="#6d28d9"/>
+    <text class="chip" x="72" y="153" style="fill:#6d28d9">Tester/QA</text>
+    <rect x="201" y="124" width="285" height="44" rx="22" fill="#fff" stroke="#c4b5fd" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="343" y="153" text-anchor="middle" style="fill:#6d28d9;font-size:19px;font-weight:650">Compliance, risk reviews</text>
+  </g>
+
+  <g transform="translate(1050,190)">
+    <rect class="tile" width="510" height="200" rx="18"/>
+    <text class="eyebrow" x="24" y="40">DATA</text>
+    <rect x="24" y="78" width="462" height="14" rx="7" fill="url(#data)"/>
+    <circle cx="163" cy="85" r="15" fill="#fff" stroke="#6d28d9" stroke-width="5"/>
+    <text class="sub" x="24" y="124">Synthetic</text>
+    <text class="sub" x="255" y="124" text-anchor="middle">Production-like</text>
+    <text class="sub" x="486" y="124" text-anchor="end">Real</text>
+    <text class="cap" x="24" y="160">Curated, versioned</text>
+    <text class="sub" x="24" y="186">Synthetic or anonymised</text>
+  </g>
+
+  <g transform="translate(520,410)">
+    <rect class="tile" width="510" height="200" rx="18"/>
+    <text class="eyebrow" x="24" y="40">WHEN</text>
+    <path d="M24 100H486" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+    <g fill="#8b5cf6">
+      <circle cx="44" cy="100" r="10"/><circle cx="100" cy="100" r="10"/><circle cx="156" cy="100" r="10"/>
+    </g>
+    <rect x="226" y="64" width="8" height="48" rx="4" fill="#6d28d9"/>
+    <g fill="#fff" stroke="#8b5cf6" stroke-width="4">
+      <circle cx="310" cy="100" r="9"/><circle cx="370" cy="100" r="9"/><circle cx="430" cy="100" r="9"/>
+    </g>
+    <text class="cap" x="140" y="148" text-anchor="middle">Before release</text>
+    <text class="cap" x="370" y="148" text-anchor="middle">Per-control cadence</text>
+    <text class="sub" x="370" y="176" text-anchor="middle">declared for each control</text>
+  </g>
+
+  <g transform="translate(1050,410)">
+    <rect class="tile" width="510" height="200" rx="18"/>
+    <text class="eyebrow" x="24" y="40">EVIDENCE</text>
+    <use href="#doc" x="24" y="96" width="76" height="76" fill="#6d28d9" opacity=".3"/>
+    <use href="#doc" x="40" y="86" width="76" height="76" fill="#6d28d9" opacity=".55"/>
+    <use href="#doc" x="56" y="76" width="76" height="76" fill="#6d28d9"/>
+    <text class="cap" x="164" y="112" style="font-size:28px">Retained</text>
+    <text class="cap" x="164" y="148" style="font-size:28px">audit evidence</text>
+  </g>
+
+  <g transform="translate(40,640)">
+    <rect class="tile" width="1520" height="252" rx="18"/>
+    <text class="eyebrow" x="24" y="40">MAIN TEST TYPES</text>
+    <text class="sub" x="1496" y="40" text-anchor="end" style="font-size:17px">AI = AI-focused, not AI-exclusive</text>
+    <rect x="24" y="70" width="282" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="44" y="101" style="fill:#4c1d95;font-size:24px;font-weight:700">Security assurance</text>
+    <rect x="320" y="70" width="165" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="340" y="101" style="fill:#4c1d95;font-size:24px;font-weight:700">Safety</text><rect x="429" y="80" width="36" height="26" rx="13" fill="#6d28d9"/><text x="447" y="99" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">AI</text>
+    <rect x="499" y="70" width="380" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="519" y="101" style="fill:#4c1d95;font-size:24px;font-weight:700">Adversarial resistance</text><rect x="823" y="80" width="36" height="26" rx="13" fill="#6d28d9"/><text x="841" y="99" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">AI</text>
+    <rect x="893" y="70" width="192" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="913" y="101" style="fill:#4c1d95;font-size:24px;font-weight:700">Fairness</text><rect x="1029" y="80" width="36" height="26" rx="13" fill="#6d28d9"/><text x="1047" y="99" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">AI</text>
+    <rect x="24" y="128" width="421" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="44" y="159" style="fill:#4c1d95;font-size:24px;font-weight:700">Bias / non-discrimination</text><rect x="389" y="138" width="36" height="26" rx="13" fill="#6d28d9"/><text x="407" y="157" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">AI</text>
+    <rect x="459" y="128" width="175" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="479" y="159" style="fill:#4c1d95;font-size:24px;font-weight:700">Robustness</text>
+    <rect x="648" y="128" width="273" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="668" y="159" style="fill:#4c1d95;font-size:24px;font-weight:700">Explainability</text><rect x="865" y="138" width="36" height="26" rx="13" fill="#6d28d9"/><text x="883" y="157" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700">AI</text>
+    <rect x="935" y="128" width="215" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="955" y="159" style="fill:#4c1d95;font-size:24px;font-weight:700">Accessibility</text>
+    <rect x="24" y="186" width="377" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="44" y="217" style="fill:#4c1d95;font-size:24px;font-weight:700">Privacy / data protection</text>
+    <rect x="415" y="186" width="323" height="46" rx="23" fill="#f3edff" stroke="#c4b5fd" stroke-width="2"/><text x="435" y="217" style="fill:#4c1d95;font-size:24px;font-weight:700">Resilience / recovery</text>
+    </g>
+</svg>

@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-503-test-groups-and-release-flow
-description: Defines four test groups (Development, Governance, Business, Production), the release flow and gates between them, and the main group of every test type. Use when naming, planning or discussing tests, deciding who approves a release, or classifying a new test type.
+description: Defines four test groups, objective-based test types, General/AI-focused affinity, reusable techniques and release gates. Use when selecting tests, distinguishing objectives from methods, or making the UAT go/no-go decision.
 apply-to: Software projects that plan, run or discuss tests across the delivery flow, including AI systems
 valid-from: 2026-10-30
 ---
@@ -9,11 +9,11 @@ valid-from: 2026-10-30
 
 ## Context and Problem Statement
 
-Unit tests, regulator evidence, business acceptance and production rollouts have different risk, people, data and standards, yet are discussed as one thing. What groups of tests exist, how do they flow to production, and where does each test type belong?
+Test objectives, techniques, levels and rollout stages are often mixed together. How should software and AI tests be classified by the outcome they assess, and how does their evidence support the release decision?
 
 ## Decision Outcome
 
-**Classify every test type into one of four groups that follow the delivery flow: Development, Governance, Business, Production.**
+**Organize testing as Group -> objective-based Type -> reusable Technique, across Development, Governance, Business and Production.**
 
 A group is defined by its objective at a point of the delivery flow, not by the environment where it runs. Gates between groups are explicit and recorded.
 
@@ -30,7 +30,7 @@ Test discussions, plans, reports and policies MUST name tests by group and MUST 
 | Business | Let the business know the consequences of deploying | `acc` | Realistic, production-like, anonymised or synthetic | Business analyst, business SMEs as named testers | Selected business users | Gate record (rule `04`) |
 | Production | Check real infrastructure, real users and cases that cannot be simulated | `prd` | Real | DevOps/Infra runs; Product Owner and Tech Lead decide | Real users in controlled audiences | Rollout stage records and monitoring |
 
-A test belongs to group Governance only when its pass/fail criteria come from a law, regulation, standard, contract or internal control and its evidence is retained for audit; any other purpose belongs to another group. Business tests are also known as acceptance tests or UAT. Personal-data rules per group are decided by each project under its own data-protection policies; this policy only states the data quality expected from each group.
+A test belongs to group Governance only when its pass/fail criteria come from a law, regulation, standard, contract or internal control and its evidence is retained for audit; any other purpose belongs to another group. Group Business distinguishes Quality, Operational readiness and User Acceptance Testing (UAT), rather than calling every Business test UAT. Personal-data rules per group are decided by each project under its own data-protection policies; this policy only states the data quality expected from each group.
 
 #### 02-flow-and-gates
 
@@ -46,7 +46,7 @@ A failed mandatory Governance control MUST block the release, unless the organis
 
 #### 04-business-gate-is-recorded-risk-acceptance
 
-The Business gate is the "Production readiness and go-live approval" of [agentme-bdr-405](../../bdrs/operations/405-digital-product-roles-raci.md): the Product Owner decides and the Tech Lead's opinion MUST be recorded. The gate does not require perfect software; it requires that the consequences of deploying are known. The gate record MUST list the Governance and Business results, what was not tested in `acc` and why (for example cost or impossible simulation), and the Production mitigation for each (slow rollout, flags, monitoring, alarms).
+UAT is the ultimate business go/no-go gate: the business knows the consequences of deploying, not that the software is perfect. It is the "Production readiness and go-live approval" of [agentme-bdr-405](../../bdrs/operations/405-digital-product-roles-raci.md): the Product Owner decides and the Tech Lead's opinion MUST be recorded. UAT MUST consider Quality, Operational readiness and other relevant evidence, including Governance results. The gate record MUST list those results, residual risks, what was not tested in `acc` and why (for example cost or impossible simulation), and the Production mitigation for each (slow rollout, flags, monitoring, alarms). Missing evidence MUST be made explicit, not treated as a pass. UAT does not waive the controls of rule `03`.
 
 #### 05-production-rollout-plan
 
@@ -58,20 +58,72 @@ An emergency release (for example a security hotfix) MAY run a reduced Governanc
 
 #### 07-every-test-type-has-one-main-group
 
-The main group of a test type is the group, moment and people that normally run it, with Governance as the main group when its default purpose is control evidence. The same technique run for another purpose is a named variation, not a second main group. This catalogue is the only source of the classification; tables elsewhere MUST mirror it and this policy prevails. New test types MUST be added here with a main group.
+Every test type MUST describe an objective and the outcome or evidence it brings to the team, business or control function, independently of its technique. Each type MUST have one main group in this catalogue; tables elsewhere MUST mirror it. The main group reflects the usual purpose, moment and people, with Governance qualified by rule `01`. The same objective pursued in another group is a named purpose-specific variation, not a second main classification.
 
-| Main group | Test types | Common variations |
-|---|---|---|
-| Development | unit, code-level integration, contract, static analysis and dependency scan, code-level and AI `smoke`, cross-team integration and E2E in `tst`, AI `functional`, `prompt`, `repeatability`, `groundedness`; performance (baseline, load, stress, spike, soak), engineering-owned and run mainly in `acc` | Performance also as developer micro-benchmark, as Governance evidence when a regulation or contract sets the threshold, and as a latency watch on the canary (Production); `functional` re-run in `acc` as Governance evidence |
-| Governance | AI `safety`, `adversarial`, `fairness`, `bias`, `robustness`, `explainability`; security (DAST, penetration); accessibility; privacy and data-protection conformity; resilience and disaster recovery; post-market monitoring | Developers run Governance AI evals and accessibility linters in CI; post-market monitoring runs continuously in `prd` |
-| Business | business acceptance scenarios, end-to-end user journeys in `acc`, operational acceptance (deploy and rollback rehearsal, runbooks, alerts), usability, data-migration rehearsal | Usability with real users during beta (Production) |
-| Production | post-deploy smoke and synthetic probes, alpha, beta, canary and progressive rollout, blue/green verification, shadow traffic and dark launch, A/B, production performance baseline with guardrails, continuous technical monitoring (drift, latency, errors) | Offline eval before an A/B launch is Development |
+The catalogue is divided into rules `09` through `12`. It classifies types; it does not require them. Techniques are non-exhaustive options, reusable across types, not mandatory or exclusive implementations. General / AI-focused is descriptive affinity, not an applicability restriction; General types apply to AI systems too.
 
-This policy classifies types; it does not require them. Security, accessibility, privacy and resilience tests are mandatory only when another policy, a regulation or a contract requires them. Performance in `prd` follows [agentme-edr-306](../platform/306-performance-testing.md) rule `04`; its prohibitions on spike, stress and resilience in `prd` remain.
+Unit, integration and E2E are levels/scopes, not objective types. Contract checks, static analysis and dependency scans support correctness or security objectives. Alpha/beta/GA are rollout stages; canary, blue/green and dark launch are deployment strategies whose checks gather evidence. A deployment strategy alone is not a test. Dataset labels and tools are execution interfaces, not the universal taxonomy; AI mappings are in [agentme-edr-152](../application/152-ai-test-types-taxonomy.md#05-test-type-taxonomy).
+
+Examples of variations: developers run accessibility or AI control checks in CI; performance is mainly Development in `acc`, but can supply Governance threshold evidence or Production canary guardrails; usability with beta users supplies Production evidence; post-market monitoring supplies Governance evidence in `prd`. A rollback rehearsal can assess Operational readiness before release or Deployment verification under a rollout plan. Offline evals before A/B remain Development.
+
+Security, accessibility, privacy and resilience tests are mandatory only when another policy, a regulation or a contract requires them. Performance in `prd` follows [agentme-edr-306](../platform/306-performance-testing.md) rule `04`; its prohibitions on spike, stress and resilience in `prd` remain.
 
 #### 08-how-each-group-runs
 
 Group Development runs through the standard Makefile targets of [agentme-edr-303](../platform/303-common-targets.md): `lint`, `test-unit`, `test-integration`, `test-smoke`, `eval-<qualifier>` and `test-performance-<kind>`. AI evals of any group MUST follow the mocking constraint of [agentme-edr-152](../application/152-ai-test-types-taxonomy.md) rules `03` and `08`. Governance and Business runs SHOULD reuse the same targets against `acc`, parameterised by `STAGE`, and keep their outputs as the evidence of rule `01`. Production tests run through the rollout plan of rule `05`.
+
+#### 09-development-objectives
+
+The following types MUST be classified primarily in group Development, subject to rule `07`'s purpose-specific variations.
+
+| Main group | Test type | Outcome assessed / value | AI affinity | Common techniques |
+|---|---|---|---|---|
+| Development | Functional correctness | Required logic and interface behavior works | General | Scenario assertions, contract checks |
+| Development | Accuracy | Model outputs meet task-quality criteria across representative inputs, with uncertainty considered | AI-focused | Golden-dataset evaluation, task rubrics, statistical evaluation |
+| Development | Regression protection | Changes preserve required existing behavior | General | Suite replay, baseline comparison |
+| Development | Smoke | Essential behavior works sufficiently to proceed | General | Small critical-scenario suite |
+| Development | Performance | Speed, capacity, error and resource limits hold | General | Baseline, load, stress, spike, soak |
+| Development | Groundedness | Claims are supported by supplied sources | AI-focused | Source-attribution checks, claim-to-context checks |
+| Development | Repeatability | Equivalent repeated requests remain sufficiently consistent | AI-focused | Repeated-run semantic comparison |
+
+#### 10-governance-objectives
+
+The following types MUST be classified primarily in group Governance when their purpose meets rule `01`'s control-and-evidence qualification.
+
+| Main group | Test type | Outcome assessed / value | AI affinity | Common techniques |
+|---|---|---|---|---|
+| Governance | Security assurance | Declared security controls withstand relevant threats | General | Penetration testing, dynamic application security testing (DAST) |
+| Governance | Safety | Harmful-output and unsafe-action constraints hold | AI-focused | Policy scenarios, red-team exercises |
+| Governance | Adversarial resistance | Malicious inputs cannot bypass declared controls | AI-focused | Prompt-injection exercises, jailbreak exercises |
+| Governance | Fairness | Legitimate segments receive intended policy outcomes | AI-focused | Segment-based scenario evaluation |
+| Governance | Bias / non-discrimination | Protected attributes do not cause prohibited outcome differences | AI-focused | Paired counterfactual comparison |
+| Governance | Robustness | Variable or unexpected inputs preserve required behavior | General | Input perturbation, boundary scenarios |
+| Governance | Explainability | Explanations faithfully support assessed outcomes | AI-focused | Rationale review, fidelity checks |
+| Governance | Accessibility | People with disabilities can access required functions | General | Automated checks, keyboard and screen-reader testing |
+| Governance | Privacy / data protection | Declared processing and access controls hold | General | Access-control checks, retention checks |
+| Governance | Resilience / recovery | Required continuity and recovery controls hold | General | Failover drills, backup-restore exercises |
+
+#### 11-business-objectives
+
+The following types MUST be classified primarily in group Business.
+
+| Main group | Test type | Outcome assessed / value | AI affinity | Common techniques |
+|---|---|---|---|---|
+| Business | Quality | Product fits intended business use and agreed functional and user-experience requirements | General | Usability tests, functional-requirement suite replay, business journeys |
+| Business | Operational readiness | Business and technical operations can run the changed service | General | Training-effectiveness checks, procedure rehearsals, communication exercises, rollback rehearsal, incident simulation, runbook exercise, alert verification |
+| Business | UAT | Business knows deployment consequences and records go/no-go | General | Evidence review, risk-impact walkthrough, decision/sign-off session |
+
+Quality is business fitness, not an umbrella replacing every other type. Operational readiness includes business operators and support functions: people can perform changed duties, new procedures work in rehearsal, and communications reach and are understood by relevant people. Attendance or a sent message alone does not demonstrate capability. Data-migration rehearsal can support Quality and readiness; UAT considers its consequences.
+
+#### 12-production-objectives
+
+The following types MUST be classified primarily in group Production, under the rollout plan of rule `05`.
+
+| Main group | Test type | Outcome assessed / value | AI affinity | Common techniques |
+|---|---|---|---|---|
+| Production | Deployment verification | Released deployment, routing and rollback work in production | General | Blue/green verification, canary checks, post-deploy smoke, shadow comparisons |
+| Production | Live outcome validation | Real-user outcomes support a version-selection decision | General | A/B experimentation |
+| Production | Production reliability | Required service behavior holds during real operation | General | Synthetic transactions, service-level checks, drift/latency/error monitoring |
 
 ## Conflicts
 

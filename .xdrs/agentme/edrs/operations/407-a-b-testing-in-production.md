@@ -19,6 +19,8 @@ Question: How must a team plan, run, stop and retire an A/B test in production?
 
 An A/B test shows version A (control, the stable one) and version B (variant) of the same system to different groups of real users, then compares measured results to decide which version stays. A/B tests are optional unless another Policy mandates them; once a team runs one, every rule below MUST be followed. For AI components see [agentme-edr-157](../application/157-ai-a-b-testing.md), which extends this Policy; when A/B is mandatory see [agentme-edr-501](../governance/501-project-quality-standards.md) rule `09-ai-project-testing-requirements`.
 
+In the objective-based catalogue of [agentme-edr-503](../governance/503-test-groups-and-release-flow.md#07-every-test-type-has-one-main-group), A/B experimentation is a technique for Live outcome validation in group Production. Its outcome is a version-selection decision, not a requirement that B wins.
+
 ### Details
 
 #### 01-plan-must-be-defined-before-launch
@@ -92,4 +94,4 @@ Assignment, stickiness, the default to A and the kill-switch path MUST be covere
 - [agentme-edr-501](../governance/501-project-quality-standards.md) - Tier requirements that make A/B mandatory for AI components
 - [agentme-edr-122](../application/122-unit-test-requirements.md) - Unit test requirements
 - [agentme-edr-306](../platform/306-performance-testing.md) - Performance testing, which also covers prod guardrails
-- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - A/B tests are group Production; rollout plan and release gate
+- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - Live outcome validation is group Production; A/B is its comparison technique

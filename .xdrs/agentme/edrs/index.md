@@ -69,7 +69,7 @@ Standards for building LLM, Agent, and Workflow components.
 Standards for eval datasets, scripts, reports, and test type taxonomy.
 
 - [agentme-edr-151](application/151-ai-eval-standards.md) - **AI eval core standards** - Eval folder structure and Makefile interface; LLM-as-judge binary scoring contract applicable to all AI tiers and test types
-- [agentme-edr-152](application/152-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Names AI test types (`functional`, `safety`, `smoke`, `repeatability`, `adversarial`, `fairness`, `bias`, and 5 others) with objective, mocking constraint, and relevance, and defines the shared golden dataset entry envelope; performance tests sit outside its enum
+- [agentme-edr-152](application/152-ai-test-types-taxonomy.md) - **AI test types taxonomy** - Map AI eval labels to objectives; define Accuracy methods, datasets and execution constraints
 - [agentme-edr-153](application/153-ai-eval-script.md) - **AI eval script** - eval.py requirements: entry-first loop, --type filtering, mock_fixtures wiring, human entries, threshold enforcement, and MLflow experiment conventions
 - [agentme-edr-154](application/154-ai-eval-report-format.md) - **AI eval report format** - report-<type>.md template, Wilson score confidence interval, convergence analysis, and human-type checklist artifact
 - [agentme-edr-155](application/155-ai-eval-repeatability.md) - **AI eval repeatability** - Repeatability test type: REPEAT_COUNT loop exception, semantic-similarity and LLM-as-judge scoring, repeatability_accuracy metric, report shape, and run cadence
@@ -101,7 +101,7 @@ Contribution and collaboration standards shared across projects.
 
 - [agentme-edr-501](governance/501-project-quality-standards.md) - **Project quality standards** - Require build, lint, and test verification before completion
 - [agentme-edr-502](governance/502-contributing-guide-requirements.md) - **Contributing guide requirements** - Define the minimum structure for CONTRIBUTING guides
-- [agentme-edr-503](governance/503-test-groups-and-release-flow.md) - **Test groups and release flow** - Four test groups (Development, Governance, Business, Production), gates and main group per test type
+- [agentme-edr-503](governance/503-test-groups-and-release-flow.md) - **Test groups and release flow** - Classify objective types, AI affinity and reusable techniques; define four groups and UAT gates
 
 ## Operations
 
