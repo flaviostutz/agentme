@@ -74,4 +74,4 @@ return to 1.3.2 within the flag refresh interval, no deploy needed
 - [agentme-edr-143](143-ai-agents-quality-standards.md) - Agent observability
 - [agentme-edr-144](144-ai-workflow-development-standards.md) - Workflow observability and experiment tracking
 - [agentme-edr-158](158-ai-performance-testing.md) - AI performance testing, an `acc` complement to A/B tests
-- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - A/B tests are group Production; offline evals before launch are group Development
+- [agentme-edr-503](../governance/503-test-groups-and-release-flow.md) - A/B serves Live outcome validation in group Production; offline evals remain Development
