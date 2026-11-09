@@ -8,6 +8,7 @@ Propose changes via pull request. All changes must be verified for clarity and n
 
 Foundational standards, principles, and guidelines.
 
+- [create-svg-design](principles/skills/create-svg-design/SKILL.md) - **Create SVG design** — Creates or reviews SVG graphics (diagrams, infographics, charts, covers) for articles, READMEs and research: brief, audience-driven palette and style, A4-like canvas, render-and-critique loop with screenshots, final approval.
 - [refine-plan-mode](principles/skills/refine-plan-mode/SKILL.md) - **Refine plan mode** — MANDATORY skill for ANY planning activity (plan, design, propose, outline, draft, brainstorm, architect). Read and follow in full before any execution begins. Must be read from XDRS even when not in `.agents/skills`. *(skill)*
 - [refine-user-story](principles/skills/refine-user-story/SKILL.md) - **Refine user stories** — Refine, elaborate, study or develop the contents of a user story used to create a unit of work for an agile team. Researches the workspace first so it asks as few questions as possible, adapts to who is answering (business or technical), writes the story from what the solution's user experiences, parks unanswerable questions as owner-tagged Pending Questions so another role can resume later, and optionally writes the refined story back to its source. Takes a description or one URL (GitHub issue, Azure DevOps work item, public web page). *(skill)*
 - [research-topic](principles/skills/research-topic/SKILL.md) - **Research a topic** — Takes a vague idea or problem and researches it in gated phases: frames the real problem and intention, maps the landscape and why it stayed unsolved, builds MECE pillars, tests falsifiable hypotheses against checked web sources including contradicting evidence, evolves them over rounds, optionally explores solutions, and ends with a proposal draft shown in chat. Findings carry source tags and model-only claims never count as evidence. *(skill)*
@@ -18,12 +19,14 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
 - [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [run-skill-tests](application/skills/run-skill-tests/SKILL.md))*
+- [agentme-edr-018](principles/018-svg-visual-design-standards.md) - **SVG visual design standards** - A4-like canvas, importance-proportional type, KARP principles, audience-driven palette, accessibility and a render-and-critique process for SVG assets
 
 ## Articles
 
 Synthetic views combining agentme XDRs and skills around a specific topic.
 
 - [agentme-article-001](principles/articles/001-continuous-xdr-improvement.md) - **Continuous XDR improvement** (what an XDR is, when to write one, how to discuss it, how to organize it, workflow)
+- [agentme-edr-article-001](application/articles/001-pragmatic-hexagonal-architecture-overview.md) - **Pragmatic hexagonal architecture overview** - Visual overview of the External, Adapters and Application layers
 
 ## Application
 

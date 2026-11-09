@@ -43,6 +43,7 @@ Content in `agentme` MUST address at least one of the following development-phas
 - Development team governance: practices that govern how development teams work during the development phase — contribution workflows, code-review standards, XDR enrichment processes, team-wide quality agreements.
 - Software development project management: organizing and tracking development work using epics, features, and user stories as defined in `agentme-bdr-401`.
 - Organizational and strategic concepts that govern how development teams are structured, staffed, and aligned to goals (e.g., org structure taxonomy, OKR framework, team roles and composition).
+- Documentation and visual communication assets of development work: diagrams, READMEs, articles and research visuals (e.g., SVG design standards).
 
 Content that addresses only deployment infrastructure, HR, or organizational process unrelated to the development phase does not belong in `agentme` (e.g., a CI/CD standard that enforces test gates belongs; a personnel policy does not).
 

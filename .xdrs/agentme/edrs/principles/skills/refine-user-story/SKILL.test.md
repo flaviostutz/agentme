@@ -1,6 +1,6 @@
 ---
 skill: refine-user-story
-skill-version: "7.2.1"
+skill-version: "7.3.0"
 ---
 
 ## Test Scenarios

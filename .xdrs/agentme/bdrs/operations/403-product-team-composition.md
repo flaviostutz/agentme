@@ -23,7 +23,7 @@ How should a product team be structured, and what known risks must teams manage 
 
 Teams MUST apply one of the two composition models defined in this policy — simple or complex — based on their product scope and AI surface. Teams MUST NOT operate with an undefined or informal structure.
 
-![Team composition diagram](.assets/team-composition.svg)
+A visual overview of the composition models is in [agentme-bdr-article-001](articles/001-product-team-composition-overview.md).
 
 #### 02-team-composition-simple
 

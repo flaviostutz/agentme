@@ -1,6 +1,6 @@
 ---
 skill: research-topic
-skill-version: "1.3.0"
+skill-version: "1.4.0"
 ---
 
 ## Test Scenarios

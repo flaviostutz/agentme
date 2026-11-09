@@ -20,3 +20,7 @@ Project management workflow and structure for development teams.
 - [agentme-bdr-404](operations/404-team-roles-and-specialists.md) - **Digital product roles — team & specialists** — Defines team-level roles (PO, PjM, BA, AI BA, AI Lead, AI Engineer, Tech Lead, engineers) and shared specialist roles
 - [agentme-bdr-405](operations/405-digital-product-roles-raci.md) - **Digital product roles — RACI** — Defines a RACI matrix assigning decision rights across the digital-product lifecycle, from team formation through outcome measurement
 - [analyse-cvs](operations/skills/analyse-cvs/SKILL.md) - **Analyse CVs** — Scores and ranks candidate CVs in a `.tmp/` folder against agreed weighted criteria for a role, with redaction, writing results to a run folder `.tmp/analyse-cvs/<id>/` with one folder and an interview chart per invited candidate *(skill)*
+
+## Articles
+
+- [agentme-bdr-article-001](operations/articles/001-product-team-composition-overview.md) - **Product team composition overview** — Visual overview of the simple and complex team composition models

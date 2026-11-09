@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1123 794" width="1123" height="794" role="img" font-family="Helvetica, Arial, sans-serif">
+<title>{{title}}</title>
+<desc>Three candidate palettes shown on the same mini diagram so one can be chosen by audience.</desc>
+<rect width="1123" height="794" fill="#FFFFFF"/>
+<text x="48" y="76" font-size="34" font-weight="700" fill="#1B2433">{{title}}</text>
+<text x="48" y="112" font-size="18" fill="#1B2433">{{subtitle}}</text>
+
+<g transform="translate(48,152)">
+<rect width="324" height="594" rx="12" fill="{{p1_surface}}"/>
+<text x="24" y="52" font-size="26" font-weight="700" fill="{{p1_text}}">{{p1_name}}</text>
+<text x="24" y="84" font-size="16" fill="{{p1_text}}">{{p1_audience}}</text>
+<rect x="24" y="116" width="32" height="32" rx="6" fill="{{p1_primary}}"/><text x="66" y="138" font-size="14" fill="{{p1_text}}">primary {{p1_primary}}</text>
+<rect x="24" y="160" width="32" height="32" rx="6" fill="{{p1_accent}}" stroke="{{p1_text}}" stroke-width="1"/><text x="66" y="182" font-size="14" fill="{{p1_text}}">accent {{p1_accent}}</text>
+<rect x="24" y="204" width="32" height="32" rx="6" fill="{{p1_surface}}" stroke="{{p1_text}}" stroke-width="1"/><text x="66" y="226" font-size="14" fill="{{p1_text}}">surface {{p1_surface}}</text>
+<rect x="24" y="248" width="32" height="32" rx="6" fill="{{p1_text}}"/><text x="66" y="270" font-size="14" fill="{{p1_text}}">text {{p1_text}}</text>
+<rect x="24" y="328" width="132" height="64" rx="10" fill="#FFFFFF" stroke="{{p1_primary}}" stroke-width="2"/>
+<text x="90" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="{{p1_text}}">Input</text>
+<line x1="156" y1="360" x2="188" y2="360" stroke="{{p1_text}}" stroke-width="2"/><polygon points="188,352 202,360 188,368" fill="{{p1_text}}"/>
+<rect x="202" y="328" width="98" height="64" rx="10" fill="{{p1_primary}}"/>
+<text x="251" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="#FFFFFF">Result</text>
+<rect x="24" y="432" width="180" height="44" rx="22" fill="{{p1_accent}}" stroke="{{p1_text}}" stroke-width="1"/>
+<text x="114" y="461" font-size="18" font-weight="700" text-anchor="middle" fill="{{p1_onaccent}}">Key step</text>
+<text x="24" y="540" font-size="16" fill="{{p1_text}}">Style: {{style}}</text>
+</g>
+
+<g transform="translate(399,152)">
+<rect width="324" height="594" rx="12" fill="{{p2_surface}}"/>
+<text x="24" y="52" font-size="26" font-weight="700" fill="{{p2_text}}">{{p2_name}}</text>
+<text x="24" y="84" font-size="16" fill="{{p2_text}}">{{p2_audience}}</text>
+<rect x="24" y="116" width="32" height="32" rx="6" fill="{{p2_primary}}"/><text x="66" y="138" font-size="14" fill="{{p2_text}}">primary {{p2_primary}}</text>
+<rect x="24" y="160" width="32" height="32" rx="6" fill="{{p2_accent}}" stroke="{{p2_text}}" stroke-width="1"/><text x="66" y="182" font-size="14" fill="{{p2_text}}">accent {{p2_accent}}</text>
+<rect x="24" y="204" width="32" height="32" rx="6" fill="{{p2_surface}}" stroke="{{p2_text}}" stroke-width="1"/><text x="66" y="226" font-size="14" fill="{{p2_text}}">surface {{p2_surface}}</text>
+<rect x="24" y="248" width="32" height="32" rx="6" fill="{{p2_text}}"/><text x="66" y="270" font-size="14" fill="{{p2_text}}">text {{p2_text}}</text>
+<rect x="24" y="328" width="132" height="64" rx="10" fill="#FFFFFF" stroke="{{p2_primary}}" stroke-width="2"/>
+<text x="90" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="{{p2_text}}">Input</text>
+<line x1="156" y1="360" x2="188" y2="360" stroke="{{p2_text}}" stroke-width="2"/><polygon points="188,352 202,360 188,368" fill="{{p2_text}}"/>
+<rect x="202" y="328" width="98" height="64" rx="10" fill="{{p2_primary}}"/>
+<text x="251" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="#FFFFFF">Result</text>
+<rect x="24" y="432" width="180" height="44" rx="22" fill="{{p2_accent}}" stroke="{{p2_text}}" stroke-width="1"/>
+<text x="114" y="461" font-size="18" font-weight="700" text-anchor="middle" fill="{{p2_onaccent}}">Key step</text>
+<text x="24" y="540" font-size="16" fill="{{p2_text}}">Style: {{style}}</text>
+</g>
+
+<g transform="translate(751,152)">
+<rect width="324" height="594" rx="12" fill="{{p3_surface}}"/>
+<text x="24" y="52" font-size="26" font-weight="700" fill="{{p3_text}}">{{p3_name}}</text>
+<text x="24" y="84" font-size="16" fill="{{p3_text}}">{{p3_audience}}</text>
+<rect x="24" y="116" width="32" height="32" rx="6" fill="{{p3_primary}}"/><text x="66" y="138" font-size="14" fill="{{p3_text}}">primary {{p3_primary}}</text>
+<rect x="24" y="160" width="32" height="32" rx="6" fill="{{p3_accent}}" stroke="{{p3_text}}" stroke-width="1"/><text x="66" y="182" font-size="14" fill="{{p3_text}}">accent {{p3_accent}}</text>
+<rect x="24" y="204" width="32" height="32" rx="6" fill="{{p3_surface}}" stroke="{{p3_text}}" stroke-width="1"/><text x="66" y="226" font-size="14" fill="{{p3_text}}">surface {{p3_surface}}</text>
+<rect x="24" y="248" width="32" height="32" rx="6" fill="{{p3_text}}"/><text x="66" y="270" font-size="14" fill="{{p3_text}}">text {{p3_text}}</text>
+<rect x="24" y="328" width="132" height="64" rx="10" fill="#FFFFFF" stroke="{{p3_primary}}" stroke-width="2"/>
+<text x="90" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="{{p3_text}}">Input</text>
+<line x1="156" y1="360" x2="188" y2="360" stroke="{{p3_text}}" stroke-width="2"/><polygon points="188,352 202,360 188,368" fill="{{p3_text}}"/>
+<rect x="202" y="328" width="98" height="64" rx="10" fill="{{p3_primary}}"/>
+<text x="251" y="368" font-size="20" font-weight="700" text-anchor="middle" fill="#FFFFFF">Result</text>
+<rect x="24" y="432" width="180" height="44" rx="22" fill="{{p3_accent}}" stroke="{{p3_text}}" stroke-width="1"/>
+<text x="114" y="461" font-size="18" font-weight="700" text-anchor="middle" fill="{{p3_onaccent}}">Key step</text>
+<text x="24" y="540" font-size="16" fill="{{p3_text}}">Style: {{style}}</text>
+</g>
+</svg>

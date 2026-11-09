@@ -7,8 +7,8 @@ description: >
   explore or understand a topic, problem or option before deciding or planning.
 metadata:
   author: flaviostutz
-  version: "1.3.0"
-  updated: 2026-10-23
+  version: "1.4.0"
+  updated: 2026-11-08
 ---
 
 ## Overview
@@ -57,7 +57,7 @@ The output is a proposal draft: a short overview of the subject, shown in chat b
 
 ## Instructions
 
-Keep every question <140 words, every gate summary <80 words and every other intermediate message <150 words. Texts inside `research.md` follow the caps in [references/research-template.md](references/research-template.md). Use no emojis anywhere. Draw diagrams as ASCII text. These rules are adapted from [refine-plan-mode](../refine-plan-mode/SKILL.md).
+Keep every question <140 words, every gate summary <80 words and every other intermediate message <150 words. Texts inside `research.md` follow the caps in [references/research-template.md](references/research-template.md). Use no emojis anywhere. Draw diagrams as ASCII text; when the person asks for a polished graphic or the deliverable embeds an image asset, activate skill [`create-svg-design`](../create-svg-design/SKILL.md) for it. These rules are adapted from [refine-plan-mode](../refine-plan-mode/SKILL.md).
 
 ### Glossary
 
@@ -307,5 +307,6 @@ See [references/research-template.md](references/research-template.md) for the h
 - [`agentme-edr-005`](../../005-skill-scripts-and-composition.md) — Skill scripts and composition
 - [`agentme-edr-017`](../../017-skill-testing.md) — Skill testing
 - [refine-plan-mode](../refine-plan-mode/SKILL.md) — Source of the gate, questioning and navigation rules
+- [create-svg-design](../create-svg-design/SKILL.md) — Polished SVG graphics for deliverables
 - [get-web-contents](../../../application/skills/get-web-contents/SKILL.md) — Reads web pages
 - [get-web-search-contents](../../../application/skills/get-web-search-contents/SKILL.md) — Searches the web through the browser
