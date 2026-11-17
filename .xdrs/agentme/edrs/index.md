@@ -19,7 +19,7 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-012](principles/012-continuous-xdr-enrichment.md) - **Continuous xdr improvement policy** - Promote recurring delivery lessons into reusable XDRs
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
 - [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [run-skill-tests](application/skills/run-skill-tests/SKILL.md))*
-- [agentme-edr-018](principles/018-svg-visual-design-standards.md) - **SVG visual design standards** - A4-like canvas, importance-proportional type, KARP principles, audience-driven palette, accessibility and a render-and-critique process for SVG assets
+- [agentme-edr-018](principles/018-svg-visual-design-standards.md) - **SVG visual design standards** - A4-like canvas, importance-proportional type, KARP principles, audience-driven palette, accessibility and a render-and-critique process for SVG assets; Mermaid readability in light and dark themes
 
 ## Articles
 
