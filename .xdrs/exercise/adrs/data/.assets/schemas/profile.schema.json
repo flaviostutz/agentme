@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Profile registry",
+  "description": "List of Profiles. A Profile groups Characteristics so results can show how many of them the user shows; it is a self-reflection aid and never a diagnosis.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "description", "reference", "characteristics"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+){0,2}$", "description": "Unique snake_case identifier, at most 3 words." },
+      "name": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,8}$", "description": "Label shown to the user in results, at most 9 words." },
+      "description": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,28}$", "description": "Neutral explanation of what the Profile groups, at most 29 words." },
+      "reference": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,28}$", "description": "Where the Characteristic selection comes from, at most 29 words." },
+      "characteristics": {
+        "description": "Ids of the Characteristics that make up the Profile. The Profile score is the mean of the scores of those already evaluated, weighted_score is the same mean weighting Characteristics listed by fewer Profiles more, and the Profile is well explored only when enough of them are measured.",
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": { "type": "string" }
+      }
+    }
+  }
+}

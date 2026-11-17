@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Question registry file",
+  "description": "Questions of one Domain, filed in questions/<domain>.json. The file name must equal the Domain of the main (highest absolute weight) Characteristic of every Question in it.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "title", "type", "answer", "characteristics", "source"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+){0,6}$", "description": "Unique snake_case identifier, at most 7 words. Used by routes (routes[].add)." },
+      "title": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,18}$", "description": "The text shown to the user, at most 19 words, concrete and about one topic. An agreement statement or a frequency question, matching 'answer'." },
+      "details": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,58}$", "description": "Optional extra help shown under the title (examples, clarification), at most 59 words." },
+      "type": { "enum": ["discovery", "exploration", "differentiation", "balancing"], "description": "Stage of the Question. discovery: generic, queued at session start. exploration: details a Characteristic after a route. differentiation: separates similar Characteristics. balancing: phrased in the opposite direction (negative weight) to catch acquiescence." },
+      "answer": { "enum": ["agreement", "frequency"], "description": "Answer scale. agreement: -1 (strongly disagree) to 1 (strongly agree). frequency: 0 (never) to 1 (always), centred when scored." },
+      "characteristics": {
+        "description": "Characteristics this Question adds evidence to. The one with the highest absolute weight is the main Characteristic and defines the Domain file.",
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "weight"],
+          "properties": {
+            "id": { "type": "string", "description": "Id of an existing Characteristic." },
+            "weight": { "type": "number", "minimum": -1, "maximum": 1, "not": { "const": 0 }, "description": "How strongly and in which direction the answer counts: positive when agreeing shows the Characteristic, negative when agreeing shows the opposite; larger absolute value means stronger evidence. Never 0." }
+          }
+        }
+      },
+      "routes": {
+        "description": "Optional rules that add other Questions to the queue after this one is answered with a value. Routes only add; they never remove or skip. The route graph must have no cycles.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["when", "threshold", "add"],
+          "properties": {
+            "when": { "enum": ["gte", "lte"], "description": "gte matches when the answer is greater than or equal to the threshold, lte when it is less than or equal." },
+            "threshold": { "type": "number", "minimum": -1, "maximum": 1, "description": "Value compared with the stored answer; must lie inside the answer range (agreement -1..1, frequency 0..1)." },
+            "add": { "type": "string", "description": "Id of the Question added to the queue when the route matches." }
+          }
+        }
+      },
+      "source": { "type": "string", "minLength": 1, "description": "Plain-text origin of the Question (reference or authoring note), so reviewers can check it." }
+    }
+  }
+}

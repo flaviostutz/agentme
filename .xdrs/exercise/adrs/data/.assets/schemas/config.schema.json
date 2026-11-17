@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Engine configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["margin_stop", "uncertainty_giveup", "giveup_min_asked", "min_answered", "stability_window", "stability_delta", "balancing_min_score", "evidence_sd", "profile_measured_ratio", "profile_settled_ratio", "profile_margin_stop", "quality_min_characteristics", "quality_margin_max", "quality_keying_max", "quality_spread_min", "quality_flat_max_mean"],
+  "properties": {
+    "margin_stop": { "type": "number", "exclusiveMinimum": 0, "description": "A Characteristic is settled when its score margin (95% interval half-width) is at or below this value." },
+    "uncertainty_giveup": { "type": "number", "exclusiveMinimum": 0, "maximum": 1, "description": "A Characteristic is given up when its uncertainty (skipped entries divided by all entries) is at or above this value." },
+    "giveup_min_asked": { "type": "integer", "minimum": 1, "description": "Minimum number of entries (answered or skipped) a Characteristic needs before it can be given up." },
+    "min_answered": { "type": "integer", "minimum": 2, "description": "Minimum non-null entries for the margin to use the observed spread, and for a Characteristic to count as measured." },
+    "stability_window": { "type": "integer", "minimum": 1, "description": "Number of recent running means compared with the current score to judge score stability." },
+    "stability_delta": { "type": "number", "exclusiveMinimum": 0, "description": "Largest distance from the current score that each running mean in the stability window may have." },
+    "balancing_min_score": { "type": "number", "minimum": 0, "maximum": 1, "description": "Absolute score above which a balancing Question is required before a Characteristic can be settled." },
+    "evidence_sd": { "type": "number", "exclusiveMinimum": 0, "description": "Assumed standard deviation of one evidence entry, used for the margin while fewer than min_answered entries exist." },
+    "profile_measured_ratio": { "type": "number", "exclusiveMinimum": 0, "maximum": 1, "description": "Share of a Profile's Characteristics that must have at least min_answered non-null entries for the Profile to be well explored." },
+    "profile_settled_ratio": { "type": "number", "exclusiveMinimum": 0, "maximum": 1, "description": "Share of a Profile's Characteristics that must be settled or given up for the Profile to be well explored." },
+    "profile_margin_stop": { "type": "number", "exclusiveMinimum": 0, "description": "Largest Profile margin (95% interval half-width of the Profile score) allowed for the Profile to be well explored." },
+    "quality_min_characteristics": { "type": "integer", "minimum": 1, "description": "Number of measured Characteristics (at least min_answered non-null entries) needed before the response-quality check can raise a flag." },
+    "quality_margin_max": { "type": "number", "exclusiveMinimum": 0, "description": "Response-quality flag is raised when the mean margin of the measured Characteristics is above this value (answers too scattered to measure anything)." },
+    "quality_keying_max": { "type": "number", "exclusiveMinimum": 0, "description": "Response-quality flag is raised when the mean gap between the direction-adjusted answers to positively and negatively weighted Questions of the same Characteristic is above this value (answers do not follow the wording)." },
+    "quality_spread_min": { "type": "number", "minimum": 0, "description": "Response-quality flag is raised when the standard deviation of the Characteristic scores is below this value and quality_flat_max_mean applies (answers are flat and near the middle, so the scores do not tell Characteristics apart)." },
+    "quality_flat_max_mean": { "type": "number", "minimum": 0, "maximum": 1, "description": "The flat-scores check applies only when the absolute mean of the Characteristic scores is at or below this value, so respondents who truly rate everything high or low are not flagged." }
+  }
+}

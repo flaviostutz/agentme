@@ -1,0 +1,18 @@
+{
+  "margin_stop": 0.25,
+  "uncertainty_giveup": 0.5,
+  "giveup_min_asked": 2,
+  "min_answered": 3,
+  "stability_window": 2,
+  "stability_delta": 0.25,
+  "balancing_min_score": 0.3,
+  "evidence_sd": 0.35,
+  "profile_measured_ratio": 0.7,
+  "profile_settled_ratio": 0.6,
+  "profile_margin_stop": 0.12,
+  "quality_min_characteristics": 10,
+  "quality_margin_max": 0.55,
+  "quality_keying_max": 0.6,
+  "quality_spread_min": 0.2,
+  "quality_flat_max_mean": 0.15
+}

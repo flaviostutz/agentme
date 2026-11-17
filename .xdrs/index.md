@@ -29,6 +29,14 @@ Opiniated set of decisions and skills for common development tasks
 
 ---
 
+### exercise
+
+Policies defining a self-reflection questionnaire system: domain model, question flow, measurement, results and authoring standards.
+
+[View scope exercise](exercise/index.md)
+
+---
+
 ### _local (reserved)
 
 _local scope is the default scope for new xdrs and might override other scope decisions. These decisions are local and are not supposed to be shared in other contexts.

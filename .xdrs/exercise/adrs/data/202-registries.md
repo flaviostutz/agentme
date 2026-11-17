@@ -1,0 +1,87 @@
+---
+name: exercise-adr-policy-202-registries
+description: Defines the JSON registries, schemas and configuration that hold the exercise catalogue and where they live. Use when adding or reading characteristics, profiles, questions or configuration values.
+apply-to: All registries and implementations of the exercise questionnaire system
+valid-from: 2026-11-17
+---
+
+# exercise-adr-policy-202: Registries
+
+## Context and Problem Statement
+
+The catalogue of characteristics, profiles and questions is data that changes much more often than the rules around it. It must still be the single source of truth during implementation.
+
+Question: Where does the catalogue live and what shape does it have?
+
+## Decision Outcome
+
+**JSON registries and JSON Schemas in the `.assets/` folder next to this policy; rules stay in Policies, data stays in the registries.**
+
+### Details
+
+#### 01-registry-location
+
+All registries MUST live in `.xdrs/exercise/adrs/data/.assets/`:
+- `characteristics.json`: array of Characteristics.
+- `profiles.json`: array of Profiles.
+- `questions/<domain>.json`: one array of Questions per Domain, where the file name is the derived Domain of the Questions it holds (`exercise-adr-policy-201.07-question-domain-is-derived`).
+- `config.json`: engine and measurement thresholds.
+- `schemas/`: one JSON Schema per registry (`characteristic`, `profile`, `question`, `config`).
+
+#### 02-registries-hold-data-not-rules
+
+Registry files MUST contain data only. A rule MUST NOT exist only in a registry or a schema; each structural rule in a schema MUST also be stated in a Policy (`exercise-adr-policy-201`, `exercise-bdr-policy-604`, `exercise-bdr-policy-605`). Every schema property MUST carry a `description` that explains what the field means in plain language; descriptions are explanatory only and, when they differ from a Policy, the Policy prevails.
+
+#### 03-ids-are-unique-and-stable
+
+Characteristic, Profile and Question ids MUST be unique within their registry. An id MUST NOT be reused for a different meaning.
+
+#### 04-references-must-resolve
+
+Every Characteristic id in a Profile or a Question, and every `add` target in a Question route, MUST exist in its registry. The automated checks are defined in `exercise-edr-policy-102`.
+
+#### 05-config-keys
+
+`config.json` MUST contain exactly these keys, with the initial values shown. Their use is defined in `exercise-edr-policy-101`.
+
+| Key | Initial value |
+|---|---|
+| `margin_stop` | 0.25 |
+| `uncertainty_giveup` | 0.5 |
+| `giveup_min_asked` | 2 |
+| `min_answered` | 3 |
+| `stability_window` | 2 |
+| `stability_delta` | 0.25 |
+| `balancing_min_score` | 0.3 |
+| `evidence_sd` | 0.35 |
+| `profile_measured_ratio` | 0.7 |
+| `profile_settled_ratio` | 0.6 |
+| `profile_margin_stop` | 0.12 |
+| `quality_min_characteristics` | 10 |
+| `quality_margin_max` | 0.55 |
+| `quality_keying_max` | 0.6 |
+| `quality_spread_min` | 0.2 |
+| `quality_flat_max_mean` | 0.15 |
+
+#### 06-catalogue-status-is-draft
+
+The initial content of all registries is a draft. It is derived from the repository `spec-original.md` and `characteristics.csv`, and has no scientific validation. Content MUST NOT be presented to end users as validated until a review records that validation.
+
+#### 07-rationale-from-dry-runs
+
+The values in `05-config-keys` came from a dry-run grid (`exercise-edr-policy-101.12-rationale-from-dry-runs`), not from real data:
+- `margin_stop` 0.25: 0.15 was unreachable; values from 0.25 to 0.35 gave identical sessions, so it is not the limiting key.
+- `stability_window` 2 and `stability_delta` 0.25 (from 3 and 0.15): settled Characteristics rose from 44 to 52 of 54 and good enough was reached in about 100% of sessions (was 89-93%), with the same bias (about -0.05 or less) and error.
+- `profile_measured_ratio` 0.7, `profile_settled_ratio` 0.6, `profile_margin_stop` 0.12: good enough arrives about 38 Questions earlier. They only change the indicator, never the session length.
+- `giveup_min_asked` 2 and `min_answered` 3: the smallest values that keep one skip or one answer from deciding a state.
+- `quality_*` keys: taken from the 95th percentile (5th for `quality_spread_min`) of simulated honest respondents in a 1000-person stress test, then `quality_flat_max_mean` was added because the spread check alone flagged 31% of honest all-severe respondents (high scores everywhere are legitimately flat). They flag every simulated random, yes-saying, no-saying, midpoint and straight-line respondent with 7% honest false alarms; at twice the simulated noise 69% of honest respondents are flagged, so these values are valid only for similar noise and MUST be recalibrated with real answers. `quality_margin_max` is 0.55 instead of the 95th percentile (0.50): in the 1000-person test it cut honest false alarms from 7% to 4% (neurotypical 19% to 9%) while random respondents flagged fell from 100% to 84%; 0.60 or more caught fewer than half of them.
+
+A value MUST be changed together with a new dry-run that checks session length, bias and discrimination between Profiles. Every schema property carries a `description` (`02-registries-hold-data-not-rules`) because the meaning of the keys and fields was not discoverable from the data alone.
+
+## References
+
+- [exercise-adr-policy-201 - Domain model](201-domain-model.md)
+- [exercise-edr-policy-102 - Registry lint](../../edrs/application/102-registry-lint.md)
+- Registries: [config.json](.assets/config.json), [characteristics.json](.assets/characteristics.json), [profiles.json](.assets/profiles.json)
+- Question files: [adaptation_environment.json](.assets/questions/adaptation_environment.json), [attention.json](.assets/questions/attention.json), [emotional_experience.json](.assets/questions/emotional_experience.json), [executive_function.json](.assets/questions/executive_function.json), [interests_learning.json](.assets/questions/interests_learning.json), [sensory_processing.json](.assets/questions/sensory_processing.json), [social_communication.json](.assets/questions/social_communication.json), [thinking_patterns.json](.assets/questions/thinking_patterns.json)
+- Schemas: [characteristic.schema.json](.assets/schemas/characteristic.schema.json), [config.schema.json](.assets/schemas/config.schema.json), [profile.schema.json](.assets/schemas/profile.schema.json), [question.schema.json](.assets/schemas/question.schema.json)
