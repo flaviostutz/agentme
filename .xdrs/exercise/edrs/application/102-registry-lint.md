@@ -25,7 +25,7 @@ The checks MUST be implemented by [lint-registries.js](.assets/lint-registries.j
 
 #### 02-schema-checks
 
-Schemas MUST check required fields, enums, id patterns, the word limits from `exercise-bdr-policy-604.01-field-limits` and `exercise-bdr-policy-605`, weights in -1..1 and not 0, and the `config.json` keys. Every schema property MUST have a `description`, and the script MUST fail when one is missing (`exercise-adr-policy-202.02`).
+Schemas MUST check required fields, enums, id patterns, the word limits from `exercise-bdr-policy-604.01-field-limits` and `exercise-bdr-policy-605` (including the required Characteristic `source`), weights in -1..1 and not 0, and the `config.json` keys. Every schema property MUST have a `description`, and the script MUST fail when one is missing (`exercise-adr-policy-202.02`).
 
 #### 03-reference-checks
 

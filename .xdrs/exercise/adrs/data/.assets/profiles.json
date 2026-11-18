@@ -3,7 +3,7 @@
     "id": "adhd",
     "name": "ADHD-related characteristics",
     "description": "Characteristics commonly described in connection with attention-deficit/hyperactivity differences. Draft list, not diagnostic.",
-    "reference": "characteristics.csv column ADHD in this repository; membership unverified.",
+    "reference": "characteristics.csv column ADHD in this repository; membership unverified. Four later entries come from ASRS-v1.1 (Kessler et al. 2005, Psychol Med 35:245-256).",
     "characteristics": [
       "fidget_movement_for_focus", "attention_regulation_differences", "hyperfocus_wide_interests", "quick_crisis_response",
       "difficulty_switching_focus", "social_impact_impulse_focus", "craving_novelty", "rejection_sensitive_dysphoria",
@@ -11,14 +11,15 @@
       "interoception_differences", "stimming", "processing_speed_impact", "atypical_social_interaction",
       "impulse_control_differences", "emotional_sensitivity", "sensory_differences", "interest_driven",
       "executive_function_difficulties", "asynchronous_development", "unique_learning_ways", "intense_curiosity",
-      "divergent_creative_thinking", "metaphor_symbol_thinking", "non_linear_learning", "easily_bored"
+      "divergent_creative_thinking", "metaphor_symbol_thinking", "non_linear_learning", "easily_bored",
+      "misplacing_belongings", "careless_mistakes", "excessive_talking", "impatience_waiting"
     ]
   },
   {
     "id": "autism",
     "name": "Autism-related characteristics",
     "description": "Characteristics commonly described in connection with autistic differences. Draft list, not diagnostic.",
-    "reference": "characteristics.csv column Autism in this repository; membership unverified.",
+    "reference": "characteristics.csv column Autism in this repository; membership unverified. Nine later entries come from AQ-50 (Baron-Cohen et al. 2001, J Autism Dev Disord 31:5-17).",
     "characteristics": [
       "alexithymia", "hyperactivity_physical_mental", "time_perception_differences", "interoception_differences",
       "stimming", "processing_speed_impact", "atypical_social_interaction", "impulse_control_differences",
@@ -27,7 +28,9 @@
       "connection_through_interests", "soothed_by_repetition", "communication_differences", "hyperfocus_few_interests",
       "concrete_thinking", "preference_direct_communication", "pattern_recognition", "need_routine_and_order",
       "preference_logic_fairness", "preference_precision_expression", "systems_thinking", "highly_developed_morals",
-      "notice_details", "need_solitude_contemplation"
+      "notice_details", "need_solitude_contemplation", "perspective_taking_differences", "one_sided_conversation",
+      "unintended_bluntness", "preference_objects_over_people", "numbers_and_categories_fascination",
+      "distress_when_interest_blocked", "anxiety_in_new_situations", "faint_mental_imagery", "preference_facts_over_fiction"
     ]
   },
   {

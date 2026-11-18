@@ -15,13 +15,13 @@ Question: What must a characteristic and a profile contain?
 
 ## Decision Outcome
 
-**A characteristic has an id, name, description and one domain; a profile has an id, name, description, reference and a list of characteristics.**
+**A characteristic has an id, name, description, one domain and a source; a profile has an id, name, description, reference and a list of characteristics.**
 
 ### Details
 
 #### 01-characteristic-fields
 
-A Characteristic MUST have `id` (snake_case, at most 7 words), `name` (required, at most 14 words), `description` (required, at most 39 words) and `domain` (one value from `exercise-adr-policy-201.02-domain-is-a-fixed-list`). These limits are checked by `exercise-edr-policy-102`.
+A Characteristic MUST have `id` (snake_case, at most 7 words), `name` (required, at most 14 words), `description` (required, at most 39 words), `domain` (one value from `exercise-adr-policy-201.02-domain-is-a-fixed-list`) and `source` (required, at most 19 words, see `07-characteristic-source`). These limits are checked by `exercise-edr-policy-102`.
 
 #### 02-characteristic-description-is-the-reference
 
@@ -43,8 +43,13 @@ A Characteristic's membership in a Profile is a claim and MUST come from the Pro
 
 Profiles MUST NOT define weights or thresholds. A more specific Characteristic adds more evidence to a Profile by being listed in it. Because `weighted_score` weights a Characteristic by how few Profiles list it (`exercise-edr-policy-101.10-weighted-profile-score`), adding or removing a membership changes the weights of that Characteristic in every Profile.
 
+#### 07-characteristic-source
+
+The `source` of a Characteristic MUST say in at most 19 words where the concept was inspired, absorbed, adapted or used directly, starting with "Inspired by", "Absorbed from", "Adapted from" or "Used from". It SHOULD cite the most scientific source found that names or organises the concept (authors, year, journal and pages, or an instrument and item numbers). When no such source is found it MUST be exactly "no reference". A cited source MUST be checked for existence and bibliographic data, and MUST be worded as inspiration when it does not prove the Characteristic. A `source` MUST NOT claim that a Profile contains the Characteristic (`05-membership-is-a-claim`).
+
 ## References
 
 - [exercise-adr-policy-201 - Domain model](../../adrs/data/201-domain-model.md)
+- [exercise-adr-policy-203 - Reference instruments](../../adrs/data/203-reference-instruments.md)
 - [exercise-bdr-policy-604 - Question authoring](604-question-authoring.md)
 - [exercise-edr-policy-102 - Registry lint](../../edrs/application/102-registry-lint.md)

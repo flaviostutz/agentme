@@ -27,6 +27,7 @@ All registries MUST live in `.xdrs/exercise/adrs/data/.assets/`:
 - `questions/<domain>.json`: one array of Questions per Domain, where the file name is the derived Domain of the Questions it holds (`exercise-adr-policy-201.07-question-domain-is-derived`).
 - `config.json`: engine and measurement thresholds.
 - `schemas/`: one JSON Schema per registry (`characteristic`, `profile`, `question`, `config`).
+- `<instrument-id>/`: reference instruments, which are not registries and are defined in `exercise-adr-policy-203`.
 
 #### 02-registries-hold-data-not-rules
 
@@ -81,6 +82,7 @@ A value MUST be changed together with a new dry-run that checks session length, 
 ## References
 
 - [exercise-adr-policy-201 - Domain model](201-domain-model.md)
+- [exercise-adr-policy-203 - Reference instruments](203-reference-instruments.md)
 - [exercise-edr-policy-102 - Registry lint](../../edrs/application/102-registry-lint.md)
 - Registries: [config.json](.assets/config.json), [characteristics.json](.assets/characteristics.json), [profiles.json](.assets/profiles.json)
 - Question files: [adaptation_environment.json](.assets/questions/adaptation_environment.json), [attention.json](.assets/questions/attention.json), [emotional_experience.json](.assets/questions/emotional_experience.json), [executive_function.json](.assets/questions/executive_function.json), [interests_learning.json](.assets/questions/interests_learning.json), [sensory_processing.json](.assets/questions/sensory_processing.json), [social_communication.json](.assets/questions/social_communication.json), [thinking_patterns.json](.assets/questions/thinking_patterns.json)

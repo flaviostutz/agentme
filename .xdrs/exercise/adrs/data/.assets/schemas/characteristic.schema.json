@@ -6,7 +6,7 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["id", "name", "description", "domain"],
+    "required": ["id", "name", "description", "domain", "source"],
     "properties": {
       "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+){0,6}$", "description": "Unique snake_case identifier, at most 7 words. Referenced by Questions (characteristics[].id) and Profiles (characteristics[])." },
       "name": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,13}$", "description": "Short label shown to the user in results, at most 14 words." },
@@ -23,7 +23,8 @@
           "interests_learning",
           "adaptation_environment"
         ]
-      }
+      },
+      "source": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,18}$", "description": "Where the concept was inspired, absorbed, adapted or used directly from: the most scientific reference that names or organises it, or exactly 'no reference' when none was found. At most 19 words." }
     }
   }
 }

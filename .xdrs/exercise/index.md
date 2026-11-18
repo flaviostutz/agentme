@@ -25,7 +25,7 @@ The system asks the user questions to identify characteristics, goes deeper into
 
 ### What this scope does not cover
 
-Application code, user interface design, privacy, multilingual support, question versioning and instrument catalogues. Deferred items are tracked in the repository `TODO.md`.
+Application code, user interface design, privacy, multilingual support, question versioning and the engine reading instrument catalogues (instruments are kept only as analysis material, see `exercise-adr-policy-203`). Deferred items are tracked in the repository `TODO.md`.
 
 ## Type Indexes
 

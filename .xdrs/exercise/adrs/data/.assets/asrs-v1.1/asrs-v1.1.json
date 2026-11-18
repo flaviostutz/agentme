@@ -1,0 +1,20 @@
+[
+  { "n": 1, "part": "A", "text": "How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done?", "shaded_from": "sometimes" },
+  { "n": 2, "part": "A", "text": "How often do you have difficulty getting things in order when you have to do a task that requires organization?", "shaded_from": "sometimes" },
+  { "n": 3, "part": "A", "text": "How often do you have problems remembering appointments or obligations?", "shaded_from": "sometimes" },
+  { "n": 4, "part": "A", "text": "When you have a task that requires a lot of thought, how often do you avoid or delay getting started?", "shaded_from": "often" },
+  { "n": 5, "part": "A", "text": "How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?", "shaded_from": "often" },
+  { "n": 6, "part": "A", "text": "How often do you feel overly active and compelled to do things, like you were driven by a motor?", "shaded_from": "often" },
+  { "n": 7, "part": "B", "text": "How often do you make careless mistakes when you have to work on a boring or difficult project?", "shaded_from": "often" },
+  { "n": 8, "part": "B", "text": "How often do you have difficulty keeping your attention when you are doing boring or repetitive work?", "shaded_from": "often" },
+  { "n": 9, "part": "B", "text": "How often do you have difficulty concentrating on what people say to you, even when they are speaking to you directly?", "shaded_from": "sometimes" },
+  { "n": 10, "part": "B", "text": "How often do you misplace or have difficulty finding things at home or at work?", "shaded_from": "often" },
+  { "n": 11, "part": "B", "text": "How often are you distracted by activity or noise around you?", "shaded_from": "often" },
+  { "n": 12, "part": "B", "text": "How often do you leave your seat in meetings or other situations in which you are expected to remain seated?", "shaded_from": "sometimes" },
+  { "n": 13, "part": "B", "text": "How often do you feel restless or fidgety?", "shaded_from": "often" },
+  { "n": 14, "part": "B", "text": "How often do you have difficulty unwinding and relaxing when you have time to yourself?", "shaded_from": "often" },
+  { "n": 15, "part": "B", "text": "How often do you find yourself talking too much when you are in social situations?", "shaded_from": "often" },
+  { "n": 16, "part": "B", "text": "When you're in a conversation, how often do you find yourself finishing the sentences of the people you are talking to, before they can finish them themselves?", "shaded_from": "sometimes" },
+  { "n": 17, "part": "B", "text": "How often do you have difficulty waiting your turn in situations when turn taking is required?", "shaded_from": "often" },
+  { "n": 18, "part": "B", "text": "How often do you interrupt others when they are busy?", "shaded_from": "sometimes" }
+]

@@ -1,0 +1,20 @@
+[
+  { "n": 1, "match": "new", "questions": ["executive_last_details_unfinished"] },
+  { "n": 2, "match": "new", "questions": ["executive_organise_hard"] },
+  { "n": 3, "match": "new", "questions": ["working_memory_forgets_appointments"] },
+  { "n": 4, "match": "new", "questions": ["executive_delays_demanding_start"] },
+  { "n": 5, "match": "close", "questions": ["legs_move_when_seated"] },
+  { "n": 6, "match": "new", "questions": ["hyperactive_driven_by_motor"] },
+  { "n": 7, "match": "new", "questions": ["careless_boring_work", "careless_difficult_work"] },
+  { "n": 8, "match": "equivalent", "questions": ["attention_hard_on_boring_tasks"] },
+  { "n": 9, "match": "equivalent", "questions": ["attention_wanders_in_talks"] },
+  { "n": 10, "match": "new", "questions": ["misplace_daily_items", "misplace_searching_for_items"] },
+  { "n": 11, "match": "new", "questions": ["attention_distracted_by_surroundings"] },
+  { "n": 12, "match": "new", "questions": ["hyperactive_leaves_seat"] },
+  { "n": 13, "match": "close", "questions": ["body_restless_when_resting"] },
+  { "n": 14, "match": "close", "questions": ["body_restless_when_resting", "mind_active_between_thoughts"] },
+  { "n": 15, "match": "new", "questions": ["talk_more_than_intended"] },
+  { "n": 16, "match": "new", "questions": ["social_finishes_others_sentences"] },
+  { "n": 17, "match": "new", "questions": ["waiting_turn_hard"] },
+  { "n": 18, "match": "close", "questions": ["social_interrupts_others"] }
+]
