@@ -13,6 +13,7 @@
       "description": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,28}$", "description": "Neutral explanation of what the Profile groups, at most 29 words." },
       "reference": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,28}$", "description": "Where the Characteristic selection comes from, at most 29 words." },
       "comments": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,48}$", "description": "Optional note on what could not be fully implemented from the paper or instrument behind the Profile, at most 49 words." },
+      "margin_stop": { "type": "number", "exclusiveMinimum": 0, "description": "Optional replacement for the config key profile_margin_stop, used only for this Profile. It is meant for Profiles with few Characteristics, whose margin is naturally wider." },
       "characteristics": {
         "description": "Ids of the Characteristics that make up the Profile. The Profile score is the mean of the scores of those already evaluated, weighted_score is the same mean weighting Characteristics listed by fewer Profiles more, and the Profile is well explored only when enough of them are measured.",
         "type": "array",

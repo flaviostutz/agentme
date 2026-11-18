@@ -52,12 +52,10 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
   const centre = (q, v) => (q.answer === 'frequency' ? 2 * v - 1 : v);
 
   // ---- measurement (exercise-edr-policy-101) ----
-  function charState(c, answers) {
-    const ent = [];
-    for (const a of answers) {
-      const q = qById[a.q]; const x = q.characteristics.find((z) => z.id === c); if (!x) continue;
-      ent.push({ w: x.weight, e: a.v === null ? null : x.weight * centre(q, a.v) });
-    }
+  // Evidence entries per Characteristic are kept by the caller and appended to as answers arrive,
+  // so a state is recomputed only for the Characteristics of the Question just answered.
+  const entryOf = (q, x, v) => ({ w: x.weight, e: v === null ? null : x.weight * centre(q, v) });
+  function charState(c, ent, asked) {
     const nn = ent.filter((e) => e.e !== null);
     const n = nn.length, total = ent.length;
     const out = { n, total, score: null, margin: Infinity, se: null, state: 'open' };
@@ -80,13 +78,12 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
         for (const e of nn) { V += Math.abs(e.w); S += e.e; run.push(S / V); }
         for (let i = n - CFG.stability_window; i < n; i++) if (Math.abs(run[i] - out.score) > CFG.stability_delta) stable = false;
       }
-      const asked = new Set(answers.map((a) => a.q));
       const bal = Math.abs(out.score) <= CFG.balancing_min_score || balQs[c].length === 0 || balQs[c].some((id) => asked.has(id));
       if ((out.margin <= CFG.margin_stop || stable) && bal) out.state = 'settled';
     }
     return out;
   }
-  const allStates = (answers) => { const s = {}; chIds.forEach((c) => { s[c] = charState(c, answers); }); return s; };
+  const emptyStates = () => { const s = {}; chIds.forEach((c) => { s[c] = charState(c, [], new Set()); }); return s; };
 
   // ---- response quality (exercise-edr-policy-101 response quality rule) ----
   function responseQuality(answers, st) {
@@ -116,7 +113,8 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
   }
 
   function profileResults(st, plist, answers) {
-    const flagged = answers ? responseQuality(answers, st).flagged : false;
+    let quality = null; // response quality scans every answer, so it runs only when the other conditions hold
+    const flagged = () => { if (quality === null) quality = answers ? responseQuality(answers, st).flagged : false; return quality; };
     return plist.map((p) => {
       const ev = p.characteristics.filter((c) => st[c].score !== null);
       const k = ev.length; const r = { id: p.id, k, score: null, margin: Infinity, wscore: null, wmargin: Infinity, well: false };
@@ -129,7 +127,7 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
       const cs = p.characteristics;
       r.measured = cs.filter((c) => st[c].n >= CFG.min_answered).length / cs.length;
       r.settled = cs.filter((c) => st[c].state !== 'open').length / cs.length;
-      r.well = !flagged && r.measured >= CFG.profile_measured_ratio && r.settled >= CFG.profile_settled_ratio && r.margin <= CFG.profile_margin_stop;
+      r.well = r.measured >= CFG.profile_measured_ratio && r.settled >= CFG.profile_settled_ratio && r.margin <= (p.margin_stop ?? CFG.profile_margin_stop) && !flagged();
       return r;
     });
   }
@@ -141,7 +139,8 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
     const add = (q, byLast) => { if (asked.has(q.id) || queued.has(q.id)) return; queue.push({ q, ins: ins++, byLast: !!byLast }); queued.add(q.id); };
     const refill = (st) => { for (const q of BANK) if (!asked.has(q.id) && q.characteristics.some((c) => inS(c.id) && st[c.id].state === 'open' && st[c.id].n > 0)) add(q); };
     BANK.filter((q) => q.type === 'discovery').forEach((q) => add(q));
-    let last = null, goodAt = null, st = allStates(answers);
+    let last = null, goodAt = null, st = emptyStates();
+    const ents = {}; chIds.forEach((c) => { ents[c] = []; });
     for (;;) {
       queue = queue.filter((it) => openIn(it.q, st).length); queued.clear(); queue.forEach((it) => queued.add(it.q.id));
       if (!queue.length) { refill(st); if (!queue.length) break; }
@@ -159,7 +158,7 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
       answers.push({ q: q.id, v }); last = q;
       queue.forEach((it) => { it.byLast = false; });
       if (v !== null) for (const r of q.routes) if ((r.when === 'gte' && v >= r.threshold) || (r.when === 'lte' && v <= r.threshold)) add(qById[r.add], true);
-      st = allStates(answers);
+      for (const x of q.characteristics) { ents[x.id].push(entryOf(q, x, v)); st[x.id] = charState(x.id, ents[x.id], asked); }
       const gaps = chIds.filter((c) => inS(c) && kc[c] > 0 && st[c].state === 'open' && st[c].n < CFG.min_answered && chDomain[c] === q.domain);
       for (const c of gaps) {
         if (queue.some((it) => it.q.characteristics.some((x) => x.id === c))) continue;

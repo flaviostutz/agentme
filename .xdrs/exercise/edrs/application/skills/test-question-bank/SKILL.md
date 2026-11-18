@@ -64,7 +64,7 @@ Keep the chat summary <250 words and every intermediate message <100 words.
 1. Run from the repository root:
    `node .xdrs/exercise/edrs/application/skills/test-question-bank/scripts/run.js --name [run-name]`
 2. Use `--only per-profile,alpha` and smaller `--n-*` values only for quick checks while iterating. The accepting run MUST use the defaults.
-3. The default run takes about 2.5 minutes. Run it with a wait of at least 300 seconds.
+3. The default run takes about 30 seconds. Run it with a wait of at least 120 seconds.
 4. Use the same `--seed` to compare a run before and after a change.
 
 | Test | Default people | What it finds |
@@ -98,7 +98,7 @@ Work files go only in `.tmp/test-question-bank/[run-name]/`, never directly in `
 
 ## Edge Cases
 
-- A profile with few characteristics (for example `ocd`) can WARN on good enough because its margin is near `profile_margin_stop`.
+- A profile with few characteristics (for example `ocd`) has a wider margin. `ocd` carries a provisional `margin_stop` of 0.15 in `profiles.json`; the engine uses it instead of `profile_margin_stop`.
 - A characteristic listed by several profiles is tested once per profile, so it can appear several times.
 - A characteristic in no profile is not tested and raises a WARN.
 - A new profile is picked up from the registry; no script change is needed.
@@ -111,7 +111,7 @@ Work files go only in `.tmp/test-question-bank/[run-name]/`, never directly in `
   **Instead:** State that respondents are simulated and only keying, weights, routes and arithmetic are tested.
 
 - **Mistake:** Accepting a change after a quick `--only` or small-population run.
-  **Why it happens:** The full run takes minutes.
+  **Why it happens:** It is tempting to skip the 30-second full run.
   **Instead:** Use quick runs while iterating and the default full run before accepting.
 
 - **Mistake:** Raising the noise or loosening a threshold until alpha or a check passes.

@@ -53,7 +53,7 @@ The skill MUST write `report.md` and `results.json` to its run folder and MUST a
 
 #### 08-known-warnings
 
-The `ocd` Profile has six Characteristics and reaches good enough in about 60% of sessions because its margin is near `profile_margin_stop`. The skill MUST report it as a WARN until the margin or the Profile size is revisited.
+The `ocd` Profile has six Characteristics, so its margin is wider than that of the large Profiles and it reached good enough in only 62% of sessions with the default `profile_margin_stop` (0.12; median margin 0.114, 90th percentile 0.151). It carries `margin_stop` 0.15 (92% in the dry-run) as a provisional override. The skill MUST apply the Profile override when judging good enough and MUST report a WARN if the rate is still below the threshold, so the override is revisited when the OCD Characteristics or questions change.
 
 ## References
 

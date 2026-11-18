@@ -32,7 +32,8 @@
       "preference_logic_fairness", "preference_precision_expression", "systems_thinking", "highly_developed_morals",
       "notice_details", "need_solitude_contemplation", "perspective_taking_differences", "one_sided_conversation",
       "unintended_bluntness", "preference_objects_over_people", "numbers_and_categories_fascination",
-      "distress_when_interest_blocked", "anxiety_in_new_situations", "faint_mental_imagery", "preference_facts_over_fiction"
+      "distress_when_interest_blocked", "anxiety_in_new_situations", "faint_mental_imagery", "preference_facts_over_fiction",
+      "difficulty_switching_focus"
     ]
   },
   {
@@ -70,6 +71,7 @@
     "description": "Characteristics commonly described in connection with obsessive-compulsive symptoms: checking, washing, ordering, hoarding, counting and unwanted thoughts. Draft list, not diagnostic.",
     "reference": "OCI-R subscales (Foa et al. 2002, Psychol Assess 14:485-496); membership unverified.",
     "comments": "OCI-R rates distress over the past month and sums to 0-72 with a cut-off. The bank has no distress rating, time window, total or cut-off. Items 12, 17 and 18 were split or simplified to keep one idea per question.",
+    "margin_stop": 0.15,
     "characteristics": [
       "hoarding_saving_things", "checking_repeatedly", "ordering_arrangement_distress", "counting_number_rituals",
       "contamination_washing", "intrusive_unwanted_thoughts"

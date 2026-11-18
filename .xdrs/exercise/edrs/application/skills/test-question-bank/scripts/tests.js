@@ -58,7 +58,7 @@ function perProfile(reg, { n, seed }) {
     const t = T.perProfile;
     if (!(rec.corr >= t.levelCorr)) checks.push({ level: 'FAIL', test: 'per-profile', text: `${p.id}: score follows the level with correlation ${rec.corr.toFixed(3)} (< ${t.levelCorr})` });
     if (!(rec.withinOne >= t.withinOne)) checks.push({ level: 'FAIL', test: 'per-profile', text: `${p.id}: level within one step for ${pct(rec.withinOne)} (< ${pct(t.withinOne)})` });
-    if (!(good >= t.goodEnough)) checks.push({ level: 'WARN', test: 'per-profile', text: `${p.id}: good enough reached in ${pct(good)} of sessions (< ${pct(t.goodEnough)}); profile margin or size may not fit profile_margin_stop` });
+    if (!(good >= t.goodEnough)) checks.push({ level: 'WARN', test: 'per-profile', text: `${p.id}: good enough reached in ${pct(good)} of sessions (< ${pct(t.goodEnough)}); profile margin or size may not fit its margin_stop (profile override or profile_margin_stop)` });
     rows.filter((r) => r.measured < t.measured).forEach((r) => checks.push({ level: 'WARN', test: 'per-profile', text: `${p.id}/${r.c}: measured in only ${pct(r.measured)} of sessions (< ${pct(t.measured)})` }));
     rows.filter((r) => Math.abs(r.bias) > t.charBias).forEach((r) => checks.push({ level: 'WARN', test: 'per-profile', text: `${p.id}/${r.c}: score is ${f2(r.bias).trim()} away from the true trait (> ${t.charBias})` }));
     summary.push([p.id, sessionLen(people), pct(good), rec.corr.toFixed(3), pct(rec.exact), pct(rec.withinOne), f2(mean(rows.map((r) => Math.abs(r.bias))))]);

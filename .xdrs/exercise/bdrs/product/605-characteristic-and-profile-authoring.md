@@ -33,7 +33,7 @@ A specialization MUST be a separate Characteristic whose id starts with the id o
 
 #### 04-profile-fields
 
-A Profile MUST have `id` (snake_case, at most 3 words), `name` (at most 9 words), `description` (at most 29 words), `reference` (at most 29 words: a URL or citation), `characteristics` (a list of Characteristic ids) and, when `08-profile-comments` applies, `comments` (at most 49 words).
+A Profile MUST have `id` (snake_case, at most 3 words), `name` (at most 9 words), `description` (at most 29 words), `reference` (at most 29 words: a URL or citation), `characteristics` (a list of Characteristic ids) and, when `08-profile-comments` applies, `comments` (at most 49 words). A Profile MAY have `margin_stop` (a number above 0) that replaces the config value `profile_margin_stop` for that Profile; it MUST only be set after a dry-run (`exercise-edr-policy-103`) shows the Profile cannot reach good enough with the default because it has few Characteristics, and its `comments` or the review notes of the change MUST say why.
 
 #### 05-membership-is-a-claim
 

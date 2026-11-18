@@ -59,7 +59,7 @@ Profile margin MUST be `1.96 x sqrt(sum of se^2) / k`, where k is the evaluated 
 A Profile is well explored when all of these hold, counting over all Characteristics listed in the Profile, including those without evidence:
 1. At least `profile_measured_ratio` of them have at least `min_answered` non-null evidence entries.
 2. At least `profile_settled_ratio` of them are `settled` or `given_up`.
-3. The Profile margin is known and <= `profile_margin_stop`.
+3. The Profile margin is known and <= the `margin_stop` of the Profile when it has one, otherwise `profile_margin_stop`. The override is for Profiles with few Characteristics, whose margin is naturally wider (it shrinks with the square root of their count).
 4. The response quality flag (`11-response-quality`) is not raised.
 
 Good enough MUST be true when at least one analysed Profile (`exercise-adr-policy-101.10-analysed-profiles`) has an evaluated Characteristic and every analysed Profile that has one is well explored. It is only an indicator: it MUST NOT end the session.

@@ -46,7 +46,7 @@ A specialization of a Characteristic (for example `repetitive_movement_motor_soo
 
 #### 05-profile-is-a-flat-list
 
-A Profile MUST be a flat list of Characteristic ids. A Profile MUST NOT carry weights, rules or thresholds of its own. The profile weights used by `weighted_score` are derived from how many Profiles list each Characteristic (`exercise-edr-policy-101.10-weighted-profile-score`) and are not stored.
+A Profile MUST be a flat list of Characteristic ids. A Profile MUST NOT carry weights or rules of its own and MUST NOT carry thresholds, except the optional `margin_stop` that replaces `profile_margin_stop` for that Profile (`exercise-edr-policy-101.08-good-enough`). The profile weights used by `weighted_score` are derived from how many Profiles list each Characteristic (`exercise-edr-policy-101.10-weighted-profile-score`) and are not stored.
 
 #### 06-question-fields
 
