@@ -15,7 +15,7 @@
   { "n": 14, "match": "new", "questions": ["fiction_making_up_stories_hard", "fiction_stories_come_easily"] },
   { "n": 15, "match": "new", "questions": ["objects_drawn_more_than_people", "objects_drawn_to_people_more"] },
   { "n": 16, "match": "new", "questions": ["blocked_upset_no_time"] },
-  { "n": 17, "match": "close", "questions": ["social_small_talk_is_easy"] },
+  { "n": 17, "match": "close", "questions": ["social_small_talk_easy"] },
   { "n": 18, "match": "new", "questions": ["talk_others_cannot_join"] },
   { "n": 19, "match": "new", "questions": ["numbers_fascinated_by_numbers"] },
   { "n": 20, "match": "new", "questions": ["perspective_story_intentions_hard"] },

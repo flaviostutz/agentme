@@ -41,7 +41,7 @@ A Characteristic's membership in a Profile is a claim and MUST come from the Pro
 
 #### 06-profile-without-weights
 
-Profiles MUST NOT define weights or thresholds. A more specific Characteristic adds more evidence to a Profile by being listed in it. Because `weighted_score` weights a Characteristic by how few Profiles list it (`exercise-edr-policy-101.10-weighted-profile-score`), adding or removing a membership changes the weights of that Characteristic in every Profile.
+Profiles MUST NOT define weights or thresholds, except the optional `margin_stop` of `04-profile-fields`. A more specific Characteristic adds more evidence to a Profile by being listed in it. Because `weighted_score` weights a Characteristic by how few Profiles list it (`exercise-edr-policy-101.10-weighted-profile-score`), adding or removing a membership changes the weights of that Characteristic in every Profile.
 
 #### 07-characteristic-source
 
