@@ -15,7 +15,7 @@ Question: What is the system for, and what must it never do?
 
 ## Decision Outcome
 
-**A self-reflection aid that asks questions, identifies and details characteristics and groups findings into profiles; it never diagnoses and always reports its uncertainty.**
+**A self-reflection aid that asks questions, identifies and details characteristics and groups findings into profiles; it MUST NOT diagnose and MUST report its uncertainty.**
 
 ### Details
 

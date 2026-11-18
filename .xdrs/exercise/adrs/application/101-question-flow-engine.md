@@ -75,13 +75,9 @@ After a change, before choosing the next Question, the engine MUST re-check the 
 
 Profile results, good enough (`exercise-edr-policy-101.08-good-enough`) and the weights of `exercise-edr-policy-101.10-weighted-profile-score` MUST consider only the analysed Profiles and MUST be recomputed after every change. Results MUST NOT show a removed Profile as analysed.
 
-#### 11-rationale-from-dry-runs
+#### 12-dry-run-flow-changes
 
-The priority, top-up and refill rules came from dry-runs with simulated respondents (see `exercise-edr-policy-101.12-rationale-from-dry-runs` for the method and limits):
-- Until the first refill the queue held only discovery and routed Questions, so Characteristics reached `min_answered` late (80% of a Profile measured at about Question 141). The least-measured criterion in `03-next-question-priority` helped little alone; `06-profile-gap-top-up` brought that point to about Question 121 and good enough about 6 Questions earlier, with the same scores.
-- Characteristics without a discovery Question of their own depended on routes to be reached, so every Profile Characteristic now has one (`exercise-bdr-policy-604.07-stage-types`).
-- Dry-runs scoped to one Profile (ADHD only) showed that questions concentrate on that Profile's Characteristics, and that the Profile score reads closer to the true level than when all Profiles are explored, because the Characteristics that depend on secondary evidence from Questions whose main Characteristic is elsewhere are the ones that drag the score down. Scope therefore is a user choice (`10-analysed-profiles`); adding a Profile later reuses all evidence and only queues what is still missing, and removing one only drops the Questions that no longer matter. Dynamic adding and removing were specified from this reasoning and have not been dry-run yet; a change to it SHOULD be checked with one.
-- Sessions still take about 200 Questions: about 54 Characteristics need 4 or more answers each, plus balancing. Looser thresholds changed this by only 10-15 Questions, so a shorter session needs Questions that inform several Characteristics or a different stop rule, not tuning. A change to these rules SHOULD be checked with a new dry-run.
+A change to the priority, top-up, refill or analysed Profiles rules (`03-next-question-priority`, `05-refill-from-bank`, `06-profile-gap-top-up`, `10-analysed-profiles`) SHOULD be checked with a simulated test run (`exercise-edr-policy-103-question-bank-testing`), including a run scoped to one Profile and runs that add and remove Profiles during the session.
 
 ## References
 

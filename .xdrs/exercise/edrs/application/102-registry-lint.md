@@ -47,10 +47,6 @@ The repository `lint` target MUST run the script and fail when it exits non-zero
 
 Contradictions between Questions and source consistency (`exercise-bdr-policy-604.06-source`) MUST be checked by review, not by the script. Dry-runs and internal consistency (Cronbach's alpha) MUST be checked by the simulated tests in `exercise-edr-policy-103-question-bank-testing`, not by the script.
 
-#### 08-rationale-from-dry-runs
-
-The description check and the discovery coverage warning exist because dry-runs (`exercise-edr-policy-101.12-rationale-from-dry-runs`) exposed two silent problems: the meaning of schema fields and config keys could not be read from the data, and Profile Characteristics without a discovery Question were reached late. The coverage check MUST remain a warning because the bank still works through routes and refill.
-
 ## References
 
 - [exercise-adr-policy-202 - Registries](../../adrs/data/202-registries.md)

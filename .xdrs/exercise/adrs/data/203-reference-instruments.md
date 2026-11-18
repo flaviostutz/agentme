@@ -15,7 +15,7 @@ Question: Where are instruments kept and how are they linked to the bank?
 
 ## Decision Outcome
 
-**One folder per instrument in `.assets/`, each linked to one Profile and mapping every item to bank Questions; instruments are analysis material and are never read by the engine.**
+**One folder per instrument in `.assets/`, each linked to one Profile and mapping every item to bank Questions; the engine MUST NOT read instruments, which are analysis material.**
 
 ### Details
 

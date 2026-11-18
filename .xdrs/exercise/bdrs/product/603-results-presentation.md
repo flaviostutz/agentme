@@ -15,7 +15,7 @@ Question: What must results show and what must they avoid?
 
 ## Decision Outcome
 
-**Results show characteristic scores grouped by domain, profile scores and weighted scores with coverage and confidence, and the good-enough indicator, always in neutral language.**
+**Results show characteristic scores grouped by domain, profile scores and weighted scores with coverage and confidence, and the good-enough indicator, in neutral language.**
 
 ### Details
 
@@ -51,9 +51,9 @@ When the response quality flag is raised (`exercise-edr-policy-101.11-response-q
 
 Before the first Question the user MUST be able to choose which Profiles to analyse, with every Profile selected by default, and MUST be able to add or remove Profiles at any moment of the session (`exercise-adr-policy-101.10-analysed-profiles`). The answers already given MUST be kept and MUST be explained as reused when a Profile is added again or later. Results MUST say which Profiles are being analysed and MUST NOT show scores as Profile results for Profiles that are not analysed; the user MUST NOT be told a Profile was "ruled out" because it is not analysed. The user MUST be told that the next questions change when the selection changes.
 
-#### 09-rationale-from-dry-runs
+#### 10-score-precision-and-weighted-view
 
-Dry-runs (`exercise-edr-policy-101.12-rationale-from-dry-runs`) showed why the score and margin are presented with care: the score is a conservative weighted mean, so a true severity of 0.75 reads about 0.70; a Profile that shares Characteristics with another one rises with it (giftedness read about 0.38 for simulated respondents with high ADHD and autism only); and the margin measures answer noise, not validity. This is why `03` shows well explored and describes the margin as answer noise only, and results SHOULD NOT present the score as more exact than this. The same overlap is why `03` also shows `weighted_score`: for a respondent with no giftedness-only traits it read about 0.24 instead of 0.35, and separated the levels better (`exercise-edr-policy-101.12-rationale-from-dry-runs`). It is a second view, not a better truth, because shared Characteristics are real signal; results SHOULD show both and MUST NOT replace one by the other.
+Results SHOULD NOT present a score as more exact than a conservative weighted mean whose margin captures answer noise only, and MUST NOT present the margin as evidence of validity. Results MUST show `score` and `weighted_score` side by side and MUST NOT replace one by the other, because shared Characteristics are real signal.
 
 ## References
 

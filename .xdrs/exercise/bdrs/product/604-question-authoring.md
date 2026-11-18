@@ -73,7 +73,7 @@ A Characteristic carried as main by six or more Questions SHOULD have at least t
 
 #### 12-internal-consistency
 
-Before accepting a Characteristic's Questions, and again after any change to them, the author MUST measure their internal consistency with Cronbach's alpha, to check that the Questions that inform the same Characteristic are answered in a coherent way. The check is part of the dry-run (`09-dry-run-before-accept`) and MUST be done per Characteristic, never over the whole bank. `exercise-edr-policy-103-question-bank-testing.05-internal-consistency` automates the simulated measurement.
+Before accepting a Characteristic's Questions, and again after any change to them, the author MUST measure their internal consistency with Cronbach's alpha, to check that the Questions that inform the same Characteristic are answered in a coherent way. The check is part of the dry-run (`09-dry-run-before-accept`) and MUST be done per Characteristic and MUST NOT be done over the whole bank. `exercise-edr-policy-103-question-bank-testing.05-internal-consistency` automates the simulated measurement.
 
 - **Items:** the Questions that list the Characteristic as main (first) Characteristic. At least 3 items are needed; with fewer, or with fewer than 30 respondents who answered a pair of items, the Characteristic MUST be reported as not measured instead of passing.
 - **Item scores:** each non-null answer is rescaled to -1..1 (agreement is used as is; frequency becomes `2 x value - 1`) and multiplied by the sign of the Question's weight, so reverse-keyed Questions (`11-reverse-keyed-pairs`) point the same way as the others.
@@ -84,13 +84,9 @@ Before accepting a Characteristic's Questions, and again after any change to the
 
 A result MUST state its respondent source. Simulated respondents are generated from the registry weights themselves, so they only check the keying and the arithmetic, not the wording; only answers from real people confirm internal consistency. The check is a test of the Questions: it MUST NOT change any score, margin or route at run time, and it MUST NOT be shown to the user.
 
-#### 13-rationale-from-dry-runs
+#### 13-weights-and-main-question-count
 
-Dry-runs (`exercise-edr-policy-101.12-rationale-from-dry-runs`) showed two authoring effects. About 26% of the evidence on ADHD and autism Characteristics came from Questions where the Characteristic is secondary, with a mean weight of 0.5; because the score is weighted, such a Question counts for half as much, so an author SHOULD raise the weight only when the Question really tells as much about that Characteristic as about the main one. Eight Profile Characteristics had no discovery Question of their own and were reached late or only through routes, hence the discovery coverage expectation in `07-stage-types`.
-
-A second dry-run (500 simulated respondents, some holding both of two related traits) found `concrete_thinking`, `abstract_thinking` and `intense_curiosity` reading 0.20-0.23 below the true trait. They had one or two main Questions, so most of their evidence came from other Characteristics' Questions, and their Questions pushed against each other: preferring concrete examples counted against abstract thinking, and a Question about stimulation-seeking counted against curiosity. Characteristics that are listed side by side in Profiles are independent traits, so an author MUST NOT give a Question a negative or reversed secondary weight on a Characteristic that a respondent can hold at the same time, unless the Question really measures their opposition. Each Characteristic SHOULD have at least three main Questions (`atypical_social_interaction` had one with weight 1 and one discovery Question with weight 0.5; it now has five with weight 1 and its bias went from -0.10 to -0.08). After removing those cross weights and adding eight main Questions, the bias fell to -0.10, -0.02 and -0.11, for about 6 more Questions per session.
-
-A stress test (`exercise-edr-policy-101.12-rationale-from-dry-runs`) found that 24 Characteristics with six or more Questions had a single reverse-keyed Question, so keying disagreement was weak evidence and yes-saying inflated every Profile to about 0.55. Adding one more reverse-keyed Question to each (`11-reverse-keyed-pairs`, drafted without a reviewed source) lowered yes-saying to about 0.47 and made the response quality check possible.
+An author SHOULD raise a secondary weight only when the Question tells as much about that Characteristic as about the main one, because a secondary Question counts for less in the weighted score. An author MUST NOT give a Question a negative or reversed secondary weight on a Characteristic that a respondent can hold at the same time, unless the Question really measures their opposition. Each Characteristic SHOULD have at least three main Questions, so that its evidence does not come mostly from other Characteristics' Questions.
 
 ## References
 
