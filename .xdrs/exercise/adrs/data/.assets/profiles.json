@@ -40,7 +40,7 @@
     "name": "Giftedness-related characteristics",
     "description": "Characteristics commonly described in connection with giftedness. Draft list, not diagnostic.",
     "reference": "characteristics.csv column Gifted in this repository; membership unverified.",
-    "comments": "No validated instrument or published criteria were used. Every membership and every question comes from an unverified list and the authors' wording, so nothing from a published measure is implemented or checked.",
+    "comments": "No validated instrument or published criteria were used. Every membership and every question comes from an unverified list, a user-supplied trait list and the authors' wording, so nothing from a published measure is implemented or checked.",
     "characteristics": [
       "impulse_control_differences", "emotional_sensitivity", "sensory_differences", "interest_driven",
       "executive_function_difficulties", "asynchronous_development", "unique_learning_ways", "intense_curiosity",
@@ -48,7 +48,8 @@
       "highly_developed_morals", "notice_details", "need_solitude_contemplation", "cross_domain_connections",
       "predict_consequences", "connection_through_complexity", "need_for_complexity", "rapid_comprehension",
       "metaphor_symbol_thinking", "non_linear_learning", "easily_bored", "abstract_thinking", "fascination_with_theory",
-      "need_intellectual_stimulation", "early_emotional_awareness", "existential_concerns", "wide_range_of_interests"
+      "need_intellectual_stimulation", "early_emotional_awareness", "existential_concerns", "wide_range_of_interests",
+      "pattern_recognition", "hyperfocus_wide_interests"
     ]
   },
   {
