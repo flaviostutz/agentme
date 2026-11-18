@@ -35,6 +35,7 @@ Every instrument MUST be listed here with the Profile it relates to. An instrume
 |---|---|---|---|
 | AQ-50, Adult Autism Spectrum Quotient | 50 | `autism` | [aq-50/](.assets/aq-50/README.md) |
 | ASRS-v1.1, Adult ADHD Self-Report Scale symptom checklist | 18 | `adhd` | [asrs-v1.1/](.assets/asrs-v1.1/README.md) |
+| ARHQ, Adult Reading History Questionnaire | 23 | `dyslexia` | [arhq/](.assets/arhq/README.md) |
 
 #### 03-every-item-is-traceable
 
@@ -74,3 +75,4 @@ A Characteristic created from an instrument MUST be listed only in the Profile t
 - [exercise-bdr-policy-605 - Characteristic and profile authoring](../../bdrs/product/605-characteristic-and-profile-authoring.md)
 - AQ-50 (autism): [README](.assets/aq-50/README.md), [items](.assets/aq-50/aq-50.json), [bank map](.assets/aq-50/aq-50-bank-map.json)
 - ASRS-v1.1 (adhd): [README](.assets/asrs-v1.1/README.md), [items](.assets/asrs-v1.1/asrs-v1.1.json), [bank map](.assets/asrs-v1.1/asrs-v1.1-bank-map.json), [original PDF](.assets/asrs-v1.1/ASRS-v1.1_Symptom_Checklist.pdf)
+- ARHQ (dyslexia): [README](.assets/arhq/README.md), [items](.assets/arhq/arhq.json), [bank map](.assets/arhq/arhq-bank-map.json)

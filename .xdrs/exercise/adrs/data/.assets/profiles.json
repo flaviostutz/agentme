@@ -47,5 +47,16 @@
       "metaphor_symbol_thinking", "non_linear_learning", "easily_bored", "abstract_thinking", "fascination_with_theory",
       "need_intellectual_stimulation", "early_emotional_awareness", "existential_concerns", "wide_range_of_interests"
     ]
+  },
+  {
+    "id": "dyslexia",
+    "name": "Dyslexia-related characteristics",
+    "description": "Characteristics commonly described in connection with dyslexia, mostly about reading, spelling and memory for names. Draft list, not diagnostic.",
+    "reference": "ARHQ items (Lefly & Pennington 2000), with working memory and processing speed after Jeffries & Everatt 2004 and Catts 2002; membership unverified.",
+    "characteristics": [
+      "childhood_reading_difficulty", "letter_colour_naming_difficulty", "school_struggle_history", "slow_reading_speed",
+      "spelling_difficulty", "letter_number_reversal", "name_number_recall_difficulty", "reading_dislike",
+      "low_reading_volume", "working_memory_impact", "processing_speed_impact"
+    ]
   }
 ]
