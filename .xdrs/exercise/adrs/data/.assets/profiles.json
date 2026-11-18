@@ -4,6 +4,7 @@
     "name": "ADHD-related characteristics",
     "description": "Characteristics commonly described in connection with attention-deficit/hyperactivity differences. Draft list, not diagnostic.",
     "reference": "characteristics.csv column ADHD in this repository; membership unverified. Four later entries come from ASRS-v1.1 (Kessler et al. 2005, Psychol Med 35:245-256).",
+    "comments": "ASRS-v1.1 is scored by counting shaded frequency answers over the past 6 months, with a Part A cut-off of 4. The bank has no count, cut-off or time window and rewords the items. Memberships outside ASRS have no instrument behind them.",
     "characteristics": [
       "fidget_movement_for_focus", "attention_regulation_differences", "hyperfocus_wide_interests", "quick_crisis_response",
       "difficulty_switching_focus", "social_impact_impulse_focus", "craving_novelty", "rejection_sensitive_dysphoria",
@@ -20,6 +21,7 @@
     "name": "Autism-related characteristics",
     "description": "Characteristics commonly described in connection with autistic differences. Draft list, not diagnostic.",
     "reference": "characteristics.csv column Autism in this repository; membership unverified. Nine later entries come from AQ-50 (Baron-Cohen et al. 2001, J Autism Dev Disord 31:5-17).",
+    "comments": "AQ-50 scores one point per agree or disagree answer, sums to 50 and has a cut-off. The bank uses graded weighted answers, reworded items and no total, cut-off or AQ subscales. Memberships outside AQ-50 have no instrument behind them.",
     "characteristics": [
       "alexithymia", "hyperactivity_physical_mental", "time_perception_differences", "interoception_differences",
       "stimming", "processing_speed_impact", "atypical_social_interaction", "impulse_control_differences",
@@ -38,6 +40,7 @@
     "name": "Giftedness-related characteristics",
     "description": "Characteristics commonly described in connection with giftedness. Draft list, not diagnostic.",
     "reference": "characteristics.csv column Gifted in this repository; membership unverified.",
+    "comments": "No validated instrument or published criteria were used. Every membership and every question comes from an unverified list and the authors' wording, so nothing from a published measure is implemented or checked.",
     "characteristics": [
       "impulse_control_differences", "emotional_sensitivity", "sensory_differences", "interest_driven",
       "executive_function_difficulties", "asynchronous_development", "unique_learning_ways", "intense_curiosity",
@@ -53,10 +56,22 @@
     "name": "Dyslexia-related characteristics",
     "description": "Characteristics commonly described in connection with dyslexia, mostly about reading, spelling and memory for names. Draft list, not diagnostic.",
     "reference": "ARHQ items (Lefly & Pennington 2000), with working memory and processing speed after Jeffries & Everatt 2004 and Catts 2002; membership unverified.",
+    "comments": "ARHQ sums 23 items on item-specific 0-4 anchors and compares with norms. The bank uses generic agreement or frequency scales, reworded items and no total or norms. Item 12 depends on working status. Working memory and processing speed do not come from ARHQ.",
     "characteristics": [
       "childhood_reading_difficulty", "letter_colour_naming_difficulty", "school_struggle_history", "slow_reading_speed",
       "spelling_difficulty", "letter_number_reversal", "name_number_recall_difficulty", "reading_dislike",
       "low_reading_volume", "working_memory_impact", "processing_speed_impact"
+    ]
+  },
+  {
+    "id": "ocd",
+    "name": "OCD-related characteristics",
+    "description": "Characteristics commonly described in connection with obsessive-compulsive symptoms: checking, washing, ordering, hoarding, counting and unwanted thoughts. Draft list, not diagnostic.",
+    "reference": "OCI-R subscales (Foa et al. 2002, Psychol Assess 14:485-496); membership unverified.",
+    "comments": "OCI-R rates distress over the past month and sums to 0-72 with a cut-off. The bank has no distress rating, time window, total or cut-off. Items 12, 17 and 18 were split or simplified to keep one idea per question.",
+    "characteristics": [
+      "hoarding_saving_things", "checking_repeatedly", "ordering_arrangement_distress", "counting_number_rituals",
+      "contamination_washing", "intrusive_unwanted_thoughts"
     ]
   }
 ]

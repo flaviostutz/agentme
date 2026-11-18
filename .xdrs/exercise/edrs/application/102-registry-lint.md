@@ -45,7 +45,7 @@ The repository `lint` target MUST run the script and fail when it exits non-zero
 
 #### 07-semantic-checks-stay-in-review
 
-Dry-runs, internal consistency (Cronbach's alpha), contradictions between Questions and source consistency (`exercise-bdr-policy-604.06-source`, `exercise-bdr-policy-604.09-dry-run-before-accept`, `exercise-bdr-policy-604.12-internal-consistency`) MUST be checked by review, not by the script.
+Contradictions between Questions and source consistency (`exercise-bdr-policy-604.06-source`) MUST be checked by review, not by the script. Dry-runs and internal consistency (Cronbach's alpha) MUST be checked by the simulated tests in `exercise-edr-policy-103-question-bank-testing`, not by the script.
 
 #### 08-rationale-from-dry-runs
 
@@ -55,4 +55,5 @@ The description check and the discovery coverage warning exist because dry-runs 
 
 - [exercise-adr-policy-202 - Registries](../../adrs/data/202-registries.md)
 - [exercise-bdr-policy-604 - Question authoring](../../bdrs/product/604-question-authoring.md)
+- [exercise-edr-policy-103 - Question bank testing](103-question-bank-testing.md)
 - [exercise-bdr-policy-605 - Characteristic and profile authoring](../../bdrs/product/605-characteristic-and-profile-authoring.md)

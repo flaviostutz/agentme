@@ -1,0 +1,20 @@
+[
+  { "n": 1, "match": "new", "questions": ["hoard_saved_things_in_way"] },
+  { "n": 2, "match": "new", "questions": ["check_more_than_necessary"] },
+  { "n": 3, "match": "new", "questions": ["order_upset_not_arranged"] },
+  { "n": 4, "match": "new", "questions": ["count_compelled_while_doing"] },
+  { "n": 5, "match": "new", "questions": ["contam_hard_to_touch"] },
+  { "n": 6, "match": "new", "questions": ["intrusive_hard_to_control"] },
+  { "n": 7, "match": "new", "questions": ["hoard_collect_unneeded"] },
+  { "n": 8, "match": "new", "questions": ["check_doors_windows_drawers"] },
+  { "n": 9, "match": "new", "questions": ["order_upset_others_change"] },
+  { "n": 10, "match": "new", "questions": ["count_repeat_certain_numbers"] },
+  { "n": 11, "match": "new", "questions": ["contam_wash_when_contaminated"] },
+  { "n": 12, "match": "new", "questions": ["intrusive_against_my_will"] },
+  { "n": 13, "match": "new", "questions": ["hoard_keep_in_case_needed"] },
+  { "n": 14, "match": "new", "questions": ["check_taps_and_switches"] },
+  { "n": 15, "match": "new", "questions": ["order_need_particular_way"] },
+  { "n": 16, "match": "new", "questions": ["count_good_bad_numbers"] },
+  { "n": 17, "match": "new", "questions": ["contam_wash_hands_more"] },
+  { "n": 18, "match": "new", "questions": ["intrusive_hard_to_get_rid_of"] }
+]

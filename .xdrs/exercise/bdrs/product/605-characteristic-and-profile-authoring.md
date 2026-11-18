@@ -15,7 +15,7 @@ Question: What must a characteristic and a profile contain?
 
 ## Decision Outcome
 
-**A characteristic has an id, name, description, one domain and a source; a profile has an id, name, description, reference and a list of characteristics.**
+**A characteristic has an id, name, description, one domain and a source; a profile has an id, name, description, reference, a list of characteristics and optional comments.**
 
 ### Details
 
@@ -33,7 +33,7 @@ A specialization MUST be a separate Characteristic whose id starts with the id o
 
 #### 04-profile-fields
 
-A Profile MUST have `id` (snake_case, at most 3 words), `name` (at most 9 words), `description` (at most 29 words), `reference` (at most 29 words: a URL or citation) and `characteristics` (a list of Characteristic ids).
+A Profile MUST have `id` (snake_case, at most 3 words), `name` (at most 9 words), `description` (at most 29 words), `reference` (at most 29 words: a URL or citation), `characteristics` (a list of Characteristic ids) and, when `08-profile-comments` applies, `comments` (at most 49 words).
 
 #### 05-membership-is-a-claim
 
@@ -46,6 +46,10 @@ Profiles MUST NOT define weights or thresholds. A more specific Characteristic a
 #### 07-characteristic-source
 
 The `source` of a Characteristic MUST say in at most 19 words where the concept was inspired, absorbed, adapted or used directly, starting with "Inspired by", "Absorbed from", "Adapted from" or "Used from". It SHOULD cite the most scientific source found that names or organises the concept (authors, year, journal and pages, or an instrument and item numbers). When no such source is found it MUST be exactly "no reference". A cited source MUST be checked for existence and bibliographic data, and MUST be worded as inspiration when it does not prove the Characteristic. A `source` MUST NOT claim that a Profile contains the Characteristic (`05-membership-is-a-claim`).
+
+#### 08-profile-comments
+
+When the paper or instrument behind a Profile (`reference`, `exercise-adr-policy-203`) could not be fully implemented in the bank, the Profile MUST carry `comments` of at most 49 words saying what was left out or changed, for example scoring, cut-offs, time windows, rating dimensions, subscales or items that were reworded or merged. When a Profile has no instrument behind it, `comments` MUST say so. A Profile whose source was implemented in full MAY omit `comments`. Comments describe the implementation only; they MUST NOT claim that a Profile contains a Characteristic (`05-membership-is-a-claim`).
 
 ## References
 

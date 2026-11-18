@@ -61,7 +61,7 @@ A route MUST point to an existing Question and SHOULD point to a Question of the
 
 #### 09-dry-run-before-accept
 
-Before accepting a Question, the author MUST dry-run answers of different kinds of people and contexts and check that the title, details, weights and routes fit the description of every listed Characteristic, and MUST check the internal consistency of the Characteristic's Questions (`12-internal-consistency`).
+Before accepting a Question, the author MUST dry-run answers of different kinds of people and contexts and check that the title, details, weights and routes fit the description of every listed Characteristic, and MUST check the internal consistency of the Characteristic's Questions (`12-internal-consistency`). The simulated part of the dry-run is automated by `exercise-edr-policy-103-question-bank-testing`.
 
 #### 10-check-related-questions
 
@@ -73,7 +73,7 @@ A Characteristic carried as main by six or more Questions SHOULD have at least t
 
 #### 12-internal-consistency
 
-Before accepting a Characteristic's Questions, and again after any change to them, the author MUST measure their internal consistency with Cronbach's alpha, to check that the Questions that inform the same Characteristic are answered in a coherent way. The check is part of the dry-run (`09-dry-run-before-accept`) and MUST be done per Characteristic, never over the whole bank.
+Before accepting a Characteristic's Questions, and again after any change to them, the author MUST measure their internal consistency with Cronbach's alpha, to check that the Questions that inform the same Characteristic are answered in a coherent way. The check is part of the dry-run (`09-dry-run-before-accept`) and MUST be done per Characteristic, never over the whole bank. `exercise-edr-policy-103-question-bank-testing.05-internal-consistency` automates the simulated measurement.
 
 - **Items:** the Questions that list the Characteristic as main (first) Characteristic. At least 3 items are needed; with fewer, or with fewer than 30 respondents who answered a pair of items, the Characteristic MUST be reported as not measured instead of passing.
 - **Item scores:** each non-null answer is rescaled to -1..1 (agreement is used as is; frequency becomes `2 x value - 1`) and multiplied by the sign of the Question's weight, so reverse-keyed Questions (`11-reverse-keyed-pairs`) point the same way as the others.
@@ -96,5 +96,6 @@ A stress test (`exercise-edr-policy-101.12-rationale-from-dry-runs`) found that 
 
 - [exercise-bdr-policy-602 - Response scales](602-response-scales.md)
 - [exercise-bdr-policy-605 - Characteristic and profile authoring](605-characteristic-and-profile-authoring.md)
+- [exercise-edr-policy-103 - Question bank testing](../../edrs/application/103-question-bank-testing.md)
 - [exercise-edr-policy-102 - Registry lint](../../edrs/application/102-registry-lint.md)
 - [Original spec with the draft question inventory](../../../../spec-original.md)
