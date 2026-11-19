@@ -20,7 +20,7 @@ Related Profile: `dyslexia`. Reference instrument kept for analysis only. It is 
 
 | ARHQ feature | Engine | How the bank handles it |
 |---|---|---|
-| Item-specific 0-4 anchors ("how much difficulty", "how would you compare") | Generic 7-point agreement or frequency scale, centred at 0 | Every item became a statement (agreement) or a how-often question (frequency); the absolute meaning of the ARHQ scale is not preserved |
+| Item-specific 0-4 anchors ("how much difficulty", "how would you compare") | Generic 5-point agreement or frequency scale, centred at 0 | Every item became a statement (agreement) or a how-often question (frequency); the absolute meaning of the ARHQ scale is not preserved |
 | One summed total | Characteristic scores and Profile means, no total | The ARHQ total is not reproduced; results show Characteristic scores only |
 | Amount-of-reading items (10, 12, 20-23), where more reading means a lower score | Negative weights and `balancing` Questions; the keying check uses `sign(weight) x centred answer` | Item 10 is worded as the absence of reading (positive weight, `discovery`); items 12 and 20-23 are reverse-keyed frequency Questions |
 | Retrospective items (childhood, school years) next to current items | No time axis | The time frame is in the wording, and childhood and current items sit in separate Characteristics where they measure different things |

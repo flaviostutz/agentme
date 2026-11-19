@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Web UI mockup (illustrative example of exercise-bdr-policy-606)</title>
+<style>
+:root{--ink:#1f2933;--mut:#52606d;--bg:#f7f5f0;--card:#fff;--line:#d9d4c7;--acc:#2f5d8a;--acc2:#e8eff6}
+*{box-sizing:border-box}
+body{margin:0;padding:28px;background:#e9e6df;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);display:flex;gap:28px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+.frame{flex:none;width:420px;background:var(--bg);border-radius:18px;border:1px solid var(--line);box-shadow:0 6px 24px #0002;overflow:hidden}
+.frame.wide{width:560px}
+header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--mut);background:#fff}
+main{padding:20px}
+.draft{font-size:13px;background:var(--acc2);border-left:4px solid var(--acc);padding:8px 12px;border-radius:6px;color:var(--ink);margin-bottom:18px}
+.meta{font-size:14px;color:var(--mut);margin-bottom:6px}
+h1{font-size:22px;line-height:1.35;margin:0 0 20px}
+.scale{display:grid;gap:8px;border:0;padding:0;margin:0}
+.opt{display:flex;align-items:center;gap:12px;min-height:46px;padding:8px 14px;background:var(--card);border:1.5px solid var(--line);border-radius:10px;font-size:16px}
+.opt i{width:18px;height:18px;border:2px solid var(--mut);border-radius:50%;flex:none}
+.opt kbd{margin-left:auto;font:12px ui-monospace,monospace;color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:0 6px}
+.opt.sel{border-color:var(--acc);background:var(--acc2)}.opt.sel i{background:var(--acc);box-shadow:inset 0 0 0 3px #fff}
+.skip{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.skip .opt{background:transparent;border-style:dashed;color:var(--mut)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:8px}
+.status + .nav{margin-top:8px}
+.skip + .status{margin-top:8px}
+.btn{font:inherit;border:1.5px solid var(--acc);color:var(--acc);background:transparent;border-radius:10px;padding:10px 14px;min-height:44px}
+.btn.p{background:var(--acc);color:#fff}
+.link{color:var(--acc);text-decoration:underline;font-size:14px}
+.link.b{font-weight:700;display:inline-flex;align-items:center;min-height:44px}
+.why{font-size:14px;color:var(--mut);margin-top:14px}
+.prog{font-size:13px;color:var(--mut)}
+h2{font-size:18px;margin:18px 0 6px}
+.row{display:grid;grid-template-columns:250px 1fr 78px;align-items:center;gap:10px;font-size:14px;margin:7px 0}
+.axis{position:relative;height:18px;background:linear-gradient(90deg,transparent calc(50% - 1px),var(--mut) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),#fff;border:1px solid var(--line);border-radius:4px}
+.rng{position:absolute;top:7px;height:4px;background:#8aa6c1;border-radius:2px}
+.dot{position:absolute;top:2px;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid #fff;margin-left:-6px;box-shadow:0 0 0 1px var(--acc)}
+.num{font-variant-numeric:tabular-nums;color:var(--mut);font-size:13px;text-align:right}
+.scalelab{display:grid;grid-template-columns:250px 1fr 78px;gap:10px;font-size:12px;color:var(--mut)}
+.scalelab div:nth-child(2){display:flex;justify-content:space-between}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:8px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}th{font-size:12px;color:var(--mut);font-weight:600}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--mut);white-space:nowrap}
+.note{font-size:13px;color:var(--mut)}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:16px;font-size:14px}
+.card h3{margin:0 0 6px;font-size:13px;color:var(--mut);font-weight:600;letter-spacing:.02em}
+.pr{display:grid;grid-template-columns:84px 1fr 118px;gap:8px;align-items:center;margin:4px 0}
+.pb{height:8px;background:#e6e1d4;border-radius:4px;overflow:hidden}.pb b{display:block;height:100%;background:var(--acc);border-radius:4px}
+.cnt{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:13px}
+.chap{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--mut);margin-bottom:6px}
+.done{font-size:12px;color:#2d6a4f;border:1px solid #b7d7c6;border-radius:999px;padding:0 8px;background:#eef7f1}
+.banner{background:#fff;border:1.5px solid var(--acc);border-radius:10px;padding:12px;margin-bottom:14px;font-size:14px}
+.banner .a{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.banner .btn{min-height:40px;padding:6px 12px;font-size:14px}
+.soft{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:14px;color:var(--mut)}
+.saved{font-size:12px;color:var(--mut);margin-top:10px;text-align:center}
+details{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:14px}
+summary{cursor:pointer;color:var(--acc)}
+.latest{display:flex;justify-content:space-between;gap:8px;background:#eef7f1;border:1px solid #b7d7c6;border-radius:8px;padding:6px 10px;font-size:13px;margin-bottom:12px}.x{color:var(--mut);cursor:pointer}.log{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink)}.log li{margin:2px 0}.hscale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:0;padding:0;border:0}
+.hopt{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:13px;min-height:84px;padding:10px 4px;background:var(--card);border:1.5px solid var(--line);border-radius:10px}
+.hopt i{width:22px;height:22px;border:2px solid var(--mut);border-radius:50%}
+.hopt kbd{font:12px ui-monospace,monospace;color:var(--mut)}
+.hopt.sel{border-color:var(--acc);background:var(--acc2)}.hopt.sel i{background:var(--acc);box-shadow:inset 0 0 0 4px #fff}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin:0 2px 6px}
+.frame.xw{width:760px}
+.status{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:14px;font-size:14px}
+.vend{margin:0 2px;font-size:12px;color:var(--mut)}
+.km{font:inherit;font-size:12px;color:var(--acc);background:transparent;border:1px solid var(--acc);border-radius:999px;padding:2px 10px;min-height:28px;margin-left:6px;white-space:nowrap}
+.nm{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.more{background:#fff;border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:8px;padding:8px 12px;font-size:13px;margin:2px 0 10px}
+.more p{margin:4px 0}
+.ib{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--acc);color:var(--acc);background:#fff;font:italic 700 14px Georgia,serif;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.nm{display:flex;align-items:center;gap:8px;justify-content:flex-start}
+.ext{color:var(--acc);text-decoration:underline;font-size:13px}
+.lv{display:inline-flex;align-items:center;gap:8px}
+.lv svg{flex:none}
+.annot{font-size:12px;color:var(--mut);border:1px dashed var(--line);border-radius:6px;padding:2px 8px;margin-bottom:12px;display:inline-block}
+.prof{background:#fff;border:1px solid var(--line);border-radius:8px;margin-bottom:6px}
+.prof>summary,.phead{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:8px;align-items:center;padding:8px 10px;font-size:14px;min-height:44px;list-style:none;cursor:pointer;color:var(--ink)}
+.prof>summary::before{content:"▸";position:absolute;margin-left:-8px;color:var(--mut);font-size:11px}
+.prof[open]>summary::before{content:"▾"}
+.phead{font-size:12px;color:var(--mut);font-weight:600;cursor:default;min-height:0;padding-bottom:2px}
+.plist{padding:4px 10px 10px;border-top:1px solid var(--line)}
+.sec{border:1px solid var(--line);border-radius:10px;background:#fff;margin:12px 0;padding:0 12px}
+.sec>summary{min-height:44px;display:flex;align-items:center;gap:6px;font-size:16px;color:var(--ink)}
+.sec[open]>summary{border-bottom:1px solid var(--line);margin-bottom:8px}
+.prof .row,.sec .row{grid-template-columns:200px 1fr 78px}
+.prof .scalelab,.sec .scalelab{grid-template-columns:200px 1fr 78px}
+.sep{border-top:1px solid var(--line);margin:8px 0 10px}
+.hm{color:#7a828a}
+.hm .axis{background:linear-gradient(90deg,transparent calc(50% - 1px),#9aa5b1 calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),#f7f8fa}
+.hm .rng{background:#c2c7cd}
+.hm .dot{background:#9aa5b1;box-shadow:0 0 0 1px #9aa5b1}
+.pprog{display:flex;justify-content:center;padding:8px 0 12px}
+.pprog .pb{width:260px;max-width:100%;height:10px;border:1px solid var(--line);background:#e6e1d4}
+</style></head><body>
+
+<section class="frame" aria-label="Question screen">
+<header><span>Self-reflection questionnaire</span><span class="prog">23 answered</span></header>
+<main>
+<div class="annot">Narrow layout (below 640 px): choices in a column, highest on top. Choosing an answer moves on by itself.</div>
+<div class="chap"><span>Chapter: Adaptation &amp; environment</span></div>
+<h1>Predictable routines help me feel comfortable.</h1>
+<fieldset class="scale" style="border:0">
+<legend class="note" style="margin-bottom:8px">How much do you agree?</legend>
+<div class="ends vend"><span>▲ most like me</span></div>
+<div class="opt"><i></i>Strongly agree<kbd>5</kbd></div>
+<div class="opt sel"><i></i>Agree<kbd>4</kbd></div>
+<div class="opt"><i></i>Neutral<kbd>3</kbd></div>
+<div class="opt"><i></i>Disagree<kbd>2</kbd></div>
+<div class="opt"><i></i>Strongly disagree<kbd>1</kbd></div>
+<div class="ends vend"><span>▼ least like me</span></div>
+</fieldset>
+<div class="skip"><div class="opt">Skip this question<kbd>S</kbd></div></div>
+<div class="status"><div class="cnt" style="border:0;margin:0;padding:0"><span>Areas done: <b>12 of 67</b></span></div><div class="latest" style="margin:6px 0 0"><span><b>Latest status:</b> Answer recorded. Moving to the next Question. Use Back to revise.</span><span class="x" aria-label="Dismiss">✕</span></div></div>
+<div class="nav"><button class="btn">← Back</button><span class="link">Change profiles</span><a class="link b" href="#">See partial results</a></div>
+<div class="saved">Progress saved on this device</div>
+</main></section>
+
+<section class="frame wide" aria-label="Results screen">
+<header><span>Your results so far</span><span class="prog">58 answered · keep answering to improve confidence</span></header>
+<main>
+<div class="draft">Your answers suggest the patterns below. This is a draft self-reflection aid, not a validated instrument and not a diagnosis. Margins show the effect of answer noise only.</div>
+<h2 style="margin-top:0">Profiles</h2>
+<div class="phead"><span>Profile</span><span>Score</span><span>Weighted score</span><span>State</span></div><details class="prof" open><summary><span class="lv" title="Characteristics of this profile: medium"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><rect x="1" y="11" width="5" height="6" rx="1" fill="#2f5d8a"/><rect x="8.5" y="6" width="5" height="11" rx="1" fill="#2f5d8a"/><rect x="16" y="1" width="5" height="16" rx="1" fill="#d3dbe3"/></svg><span><b style="font-weight:600">Giftedness</b><br><span class="note">medium</span></span></span><span>0.19 ± 0.09</span><span>0.33 ± 0.09</span><span class="tag">well explored</span></summary><div class="plist"><div class="pprog"><div class="pb"><b style="width:94%"></b></div></div><div class="cnt" style="border:0;padding-top:0;margin:0 0 8px;justify-content:center"><span>25 of 31 characteristics evaluated</span></div><div class="sep"></div><div class="note" style="margin:0 0 6px"><b>Characteristics</b></div><div class="scalelab"><div></div><div><span>-1</span><span>0</span><span>1</span></div><div></div></div><div class="row"><span class="nm"><button class="ib" aria-label="Know more about Need for complexity">i</button>Need for complexity</span><div class="axis"><div class="rng" style="left:calc(50% + 50%*0.47);width:13%"></div><div class="dot" style="left:80%"></div></div><span class="num">0.60 ± 0.13</span></div><div class="more"><p>Some people enjoy ideas, tasks and environments with many layers and feel restless when things are too simple; others prefer clear, simple structure. Think about which situations you look for or avoid.</p><p class="note">Draft description, not a validated definition. Compare it with your own experience and education.</p><p><a class="ext" href="#">Know more ↗</a> <span class="note">(opens an external site)</span></p></div><div class="row"><span class="nm"><button class="ib" aria-label="Know more about Rapid comprehension">i</button>Rapid comprehension</span><div class="axis"><div class="rng" style="left:calc(50% + 50%*0.45);width:14%"></div><div class="dot" style="left:76%"></div></div><span class="num">0.52 ± 0.14</span></div><div class="row"><span class="nm"><button class="ib" aria-label="Know more about Pattern recognition">i</button>Pattern recognition</span><div class="axis"><div class="rng" style="left:calc(50% + 50%*0.35);width:15%"></div><div class="dot" style="left:75%"></div></div><span class="num">0.50 ± 0.15</span></div><div class="row hm"><span class="nm"><button class="ib" aria-label="Know more about Fascination with theory">i</button>Fascination with theory <span class="note">(high margin)</span></span><div class="axis"><div class="rng" style="left:calc(50% - 50%*0.2);width:40%"></div><div class="dot" style="left:52%"></div></div><span class="num">0.04 ± 0.40</span></div><div class="row"><span class="nm"><button class="ib" aria-label="Know more about Highly developed morals">i</button>Highly developed morals</span><span class="note">not evaluated yet</span><span></span></div><div class="note" style="margin-top:6px">sorted by score, highest first; not evaluated characteristics stay at the end</div></div></details><details class="prof"><summary><span class="lv" title="Characteristics of this profile: pending"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><circle cx="11" cy="9" r="7" fill="none" stroke="#52606d" stroke-width="1.6" stroke-dasharray="3 2.5"/></svg><span><b style="font-weight:600">ADHD</b><br><span class="note">pending</span></span></span><span>-0.05 ± 0.14</span><span>0.01 ± 0.14</span><span class="tag">still exploring</span></summary></details><details class="prof"><summary><span class="lv" title="Characteristics of this profile: pending"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><circle cx="11" cy="9" r="7" fill="none" stroke="#52606d" stroke-width="1.6" stroke-dasharray="3 2.5"/></svg><span><b style="font-weight:600">Autism</b><br><span class="note">pending</span></span></span><span>-0.01 ± 0.14</span><span>0.04 ± 0.14</span><span class="tag">not enough answers</span></summary></details>
+<p class="note">Weighted score gives more weight to characteristics that fewer profiles share. Both are shown because shared characteristics are real signal.</p>
+
+<details class="sec"><summary><b>Characteristics by domain</b> <span class="note">· 17 with a score</span></summary><div class="scalelab"><div></div><div><span>-1</span><span>0</span><span>1</span></div><div></div></div>
+<div class="note" style="margin-top:6px"><b>Thinking patterns</b></div>
+<div class="row"><span class="nm"><button class="ib" aria-label="Know more about Pattern recognition">i</button>Pattern recognition</span><div class="axis"><div class="rng" style="left:calc(50% + 50%*0.35);width:15%"></div><div class="dot" style="left:75%"></div></div><span class="num">0.50 ± 0.15</span></div>
+<div class="note" style="margin-top:10px"><b>Adaptation &amp; environment</b></div>
+<div class="row"><span class="nm"><button class="ib" aria-label="Know more about Need for complexity" aria-expanded="true" style="background:var(--acc);color:#fff">i</button>Need for complexity</span><div class="axis"><div class="rng" style="left:calc(50% + 50%*0.47);width:13%"></div><div class="dot" style="left:80%"></div></div><span class="num">0.60 ± 0.13</span></div>
+<div class="more"><p>Some people enjoy ideas, tasks and environments with many layers and feel restless when things are too simple; others prefer clear, simple structure. Think about which situations you look for or avoid.</p><p class="note">Draft description, not a validated definition. Compare it with your own experience and education.</p><p><a class="ext" href="#">Know more ↗</a> <span class="note">(opens an external site)</span></p></div>
+<div class="row"><span class="nm"><button class="ib" aria-label="Know more about Need for routine and order">i</button>Need for routine and order</span><div class="axis"><div class="rng" style="left:calc(50% - 50%*0.66);width:44%"></div><div class="dot" style="left:39%"></div></div><span class="num">-0.22 ± 0.44</span></div>
+<div class="note" style="margin-top:10px"><b>Sensory processing</b></div>
+<div class="row"><span class="nm"><button class="ib" aria-label="Know more about Sensory differences">i</button>Sensory differences</span><div class="axis"><div class="rng" style="left:calc(50% - 50%*0.8);width:23%"></div><div class="dot" style="left:21.5%"></div></div><span class="num">-0.57 ± 0.23</span></div>
+</details>
+<details class="sec"><summary><b>Progress</b> <span class="note">· areas done: 12 of 67</span></summary><div class="card"><h3>HOW CLEAR YOUR PICTURE IS</h3>
+<div class="pr"><span>Giftedness</span><div class="pb"><b style="width:94%"></b></div><span class="note">well explored</span></div>
+<div class="pr"><span>ADHD</span><div class="pb"><b style="width:48%"></b></div><span class="note">still exploring</span></div>
+<div class="pr"><span>Autism</span><div class="pb"><b style="width:20%"></b></div><span class="note">not enough answers</span></div>
+<div class="cnt"><span>Areas done: <b>12 of 67</b></span></div>
+<div class="cnt"><span>Last 10 answers: Giftedness margin narrowed from 0.31 to 0.22; ADHD from 0.28 to 0.21; Autism did not change.</span></div></div>
+<div class="card"><h3>LATEST ACCOMPLISHMENTS</h3><ul class="log">
+<li>Giftedness: well explored</li>
+<li>Giftedness: 16 of 31 characteristics evaluated</li>
+<li>Giftedness: margin at or below 3x its limit</li>
+<li>Sensory processing: well covered</li>
+<li>Area settled: Need for complexity</li>
+<li>ADHD: 8 of 32 characteristics evaluated</li></ul></div>
+</details>
+<div class="nav"><button class="btn p">← Keep answering</button><button class="btn">Print / save as PDF</button></div>
+</main></section>
+
+<section class="frame" aria-label="Between questions">
+<header><span>Self-reflection questionnaire</span><span class="prog">50 answered</span></header>
+<main>
+<div class="banner"><b>Good place to look at your results.</b><br>Your results for the profiles you are analysing are now reasonably stable. You can see them now or keep refining.
+<div class="a"><a class="link b" href="#">See partial results</a><button class="btn">Keep answering</button></div></div>
+<div class="soft">You have answered 50 questions. This is a good place to pause. Your results so far are one tap away. <span class="link">Dismiss</span></div>
+<div class="annot" style="margin-top:6px">(the Question and its choices stay above, unchanged)</div>
+<div class="status"><div class="cnt" style="border:0;margin:0;padding:0"><span>Areas done: <b>14 of 67</b></span></div><div class="latest" style="margin:6px 0 0"><span><b>Latest progress:</b> ADHD is now well explored.</span><span class="x">✕</span></div></div>
+<div class="nav"><button class="btn">← Back</button><a class="link b" href="#">See partial results</a></div>
+<div class="saved">Progress saved on this device</div>
+</main></section>
+
+<section class="frame xw" aria-label="Wide question screen">
+<header><span>Self-reflection questionnaire</span><span class="prog">Wide screen (640 px and up): choices left to right, lowest to highest</span></header>
+<main>
+<div class="chap"><span>Chapter: Adaptation &amp; environment</span></div>
+<h1>Predictable routines help me feel comfortable.</h1>
+<div class="ends"><span>◀ least like me</span><span>most like me ▶</span></div>
+<div class="hscale" role="radiogroup" aria-label="How much do you agree?"><div class="hopt"><i></i><span>Strongly disagree</span><kbd>1</kbd></div><div class="hopt"><i></i><span>Disagree</span><kbd>2</kbd></div><div class="hopt"><i></i><span>Neutral</span><kbd>3</kbd></div><div class="hopt sel"><i></i><span>Agree</span><kbd>4</kbd></div><div class="hopt"><i></i><span>Strongly agree</span><kbd>5</kbd></div></div>
+<div class="skip" style="max-width:260px"><div class="opt">Skip this question<kbd>S</kbd></div></div>
+<div class="nav"><button class="btn">← Back</button><span class="link">Change profiles</span><a class="link b" href="#">See partial results</a></div>
+</main></section>
+</body></html>

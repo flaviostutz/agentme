@@ -19,7 +19,7 @@ Related Profile: `ocd`. Reference instrument kept for analysis only. It is not r
 
 | OCI-R feature | Engine | How the bank handles it |
 |---|---|---|
-| Items rated by distress or bother in the past month ("Not at all" to "Extremely") | Generic 7-point agreement or frequency scale, no time window | Items became agreement statements; frequency is used where the item is about how often something happens. The one-month window and the distress rating are not reproduced |
+| Items rated by distress or bother in the past month ("Not at all" to "Extremely") | Generic 5-point agreement or frequency scale, no time window | Items became agreement statements; frequency is used where the item is about how often something happens. The one-month window and the distress rating are not reproduced |
 | Distress separates a symptom from a preference (liking things in order is common) | Same scale for every Question | Ordering items keep their "upset" wording (items 3 and 9); the other items are worded as the behaviour, so a high score alone does not show distress |
 | Six subscales of three items, summed | Characteristic scores and Profile mean, no sums | Each subscale is one Characteristic with its three items as main Questions plus one reverse-keyed Question, which gives four items for the internal-consistency check (`exercise-bdr-policy-604.12-internal-consistency`) |
 | All items worded in the same direction | Keying check compares positive and negative keyed entries | One counter-statement was added per Characteristic so keying can be checked; each is a draft by the author |

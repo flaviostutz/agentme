@@ -15,13 +15,13 @@ Question: What must a characteristic and a profile contain?
 
 ## Decision Outcome
 
-**A characteristic has an id, name, description, one domain and a source; a profile has an id, name, description, reference, a list of characteristics and optional comments.**
+**A characteristic has an id, name, description, one domain, a source and optional user info and link; a profile has an id, name, description, reference, a list of characteristics and optional comments.**
 
 ### Details
 
 #### 01-characteristic-fields
 
-A Characteristic MUST have `id` (snake_case, at most 7 words), `name` (required, at most 14 words), `description` (required, at most 39 words), `domain` (one value from `exercise-adr-policy-201.02-domain-is-a-fixed-list`) and `source` (required, at most 19 words, see `07-characteristic-source`). These limits are checked by `exercise-edr-policy-102`.
+A Characteristic MUST have `id` (snake_case, at most 7 words), `name` (required, at most 14 words), `description` (required, at most 39 words), `domain` (one value from `exercise-adr-policy-201.02-domain-is-a-fixed-list`) and `source` (required, at most 19 words, see `07-characteristic-source`). It MAY have `userInfo` and `userUrl` (see `09-characteristic-user-info`). These limits are checked by `exercise-edr-policy-102`.
 
 #### 02-characteristic-description-is-the-reference
 
@@ -50,6 +50,10 @@ The `source` of a Characteristic MUST say in at most 19 words where the concept 
 #### 08-profile-comments
 
 When the paper or instrument behind a Profile (`reference`, `exercise-adr-policy-203`) could not be fully implemented in the bank, the Profile MUST carry `comments` of at most 49 words saying what was left out or changed, for example scoring, cut-offs, time windows, rating dimensions, subscales or items that were reworded or merged. When a Profile has no instrument behind it, `comments` MUST say so. A Profile whose source was implemented in full MAY omit `comments`. Comments describe the implementation only; they MUST NOT claim that a Profile contains a Characteristic (`05-membership-is-a-claim`).
+
+#### 09-characteristic-user-info
+
+`userInfo` is optional text of at most 80 words written for the person using the questionnaire, so they can understand the Characteristic from their own education and perspective. It MUST be in plain, neutral language and MUST NOT say what a score or its direction means for any Profile (`exercise-bdr-policy-601.02-no-diagnosis`). `userUrl` is an optional `https` URL of a page where the person can read more; it MUST be checked to exist and MUST NOT carry any session data. When `userInfo` is absent, the web client shows the `description` instead (`exercise-bdr-policy-606.22-know-more`).
 
 ## References
 

@@ -83,11 +83,14 @@ for (const q of questions) {
     errors.push(`question ${q.id}: derived domain ${domain} does not match file ${q.file}`);
   }
   const [min, max] = q.answer === 'frequency' ? [0, 1] : [-1, 1];
+  const scale = q.answer === 'frequency' ? [0, 0.25, 0.5, 0.75, 1] : [-1, -0.5, 0, 0.5, 1]; // exercise-bdr-policy-602
   for (const r of q.routes || []) {
     if (!questionById.has(r.add)) errors.push(`question ${q.id}: route target ${r.add} does not exist`);
     if (r.add === q.id) errors.push(`question ${q.id}: routes to itself`);
     if (r.threshold < min || r.threshold > max) {
       errors.push(`question ${q.id}: threshold ${r.threshold} outside ${q.answer} range ${min}..${max}`);
+    } else if (!scale.includes(r.threshold)) {
+      errors.push(`question ${q.id}: threshold ${r.threshold} is not a value of the ${q.answer} scale (${scale.join(', ')})`);
     }
   }
 }

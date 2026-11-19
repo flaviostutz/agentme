@@ -69,7 +69,7 @@ The author MUST check whether other registry Questions should be routes from the
 
 #### 11-reverse-keyed-pairs
 
-A Characteristic carried as main by six or more Questions SHOULD have at least two reverse-keyed Questions (`answer: agreement`, negative weight, `type: balancing`), and the first one SHOULD have a route with `when: gte` and `threshold: 0.33` to the second. The route fires for honest agreement with the reversed statement and for yes-saying, which is what the response quality check (`exercise-edr-policy-101.11-response-quality`) compares. A Characteristic with a single reverse-keyed Question lets one noisy answer decide whether keying disagreement can be seen.
+A Characteristic carried as main by six or more Questions SHOULD have at least two reverse-keyed Questions (`answer: agreement`, negative weight, `type: balancing`), and the first one SHOULD have a route with `when: gte` and `threshold: 0.5` to the second. The route fires for honest agreement with the reversed statement and for yes-saying, which is what the response quality check (`exercise-edr-policy-101.11-response-quality`) compares. A Characteristic with a single reverse-keyed Question lets one noisy answer decide whether keying disagreement can be seen.
 
 #### 12-internal-consistency
 

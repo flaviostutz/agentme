@@ -60,7 +60,7 @@ The session MUST end when the queue is empty after refill. The user MAY stop at 
 
 #### 09-state-is-derived
 
-The engine MUST be a pure function of the registries, the ordered Answers (`exercise-adr-policy-201.08-answer-is-value-or-null`) and the analysed Profiles and the ordered changes to them, each with the number of Answers given when it happened (`10-analysed-profiles`). The queue, asked set and last Question MUST be recomputable by replaying them.
+The engine MUST be a pure function of the registries, the ordered Answers (`exercise-adr-policy-201.08-answer-is-value-or-null`) and the analysed Profiles and the ordered changes to them, each with the number of Answers given when it happened (`10-analysed-profiles`). The queue, asked set and last Question MUST be recomputable by replaying them. Replay MUST ask each stored Question in the stored order, even when the engine would have chosen another (as after the user deletes Answers), and MUST reject only unknown or repeated Questions.
 
 #### 10-analysed-profiles
 

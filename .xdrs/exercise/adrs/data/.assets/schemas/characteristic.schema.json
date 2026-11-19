@@ -24,7 +24,9 @@
           "adaptation_environment"
         ]
       },
-      "source": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,18}$", "description": "Where the concept was inspired, absorbed, adapted or used directly from: the most scientific reference that names or organises it, or exactly 'no reference' when none was found. At most 19 words." }
+      "source": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,18}$", "description": "Where the concept was inspired, absorbed, adapted or used directly from: the most scientific reference that names or organises it, or exactly 'no reference' when none was found. At most 19 words." },
+      "userInfo": { "type": "string", "pattern": "^\\S+(\\s+\\S+){0,79}$", "description": "Optional plain-language text for the person using the questionnaire, shown in the know-more box of the results. At most 80 words." },
+      "userUrl": { "type": "string", "pattern": "^https://\\S+$", "description": "Optional https link to a page where the person can read more about the Characteristic, shown at the end of the know-more box." }
     }
   }
 }

@@ -21,11 +21,12 @@ The system asks the user questions to identify characteristics, goes deeper into
 - **Domain model**: Domain, Characteristic, Profile, Question and Answer, and the JSON registries that hold them.
 - **Flow engine**: a single question queue, follow-up routes and the next-question priority.
 - **Measurement**: the formulas that turn answers into characteristic scores, confidence and profile results.
+- **Web client**: where the engine runs in a browser, where answers are kept, and the flow, navigation and accessibility of the web interface.
 - **Product**: purpose and guardrails, the response scales, results presentation and the authoring standards for questions, characteristics and profiles.
 
 ### What this scope does not cover
 
-Application code, user interface design, privacy, multilingual support, question versioning and the engine reading instrument catalogues (instruments are kept only as analysis material, see `exercise-adr-policy-203`). Deferred items are tracked in the repository `TODO.md`.
+Application code, visual branding, privacy beyond keeping answers on the device, multilingual support, question versioning and the engine reading instrument catalogues (instruments are kept only as analysis material, see `exercise-adr-policy-203`). Deferred items are tracked in the repository `TODO.md`.
 
 ## Type Indexes
 

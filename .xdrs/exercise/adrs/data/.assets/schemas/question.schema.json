@@ -36,7 +36,7 @@
           "required": ["when", "threshold", "add"],
           "properties": {
             "when": { "enum": ["gte", "lte"], "description": "gte matches when the answer is greater than or equal to the threshold, lte when it is less than or equal." },
-            "threshold": { "type": "number", "minimum": -1, "maximum": 1, "description": "Value compared with the stored answer; must lie inside the answer range (agreement -1..1, frequency 0..1)." },
+            "threshold": { "type": "number", "minimum": -1, "maximum": 1, "description": "Value compared with the stored answer; must be one of the values of the answer's 5-point scale (agreement -1, -0.5, 0, 0.5, 1; frequency 0, 0.25, 0.5, 0.75, 1)." },
             "add": { "type": "string", "description": "Id of the Question added to the queue when the route matches." }
           }
         }

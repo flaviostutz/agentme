@@ -29,7 +29,7 @@ Schemas MUST check required fields, enums, id patterns, the word limits from `ex
 
 #### 03-reference-checks
 
-The script MUST fail on: duplicate ids; Characteristic ids in Profiles or Questions that do not exist; route targets that do not exist; a Question file whose name differs from the derived Domain of its Questions; route thresholds outside the Question's answer range.
+The script MUST fail on: duplicate ids; Characteristic ids in Profiles or Questions that do not exist; route targets that do not exist; a Question file whose name differs from the derived Domain of its Questions; route thresholds outside the Question's answer range or that are not a value of its response scale (`exercise-bdr-policy-602.05-thresholds-use-internal-values`).
 
 #### 04-graph-checks
 

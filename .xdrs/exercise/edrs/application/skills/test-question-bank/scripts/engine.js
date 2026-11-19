@@ -1,14 +1,20 @@
 'use strict';
 // Reference implementation of the exercise engine (exercise-adr-policy-101) and measurement formulas
-// (exercise-edr-policy-101), used only to dry-run the registries with simulated respondents.
-// It reads the registries and never changes them. When the Policies change, change this file with them.
-const fs = require('fs');
-const path = require('path');
-
+// (exercise-edr-policy-101). It runs in Node, where the test-question-bank skill dry-runs the registries with
+// simulated respondents, and unchanged in the browser, where the web client feeds it Answers
+// (exercise-adr-policy-102.02-shared-engine-module). It reads the registries and never changes them.
+// When the Policies change, change this file with them.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(typeof require === 'function' ? require : null);
+  else root.ExerciseEngine = factory(null);
+}(typeof self !== 'undefined' ? self : this, function (nodeRequire) {
 const DOMAINS = ['attention', 'executive_function', 'sensory_processing', 'social_communication', 'thinking_patterns', 'emotional_experience', 'interests_learning', 'adaptation_environment'];
-const DEFAULT_REGISTRY = path.join(__dirname, '../../../../../adrs/data/.assets');
 
-function loadRegistry(dir = DEFAULT_REGISTRY) {
+// Node only; the browser receives the registry as data
+function loadRegistry(given) {
+  const fs = nodeRequire('fs');
+  const path = nodeRequire('path');
+  const dir = given || path.join(__dirname, '../../../../../adrs/data/.assets');
   const read = (f) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
   const questions = DOMAINS.flatMap((d) => {
     const file = path.join(dir, 'questions', `${d}.json`);
@@ -19,22 +25,39 @@ function loadRegistry(dir = DEFAULT_REGISTRY) {
   return { dir, config: read('config.json'), characteristics: read('characteristics.json'), profiles: read('profiles.json'), questions };
 }
 
-// scope: profile id; when set, only the Characteristics of that Profile are asked about and judged
-function createEngine(registry, { scope = null, config = {} } = {}) {
+// profiles: ids of the analysed Profiles (default: every Profile), changeable in a session with setProfiles.
+// scope: profile id used by the test skill; like profiles: [id] but the bank is also limited to the Questions whose
+// main Characteristic belongs to that Profile.
+function createEngine(registry, { scope = null, profiles = null, config = {} } = {}) {
+  if (scope && profiles) throw new Error('use scope or profiles, not both');
   const CFG = { ...registry.config, ...config };
   const CH = registry.characteristics;
   const chIds = CH.map((c) => c.id);
   const chDomain = Object.fromEntries(CH.map((c) => [c.id, c.domain]));
-  const scoped = scope ? registry.profiles.find((p) => p.id === scope) : null;
-  if (scope && !scoped) throw new Error(`unknown profile ${scope}`);
-  const SC = scoped ? new Set(scoped.characteristics) : null;
-  const inS = (id) => !SC || SC.has(id);
+
+  // everything that depends on which Profiles are analysed (exercise-adr-policy-101.10-analysed-profiles)
+  function scopeOf(ids) {
+    let list = registry.profiles;
+    if (ids) {
+      const want = new Set(ids);
+      ids.forEach((id) => { if (!registry.profiles.some((p) => p.id === id)) throw new Error(`unknown profile ${id}`); });
+      list = registry.profiles.filter((p) => want.has(p.id));
+      if (!list.length) throw new Error('at least one profile must be analysed');
+    }
+    const SC = ids ? new Set(list.flatMap((p) => p.characteristics)) : null;
+    const P = list.length;
+    const kc = {}; chIds.forEach((c) => { kc[c] = list.filter((p) => p.characteristics.includes(c)).length; });
+    const pw = {}; chIds.forEach((c) => { pw[c] = kc[c] ? (P - kc[c] + 1) / P : 1; });
+    return { ids: list.map((p) => p.id), PEVAL: list, P, SC, inS: (id) => !SC || SC.has(id), kc, pw };
+  }
+  const base = scopeOf(scope ? [scope] : profiles);
+  const { SC, PEVAL, P, kc, pw } = base;
 
   const mainOf = (q) => q.characteristics.reduce((a, c) => (Math.abs(c.weight) > Math.abs(a.weight) ? c : a));
   const STAGE = { discovery: 0, exploration: 1, differentiation: 2, balancing: 3 };
   let BANK = registry.questions.map((q) => ({ ...q, routes: [...(q.routes || [])] }));
   BANK.forEach((q) => { q.main = mainOf(q); q.domain = chDomain[q.main.id]; q.stage = STAGE[q.type]; });
-  if (SC) BANK = BANK.filter((q) => SC.has(q.main.id));
+  if (scope) BANK = BANK.filter((q) => SC.has(q.main.id));
   const qById = {};
   BANK.forEach((q, i) => { q.idx = i; qById[q.id] = q; });
   BANK.forEach((q) => { q.routes = q.routes.filter((r) => qById[r.add]); });
@@ -43,11 +66,6 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
   BANK.forEach((q) => q.characteristics.forEach((c) => carry[c.id] && carry[c.id].push(q)));
   const balQs = {};
   chIds.forEach((c) => { balQs[c] = carry[c].filter((q) => q.type === 'balancing' && q.characteristics.find((x) => x.id === c).weight < 0).map((q) => q.id); });
-
-  const PEVAL = registry.profiles.filter((p) => !scoped || p.id === scoped.id);
-  const P = PEVAL.length;
-  const kc = {}; chIds.forEach((c) => { kc[c] = PEVAL.filter((p) => p.characteristics.includes(c)).length; });
-  const pw = {}; chIds.forEach((c) => { pw[c] = kc[c] ? (P - kc[c] + 1) / P : 1; });
 
   const centre = (q, v) => (q.answer === 'frequency' ? 2 * v - 1 : v);
 
@@ -112,7 +130,8 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
     return out;
   }
 
-  function profileResults(st, plist, answers) {
+  function profileResults(st, plist, answers, sc = base) {
+    const pw = sc.pw;
     let quality = null; // response quality scans every answer, so it runs only when the other conditions hold
     const flagged = () => { if (quality === null) quality = answers ? responseQuality(answers, st).flagged : false; return quality; };
     return plist.map((p) => {
@@ -133,47 +152,136 @@ function createEngine(registry, { scope = null, config = {} } = {}) {
   }
 
   // ---- flow (exercise-adr-policy-101): one queue, routes, refill, gap filling ----
-  const openIn = (q, st) => q.characteristics.filter((c) => inS(c.id) && st[c.id].state === 'open');
-  function runSession(answerFn) {
-    const answers = []; let queue = []; const queued = new Set(), asked = new Set(); let ins = 0;
+  // A session is stepped with next() and answer(v); the Profiles analysed can change between steps (setProfiles).
+  function createSession(profileIds = null) {
+    let sc = profileIds ? scopeOf(profileIds) : base;
+    const answers = [], queued = new Set(), asked = new Set(), ents = {}, st = emptyStates();
+    let queue = [], ins = 0, last = null, goodAt = null, pending = null, pendingIt = null;
+    chIds.forEach((c) => { ents[c] = []; });
+    const openIn = (q) => q.characteristics.filter((c) => sc.inS(c.id) && st[c.id].state === 'open');
     const add = (q, byLast) => { if (asked.has(q.id) || queued.has(q.id)) return; queue.push({ q, ins: ins++, byLast: !!byLast }); queued.add(q.id); };
-    const refill = (st) => { for (const q of BANK) if (!asked.has(q.id) && q.characteristics.some((c) => inS(c.id) && st[c.id].state === 'open' && st[c.id].n > 0)) add(q); };
+    const prune = () => { queue = queue.filter((it) => openIn(it.q).length); queued.clear(); queue.forEach((it) => queued.add(it.q.id)); };
+    const refill = () => { for (const q of BANK) if (!asked.has(q.id) && q.characteristics.some((c) => sc.inS(c.id) && st[c.id].state === 'open' && st[c.id].n > 0)) add(q); };
     BANK.filter((q) => q.type === 'discovery').forEach((q) => add(q));
-    let last = null, goodAt = null, st = emptyStates();
-    const ents = {}; chIds.forEach((c) => { ents[c] = []; });
-    for (;;) {
-      queue = queue.filter((it) => openIn(it.q, st).length); queued.clear(); queue.forEach((it) => queued.add(it.q.id));
-      if (!queue.length) { refill(st); if (!queue.length) break; }
+
+    // the Question to ask now, or null when the session ended; asking it twice returns the same one
+    function next() {
+      if (pending) return pending;
+      prune();
+      if (!queue.length) { refill(); if (!queue.length) return null; }
       let best = null, bk = null;
       for (const it of queue) {
-        const open = openIn(it.q, st);
+        const open = openIn(it.q);
         const key = [it.byLast ? 0 : 1, last && it.q.domain === last.domain ? 0 : 1, Math.min(...open.map((c) => st[c.id].n)), it.q.stage, it.ins];
         let lt = !bk;
         if (!lt) for (let i = 0; i < key.length; i++) if (key[i] !== bk[i]) { lt = key[i] < bk[i]; break; }
         if (lt) { best = it; bk = key; }
       }
       queue = queue.filter((it) => it !== best); queued.delete(best.q.id);
-      const q = best.q; asked.add(q.id);
-      const v = answerFn(q);
+      asked.add(best.q.id);
+      pending = best.q; pendingIt = best;
+      return pending;
+    }
+
+    // asks a given Question instead of the one next() would choose; used when replaying Answers that remain after others were deleted
+    function ask(id) {
+      const q = qById[id];
+      if (!q) throw new Error(`unknown question ${id}`);
+      if (pending && pending.id === id) return pending;
+      if (asked.has(id)) throw new Error(`question ${id} appears twice in the answers`);
+      if (pending) { asked.delete(pending.id); queue.push(pendingIt); queued.add(pending.id); }
+      queue = queue.filter((it) => it.q !== q); queued.delete(id);
+      asked.add(id);
+      pending = q; pendingIt = null;
+      return pending;
+    }
+
+    // v: the stored value, or null when skipped
+    function answer(v) {
+      if (!pending) throw new Error('no question to answer; call next() first');
+      const q = pending; pending = null;
       answers.push({ q: q.id, v }); last = q;
       queue.forEach((it) => { it.byLast = false; });
       if (v !== null) for (const r of q.routes) if ((r.when === 'gte' && v >= r.threshold) || (r.when === 'lte' && v <= r.threshold)) add(qById[r.add], true);
       for (const x of q.characteristics) { ents[x.id].push(entryOf(q, x, v)); st[x.id] = charState(x.id, ents[x.id], asked); }
-      const gaps = chIds.filter((c) => inS(c) && kc[c] > 0 && st[c].state === 'open' && st[c].n < CFG.min_answered && chDomain[c] === q.domain);
+      const gaps = chIds.filter((c) => sc.inS(c) && sc.kc[c] > 0 && st[c].state === 'open' && st[c].n < CFG.min_answered && chDomain[c] === q.domain);
       for (const c of gaps) {
         if (queue.some((it) => it.q.characteristics.some((x) => x.id === c))) continue;
         const cand = carry[c].filter((x) => !asked.has(x.id) && !queued.has(x.id)).sort((a, b) => a.stage - b.stage || a.idx - b.idx)[0];
         if (cand) add(cand);
       }
       if (goodAt === null) {
-        const withEv = profileResults(st, PEVAL, answers).filter((r) => r.k > 0);
+        const withEv = profileResults(st, sc.PEVAL, answers, sc).filter((r) => r.k > 0);
         if (withEv.length && withEv.every((r) => r.well)) goodAt = answers.length;
       }
     }
-    return { answers, st, goodAt };
+
+    // exercise-adr-policy-101.10-analysed-profiles: Answers are kept; the queue is re-checked against the new scope
+    function setProfiles(ids) {
+      if (pending) throw new Error('profiles can change only before the next question is chosen');
+      const before = sc;
+      sc = scopeOf(ids);
+      prune();
+      for (const q of BANK) {
+        if (q.type !== 'discovery' || asked.has(q.id) || queued.has(q.id)) continue;
+        if (q.characteristics.some((c) => sc.inS(c.id) && !before.inS(c.id) && st[c.id].state === 'open')) add(q);
+      }
+    }
+
+    return {
+      next, ask, answer, setProfiles, st, answers,
+      get goodAt() { return goodAt; },
+      get profiles() { return sc.ids; },
+      get analysed() { return sc.PEVAL; },
+      get weights() { return sc.pw; },
+      inScope: (id) => sc.inS(id),
+      // true when no Question that touches an open Characteristic of the Profile can still be offered
+      exhausted: (id) => {
+        const p = sc.PEVAL.find((x) => x.id === id);
+        if (!p) return true;
+        const open = new Set(p.characteristics.filter((c) => st[c].state === 'open'));
+        const touches = (q) => q.characteristics.some((c) => open.has(c.id));
+        if (!open.size) return true;
+        if ((pending && touches(pending)) || queue.some((it) => touches(it.q))) return false;
+        return !BANK.some((q) => !asked.has(q.id) && !queued.has(q.id) && touches(q) && q.characteristics.some((c) => sc.inS(c.id) && st[c.id].state === 'open' && st[c.id].n > 0));
+      },
+      results: () => profileResults(st, sc.PEVAL, answers, sc),
+      quality: () => responseQuality(answers, st)
+    };
   }
 
-  return { CFG, CH, BANK, PROFILES: registry.profiles, PEVAL, chIds, chDomain, qById, kc, pw, runSession, profileResults, responseQuality, centre, scope };
+  function runSession(answerFn) {
+    const s = createSession();
+    for (let q = s.next(); q; q = s.next()) s.answer(answerFn(q));
+    return { answers: s.answers, st: s.st, goodAt: s.goodAt };
+  }
+
+  // Rebuilds a session from the stored form (exercise-adr-policy-101.09-state-is-derived): the first analysed
+  // Profiles, the Answers in order and the ordered Profile changes, each with the number of Answers when it happened.
+  // onStep(session, index, question) runs after every Answer. Throws when the stored form does not match this engine.
+  function replay({ profiles: first = null, answers = [], changes = [] } = {}, onStep = null) {
+    const s = createSession(first);
+    let ci = 0;
+    const applyChanges = (n) => { while (ci < changes.length && changes[ci].at <= n) s.setProfiles(changes[ci++].profiles); };
+    for (let i = 0; i < answers.length; i++) {
+      applyChanges(i);
+      s.next(); // keeps the queue evolving as in a live session; ask() corrects it when this Answer was not the engine's choice
+      const q = s.ask(answers[i].q);
+      const v = answers[i].v;
+      if (v !== null) {
+        const lo = q.answer === 'frequency' ? 0 : -1;
+        if (typeof v !== 'number' || !Number.isFinite(v) || v < lo || v > 1) throw new Error(`answer ${i + 1} (${q.id}) is out of range`);
+      }
+      s.answer(v === null ? null : Math.round(v * 100) / 100);
+      if (onStep) onStep(s, i, q);
+    }
+    applyChanges(answers.length);
+    s.next();
+    return s;
+  }
+
+  return { CFG, CH, BANK, PROFILES: registry.profiles, PEVAL, chIds, chDomain, qById, kc, pw, runSession, createSession, replay, profileResults, responseQuality, centre, scope };
 }
 
-module.exports = { DOMAINS, DEFAULT_REGISTRY, loadRegistry, createEngine };
+return { DOMAINS, loadRegistry, createEngine };
+}));

@@ -36,7 +36,7 @@ function stanceFrom(profiles, chIds, severities, base, idio, r) {
   });
   return stance;
 }
-const toScale = (q, x) => { const y = Math.round((clamp(x) + 1) * 3) / 3 - 1; return q.answer === 'frequency' ? (y + 1) / 2 : y; };
+const toScale = (q, x) => { const y = Math.round((clamp(x) + 1) * 2) / 2 - 1; return q.answer === 'frequency' ? (y + 1) / 2 : y; };
 
 // Standard respondent: nominal level per Profile (0 = none), small variation, 3% skips.
 function simplePerson({ profiles, chIds, nominal, seed, noise = 1 }) {
@@ -81,7 +81,7 @@ function archetypes(profiles, domains, chIds, chDomain) {
     ['invalid', 'yes_sayer', 3, () => ({ levels: zero(), fixed: 0.9 })],
     ['invalid', 'no_sayer', 2, () => ({ levels: zero(), fixed: -0.9 })],
     ['invalid', 'midpoint', 2, () => ({ levels: zero(), fixed: 0 })],
-    ['invalid', 'straight_line', 2, (r) => ({ levels: zero(), fixed: pick(r, [-1, -2 / 3, -1 / 3, 1 / 3, 2 / 3, 1]), exact: true })],
+    ['invalid', 'straight_line', 2, (r) => ({ levels: zero(), fixed: pick(r, [-1, -0.5, 0.5, 1]), exact: true })],
   ];
 }
 

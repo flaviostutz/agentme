@@ -86,6 +86,10 @@ The engine MUST raise a response quality flag when at least `quality_min_charact
 
 The flag MUST NOT change any score or margin and MUST NOT end the session. It only means the answers do not look like one consistent person, so the Profile results MUST NOT be reported as well explored (`08-good-enough`) and the results MUST show a neutral notice (`exercise-bdr-policy-603`). It cannot detect consistent but inverted answers, masking or most extreme responding.
 
+#### 12-domain-result
+
+For a Domain, the evaluated Characteristics are those of that Domain with a non-null score. Domain score and Domain margin MUST be computed exactly like the Profile score and Profile margin of `07-profile-result`, over those Characteristics, with each counted once. With no evaluated Characteristic the Domain has no result. The same limits apply: the margin measures only answer noise and assumes independent errors, and Characteristics that share Questions are not independent, so results MUST NOT present it as more than that (`exercise-bdr-policy-603`).
+
 #### 13-recalibrate-with-real-answers
 
 The configuration values in `exercise-adr-policy-202.05-config-keys` and the response quality thresholds come from simulated respondents, whose answers are generated from the registry weights. They MUST be recalibrated with real answers before the results are treated as validated.

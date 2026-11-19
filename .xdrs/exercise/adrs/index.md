@@ -5,6 +5,7 @@ Architectural decisions for the exercise questionnaire system.
 ## Application
 
 - [exercise-adr-policy-101](application/101-question-flow-engine.md) - **Question flow engine** - Single question queue, follow-up routes, next-question priority, refill, pruning and session end
+- [exercise-adr-policy-102](application/102-web-client-architecture.md) - **Web client architecture** - Static browser app, shared engine, answers kept on the device
 
 ## Data
 
