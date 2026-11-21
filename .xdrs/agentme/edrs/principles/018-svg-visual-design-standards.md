@@ -1,7 +1,7 @@
 ---
 name: agentme-edr-policy-018-svg-visual-design-standards
 description: >
-  Defines visual design standards for SVG assets (diagrams, infographics, charts, illustrations, icons, cover art) used in articles, READMEs and research: A4-like canvas, readable type, KARP principles, palette, layout, accessibility and a render-and-critique process. Use when creating, modifying or reviewing an SVG design or a Mermaid or draw.io visual made as a document asset.
+  Defines visual design standards for SVG assets (diagrams, infographics, charts, illustrations, icons, cover art) used in articles, READMEs and research: A4-like canvas, readable type, KARP principles, palette, layout, accessibility and a render-and-critique process. Use when creating, modifying or reviewing an SVG design, or a Mermaid or draw.io visual (including Mermaid shown in chat) made as a document asset.
 apply-to: the agentme scope itself, and any scope that directly or transitively follows or extends agentme
 valid-from: 2026-11-08
 ---
@@ -22,7 +22,7 @@ Which design rules and verification process must SVG visual assets follow?
 
 #### 01-scope-and-precedence
 
-These rules apply when an SVG design is created or materially modified, meaning layout, text or colors change beyond a typo fix. Existing SVGs are not required to be redrawn. A primary element is a box, node, chart mark or label group that carries meaning. Format order and the ban on images in Policies stay as in [`_core-adr-policy-020`](../../../_core/adrs/principles/020-media-and-asset-standards.md). Mermaid and draw.io visuals made as document assets MUST follow rules `02` to `18` through their own levers (theme, classes, layout direction) and MUST be rendered when a renderer exists.
+These rules apply when an SVG design is created or materially modified, meaning layout, text or colors change beyond a typo fix. Existing SVGs are not required to be redrawn. A primary element is a box, node, chart mark or label group that carries meaning. Format order and the ban on images in Policies stay as in [`_core-adr-policy-020`](../../../_core/adrs/principles/020-media-and-asset-standards.md). Mermaid and draw.io visuals made as document assets MUST follow rules `02` to `18` through their own levers (theme, classes, layout direction) and MUST be rendered when a renderer exists. Mermaid diagrams shown only in chat or in a report MUST follow rule `20`.
 
 #### 02-canvas-and-ratio
 
@@ -95,6 +95,15 @@ Each pass MUST render the SVG to an image and view it, then test it against rule
 #### 19-skill
 
 The skill [`create-svg-design`](skills/create-svg-design/SKILL.md) operationalizes these rules and SHOULD be used to create or review SVG designs.
+
+#### 20-mermaid-readability
+
+Every Mermaid diagram, including one shown only in chat, MUST be readable in both light and dark viewer themes. Mermaid takes default text and line colors from the viewer theme, and its source cannot set the page background, so a custom fill with default text can become unreadable (for example light grey text on a pastel fill).
+- A diagram SHOULD sit on a white panel by default: wrap all nodes in one `subgraph panel[" "]` and style it with `classDef panel fill:#ffffff,stroke:#cbd5e1,color:#1e293b` plus `class panel panel`. This makes the pastel palette read the same in any viewer theme and matches the light background required for SVG (rule `02`).
+- Every `classDef` or `style` that sets `fill` MUST also set `stroke` and text `color` explicitly, with text at least 4.5:1 against the fill. Dark text (for example `#1e293b`) on a washed-out fill, or white text on a dark fill, are the usual pairs.
+- Edges and labels MUST NOT rely on theme defaults when they carry meaning: set `linkStyle` with a mid-tone stroke (for example `#64748b`), which stays visible on the white panel.
+- Node labels SHOULD be short (rule `12`) and a diagram SHOULD have about 12 nodes or fewer (rule `03`). A sample of a larger graph MUST say it is a sample.
+- A diagram shown in chat SHOULD be rendered with `mmdc` in a dark theme (`-t dark`) and a light one before it is shown, when `mmdc` is available.
 
 ## References
 

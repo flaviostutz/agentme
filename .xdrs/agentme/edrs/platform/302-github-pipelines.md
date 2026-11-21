@@ -1,6 +1,6 @@
 ---
 name: agentme-edr-policy-302-github-ci-cd-pipelines
-description: Defines the standard GitHub Actions workflow split for CI, release tagging, and publishing. Use when configuring project automation.
+description: Defines the standard GitHub Actions workflow split for CI, release tagging, publishing, and stage deployment. Use when configuring project automation.
 apply-to: Projects using GitHub Actions
 valid-from: 2026-05-25
 ---
@@ -15,7 +15,7 @@ What GitHub Actions workflows should every project follow to ensure a safe, pred
 
 ## Decision Outcome
 
-**Use three separate, purpose-scoped GitHub Actions workflows: `ci.yml` for build verification on PRs and main, `release.yml` for calculating and creating a version tag with monotag, and `publish.yml` for publishing artifacts when a version tag is pushed.**
+**Use separate, purpose-scoped GitHub Actions workflows: `ci.yml` for build verification on PRs and main, `release.yml` for calculating and creating a version tag with monotag, `publish.yml` for publishing artifacts when a version tag is pushed, and `deploy.yml` for deploying environments as defined in [agentme-adr-301](../../adrs/platform/301-computational-environments.md) rule `11-stage-deployment-lifecycle`.**
 
 Separating these concerns eliminates accidental publishes from CI runs, ensures monotag has access to the full git history, and makes each workflow independently auditable and re-runnable.
 
@@ -27,7 +27,10 @@ Separating these concerns eliminates accidental publishes from CI runs, ensures 
 |----------|---------|---------|
 | `ci.yml` | `pull_request` → `main`, `push` → `main` | Build, lint, and test the codebase |
 | `release.yml` | `workflow_dispatch` | Tag the next version using monotag |
-| `publish.yml` | `push` of tags matching `*` | Publish artifacts for the tagged version |
+| `publish.yml` | `push` of any version tag | Publish artifacts for the tagged version |
+| `deploy.yml` | `push` → `main`, `push` of any version tag | Deploy `tst`, `acc` or `prd` |
+
+Version tags have no `v` prefix: `<semver>` in a single-module repository and `<module-name>/<semver>` in a monorepo, as defined in [agentme-edr-301](301-monorepo-structure.md). Tag triggers MUST use the pattern `'**'` so tags containing `/` match.
 
 All workflows run on `ubuntu-latest`. Tool versions MUST be managed by Mise via `jdx/mise-action`. Projects SHOULD have a `.mise.toml` file to configure it
 
@@ -112,7 +115,7 @@ jobs:
 
 File: `.github/workflows/publish.yml`
 
-Projects MUST configure this workflow, triggered exclusively when a tag matching `v*.*.*` is pushed to the repository. This ensures only explicitly tagged commits produce published artifacts. Runs `make publish` against the tagged commit.
+Projects that publish artifacts MUST configure this workflow, triggered exclusively when a version tag is pushed to the repository. This ensures only explicitly tagged commits produce published artifacts. It resolves the module from the tag (`dirname` of the tag name is `.` at the root and the module path in a monorepo) and runs `make -C <module> publish` against the tagged commit. A module that is deployed instead of published has no `publish` target and is not published.
 
 ```yaml
 name: publish
@@ -120,7 +123,7 @@ name: publish
 on:
   push:
     tags:
-      - '*'
+      - '**'
 
 permissions:
   contents: read
@@ -132,12 +135,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v3
-      - run: make build
-      - run: make lint
-      - run: make test
+      - run: echo "MODULE=$(dirname "$GITHUB_REF_NAME")" >> "$GITHUB_ENV"
+      - run: make -C "$MODULE" build
+      - run: make -C "$MODULE" lint
+      - run: make -C "$MODULE" test
       - run: git reset --hard HEAD
-      - run: make publish
-
+      - run: make -C "$MODULE" publish
 ```
 
 *Why rebuild on publish:* The checkout is done from the exact tag commit. Rebuilding ensures the published artifact matches exactly what is tagged, rather than relying on a prior CI artifact.
@@ -152,13 +155,121 @@ Performance tests need a deployed environment, so `ci.yml` MUST NOT run them. A 
 
 ---
 
+#### 05-deploy-workflow
+
+File: `.github/workflows/deploy.yml`
+
+Projects that deploy environments MUST use this workflow and MUST include only the stage jobs they use. Stage selection follows [agentme-adr-301](../../adrs/platform/301-computational-environments.md) rule `11-stage-deployment-lifecycle`:
+
+- `tst` runs on push to `main` and deploys all deployable modules (the root `make deploy` delegates to each module); an unchanged IaC deploy is a no-op.
+- A `resolve` job runs on tag pushes. It takes the semver after the last `/` of the tag and sets stage `acc` when it contains `-`, otherwise `prd`, and outputs the module path. Stage jobs MUST select on these outputs, not on a pattern over the whole tag, because module names may contain `-`.
+- Every stage job MUST rerun `make build`, `make lint` and `make test` for its commit, then `STAGE=<stage> make deploy`, so each environment is built with its own configuration.
+- The `prd` job MUST use the GitHub Environment `prd` configured with required reviewers, so a manual approval happens before the job and its credentials are used. Tag rulesets restricting who can create tags MAY be added, but the approval is the main production protection.
+- Credentials MUST reach the job as the standard AWS environment variables of [agentme-edr-308](308-iac-module-and-deployment.md). OIDC role assumption with `aws-actions/configure-aws-credentials`, which exports them, SHOULD be used; static keys held as secrets of a per-stage GitHub Environment MAY be used. For `tst` and `acc` only, stage-suffixed repository secrets (for example `AWS_ACCESS_KEY_ID_ACC`) MAY be mapped to the standard names in the job.
+- `deploy.yml` MUST NOT run `undeploy` for `tst`, `acc` or `prd`.
+- To roll back, re-run the workflow of the previous good tag; it passes the `prd` approval again.
+
+```yaml
+name: deploy
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - '**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  resolve:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    outputs:
+      module: ${{ steps.tag.outputs.module }}
+      stage: ${{ steps.tag.outputs.stage }}
+    steps:
+      - id: tag
+        run: |
+          echo "module=$(dirname "$GITHUB_REF_NAME")" >> "$GITHUB_OUTPUT"
+          case "${GITHUB_REF_NAME##*/}" in
+            *-*) echo "stage=acc" >> "$GITHUB_OUTPUT" ;;
+            *) echo "stage=prd" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  deploy-tst:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: tst
+    env:
+      STAGE: tst
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: make build
+      - run: make lint
+      - run: make test
+      - run: make deploy
+
+  deploy-acc:
+    needs: resolve
+    if: needs.resolve.outputs.stage == 'acc'
+    runs-on: ubuntu-latest
+    environment: acc
+    env:
+      STAGE: acc
+      MODULE: ${{ needs.resolve.outputs.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: make -C "$MODULE" build
+      - run: make -C "$MODULE" lint
+      - run: make -C "$MODULE" test
+      - run: make -C "$MODULE" deploy
+
+  deploy-prd:
+    needs: resolve
+    if: needs.resolve.outputs.stage == 'prd'
+    runs-on: ubuntu-latest
+    environment: prd # required reviewers: manual approval before the job runs
+    env:
+      STAGE: prd
+      MODULE: ${{ needs.resolve.outputs.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: make -C "$MODULE" build
+      - run: make -C "$MODULE" lint
+      - run: make -C "$MODULE" test
+      - run: make -C "$MODULE" deploy
+```
+
+*Why Environments:* `vars.AWS_DEPLOY_ROLE_ARN` and `vars.AWS_REGION` are set per GitHub Environment, so each stage assumes its own role in its own account.
+
+---
+
 #### Required secrets and permissions
 
 | Secret / Permission | Used in | Purpose |
 |--------------------|---------|---------| 
 | `GITHUB_TOKEN` (built-in) | `release.yml` | Push newly calculated tag back to the repository |
-| `id-token: write` | `publish.yml` | Generate OIDC token for npm provenance |
+| `GH_PERSONAL_TOKEN` | `release.yml` | Token that lets the tag push trigger `publish.yml` and `deploy.yml` (tags pushed with `GITHUB_TOKEN` trigger no workflows) |
+| `id-token: write` | `publish.yml`, `deploy.yml` | OIDC token for npm provenance and for AWS role assumption |
 | `contents: write` | `release.yml` | Allow the workflow job to push tags |
+| `AWS_DEPLOY_ROLE_ARN`, `AWS_REGION` (Environment variables) | `deploy.yml` | Role and region of each stage; static-key alternative: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` as Environment secrets |
 
 ---
 
@@ -180,10 +291,15 @@ PR opened / push to main
   next semver tag
         │
         ▼
-  tag pushed → v1.2.3
+  tag pushed → 1.2.3 (or orders/1.2.3 in a monorepo)
         │
         ▼
   publish.yml triggered
   (build + publish artifacts)
+
+  Deployable modules:
+  merge to main      → deploy.yml → tst
+  tag 1.2.3-beta.1   → deploy.yml → acc
+  tag 1.2.3          → deploy.yml → approval → prd
 ```
 

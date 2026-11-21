@@ -35,7 +35,7 @@ Environment-aware Makefile targets MUST fail fast with a message naming the valu
 
 #### 03-env-files-must-use-the-prefix-name
 
-Deployment configuration MUST follow [agentme-edr-305](305-environment-variable-configuration.md) rule `04-stage-specific-dotenv-committed` using `.env.<prefix>` (for example `.env.tst`, `.env.prd`).
+Feature flags and soft toggles per environment MUST follow [agentme-edr-305](305-environment-variable-configuration.md) rule `04-stage-specific-dotenv-committed` using `.env.<prefix>` (for example `.env.tst`, `.env.prd`). Hard per-stage configuration follows [agentme-edr-308](308-iac-module-and-deployment.md).
 
 A variant MAY add `.env.<prefix>-<variant>` (for example `.env.dev-pr123`). It MUST be loaded after `.env.<prefix>` and only overrides values; the `.env.<prefix>` file MUST still exist.
 
@@ -45,7 +45,7 @@ Resource names SHOULD end with `-<stage>` using the full `STAGE` value (for exam
 
 #### 05-vendor-endpoints-must-be-configured-per-environment
 
-Vendor endpoint addresses MUST be set per environment through `.env.<prefix>` (per rule `03-env-files-must-use-the-prefix-name`) and MUST NOT be hardcoded in code. `.env.prd` MUST hold only live vendor endpoints; `.env.sbx`, `.env.dev`, `.env.tst` and `.env.acc` MUST hold only the vendor's production-grade non-production endpoints or a recorded fallback, as defined in [agentme-adr-301](../../adrs/platform/301-computational-environments.md) rule `10-vendor-environments-must-be-production-grade`. Credentials are not configuration and follow [agentme-edr-124](../application/124-secrets-management.md).
+Vendor endpoint addresses MUST be set per environment and MUST NOT be hardcoded in business logic. They SHOULD live in the typed stage configuration of the `infra/` module (see [agentme-edr-308](308-iac-module-and-deployment.md)) and MAY be set through `.env.<prefix>` (per rule `03-env-files-must-use-the-prefix-name`) when a project does not use typed stage configuration. The `prd` configuration MUST hold only live vendor endpoints; `sbx`, `dev`, `tst` and `acc` MUST hold only the vendor's production-grade non-production endpoints or a recorded fallback, as defined in [agentme-adr-301](../../adrs/platform/301-computational-environments.md) rule `10-vendor-environments-must-be-production-grade`. Credentials are not configuration and follow [agentme-edr-124](../application/124-secrets-management.md).
 
 ```text
 # .env.tst

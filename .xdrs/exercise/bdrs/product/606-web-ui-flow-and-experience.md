@@ -144,6 +144,5 @@ Every Profile row of the results screen MUST be a button, collapsed by default, 
 - [exercise-bdr-policy-603 - Results presentation](603-results-presentation.md)
 - [exercise-adr-policy-101 - Question flow engine](../../adrs/application/101-question-flow-engine.md)
 - [exercise-adr-policy-102 - Web client architecture](../../adrs/application/102-web-client-architecture.md)
-- [Web UI mockup](.assets/web-ui-mockup.html) - Illustrative HTML example of the Question, Results, between-questions and wide screens; the rules above prevail over it
 - [Web UI functional sample](.assets/web-ui-functional-sample.html) - Self-contained, working HTML app (intro, questions, results, import/export) that runs the shared engine and registries inlined by the build script; illustrative, the rules above prevail over it
 - [Web sample build script](.assets/build-web-sample.js) - Fails when registry lint fails, then inlines `engine.js` and the registries into the generated regions of the functional sample

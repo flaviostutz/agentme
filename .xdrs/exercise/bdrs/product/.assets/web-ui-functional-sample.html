@@ -9,7 +9,7 @@
   One static file: no server, no network calls, no third-party scripts. Answers stay in this browser (localStorage).
   The engine (test-question-bank/scripts/engine.js) and the registries are inlined between the GENERATED markers by
   build-web-sample.js; do not edit those regions, edit the engine or the registries and run the build again:
-    node .xdrs/exercise/bdrs/product/.assets/build-web-sample.js
+    node .xdrs/exercise/bdrs/product/.assets/build-web-sample.js   (add --check to only test whether it is up to date)
 -->
 <style>
 :root{--ink:#1f2933;--mut:#52606d;--bg:#f7f5f0;--card:#fff;--line:#c9c3b3;--acc:#2f5d8a;--acc2:#e8eff6;--gray:#5f6870;--font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -722,7 +722,7 @@ function renderResults() {
   const rows = session.analysed.map((p, i) => {
     const r = m.R[i], lv = levelOf(r, m.Q), st = profState(r), isOpen = open(p.id), gray = st === IMPRECISE ? ' hm' : '';
     return `<div class="card"><button type="button" class="prow" data-act="expand" data-id="${p.id}" data-fid="prof-${p.id}" aria-expanded="${!!isOpen}" aria-controls="det-${p.id}">
-        <span class="pname"><span class="lvl${gray}" role="img"aria-label="Characteristics of this profile: ${lv}" title="${lv === 'pending' ? 'The level is shown once the profile is well explored.' : ''}">${levelIcon(lv)}</span><span><b>${esc(short(p))}</b><br><span class="muted">level ${lv}</span></span></span>
+        <span class="pname"><span class="lvl${gray}" role="img"aria-label="Characteristics of this profile: ${lv}" title="${lv === 'pending' ? 'The level is shown once the profile is well explored.' : ''}">${levelIcon(lv)}</span><span><b>${esc(short(p))}</b><br><span class="muted">${lv}</span></span></span>
         <span><span class="lbl">Score</span>${r.k ? `<span class="pscore${gray}">${scoreBar({}, { score: r.score, margin: r.margin }, `${short(p)} score`)}<span>${fmt(r.score, r.margin)}</span></span>` : '—'}</span>
         <span><span class="lbl">Weighted score</span>${r.k ? f2(r.wscore) : '—'}</span>
         <span><span class="tag">${st}</span></span></button>

@@ -83,7 +83,7 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 
 | Target | Purpose |
 |--------|---------|
-| `build` | Install dependencies, compile, and package the software. The full `install → compile → package` workflow. |
+| `build` | Install dependencies, compile, and package the software. The full `install → compile → package` workflow. For modules with an `infra/` folder it MUST also validate the infrastructure code offline (for example `cdk synth --no-lookups`), see [agentme-edr-308](308-iac-module-and-deployment.md). |
 | `install` | Download and install all project dependencies. Assumes the language runtime is already available (installed via `setup`). |
 | `compile` | Compile source files into binaries or transpiled output. Assumes dependencies are already installed. |
 | `package` | Assemble a distributable package from compiled files and other resources. Use the `VERSION` environment variable to set the package version explicitly. |
@@ -113,8 +113,8 @@ Targets are organized into five lifecycle groups. Projects MUST use these names 
 | `release` | Determine the next version (e.g., via semantic versioning and git tags), generate changelogs and release notes, tag the repository, and create a release artifact. Normally invokes `docgen`. |
 | `docgen` | Generate documentation (API docs, static sites, changelogs, example outputs). |
 | `publish` | Upload the versioned package to the appropriate registry (npm, PyPI, DockerHub, GitHub Releases, blob storage, etc.). Depends on `release` and `package` having been run first. |
-| `deploy` | Provision the software on a running environment. Use the `STAGE` environment variable to select the target environment (e.g., `STAGE=dev make deploy`). |
-| `undeploy` | Deactivate or remove the software from an environment. Use the `STAGE` environment variable in the same way as `deploy`. Useful for tearing down ephemeral PR environments. |
+| `deploy` | Provision the software on a running environment. `STAGE` MUST be set (no default) to select the target environment (e.g., `STAGE=dev make deploy`), and cloud credentials come only from environment variables. `deploy` of `tst`, `acc` and `prd` runs only from the pipeline. See [agentme-edr-308](308-iac-module-and-deployment.md). |
+| `undeploy` | Deactivate or remove the software from an environment. `STAGE` MUST be set, as for `deploy`. Useful for tearing down ephemeral `sbx` and `dev` environments; `tst`, `acc` and `prd` are removed manually, never by a pipeline. |
 
 ---
 
@@ -124,7 +124,7 @@ Two environment variables have defined semantics and MUST be used consistently.
 
 | Variable | Purpose |
 |----------|---------|
-| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. The prefix MUST be one of `sbx`, `dev`, `tst`, `acc`, `prd` (see [agentme-edr-307](307-environment-short-names.md)). Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. MAY be required by any target that is environment-aware (build, lint, deploy, etc.). |
+| `STAGE` | Identifies the runtime environment. Format: `[prefix][-variant]`. The prefix MUST be one of `sbx`, `dev`, `tst`, `acc`, `prd` (see [agentme-edr-307](307-environment-short-names.md)). Examples: `dev`, `dev-pr123`, `tst`, `prd-blue`. MAY be required by any target that is environment-aware (build, lint, deploy, etc.); `build`, `lint` and `test` default to `dev` when it is unset, while `deploy` and `undeploy` MUST fail. |
 | `VERSION` | Sets the explicit version used during packaging and deployment. Used when there is no automatic version-tagging utility, or to override it. |
 
 ---

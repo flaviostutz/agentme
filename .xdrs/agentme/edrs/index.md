@@ -91,12 +91,14 @@ Data layer implementation and data management decisions.
 Infrastructure implementation, delivery pipeline, and developer environment decisions.
 
 - [agentme-edr-301](platform/301-monorepo-structure.md) - **Monorepo structure** - Standardize monorepo layout, tooling, and package boundaries *(includes skill: [monorepo-setup](platform/skills/monorepo-setup/SKILL.md))*
-- [agentme-edr-302](platform/302-github-pipelines.md) - **GitHub CI/CD pipelines** - Define required CI stages and workflow structure
-- [agentme-edr-303](platform/303-common-targets.md) - **Common development script names** - Reuse standard build, lint, and test target names
+- [agentme-edr-302](platform/302-github-pipelines.md) - **GitHub CI/CD pipelines** - Define CI, release, publish and stage deploy workflows, tag format and prd approval gate
+- [agentme-edr-303](platform/303-common-targets.md) - **Common development script names** - Reuse standard build, lint, test, deploy and undeploy target names and STAGE rules
 - [agentme-edr-304](platform/304-tool-execution-and-scripting.md) - **Tool execution and scripting** - Run tools consistently across shells, Makefiles, and CI
-- [agentme-edr-305](platform/305-environment-variable-configuration.md) - **Environment variable configuration files** - Manage non-secret configuration with `.env` files, `.gitignore` rules, stage variants, and Makefile loading
+- [agentme-edr-305](platform/305-environment-variable-configuration.md) - **Environment variable configuration files** - Manage non-secret configuration and feature flags with `.env` files, `.gitignore` rules, stage variants, and Makefile loading
 - [agentme-edr-306](platform/306-performance-testing.md) - **Performance testing** - Six kinds (baseline, load, stress, spike, soak, resilience) in a `performance-<slug>` module with environment rules, thresholds and report files
 - [agentme-edr-307](platform/307-environment-short-names.md) - **Environment short names** - Use sbx, dev, tst, acc, prd in STAGE, env files, resource names, tags and vendor endpoint config
+- [agentme-edr-308](platform/308-iac-module-and-deployment.md) - **IaC module and deployment** - infra/ folder, STAGE plus ENV-var credentials only, typed stage config, CI-only deploys to tst, acc and prd
+- [agentme-edr-309](platform/309-aws-cdk-typescript.md) - **AWS CDK with TypeScript** - CDK v2 layout in infra/, offline synth in build, cdk deploy, ts-node setup and Jest assertions
 
 ## Governance
 
