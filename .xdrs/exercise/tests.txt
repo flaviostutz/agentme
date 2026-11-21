@@ -1,0 +1,40 @@
+Create gdpr scope in agentme
+
+Prepare a monorepo with a next js module. Create policies to define that the assessment engine, question bank, scientific links, scoring system and policies must not be available in the browser of the user at any time to avoid copy from other people. We will pay for a backend processing to protect those assets. So after the implementation check if any of those things could be sniffed/copied directly from attackers that wants to clone our system. Ideally the api call should simply bring the next question, receive the answers  and output the results, without any exposure of the internals. Declare in the policies that our architecture is Next.js static export + S3/CloudFront + API Gateway + Lambda. We also must run on AWS region eu Frankfurt because of gdpr. Our engine and questions bank relies on a lib that has the data and everything embedded running in the lambda NodeJS, so no database is needed.
+Add to the policies that every feature we implement we must not conflict with gdpr requirements. Always check for these before any implementation and challenge it. For example if I ask to store the answers of the user in the database and I don’t have any consent page explaining why we are storing t the data to the user, show this as an error. Store quesrionare answers in dynamo db.
+
+Prepare gdpr procedures/architecture
+Privacy policy
+Explain data collected, purposes, legal bases, retention and rights.
+Explicit consent
+Separate, specific and informed consent for health-related processing.
+Data Processing Agreements
+Appropriate Article 28 contracts with hosting and other processors.
+Data minimization
+Don't collect accounts, names or answers unless necessary.
+Retention policy
+Define automatic deletion of temporary assessment sessions.
+Security
+TLS, encryption, restricted access, backups and incident response.
+Data subject rights
+Implement access, correction, deletion and portability procedures.
+Cookie consent
+Obtain consent where required for non-essential tracking technologies.
+Subprocessor review
+Check hosting, payment, analytics and email provider data flows.
+DPIA assessment
+Evaluate whether a Data Protection Impact Assessment is required.
+Breach procedure
+Prepare for the GDPR notification requirements, including the 72-hour supervisory-authority deadline where applicable.
+
+Intake profile 
+Create a profile called “Intake” that will be used to give initial guidance on which detailed profiles the user could explore further. This is a special profile that has one characteristic per other profiles and each of these characteristics either reuse an existing question that represents well the profile being tested, or we need to create a special question for it (that might be more generic than the normal ones so it can span more the exploration). This is a new type of question: “bootstrap”. The Intake profile must be kept up to date everytime a new profile is created (so it gets a new characteristic that represents that profile with questions). The intake profile must: have 2-4 questions per characteristic (that represents another profile) being explored, and its questions must try to detect things that are a high indicative that a certain profile should be explored. It means that those questions doesn’t need to be too broad or generic, but must focus on specific things that are sensors about a possible match to one or other profile, trying to make it a discriminating question between profiles, but that at the same time will reduce false negatives (in case the person has a certain profile but the question is too specific to something they don’t have). Try to find the good set of questions that can guide flags about a certain profile. This Intake profile must be up to date whatever we change the question bank to represent the different profiles that can be assessed along with the type of questions/content that it has. At the end of answering this special intake profile we should be able to score all the other profiles and check which ones deserves to continue to be investigated with all its questions then (we will activate this profile in current session then for further exploration reusing the same questions that were already answered, but this is outside this scope).
+
+Scientific link to questions
+Improve the link of our questions to the scientific instruments link it might be connected to
+  - create a catalog of instruments and its questions
+  - make clear links in the questions to one or more questions in a instrument, with source types “copy-from”, “adapted-from”, “inspired-on”. Adapted-from: means the content is very similar, but with different wording or phrasing, not changing the main idea; inspired on: the content might be different, also combining with other questions, but the concepts and content doesn’t conflict or go against the original content; copy-from: this is a copy of the original question text. Attributes in question are sources: [{instrumentId, instrumentQuestionId, sourceType}]
+  - with this link it should be possible to create a “scientific” score for a certain group of questions (involved in an profile or any other cut) about how much they are tight to scientific instruments. The instrument catalog should also have a methodologyAlignmentScore (0.0-1.0) about how well the instrument methodology is aligned with our engine and that influences the overall scientific score for the questions
+  - scientific instrument -> instrument question N-[source]-N bank question
+  - bank questions must have a scientific references text field that can also be used when there is no specific instrument question connected, but the question was based on an article or scientific paper. The reference must indicate the bibliographical ref along with the chapter or summary of the concept in the paper.
+
