@@ -49,7 +49,7 @@ A `dev` environment MUST NOT require another system's `dev` environment to be ru
 
 #### 04-tst-must-run-the-full-dependency-chain
 
-`tst` MUST be accessible to all developers and MUST run the complete solution with its entire chain of dependencies, so that systems can depend on each other. It SHOULD be updated automatically when changes are merged to the main branch.
+`tst` MUST be accessible to all developers and MUST run the complete solution with its entire chain of dependencies, so that systems can depend on each other. It MUST be updated automatically when changes are merged to the main branch, as defined in `11-stage-deployment-lifecycle`.
 
 #### 05-acc-must-mirror-prd-architecture
 
@@ -98,8 +98,25 @@ When the vendor cannot provide a production-grade non-production endpoint, teams
 
 Each fallback, and each shared endpoint, MUST be recorded as an exception as defined in [agentme-edr-307](../../edrs/platform/307-environment-short-names.md).
 
+#### 11-stage-deployment-lifecycle
+
+Systems that are deployed to an environment MUST follow this lifecycle:
+
+| Environment | Deployed when | Gate |
+|---|---|---|
+| `dev` (and `sbx`) | A developer triggers it manually from their own machine | none |
+| `tst` | Automatically, when changes are merged to the main branch | none |
+| `acc` | Automatically, when a pre-release version tag is pushed (for example `1.0.0-beta.1`) | none |
+| `prd` | When a stable version tag is pushed (for example `1.0.0`), only after a manual approval | manual approval before the pipeline runs |
+
+Each environment MUST be built and deployed with its own `STAGE` configuration; artifacts MUST NOT be promoted from one environment to another, because they differ per environment (for example network identifiers). A project MUST include only the environments it uses, so a project without `acc` deploys nothing on a pre-release tag.
+
+Version tags have no `v` prefix: `<semver>` in a single-module repository and `<module-name>/<semver>` in a monorepo, as defined in [agentme-edr-301](../../edrs/platform/301-monorepo-structure.md). Pipeline implementation follows [agentme-edr-302](../../edrs/platform/302-github-pipelines.md), and deployment mechanics follow [agentme-edr-308](../../edrs/platform/308-iac-module-and-deployment.md).
+
 ## References
 
 - [agentme-edr-307](../../edrs/platform/307-environment-short-names.md) - Short names and their use in `STAGE`, files, resources and tags
 - [agentme-edr-303](../../edrs/platform/303-common-targets.md) - `STAGE` variable and `deploy` targets
+- [agentme-edr-302](../../edrs/platform/302-github-pipelines.md) - `deploy.yml` workflow implementing the lifecycle
+- [agentme-edr-308](../../edrs/platform/308-iac-module-and-deployment.md) - Infrastructure as code module and deployment
 - [agentme-edr-306](../../edrs/platform/306-performance-testing.md) - Performance tests against `acc`
