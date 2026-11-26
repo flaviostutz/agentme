@@ -1,3 +1,2 @@
 sets:
   - package: git:https://github.com/flaviostutz/xdrs-core.git@main
-  - package: xdrs-core

@@ -166,3 +166,4 @@ In library code (Python, JS/TS, Go), continue using the cross-platform libraries
 
 - [agentme-edr-303](../platform/303-common-targets.md) - Common development script names (defines Makefile target conventions)
 - [agentme-edr-123](123-error-handling.md) - Error handling (governs how the fallback exception should be raised)
+- [agentme-edr-162](162-personal-data-handling-in-code.md) - Personal data handling in code: personal data MUST NOT appear in logs, URLs or prompts

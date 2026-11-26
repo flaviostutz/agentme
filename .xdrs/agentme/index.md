@@ -17,7 +17,7 @@ The `agentme` scope is a curated library of XDRs and skills encoding best practi
 
 ### What this scope covers
 
-The `agentme` scope provides opinionated, reusable guidance on how to scaffold, build, test, and ship software projects. It targets AI coding agents and human developers who want consistent, high-quality defaults across JavaScript, Go, and Python projects. It also provides business decisions for software development project management (epics, features, user stories).
+The `agentme` scope provides opinionated, reusable guidance on how to scaffold, build, test, and ship software projects. It targets AI coding agents and human developers who want consistent, high-quality defaults across JavaScript, Go, and Python projects. It also provides business decisions for software development project management (epics, features, user stories). It also covers GDPR compliance for applications: an applicability declaration (or explicit opt-out), privacy-by-design architecture, consent UX, storage and retention, runbooks, and a `review-gdpr` audit skill. It also defines the eight-phase business and software lifecycle (Ideation to Operate, Improve and Retire) with roles, RACI, control framework and gate approvals, and the practices for using XDRS as the single source of truth for a solution throughout those phases.
 
 All content in this scope is published and consumed by external projects. Changes must be clear, backwards-compatible where possible, and thoroughly reviewed before merging.
 

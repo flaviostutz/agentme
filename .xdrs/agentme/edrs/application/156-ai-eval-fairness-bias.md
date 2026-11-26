@@ -231,3 +231,4 @@ The following six bias types guide dataset authors when designing bias entries. 
 - [agentme-edr-155](155-ai-eval-repeatability.md) — AI eval repeatability: release cadence convention (rule `02`) referenced by rule `06` for bias
 - [agentme-edr-201](../data/201-ml-dataset-structure.md) — ML dataset structure: per-entry JSON format and schema-lint validation for golden datasets
 - [agentme-edr-501](../governance/501-project-quality-standards.md) — Project quality standards: when evals are required per AI tier (rule `09`) and threshold enforcement (rule `07`)
+- [agentme-edr-162](162-personal-data-handling-in-code.md) - Personal data handling in code: personal data in eval datasets and prompts is subject to GDPR when the application is in GDPR scope

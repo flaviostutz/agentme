@@ -1,34 +1,33 @@
 ---
 name: agentme-bdr-policy-405-digital-product-roles-raci
-description: Defines a RACI (Responsible, Accountable, Consulted, Informed) matrix assigning decision rights across the digital-product lifecycle, from team formation through outcome measurement. Use when clarifying who owns a decision, resolving accountability ambiguity, or tracing root cause after a delivery or business-outcome failure.
+description: Defines the RACI (Responsible, Accountable, Consulted, Informed) rules for the digital-product lifecycle - exactly one Accountable per activity - with the activity matrix distributed over the eight phase policies and the team-operations activities kept here. Use when clarifying who owns a decision, resolving accountability ambiguity, or tracing root cause after a delivery or business-outcome failure.
 apply-to: All digital product teams and the roles defined in agentme-bdr-402, agentme-bdr-403, and agentme-bdr-404
-valid-from: 2026-09-18
+valid-from: 2026-11-26
 ---
 
 # agentme-bdr-policy-405: Digital product roles — RACI
 
 ## Context and Problem Statement
 
-`agentme-bdr-401` through `agentme-bdr-404` define roles, team composition, and organisational structure, but no policy assigns explicit decision rights across the product lifecycle. Activities such as workforce planning, vendor selection, and on-call ownership have no named Accountable owner, leaving ambiguity during execution and when tracing failure to its cause.
+`agentme-bdr-401` through `agentme-bdr-404` define roles, team composition, and organisational structure, but a role list alone does not assign decision rights across the product lifecycle. Activities such as workforce planning, vendor selection, and on-call ownership need a named Accountable owner, or ambiguity appears during execution and when tracing failure to its cause.
 
-Question: Who is Accountable, Responsible, Consulted, and Informed for each activity across the digital-product lifecycle, from team formation to outcome measurement?
+Question: Who is Accountable, Responsible, Consulted, and Informed for each activity across the digital-product lifecycle?
 
 ## Decision Outcome
 
-**A RACI matrix covering the full digital-product lifecycle, with exactly one Accountable role per activity**
+**RACI rules with exactly one Accountable role per activity, and an activity matrix distributed over the eight lifecycle phases of `agentme-bdr-004`, so that each phase policy holds the activities of its phase**
 
-Activities are grouped into six lifecycle stages, ordered as they occur end to end:
-
-| Lifecycle group | Activities | Main Accountable role(s) |
-|---|---|---|
-| Team formation & enablement | 5 | Engineering Manager (4), Product Owner (1) |
-| Discover | 8 | Product Manager (3), Product Owner (2), Project Manager (2), AI Business Analyst (1) |
-| Design | 7 | Tech Lead / AI Lead (3), Product Owner (1), Solution Architect (1), designated Tech Lead (1), Principal Engineer (1) |
-| Implement | 5 | Tech Lead / AI Lead (4), AI Lead (1) |
-| Deliver | 4 | Tech Lead (2), Product Owner (2) |
-| Operate | 10 | Product Manager (3), Product Owner (3), Tech Lead / AI Lead (2), Engineering Manager (1), Principal Engineer (1) |
-
-The single RACI matrix in rule `10-raci-activity-matrix` below gives the full per-activity Responsible, Accountable, Consulted, and Informed assignments.
+| Group | Policy | Activities | Main Accountable role(s) |
+|---|---|---|---|
+| Team operations (cross-phase) | this policy, rule `10-raci-activity-matrix` | 5 | Engineering Manager (4), Product Owner (1) |
+| 1 Ideation | `agentme-bdr-407` | 2 | AI Business Analyst (1), Product Owner (1) |
+| 2 Scope Requirements | `agentme-bdr-408` | 7 | Product Owner (2), Product Manager (1), Business Owner (1), Business Analyst / AI Business Analyst (1), Project Manager (1), outside the roster (1) |
+| 3 Risk and Impact Assessment | `agentme-bdr-409` | 2 | Product Owner (1), Project Manager (1) |
+| 4 Architecture, Security and Control Design | `agentme-bdr-410` | 7 | Tech Lead / AI Lead (2), Tech Lead (1), Solution Architect (1), Product Manager (1), Enterprise Architect (1), Principal Engineer (1) |
+| 5 Develop, Build and Configure | `agentme-bdr-411` | 6 | Tech Lead / AI Lead (3), Tech Lead (2), AI Lead (1) |
+| 6 Validate and Approve | `agentme-bdr-412` | 1 | Product Owner (1) |
+| 7 Deploy and Rollout | `agentme-bdr-413` | 2 | Tech Lead (1), Product Owner (1) |
+| 8 Operate, Improve and Retire | `agentme-bdr-414` | 10 | Product Manager (2), Product Owner (2), Tech Lead / AI Lead (1), Tech Lead (1), Principal Engineer (1), Engineering Manager (1), Business Analyst (1), outside the roster (1) |
 
 ### Details
 
@@ -38,7 +37,7 @@ Accountable (A) MUST ensure an activity is done and done correctly, answering fo
 
 #### 02-exactly-one-accountable-per-activity
 
-Each activity in this policy MUST have exactly one Accountable role — never zero, never more than one. When an existing decision elsewhere in this scope assigns joint accountability to two roles for one activity, it MUST be split into two separate activities, each with its own single Accountable role, as this policy does with `agentme-bdr-003`'s outcome-measurement stage (split into Team-level outcome measurement, Accountable: PO, and Tactical OKR fulfillment reporting, Accountable: PM; see rule `10-raci-activity-matrix`).
+Each activity in this policy and in the phase policies `agentme-bdr-407` to `agentme-bdr-414` MUST have exactly one Accountable role — never zero, never more than one — except where a footnote names an Accountable outside this roster. When an existing decision elsewhere in this scope assigns joint accountability to two roles for one activity, it MUST be split into two separate activities, each with its own single Accountable role, as phase 8 does with outcome measurement (Team-level outcome measurement, Accountable: PO, and Tactical OKR fulfillment reporting, Accountable: PM; see `agentme-bdr-414`).
 
 #### 03-accountable-role-must-ensure-communication
 
@@ -50,7 +49,7 @@ Activities are interdependent: the Accountable role for a failing activity MAY i
 
 #### 05-role-collapsing-and-conditional-activities
 
-One person MAY hold more than one role concurrently — for example, the same person acting as PO and Tech Lead in a Simple team per `agentme-bdr-403`. The RACI assignment still attaches to the role, not the individual, and each accountability MUST be reasoned about separately even when one person holds both. On small projects without a dedicated PjM, the PjM's activities in this policy MUST collapse onto the PO by default. An activity MUST only be applied when its triggering condition is present (e.g., cross-team scope, AI involvement, or regulatory/vendor context); rigor of execution SHOULD scale with risk rather than with project size alone.
+One person MAY hold more than one role concurrently — for example, the same person acting as PO and Tech Lead in a Simple team per `agentme-bdr-403`. The RACI assignment still attaches to the role, not the individual, and each accountability MUST be reasoned about separately even when one person holds both. On small projects without a dedicated PjM, the PjM's activities MUST collapse onto the PO by default. An activity MUST only be applied when its triggering condition is present (e.g., cross-team scope, AI involvement, or regulatory/vendor context); rigor of execution SHOULD scale with risk rather than with project size alone. The Control Owner of `agentme-bdr-502` is never collapsed onto a role of the product team.
 
 #### 06-accountable-is-not-necessarily-the-executor
 
@@ -58,7 +57,7 @@ The Accountable role MUST ensure an activity happens correctly, but is not requi
 
 #### 07-scope-boundary
 
-This matrix MUST only be used for activities delivered as a digital-product or feature change. A business objective achieved partly or wholly through non-digital-product levers — marketing, pricing, sales incentives, or partnerships — MUST have its accountability owned outside this role roster entirely. Formal regulatory or legal sign-off in a regulated environment likewise sits outside this roster: the Solution Architect and PO remain Accountable for designing to, and including, known compliance requirements, but the approval authority itself (Compliance Officer, Legal, Risk) MUST be Consulted before milestones and Informed of changes, and MUST NOT be treated as an Accountable column in this matrix. The same boundary applies to vendor contract signing and legal terms following the PM's vendor-selection activity in rule `10-raci-activity-matrix`.
+This matrix MUST only be used for activities delivered as a digital-product or feature change. A business objective achieved partly or wholly through non-digital-product levers — marketing, pricing, sales incentives, or partnerships — MUST have its accountability owned outside this role roster entirely. Formal regulatory or legal sign-off in a regulated environment likewise sits outside this roster: the Solution Architect and PO remain Accountable for designing to, and including, known compliance requirements, but the approval authority itself (Compliance Officer, Legal, Risk) MUST be Consulted before milestones and Informed of changes, and MUST NOT be treated as an Accountable column in this matrix. Their phase approvals are defined in `agentme-bdr-502` and `agentme-bdr-503`. The same boundary applies to vendor contract signing and legal terms following the PM's vendor-selection activity in `agentme-bdr-410`.
 
 #### 08-multi-team-application
 
@@ -66,66 +65,33 @@ Activities MUST be applied per contributing team so that exactly one Accountable
 
 #### 09-role-abbreviations
 
-Activities below use the roles defined in `agentme-bdr-402` and `agentme-bdr-404`: PM (Product Manager), PO (Product Owner), PjM (Project Manager), EM (Engineering Manager), BA (Business Analyst), AI BA (AI Business Analyst). Engineers MUST be read as one grouped column spanning the Backend, Frontend, and Full Stack Engineer sub-types defined in `agentme-bdr-404`; DevOps/Infra Engineer and AI Engineer remain distinct columns. Specialists MUST be read as one grouped column spanning the UX Designer, Tester/QA, Communication, Technical Writer, and Business SME specialist roles defined in `agentme-bdr-404`.
+Activities use the roles defined in `agentme-bdr-402` and `agentme-bdr-404`: PM (Product Manager), PO (Product Owner), PjM (Project Manager), EM (Engineering Manager), BA (Business Analyst), AI BA (AI Business Analyst), EA (Enterprise Architect), BO (Business Owner). Engineers MUST be read as one grouped column spanning the Backend, Frontend, and Full Stack Engineer sub-types defined in `agentme-bdr-404`; DevOps/Infra Engineer and AI Engineer remain distinct columns. Specialists MUST be read as one grouped column spanning the UX Designer, Tester/QA, Communication, Technical Writer, and Business SME specialist roles defined in `agentme-bdr-404`.
 
 #### 10-raci-activity-matrix
 
-Every activity MUST have exactly one Accountable role, per rule `02-exactly-one-accountable-per-activity`. The matrix below assigns Responsible, Accountable, Consulted, and Informed roles to all 39 activities, ordered top-to-bottom by the natural workflow across the six lifecycle groups: team formation & enablement, Discover, Design, Implement, Deliver, and Operate.
+The matrix of 42 activities is distributed: each phase policy holds the rows of its phase, and this policy holds the five team-operations rows below. Every table MUST use the same columns, in this order: PM, PO, PjM, EM, BA, AI BA, Solution Architect, Enterprise Architect, Business Owner, Tech Lead, AI Lead, Principal Engineer, Engineers, AI Engineer, DevOps/Infra Engineer, Specialists. Activity names are normative.
 
-| Group | Activity | PM | PO | PjM | EM | BA | AI BA | Solution Architect | Tech Lead | AI Lead | Principal Engineer | Engineers | AI Engineer | DevOps/Infra Engineer | Specialists |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Team formation & enablement | Hiring, onboarding, and offboarding | | | | A | | | | R | R | | | | | |
-| Team formation & enablement | Performance management, career growth, and compensation/promotion | | | | A | | | | | | | | | | |
-| Team formation & enablement | Workforce planning and capacity allocation | C | | | A | | | | | | | | | | |
-| Team formation & enablement | Team health, psychological safety, and retention | I | | | A | | | | | | | | | | |
-| Team formation & enablement | Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale | I | A | | C | | | | R | | | | | | |
-| Discover | Strategic direction and OKR setting¹ | C | | | | | | | | | | | | | |
-| Discover | Tactical OKR translation, epic prioritisation, and business case/ROI justification | A | I | | | | | | | | | | | | |
-| Discover | Vendor/third-party selection, contract, and SLA negotiation | A | C | | | | | C | | | | | | | |
-| Discover | Epic definition, backlog scoping/acceptance, and ongoing scope change management | C | A | | | | | C | | | | | | | |
-| Discover | Initial compliance/privacy/risk triage, including breach-notification escalation | | A | | | | | C | | | | | | | C (Business SME) |
-| Discover | AI opportunity discovery | | | | | | A | | | | | | | | |
-| Discover | Cross-team dependency tracking and schedule/milestone reporting² | | | A | | | | C | | | | | | | |
-| Discover | Complex or high-risk stakeholder and issue/risk (RAID) management | C | C | A | | | | | | | | | | | |
-| Design | Requirements and user stories | | | | | A (non-AI) | A (AI) | | | | | | | | C (Business SME) |
-| Design | Architecture blueprint (cross-system) | | | | | | | A | C | | | | | | |
-| Design | Technical refinement | | | | | | | | A (non-AI) | A (AI) | | | | | |
-| Design | UX and interaction design | | A | | | | | | | | | | | | R (UX Designer) |
-| Design | Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment) | | | | | | | C | A (non-AI) | A (AI) | C | | | | |
-| Design | Cross-team shared-component ownership³ | | | | | | | C | A | | | | | | |
-| Design | Engineering standards, platforms, and AI-practice governance | C | | C | | | | C | C | C | A | | | | |
-| Implement | Feature or model implementation, including migration, cutover, and legacy decommissioning build work | | | | | C | C | | A (non-AI) | A (AI) | | R | R | | |
-| Implement | Code or model review | | | | | | | | A (non-AI) | A (AI) | | | | | |
-| Implement | Independent QA and test execution | | | | | | | | A (non-AI) | A (AI) | | | | | R (Tester/QA) |
-| Implement | AI model evaluation, safety, and fairness testing | | | | | | C | | | A | C | | R | | R (Tester/QA) |
-| Implement | Dependency and license compliance | | | | | | | | A | | C | | | | |
-| Deliver | CI/CD pipeline and deployment automation | | | | | | | | A | | | | | R | |
-| Deliver | Production readiness and go-live approval | | A | | | | | | C | C | | | | C | |
-| Deliver | Rollback decision authority | | | C | | | | C | A | | | | | | |
-| Deliver | Release/rollout communication and user-facing documentation, including deprecation and sunset notices | | A | | | | | | | | | | | | R (Communication/Technical Writer) |
-| Operate | Production monitoring, alerting, incident response, and post-incident review, including proactive remediation of disclosed vulnerabilities | | | | | | | | A (non-AI) | A (AI) | | | | | |
-| Operate | Cross-team technical emergency declaration and mobilization | I | | C | | | | | C | C | A | | | | |
-| Operate | On-call scheduling and compensation | | | | A | | | | | | | | | | |
-| Operate | Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring) | | | | | | | | A | | C | | | R | |
-| Operate | Service or system deprecation decision | C | A | | | | | | | | | | | | |
-| Operate | Business metrics instrumentation and tracking | | C | | | A | | | C | | | R | | | |
-| Operate | Team-level outcome measurement (Operational OKRs) | | A | | | | | | | | | | | | |
-| Operate | Tactical OKR fulfillment reporting to the organisation | A | | | | | | | | | | | | | |
-| Operate | Strategic OKR fulfillment review (multi-quarter or annual)⁴ | R | | | | | | | | | | | | | |
-| Operate | OKR cycle retrospective, learnings capture, and unfulfilled-OKR review | A | | | | | | | | | | | | | |
+| Activity | PM | PO | PjM | EM | BA | AI BA | Solution Architect | Enterprise Architect | Business Owner | Tech Lead | AI Lead | Principal Engineer | Engineers | AI Engineer | DevOps/Infra Engineer | Specialists |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Hiring, onboarding, and offboarding | | | | A | | | | | | R | R | | | | | |
+| Performance management, career growth, and compensation/promotion | | | | A | | | | | | | | | | | | |
+| Workforce planning and capacity allocation | C | | | A | | | | | | | | | | | | |
+| Team health, psychological safety, and retention | I | | | A | | | | | | | | | | | | |
+| Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale | I | A | | C | | | | | | R | | | | | | |
 
-¹ Accountable: Group/Company/Business Unit leadership, outside this role roster (see rule `07-scope-boundary`). ² Also Consulted: each contributing team's Tech Lead (non-AI) / AI Lead (AI). ³ Accountable: the shared/platform team's Tech Lead if one exists, otherwise one contributing team's Tech Lead designated by the Solution Architect; other contributing teams' Tech Leads are Informed. ⁴ Accountable: Group/Company/Business Unit leadership, outside this role roster; PM is Responsible for aggregating Tactical OKR results upward.
-
-Tech Lead and AI Lead are Responsible for the technical-ramp-up portion of onboarding; Tech Lead is also Responsible for flagging and protecting technical-debt/operational time on the workforce-allocation-enforcement row. Tech Lead and AI Lead also consult each other on shared (non-AI)/(AI) integration points. Specialist columns (R) apply only when that specialist is engaged on the initiative, per rule `05-role-collapsing-and-conditional-activities`; when not engaged, the Accountable role executes the activity directly.
+Tech Lead and AI Lead are Responsible for the technical-ramp-up portion of onboarding; Tech Lead is also Responsible for flagging and protecting technical-debt/operational time on the workforce-allocation-enforcement row. These activities are continuous team activities, not lifecycle phases. Specialist columns (R) apply only when that specialist is engaged, per rule `05-role-collapsing-and-conditional-activities`; when not engaged, the Accountable role executes the activity directly.
 
 #### 11-role-description-must-mirror-the-matrix
 
-Each role's Accountability, Responsibilities, Consulted on, and Informed about fields in `agentme-bdr-402` or `agentme-bdr-404` MUST list the same activity names — footnote markers excluded, `(non-AI)`/`(AI)` qualifiers included — as that role's A/R/C/I assignments in rule `10-raci-activity-matrix`. This applies only to roles with a column per rule `09-role-abbreviations`, excluding the Squad Lead (`agentme-bdr-403`, no column) and unnamed Specialists cells. Matrix changes and matching role-field changes MUST ship together; reviewers MUST reject one without the other.
+Each role's Accountability, Responsibilities, Consulted on, and Informed about fields in `agentme-bdr-402` or `agentme-bdr-404` MUST list the same activity names — footnote markers excluded, `(non-AI)`/`(AI)` qualifiers included — as that role's A/R/C/I assignments in the tables of rule `10-raci-activity-matrix` and of `agentme-bdr-407` to `agentme-bdr-414`. This applies only to roles with a column per rule `09-role-abbreviations`, excluding the Squad Lead (`agentme-bdr-403`, no column) and unnamed Specialists cells. Matrix changes and matching role-field changes MUST ship together; reviewers MUST reject one without the other.
 
 ## References
 
+- [`agentme-bdr-004`](../principles/004-business-and-software-lifecycle.md) — Business and software lifecycle: the phases this matrix is distributed over
 - [`agentme-bdr-401`](401-plan-epic-feature-story.md) — Epic / Feature / User Story planning: structure referenced by the epic-definition activity
-- [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Principal Engineer, Solution Architect, and the workforce-allocation split
+- [`agentme-bdr-402`](402-digital-product-roles.md) — Digital product roles (org & cross-team): PM, Business Owner, Enterprise Architect, Principal Engineer, Solution Architect, and the workforce-allocation split
 - [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models and known structural gaps, including role-collapsing in Simple teams
 - [`agentme-bdr-404`](404-team-roles-and-specialists.md) — Full role definitions for all roles referenced in this matrix, including the Engineering Manager
-- [`agentme-bdr-003`](../principles/003-product-delivery-value-flow.md) — Product delivery value flow: the value chain stages this matrix assigns accountability across
+- [`agentme-bdr-407`](407-phase-1-ideation.md) to [`agentme-bdr-414`](414-phase-8-operate-improve-and-retire.md) — Phase policies that hold the activity rows
+- [`agentme-bdr-502`](../governance/502-control-framework-and-standards-setters.md) — Control Owner, Risk function and standards-setters outside this matrix
+- [`agentme-bdr-503`](../governance/503-lifecycle-gate-approvals.md) — Phase gate approvals

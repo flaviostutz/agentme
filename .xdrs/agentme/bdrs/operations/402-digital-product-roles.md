@@ -1,6 +1,6 @@
 ---
 name: agentme-bdr-policy-402-digital-product-roles-org-cross-team
-description: Defines organisation-level and cross-team roles — Product Manager, Principal Engineer, and Solution Architect — along with team purpose, scope, workforce allocation, and a roles overview table. Use when staffing or assigning responsibilities at the organisation or cross-team level.
+description: Defines organisation-level and cross-team roles — Product Manager, Business Owner, Enterprise Architect, Principal Engineer, and Solution Architect — along with team purpose, scope, workforce allocation, and a roles overview table. Use when staffing or assigning responsibilities at the organisation or cross-team level.
 apply-to: Organisation-level and cross-team roles in digital product organisations
 valid-from: 2026-08-30
 ---
@@ -56,6 +56,8 @@ All roles MUST be filled by a person with the required hard skills. Organisation
 | Role | Scope | Focus |
 |---|---|---|
 | Product Manager (PM) | Org-level | What / When |
+| Business Owner (BO) | Org-level | Why / What |
+| Enterprise Architect (EA) | Cross-team | What |
 | Principal Engineer | Cross-team | How |
 | Solution Architect | Cross-team | What |
 | Product Owner (PO) | Team | What / When |
@@ -85,11 +87,11 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 *Responsibilities*: Strategic OKR fulfillment review (multi-quarter or annual)
 
-*Consulted on*: Workforce planning and capacity allocation; Strategic direction and OKR setting; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Complex or high-risk stakeholder and issue/risk (RAID) management; Service or system deprecation decision; Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Workforce planning and capacity allocation; Strategic direction and OKR setting; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Complex or high-risk stakeholder and issue/risk (RAID) management; Service or system deprecation decision; Business plan, milestones, KPIs, and owner assignment; Solution, platform, and security architecture standards; Engineering and AI-practice standards
 
 *Informed about*: Team health, psychological safety, and retention; Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Cross-team technical emergency declaration and mobilization
 
-*Authority*: The PM owns WHAT the organisation builds at the portfolio level and WHEN Tactical OKRs are set. The PM does NOT own day-to-day team decisions — those remain with each team's Product Owner and Tech Lead. The PM does NOT set engineering practices or platform choices — those are owned by the Principal Engineer.
+*Authority*: The PM owns WHAT the organisation builds at the portfolio level and WHEN Tactical OKRs are set. The PM does NOT own day-to-day team decisions — those remain with each team's Product Owner and Tech Lead. The PM does NOT set engineering practices or platform choices — those are owned by the Principal Engineer and the Enterprise Architect.
 
 *Soft skills*: Strategic thinking, product vision, stakeholder communication, prioritisation across competing goals, ability to synthesise market and business context into clear direction
 
@@ -101,11 +103,11 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 **Principal Engineer**
 
-*Purpose*: Own the HOW across all product teams — engineering practices, tooling standards, platform choices, and AI practices — and synthesise them into a blueprint that leads can apply.
+*Purpose*: Own the HOW across all product teams — engineering practices, tooling standards, and AI practices — within the solution and platform standards of the Enterprise Architect, and synthesise them into a blueprint that leads can apply.
 
-*Accountability*: Engineering standards, platforms, and AI-practice governance; Cross-team technical emergency declaration and mobilization
+*Accountability*: Engineering and AI-practice standards; Cross-team technical emergency declaration and mobilization
 
-*Consulted on*: Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); AI model evaluation, safety, and fairness testing; Dependency and license compliance; Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
+*Consulted on*: Solution, platform, and security architecture standards; Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); AI model evaluation, safety, and fairness testing; Dependency and license compliance; Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
 
 *Soft skills*: Technical leadership, communication across skill levels, systems thinking, mentoring, cross-team influence — a nexialist connecting engineering, management, architecture, platforms, and product
 
@@ -121,13 +123,49 @@ The following roles operate at the organisation level (Group, Company, or Busine
 
 *Accountability*: Architecture blueprint (cross-system)
 
-*Consulted on*: Vendor/third-party selection, contract, and SLA negotiation; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; Cross-team dependency tracking and schedule/milestone reporting; Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); Cross-team shared-component ownership; Rollback decision authority; Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Vendor/third-party selection, contract, and SLA negotiation; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; Cross-team dependency tracking and schedule/milestone reporting; Non-functional requirements sign-off (performance, accessibility, availability/reliability, security, privacy-by-design, including third-party assessment); Cross-team shared-component ownership; Rollback decision authority; Ideation, spikes, and sandbox prototypes; Solution, platform, and security architecture standards; Engineering and AI-practice standards
 
 *Soft skills*: Holistic thinking, stakeholder communication, structured documentation, facilitation, ability to balance pragmatism with rigour
 
 *Hard skills*: Enterprise architecture, system integration patterns, cloud architecture, security architecture, business process modelling, platform evaluation, domain-driven design
 
 *Common activities*: Architecture design for complex Epics, blueprint authoring, cross-system integration design, security and compliance assessment, architecture review participation, cross-team design alignment sessions
+
+---
+
+**Enterprise Architect (EA)**
+
+*Purpose*: Define and publish the solution, platform, integration and security-architecture standards by risk class that product teams and the Principal Engineer must comply with. A standards-setter under `agentme-bdr-502`.
+
+*Accountability*: Solution, platform, and security architecture standards
+
+*Consulted on*: Ideation, spikes, and sandbox prototypes; Engineering and AI-practice standards
+
+*Authority*: Owns the architecture and platform standards, not the engineering practices (Principal Engineer) nor the architecture of one solution (Solution Architect). Does not verify controls; that is the Control Owner.
+
+*Soft skills*: Strategic thinking, influence without authority, structured documentation, negotiation across business and technology
+
+*Hard skills*: Enterprise architecture, platform and integration architecture, security architecture, standards authoring, risk-based control design
+
+*Common activities*: Architecture standards authoring, platform roadmap reviews, risk-class standard definition, architecture exception review
+
+---
+
+**Business Owner (BO)**
+
+*Purpose*: Own the business outcome of a business application: its business plan, milestones, KPIs and owner assignment, and the business consequence of going live.
+
+*Accountability*: Business plan, milestones, KPIs, and owner assignment
+
+*Consulted on*: Production readiness and go-live approval
+
+*Authority*: Co-signs go-live when the risk class is high (`agentme-bdr-503`). Does not replace the Product Owner as single Accountable for go-live and cannot waive governance failures.
+
+*Soft skills*: Accountability for results, risk-aware decision making, stakeholder management, commercial judgement
+
+*Hard skills*: Business planning, KPI definition, budgeting, domain knowledge of the business application
+
+*Common activities*: Business plan reviews, KPI reviews, go-live co-signing for high-risk changes, owner assignment
 
 #### 06-team-and-specialist-roles
 
@@ -140,6 +178,8 @@ Team-level and specialist roles are defined in [`agentme-bdr-404`](404-team-role
 - [`agentme-bdr-001`](../principles/001-company-organizational-levels.md) — Company organisational levels: Group, Company, and Business Unit definitions
 - [`agentme-bdr-002`](../principles/002-okr-framework.md) — OKR framework: Strategic, Tactical, and Operational OKR definitions
 - [`agentme-bdr-003`](../principles/003-product-delivery-value-flow.md) — Product delivery value flow: end-to-end chain from Strategic OKRs to fulfilled Tactical OKRs
+- [`agentme-bdr-004`](../principles/004-business-and-software-lifecycle.md) — Business and software lifecycle: the eight phases these roles work in
+- [`agentme-bdr-502`](../governance/502-control-framework-and-standards-setters.md) — Control framework: standards-setters, Control Owner and Risk function outside this roster
 - [`agentme-bdr-403`](403-product-team-composition.md) — Team composition models, squad dynamics, and known structural gaps
 - [`agentme-bdr-404`](404-team-roles-and-specialists.md) — Team-level roles and specialists: PO, PjM, BA, AI BA, AI Lead, AI Engineer, Tech Lead, engineers, and specialists
 - [`agentme-bdr-405`](405-digital-product-roles-raci.md) — RACI matrix assigning decision rights across the digital-product lifecycle for the roles defined here

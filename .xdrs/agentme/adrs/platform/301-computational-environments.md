@@ -120,3 +120,4 @@ Version tags have no `v` prefix: `<semver>` in a single-module repository and `<
 - [agentme-edr-302](../../edrs/platform/302-github-pipelines.md) - `deploy.yml` workflow implementing the lifecycle
 - [agentme-edr-308](../../edrs/platform/308-iac-module-and-deployment.md) - Infrastructure as code module and deployment
 - [agentme-edr-306](../../edrs/platform/306-performance-testing.md) - Performance tests against `acc`
+- [agentme-adr-501](../governance/501-gdpr-applicability-and-declarations.md) - GDPR applicability; [agentme-edr-202](../../edrs/data/202-personal-data-storage-and-erasure.md) - production personal data MUST NOT be copied to lower environments

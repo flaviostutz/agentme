@@ -20,6 +20,7 @@ Foundational standards, principles, and guidelines.
 - [agentme-edr-016](principles/016-cross-language-module-structure.md) - **Cross-language module structure** - Organize modules consistently across supported languages
 - [agentme-edr-017](principles/017-skill-testing.md) - **skill testing** - Mandates a `SKILL.test.md` co-located with every skill in scopes that follow agentme; defines test scenario format (trigger, expected behaviour, assertions) and requires execution before merging any skill change *(includes skill: [run-skill-tests](application/skills/run-skill-tests/SKILL.md))*
 - [agentme-edr-018](principles/018-svg-visual-design-standards.md) - **SVG visual design standards** - A4-like canvas, importance-proportional type, KARP principles, audience-driven palette, accessibility and a render-and-critique process for SVG assets; Mermaid readability in light and dark themes
+- [agentme-edr-019](principles/019-policies-as-automated-checks-and-agent-context.md) - **Policies as automated checks and agent context** - Structured rule blocks, loading the whole extends chain, running reviews at phase gates and skills for evidence
 
 ## Articles
 
@@ -80,11 +81,19 @@ Standards for eval datasets, scripts, reports, and test type taxonomy.
 - [agentme-edr-157](application/157-ai-a-b-testing.md) - **AI A/B testing** - Extends agentme-edr-407 for AI components: quality, cost and latency metrics, duration for noisy output, offline eval gate, controlled first group for high-impact decisions, and experiment fields in logs
 - [agentme-edr-158](application/158-ai-performance-testing.md) - **AI performance testing** - Extends agentme-edr-306 for AI: latency, error rate, cost and integrity metrics, proxy fault simulation with optional LLM mocking, local semantic scoring, and offline scoring of recorded samples
 
+### Privacy and data protection
+
+GDPR engineering rules for applications that process personal data. The declaration contract is [agentme-adr-501](../adrs/governance/501-gdpr-applicability-and-declarations.md).
+
+- [agentme-edr-161](application/161-consent-and-privacy-ux.md) - **Consent and privacy UX** - Explicit opt-in per purpose, equal choice, no trackers before consent, withdrawal as easy as giving, consent records, children
+- [agentme-edr-162](application/162-personal-data-handling-in-code.md) - **Personal data handling in code** - Field tagging, verified data subject rights operations, least privilege and audit, no personal data in logs, URLs or prompts
+
 ## Data
 
 Data layer implementation and data management decisions.
 
 - [agentme-edr-201](data/201-ml-dataset-structure.md) - **ML dataset structure** - Standard folder layout and file conventions for ML datasets
+- [agentme-edr-202](data/202-personal-data-storage-and-erasure.md) - **Personal data storage and erasure** - Field-level tagging, encryption and key separation, no production personal data outside prd, tested purge jobs, backups, export format
 
 ## Platform
 
@@ -107,6 +116,8 @@ Contribution and collaboration standards shared across projects.
 - [agentme-edr-501](governance/501-project-quality-standards.md) - **Project quality standards** - Require build, lint, and test verification before completion
 - [agentme-edr-502](governance/502-contributing-guide-requirements.md) - **Contributing guide requirements** - Define the minimum structure for CONTRIBUTING guides
 - [agentme-edr-503](governance/503-test-groups-and-release-flow.md) - **Test groups and release flow** - Classify objective types, AI affinity and reusable techniques; define four groups and UAT gates
+- [agentme-edr-504](governance/504-gdpr-automated-checks.md) - **GDPR automated checks** - Deterministic hub check and full audit before release, finding severities, report *(includes skill: [review-gdpr](governance/skills/review-gdpr/SKILL.md))*
+- [review-gdpr](governance/skills/review-gdpr/SKILL.md) - **Review GDPR** — Read-only GDPR audit of a whole application and its docs: applicability hub or opt-out, personal data discovery, consent, code, storage, retention and runbooks, with findings, fixes and declaration drafts. *(skill)*
 
 ## Operations
 
@@ -119,3 +130,4 @@ Production behavior and operational response decisions.
 - [agentme-edr-405](operations/405-dora-change-failure-rate.md) - **DORA change failure rate** - Calculation, examples, and challenges for hotfix/revert rate, incident-linked deploy rate, and escaped defect rate, including cross-team attribution
 - [agentme-edr-406](operations/406-dora-time-to-restore-service.md) - **DORA time to restore service** - Calculation, examples, and challenges for total restore time, detection time, acknowledgement time, and resolution time
 - [agentme-edr-407](operations/407-a-b-testing-in-production.md) - **A/B testing in production** - Plan before launch, sticky random audience split, feature-flag control, version tags in logs, flag-only rollback, and dated cleanup of the losing version
+- [agentme-edr-408](operations/408-gdpr-runbooks.md) - **GDPR runbooks** - Required-content checklists for data subject request and breach runbooks, and drill evidence

@@ -29,7 +29,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Purpose*: Own the product vision for the team's scope, define sprint goals, and ensure team priorities align with broader OKRs.
 
-*Accountability*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; UX and interaction design; Production readiness and go-live approval; Release/rollout communication and user-facing documentation, including deprecation and sunset notices; Service or system deprecation decision; Team-level outcome measurement (Operational OKRs)
+*Accountability*: Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Epic definition, backlog scoping/acceptance, and ongoing scope change management; Initial compliance/privacy/risk triage, including breach-notification escalation; UX and interaction design; Ideation, spikes, and sandbox prototypes; Production readiness and go-live approval; Release/rollout communication and user-facing documentation, including deprecation and sunset notices; Service or system deprecation decision; Team-level outcome measurement (Operational OKRs)
+
+*Responsibilities*: Business plan, milestones, KPIs, and owner assignment
 
 *Consulted on*: Vendor/third-party selection, contract, and SLA negotiation; Complex or high-risk stakeholder and issue/risk (RAID) management; Business metrics instrumentation and tracking
 
@@ -51,7 +53,7 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Accountability*: Cross-team dependency tracking and schedule/milestone reporting; Complex or high-risk stakeholder and issue/risk (RAID) management
 
-*Consulted on*: Rollback decision authority; Cross-team technical emergency declaration and mobilization; Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Rollback decision authority; Cross-team technical emergency declaration and mobilization; Solution, platform, and security architecture standards; Engineering and AI-practice standards
 
 *Authority*: No authority over technical or product decisions. Facilitates and connects; does not override PO or Tech Lead decisions.
 
@@ -131,9 +133,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Accountability*: Technical refinement (AI); Non-functional requirements sign-off (AI); Feature or model implementation, including migration, cutover, and legacy decommissioning build work (AI); Code or model review (AI); Independent QA and test execution (AI); AI model evaluation, safety, and fairness testing; Production monitoring, alerting, incident response, and post-incident review, including proactive remediation of disclosed vulnerabilities (AI)
 
-*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion)
+*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion); Ideation, spikes, and sandbox prototypes
 
-*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Solution, platform, and security architecture standards; Engineering and AI-practice standards
 
 *Shared across squads*: Yes — the AI Lead connects to all squads in the team.
 
@@ -165,9 +167,9 @@ The following roles MUST belong to a product team. Some roles are shared across 
 
 *Accountability*: Technical refinement (non-AI); Non-functional requirements sign-off (non-AI); Cross-team shared-component ownership; Feature or model implementation, including migration, cutover, and legacy decommissioning build work (non-AI); Code or model review (non-AI); Independent QA and test execution (non-AI); Dependency and license compliance; CI/CD pipeline and deployment automation; Rollback decision authority; Production monitoring, alerting, incident response, and post-incident review, including proactive remediation of disclosed vulnerabilities (non-AI); Ongoing operational governance (cost/FinOps, security review cadence and access audits, DR/business-continuity drills, vendor/SLA performance monitoring)
 
-*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion); Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale
+*Responsibilities*: Hiring, onboarding, and offboarding (technical ramp-up portion); Workforce-allocation enforcement (the split defined in `agentme-bdr-402`) and team-building/morale; Ideation, spikes, and sandbox prototypes
 
-*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (non-AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Business metrics instrumentation and tracking; Architecture blueprint (cross-system); Engineering standards, platforms, and AI-practice governance
+*Consulted on*: Cross-team dependency tracking and schedule/milestone reporting (non-AI); Production readiness and go-live approval; Cross-team technical emergency declaration and mobilization; Business metrics instrumentation and tracking; Architecture blueprint (cross-system); Solution, platform, and security architecture standards; Engineering and AI-practice standards
 
 *Shared across squads*: Yes — the Tech Lead connects to all squads in the team.
 
