@@ -108,6 +108,7 @@ Infrastructure implementation, delivery pipeline, and developer environment deci
 - [agentme-edr-307](platform/307-environment-short-names.md) - **Environment short names** - Use sbx, dev, tst, acc, prd in STAGE, env files, resource names, tags and vendor endpoint config
 - [agentme-edr-308](platform/308-iac-module-and-deployment.md) - **IaC module and deployment** - infra/ folder, STAGE plus ENV-var credentials only, typed stage config, CI-only deploys to tst, acc and prd
 - [agentme-edr-309](platform/309-aws-cdk-typescript.md) - **AWS CDK with TypeScript** - CDK v2 layout in infra/, offline synth in build, cdk deploy, ts-node setup and Jest assertions
+- [agentme-edr-310](platform/310-domain-registration-and-hostnames.md) - **Domain registration and hostnames** - Register base domains and name module hosts as module.stage.group.base-domain, prd without stage
 
 ## Governance
 
